@@ -34,13 +34,16 @@ void HNtypeI_WZ_CR::initializeAnalyzer(){
   //==== Test btagging code
   //==== add taggers and WP that you want to use in analysis
   std::vector<Jet::Tagger> vtaggers;
-  vtaggers.push_back(Jet::DeepCSV);
+//  vtaggers.push_back(Jet::DeepCSV);
+  vtaggers.push_back(Jet::CSVv2);
 
   std::vector<Jet::WP> v_wps;
-  v_wps.push_back(Jet::Medium);
+//  v_wps.push_back(Jet::Medium);
+  v_wps.push_back(Jet::Loose);
 
   //=== list of taggers, WP, setup systematics, use period SFs
-  SetupBTagger(vtaggers,v_wps, true, true);
+//  SetupBTagger(vtaggers,v_wps, true, true);
+  SetupBTagger(vtaggers,v_wps, true, true);  
 
 }
 
@@ -208,13 +211,13 @@ void HNtypeI_WZ_CR::executeEventFromParameter(AnalyzerParameter param){
   std::sort(muons.begin(), muons.end(), PtComparing);
   std::sort(jets.begin(), jets.end(), PtComparing);
 
-  int n_bjet_deepcsv_m=0;
-  int n_bjet_deepcsv_m_noSF=0;
+//  int n_bjet_deepcsv_m=0;
+//  int n_bjet_deepcsv_m_noSF=0;
   int n_bjet_csvv2=0;
 
   for(unsigned int ij = 0 ; ij < jets.size(); ij++){
-    if(IsBTagged(jets.at(ij), Jet::DeepCSV, Jet::Medium,true,0)) n_bjet_deepcsv_m++; // method for getting btag with SF applied to MC
-    if(IsBTagged(jets.at(ij), Jet::DeepCSV, Jet::Medium,false,0)) n_bjet_deepcsv_m_noSF++; // method for getting btag with no SF applied to MC
+//    if(IsBTagged(jets.at(ij), Jet::DeepCSV, Jet::Medium,true,0)) n_bjet_deepcsv_m++; // method for getting btag with SF applied to MC
+//    if(IsBTagged(jets.at(ij), Jet::DeepCSV, Jet::Medium,false,0)) n_bjet_deepcsv_m_noSF++; // method for getting btag with no SF applied to MC
     if(IsBTagged(jets.at(ij), Jet::CSVv2, Jet::Loose,false,0)) n_bjet_csvv2++;
   }
   
@@ -226,7 +229,7 @@ void HNtypeI_WZ_CR::executeEventFromParameter(AnalyzerParameter param){
   double MET = ev.GetMETVector().Pt(); 
   if(lepton_size == 3){
     if(lepton_size + electrons_veto.size() > 3) return;
-    if(muons.at(0).Pt() > TriggerSafePtCut) return;
+    if(muons.at(0).Pt() < TriggerSafePtCut) return;
 
     // Z candidate
     Particle ZCand, WtagLep, TriLep, ZtagLep1, ZtagLep2, Ztemp;
