@@ -16,22 +16,22 @@ public:
   bool RunNewPDF;
   bool RunXSecSyst;
 
-  TString IsoMuTriggerName;
-  double TriggerSafePtCut;
+  
+  vector<TString> MuonTriggers;
+  vector<TString> ElectronTriggers;
+  double MuonPtCut;
+  double ElectronPtCut;
 
 //  vector<TString> EleIDs, EleIDSFKeys, MuonIDs, MuonIDSFKeys;
   vector<Electron> AllElectrons;
   vector<Muon> AllMuons;
   vector<Jet> AllJets;
 
-  double weight_Prefire;
+//  double weight_Prefire;
 
   HNtypeI_SM_CR();
   ~HNtypeI_SM_CR();
 
 };
 
-
-
 #endif
-

@@ -20,16 +20,22 @@ void HNtypeI_SM_CR::initializeAnalyzer(){
   //==== IsoMuTriggerName is a year-dependent variable, and you don't want to do "if(Dataer==~~)" for every event (let's save cpu time).
   //==== Then, do it here, which only ran once for each macro
   if(DataYear==2016){
-    IsoMuTriggerName = "HLT_IsoMu24_v";
-    TriggerSafePtCut = 26.;
+    MuonTriggers.push_back("HLT_IsoMu24_v");
+    MuonTriggers.push_back("HLT_IsoTkMu24_v");
+    ElectronTriggers.push_back("HLT_Ele27_WPTight_Gsf_v");
+    MuonPtCut = 26.;
+    ElectronPtCut = 29.;
   }
   else if(DataYear==2017){
-    IsoMuTriggerName = "HLT_IsoMu27_v";
-    TriggerSafePtCut = 29.;
+    MuonTriggers.push_back("HLT_IsoMu27_v");
+    ElectronTriggers.push_back("HLT_Ele27_WPTight_Gsf_L1DoubleEG_v");
+    ElectronTriggers.push_back("HLT_Ele32_WPTight_Gsf_v");
+    MuonPtCut = 29.;
+    ElectronPtCut = 35.;
   }
 
-  cout << "[HNtypeI_SM_CR::initializeAnalyzer] IsoMuTriggerName = " << IsoMuTriggerName << endl;
-  cout << "[HNtypeI_SM_CR::initializeAnalyzer TriggerSafePtCut = " << TriggerSafePtCut << endl;
+//  cout << "[HNtypeI_SM_CR::initializeAnalyzer] IsoMuTriggerName = " << IsoMuTriggerName << endl;
+//  cout << "[HNtypeI_SM_CR::initializeAnalyzer TriggerSafePtCut = " << TriggerSafePtCut << endl;
 
   //==== Test btagging code
   //==== add taggers and WP that you want to use in analysis
@@ -76,7 +82,7 @@ void HNtypeI_SM_CR::executeEvent(){
   //==== If MC && DataYear > 2017, 1.;
   //==== If MC && DataYear <= 2017, we have to reweight the event with this value
   //==== I defined "double weight_Prefire;" in Analyzers/include/HNtypeI_SM_CR.h
-  weight_Prefire = GetPrefireWeight(0);
+//  weight_Prefire = GetPrefireWeight(0);
 
   AnalyzerParameter param;
 
@@ -93,7 +99,7 @@ void HNtypeI_SM_CR::executeEvent(){
 
   param.Electron_Tight_ID = "passTightID";
   param.Electron_Veto_ID = "passVetoID";
-  param.Electron_ID_SF_Key = "";
+  param.Electron_ID_SF_Key = "passTightID";
   param.Muon_Tight_ID = MuonID;
   param.Muon_Veto_ID = "";
   param.Muon_ID_SF_Key = "NUM_TightID_DEN_genTracks";
@@ -133,8 +139,10 @@ void HNtypeI_SM_CR::executeEventFromParameter(AnalyzerParameter param){
   //==============
   //==== Trigger
   //==============
-//  if(! (ev.PassTrigger(IsoMuTriggerName) )) return;
 
+  if(!IsData && !(ev.PassTrigger(MuonTriggers) || ev.PassTrigger(ElectronTriggers))) return;
+  if(DataStream.Contains("SingleMuon") && !ev.PassTrigger(MuonTriggers)) return;
+  else if(DataStream.Contains("SingleElectron") && !ev.PassTrigger(ElectronTriggers)) return;
 
 
   //======================
@@ -232,12 +240,19 @@ void HNtypeI_SM_CR::executeEventFromParameter(AnalyzerParameter param){
   double Mt = 0.;
   double MZ = 91.1876;
   double weight = 1.;
+  double muon_idsf = 1.;
+  double muon_isosf = 1.;
+  double ele_idsf = 1.;
+  double ele_recosf = 1.;
 
   for(unsigned int it_ch=0; it_ch<channels.size(); it_ch++){
     //WZ or ZG
     if(lepton_size==3 && it_ch<2){
       if(lepton_size + electrons_veto.size() > 3) continue;
-      if(muons.at(0).Pt() < TriggerSafePtCut) continue;
+
+      if(ev.PassTrigger(MuonTriggers) && muons.at(0).Pt()<MuonPtCut) continue;
+      else if(!ev.PassTrigger(MuonTriggers) && ev.PassTrigger(ElectronTriggers) && electrons.at(0).Pt()<ElectronPtCut) continue;
+      else continue;
 
       // sort 3 leptons with pT order
       for(unsigned int imu=0; imu<muons.size(); imu++){
@@ -316,16 +331,19 @@ void HNtypeI_SM_CR::executeEventFromParameter(AnalyzerParameter param){
 
         weight *= weight_norm_1invpb*ev.GetTriggerLumi("Full");
         weight *= ev.MCweight();
-        weight *= weight_Prefire;
+        weight *= GetPrefireWeight(0);
+        weight *= GetPileUpWeight(nPileUp,0);
 
       //==== Example of applying Muon scale factors
         for(unsigned int i=0; i<muons.size(); i++){
-          double this_idsf  = mcCorr->MuonID_SF (param.Muon_ID_SF_Key,  muons.at(i).Eta(), muons.at(i).MiniAODPt());
-
-        //==== If you have iso SF, do below. Here we don't.
-        //double this_isosf = mcCorr->MuonISO_SF(param.Muon_ISO_SF_Key, muons.at(i).Eta(), muons.at(i).MiniAODPt());
-          double this_isosf = 1.;
-          weight *= this_idsf*this_isosf;
+          muon_idsf = mcCorr->MuonID_SF(param.Muon_ID_SF_Key,  muons.at(i).Eta(), muons.at(i).MiniAODPt(), 0);
+          muon_isosf = mcCorr->MuonISO_SF(param.Muon_ISO_SF_Key, muons.at(i).Eta(), muons.at(i).MiniAODPt(), 0);
+          weight *= muon_idsf*muon_isosf;
+        }
+        for(unsigned int j=0; j<electrons.size(); j++){
+          ele_recosf = mcCorr->ElectronReco_SF(electrons.at(j).scEta(), electrons.at(j).Pt(), 0);
+          ele_idsf = mcCorr->ElectronID_SF(param.Electron_ID_SF_Key, electrons.at(j).scEta(), electrons.at(j).Pt(), 0);
+          weight *= ele_recosf*ele_idsf;
         }
       }
       
@@ -346,8 +364,11 @@ void HNtypeI_SM_CR::executeEventFromParameter(AnalyzerParameter param){
     if(lepton_size==4 && it_ch==2){
       if(lepton_size + electrons_veto.size() > 4) continue;
 
+      if(ev.PassTrigger(MuonTriggers) && muons.at(0).Pt()<MuonPtCut) continue;
+      else if(!ev.PassTrigger(MuonTriggers) && ev.PassTrigger(ElectronTriggers) && electrons.at(0).Pt()<ElectronPtCut) continue;
+      else continue;
+
       // sort 4 leptons with pT order
-      if(muons.at(0).Pt() < TriggerSafePtCut) continue;
       for(unsigned int imu=0; imu<muons.size(); imu++){
         leptons.push_back(&muons.at(imu));
       }
@@ -391,15 +412,22 @@ void HNtypeI_SM_CR::executeEventFromParameter(AnalyzerParameter param){
       if(n_bjet_csvv2 > 0) continue;
       if(!IsOnZ(ZCand1.M(), 15.) || !IsOnZ(ZCand2.M(), 15.)) continue;
 
+
       if(!IsDATA){
         weight *= weight_norm_1invpb*ev.GetTriggerLumi("Full");
         weight *= ev.MCweight();
-        weight *= weight_Prefire;
+        weight *= GetPrefireWeight(0);
+        weight *= GetPileUpWeight(nPileUp,0);
 
         for(unsigned int i=0; i<muons.size(); i++){
-          double this_idsf  = mcCorr->MuonID_SF (param.Muon_ID_SF_Key,  muons.at(i).Eta(), muons.at(i).MiniAODPt());
-          double this_isosf = 1.;
-          weight *= this_idsf*this_isosf;
+          muon_idsf = mcCorr->MuonID_SF(param.Muon_ID_SF_Key,  muons.at(i).Eta(), muons.at(i).MiniAODPt(), 0);
+          muon_isosf = mcCorr->MuonISO_SF(param.Muon_ISO_SF_Key, muons.at(i).Eta(), muons.at(i).MiniAODPt(), 0);
+          weight *= muon_idsf*muon_isosf;
+        }
+        for(unsigned int j=0; j<electrons.size(); j++){
+          ele_recosf = mcCorr->ElectronReco_SF(electrons.at(j).scEta(), electrons.at(j).Pt(), 0);
+          ele_idsf = mcCorr->ElectronID_SF(param.Electron_ID_SF_Key, electrons.at(j).scEta(), electrons.at(j).Pt(), 0);
+          weight *= ele_recosf*ele_idsf;
         }
       }
  
