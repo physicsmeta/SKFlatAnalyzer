@@ -140,10 +140,11 @@ void HNtypeI_SM_CR::executeEventFromParameter(AnalyzerParameter param){
   //==== Trigger
   //==============
 
-  if(!IsData && !(ev.PassTrigger(MuonTriggers) || ev.PassTrigger(ElectronTriggers))) return;
-  if(DataStream.Contains("SingleMuon") && !ev.PassTrigger(MuonTriggers)) return;
-  else if(DataStream.Contains("SingleElectron") && !ev.PassTrigger(ElectronTriggers)) return;
-
+  if(!IsDATA && !(ev.PassTrigger(MuonTriggers) || ev.PassTrigger(ElectronTriggers))) return;
+  if(IsDATA){
+    if(DataStream.Contains("SingleMuon") && !ev.PassTrigger(MuonTriggers)) return;
+    else if(DataStream.Contains("SingleElectron") && !ev.PassTrigger(ElectronTriggers)) return;
+  }
 
   //======================
   //==== Copy AllObjects
@@ -252,7 +253,6 @@ void HNtypeI_SM_CR::executeEventFromParameter(AnalyzerParameter param){
 
       if(ev.PassTrigger(MuonTriggers) && muons.at(0).Pt()<MuonPtCut) continue;
       else if(!ev.PassTrigger(MuonTriggers) && ev.PassTrigger(ElectronTriggers) && electrons.at(0).Pt()<ElectronPtCut) continue;
-      else continue;
 
       // sort 3 leptons with pT order
       for(unsigned int imu=0; imu<muons.size(); imu++){
@@ -358,6 +358,7 @@ void HNtypeI_SM_CR::executeEventFromParameter(AnalyzerParameter param){
       FillHist("Lep3_Pt_"+channels.at(it_ch), leptons.at(2)->Pt(), weight, 400, 0., 400.);
       FillHist("MET_"+channels.at(it_ch), MET, weight, 400, 0., 400.);
       FillHist("Mt_"+channels.at(it_ch), Mt, weight, 400, 0., 400.);
+      FillHist("EventNumber_"+channels.at(it_ch), 0.5, weight, 2, 0., 2.);
     }
 
     // ZZ
@@ -366,7 +367,6 @@ void HNtypeI_SM_CR::executeEventFromParameter(AnalyzerParameter param){
 
       if(ev.PassTrigger(MuonTriggers) && muons.at(0).Pt()<MuonPtCut) continue;
       else if(!ev.PassTrigger(MuonTriggers) && ev.PassTrigger(ElectronTriggers) && electrons.at(0).Pt()<ElectronPtCut) continue;
-      else continue;
 
       // sort 4 leptons with pT order
       for(unsigned int imu=0; imu<muons.size(); imu++){
@@ -439,6 +439,7 @@ void HNtypeI_SM_CR::executeEventFromParameter(AnalyzerParameter param){
       FillHist("Lep3_Pt_"+channels.at(it_ch), leptons.at(2)->Pt(), weight, 400, 0., 400.);
       FillHist("Lep4_Pt_"+channels.at(it_ch), leptons.at(3)->Pt(), weight, 400, 0., 400.);
       FillHist("MET_"+channels.at(it_ch), MET, weight, 400, 0., 400.);
+      FillHist("EventNumber_"+channels.at(it_ch), 0.5, weight, 2, 0., 2.);
     }
   }
 }
