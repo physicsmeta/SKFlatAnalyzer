@@ -295,7 +295,7 @@ void HNtypeI_SM_CR::executeEventFromParameter(AnalyzerParameter param){
 
       // Z candidate
       Particle ZCand, WtagLep, TriLep, ZtagLep1, ZtagLep2, Ztemp;
-      int l1 = 0, l2 = 0, wlep = 0;  
+      int l1 = -999, l2 = -999, wlep = -999;  
       if(muons.size()==2 && muons.at(0).Charge()*muons.at(1).Charge()<0){
         ZCand = muons.at(0) + muons.at(1);
         WtagLep = electrons.at(0);
@@ -313,20 +313,26 @@ void HNtypeI_SM_CR::executeEventFromParameter(AnalyzerParameter param){
 //        else leptons = MakeLeptonPointerVector(electrons);
         // No same-sign 3 leptons
         if(fabs(leptons.at(0)->Charge() + leptons.at(1)->Charge() + leptons.at(2)->Charge()) == 1){
-          ZCand = *leptons.at(0) + *leptons.at(1);
-          if(leptons.at(0)->Charge()*leptons.at(1)->Charge() > 0) ZCand = *leptons.at(0) + *leptons.at(2);
+          double tmpMassDiff=1000000.; 
+
+          
+          //ZCand = *leptons.at(0) + *leptons.at(1);
+          //if(leptons.at(0)->Charge()*leptons.at(1)->Charge() > 0) ZCand = *leptons.at(0) + *leptons.at(2);
           // Select OSSF lepton pair
           for(int ilep1=0; ilep1<2; ilep1++){
             for(int ilep2=ilep1+1; ilep2<3; ilep2++){
+              // require OS dilepton
+              if(leptons.at(ilep1)->Charge()*leptons.at(ilep2)->Charge()>0) continue;
               Ztemp = *leptons.at(ilep1) + *leptons.at(ilep2);
-              if(Ztemp.M()<ZCand.M() && leptons.at(ilep1)->Charge()*leptons.at(ilep2)->Charge()<0){
-                ZCand = Ztemp; l1 = ilep1; l2 = ilep2;
+              if(fabs(Ztemp.M() - MZ) <  tmpMassDiff) {
+                  tmpMassDiff= fabs(Ztemp.M() - MZ);
+                  ZCand = Ztemp; l1 = ilep1; l2 = ilep2;
               }
             }
           }
           // Set W-tagged lepton
           for(int ilep3=0; ilep3<3; ilep3++){
-            if(fabs(ilep3-l1)>0 && fabs(ilep3-l2)>0) wlep = ilep3; 
+            if(fabs(ilep3-l1)>0 && fabs(ilep3-l2)>0) { wlep = ilep3; break;}
           }
           WtagLep = *leptons.at(wlep);
           ZtagLep1 = *leptons.at(l1);
