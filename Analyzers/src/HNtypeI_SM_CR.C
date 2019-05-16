@@ -48,7 +48,7 @@ void HNtypeI_SM_CR::initializeAnalyzer(){
   v_wps.push_back(Jet::Loose);
 
   //=== list of taggers, WP, setup systematics, use period SFs
-  SetupBTagger(vtaggers,v_wps, false, false);
+  SetupBTagger(vtaggers,v_wps, true, true);
 
 }
 
@@ -120,7 +120,8 @@ void HNtypeI_SM_CR::executeEvent(){
 
 void HNtypeI_SM_CR::executeEventFromParameter(AnalyzerParameter param){
 
-  vector<TString> channels = {"WZ", "ZG", "ZZ"};
+  vector<TString> regions = {"WZ", "ZG", "ZZ"};
+  vector<TString> channels = {"eee", "eem", "emm", "mmm"}; 
   double cutflow_max = 10.;
   int cutflow_bin = 10;
   //=============
@@ -219,9 +220,9 @@ void HNtypeI_SM_CR::executeEventFromParameter(AnalyzerParameter param){
   //==== Then, apply ID selections using this_AllXXX
   //==================================================
 
-  vector<Electron> electrons = SelectElectrons(this_AllElectrons, param.Electron_Tight_ID, 25., 2.5);
-  vector<Electron> electrons_veto = SelectElectrons(this_AllElectrons, param.Electron_Veto_ID, 25., 2.5);
-  vector<Muon> muons = SelectMuons(this_AllMuons, param.Muon_Tight_ID, 20., 2.4);
+  vector<Electron> electrons = SelectElectrons(this_AllElectrons, param.Electron_Tight_ID, 10., 2.5);
+  vector<Electron> electrons_veto = SelectElectrons(this_AllElectrons, param.Electron_Veto_ID, 10., 2.5);
+  vector<Muon> muons = SelectMuons(this_AllMuons, param.Muon_Tight_ID, 10., 2.4);
   vector<Jet> jets = SelectJets(this_AllJets, param.Jet_ID, 30., 2.4);
   std::vector<Lepton*> leptons;
   std::vector<Lepton*> leptons_minus;
@@ -237,13 +238,13 @@ void HNtypeI_SM_CR::executeEventFromParameter(AnalyzerParameter param){
 
 //  int n_bjet_deepcsv_m=0;
 //  int n_bjet_deepcsv_m_noSF=0;
-  int n_bjet_csvv2=0;
+  int n_bjet_deepcsv=0;
 
   for(unsigned int ij = 0 ; ij < jets.size(); ij++){
 //    if(IsBTagged(jets.at(ij), Jet::DeepCSV, Jet::Medium,true,0)) n_bjet_deepcsv_m++; // method for getting btag with SF applied to MC
 //    if(IsBTagged(jets.at(ij), Jet::DeepCSV, Jet::Medium,false,0)) n_bjet_deepcsv_m_noSF++; // method for getting btag with no SF applied to MC
 //    if(IsBTagged(jets.at(ij), Jet::CSVv2, Jet::Loose,false,0)) n_bjet_csvv2++;
-    if(IsBTagged(jets.at(ij), Jet::DeepCSV, Jet::Loose,false,0)) n_bjet_csvv2++;
+    if(IsBTagged(jets.at(ij), Jet::DeepCSV, Jet::Loose,true,0)) n_bjet_deepcsv++;
   }
   
   //=========================
@@ -259,18 +260,20 @@ void HNtypeI_SM_CR::executeEventFromParameter(AnalyzerParameter param){
   double muon_isosf = 1.;
   double ele_idsf = 1.;
   double ele_recosf = 1.;
+  int ossf_mass10 = 0;
 
-  for(unsigned int it_ch=0; it_ch<channels.size(); it_ch++){
+  for(unsigned int it_rg=0; it_rg<regions.size(); it_rg++){
     double weight = 1.;
+    ossf_mass10 = 0;
     // WZ or ZG CR
-    if(lepton_size==3 && it_ch<2){
+    if(lepton_size==3 && it_rg<2){
 
-      FillHist("NumberOfEvents_"+channels.at(it_ch), 3.5, 1., cutflow_bin, 0., cutflow_max);
+      FillHist("NumberOfEvents_"+regions.at(it_rg), 3.5, 1., cutflow_bin, 0., cutflow_max);
 
       // Veto additional leptons
       if(lepton_veto_size>0) continue;
 
-      FillHist("NumberOfEvents_"+channels.at(it_ch), 4.5, 1., cutflow_bin, 0., cutflow_max);
+      FillHist("NumberOfEvents_"+regions.at(it_rg), 4.5, 1., cutflow_bin, 0., cutflow_max);
 
       // Triggers
       if(ev.PassTrigger(MuonTriggers)){
@@ -282,7 +285,7 @@ void HNtypeI_SM_CR::executeEventFromParameter(AnalyzerParameter param){
         else if(electrons.size()>0 && electrons.at(0).Pt()<ElectronPtCut) continue;
       }
 
-      FillHist("NumberOfEvents_"+channels.at(it_ch), 5.5, 1., cutflow_bin, 0., cutflow_max);
+      FillHist("NumberOfEvents_"+regions.at(it_rg), 5.5, 1., cutflow_bin, 0., cutflow_max);
 
       // sort 3 leptons with pT order
       for(unsigned int imu=0; imu<muons.size(); imu++){
@@ -324,6 +327,7 @@ void HNtypeI_SM_CR::executeEventFromParameter(AnalyzerParameter param){
               // require OS dilepton
               if(leptons.at(ilep1)->Charge()*leptons.at(ilep2)->Charge()>0) continue;
               Ztemp = *leptons.at(ilep1) + *leptons.at(ilep2);
+              if(Ztemp.M() < 10) ossf_mass10++;
               if(fabs(Ztemp.M() - MZ) <  tmpMassDiff) {
                   tmpMassDiff= fabs(Ztemp.M() - MZ);
                   ZCand = Ztemp; l1 = ilep1; l2 = ilep2;
@@ -341,32 +345,32 @@ void HNtypeI_SM_CR::executeEventFromParameter(AnalyzerParameter param){
       }
       else continue;
 
-      FillHist("NumberOfEvents_"+channels.at(it_ch), 6.5, 1., cutflow_bin, 0., cutflow_max);
+      FillHist("NumberOfEvents_"+regions.at(it_rg), 6.5, 1., cutflow_bin, 0., cutflow_max);
 
       TriLep = ZCand + WtagLep;
       Mt = MT(WtagLep, METv);
 
       // cuts on kinematic variables
-      if(ZCand.M() < 10.) continue;
-      FillHist("NumberOfEvents_"+channels.at(it_ch), 7.5, 1., cutflow_bin, 0., cutflow_max);
-      if(n_bjet_csvv2 > 0) continue;
-      FillHist("NumberOfEvents_"+channels.at(it_ch), 8.5, 1., cutflow_bin, 0., cutflow_max);
+      if(ZCand.M()<10. || ossf_mass10>0) continue;
+      FillHist("NumberOfEvents_"+regions.at(it_rg), 7.5, 1., cutflow_bin, 0., cutflow_max);
+      if(n_bjet_deepcsv > 0) continue;
+      FillHist("NumberOfEvents_"+regions.at(it_rg), 8.5, 1., cutflow_bin, 0., cutflow_max);
 
-      if(it_ch == 0){
+      if(it_rg == 0){
         if(!IsOnZ(ZCand.M(), 15.)) continue;
-//        FillHist("NumberOfEvents_"+channels.at(it_ch), 7.5, 1., cutflow_bin, 0., cutflow_max);
+//        FillHist("NumberOfEvents_"+regions.at(it_rg), 7.5, 1., cutflow_bin, 0., cutflow_max);
         if(MET < 50.) continue;
         if(Mt < 20.) continue;
         if(TriLep.M() < MZ + 15.) continue;
       }
-      if(it_ch == 1){
+      if(it_rg == 1){
         if(IsOnZ(ZCand.M(), 15.)) continue;
-//        FillHist("NumberOfEvents_"+channels.at(it_ch), 7.5, 1., cutflow_bin, 0., cutflow_max);
+//        FillHist("NumberOfEvents_"+regions.at(it_rg), 7.5, 1., cutflow_bin, 0., cutflow_max);
         if(MET > 50.) continue;
         if(!IsOnZ(TriLep.M(), 15.)) continue;
       }
 
-      FillHist("NumberOfEvents_"+channels.at(it_ch), 9.5, 1., cutflow_bin, 0., cutflow_max);
+      FillHist("NumberOfEvents_"+regions.at(it_rg), 9.5, 1., cutflow_bin, 0., cutflow_max);
 
       // weights for MC
       if(!IsDATA){
@@ -392,28 +396,44 @@ void HNtypeI_SM_CR::executeEventFromParameter(AnalyzerParameter param){
       }
       
       // Histograms
-      FillHist("ZCand_Mass_"+channels.at(it_ch), ZCand.M(), weight, 80, 50., 130.);
-      FillHist("TriLep_Mass_"+channels.at(it_ch), TriLep.M(), weight, 80, 50., 130.);
-      FillHist("WtagLep_Pt_"+channels.at(it_ch), WtagLep.Pt(), weight, 400, 0., 400.);
-      FillHist("ZtagLep1_Pt_"+channels.at(it_ch), ZtagLep1.Pt(), weight, 400, 0., 400.);
-      FillHist("ZtagLep2_Pt_"+channels.at(it_ch), ZtagLep2.Pt(), weight, 400, 0., 400.);
-      FillHist("Lep1_Pt_"+channels.at(it_ch), leptons.at(0)->Pt(), weight, 400, 0., 400.);
-      FillHist("Lep2_Pt_"+channels.at(it_ch), leptons.at(1)->Pt(), weight, 400, 0., 400.);
-      FillHist("Lep3_Pt_"+channels.at(it_ch), leptons.at(2)->Pt(), weight, 400, 0., 400.);
-      FillHist("MET_"+channels.at(it_ch), MET, weight, 400, 0., 400.);
-      FillHist("Mt_"+channels.at(it_ch), Mt, weight, 400, 0., 400.);
-      FillHist("NumberOfEvents_weighted_"+channels.at(it_ch), 0.5, weight, 2, 0., 2.);
+      FillHist("ZCand_Mass_"+regions.at(it_rg), ZCand.M(), weight, 80, 50., 130.);
+      FillHist("TriLep_Mass_"+regions.at(it_rg), TriLep.M(), weight, 80, 50., 130.);
+      FillHist("WtagLep_Pt_"+regions.at(it_rg), WtagLep.Pt(), weight, 400, 0., 400.);
+      FillHist("ZtagLep1_Pt_"+regions.at(it_rg), ZtagLep1.Pt(), weight, 400, 0., 400.);
+      FillHist("ZtagLep2_Pt_"+regions.at(it_rg), ZtagLep2.Pt(), weight, 400, 0., 400.);
+      FillHist("Lep1_Pt_"+regions.at(it_rg), leptons.at(0)->Pt(), weight, 400, 0., 400.);
+      FillHist("Lep2_Pt_"+regions.at(it_rg), leptons.at(1)->Pt(), weight, 400, 0., 400.);
+      FillHist("Lep3_Pt_"+regions.at(it_rg), leptons.at(2)->Pt(), weight, 400, 0., 400.);
+      FillHist("MET_"+regions.at(it_rg), MET, weight, 400, 0., 400.);
+      FillHist("Mt_"+regions.at(it_rg), Mt, weight, 400, 0., 400.);
+      FillHist("NumberOfEvents_weighted_"+regions.at(it_rg), 0.5, weight, 2, 0., 2.);
+     
+      for(unsigned int it_ch=0; it_ch<channels.size(); it_ch++){
+        if(muons.size() == it_ch){
+          FillHist("ZCand_Mass_"+regions.at(it_rg)+"_"+channels.at(it_ch), ZCand.M(), weight, 80, 50., 130.);
+          FillHist("TriLep_Mass_"+regions.at(it_rg)+"_"+channels.at(it_ch), TriLep.M(), weight, 80, 50., 130.);
+          FillHist("WtagLep_Pt_"+regions.at(it_rg)+"_"+channels.at(it_ch), WtagLep.Pt(), weight, 400, 0., 400.);
+          FillHist("ZtagLep1_Pt_"+regions.at(it_rg)+"_"+channels.at(it_ch), ZtagLep1.Pt(), weight, 400, 0., 400.);
+          FillHist("ZtagLep2_Pt_"+regions.at(it_rg)+"_"+channels.at(it_ch), ZtagLep2.Pt(), weight, 400, 0., 400.);
+          FillHist("Lep1_Pt_"+regions.at(it_rg)+"_"+channels.at(it_ch), leptons.at(0)->Pt(), weight, 400, 0., 400.);
+          FillHist("Lep2_Pt_"+regions.at(it_rg)+"_"+channels.at(it_ch), leptons.at(1)->Pt(), weight, 400, 0., 400.);
+          FillHist("Lep3_Pt_"+regions.at(it_rg)+"_"+channels.at(it_ch), leptons.at(2)->Pt(), weight, 400, 0., 400.);
+          FillHist("MET_"+regions.at(it_rg)+"_"+channels.at(it_ch), MET, weight, 400, 0., 400.);
+          FillHist("Mt_"+regions.at(it_rg)+"_"+channels.at(it_ch), Mt, weight, 400, 0., 400.);
+          FillHist("NumberOfEvents_weighted_"+regions.at(it_rg)+"_"+channels.at(it_ch), 0.5, weight, 2, 0., 2.);
+        }
+      }
     }
 
     // ZZ CR
-    if(lepton_size==4 && it_ch==2){
+    if(lepton_size==4 && it_rg==2){
 
-      FillHist("NumberOfEvents_"+channels.at(it_ch), 3.5, 1., cutflow_bin, 0., cutflow_max);
+      FillHist("NumberOfEvents_"+regions.at(it_rg), 3.5, 1., cutflow_bin, 0., cutflow_max);
 
       // Veto additional leptons
       if(lepton_veto_size>0) continue;
 
-      FillHist("NumberOfEvents_"+channels.at(it_ch), 4.5, 1., cutflow_bin, 0., cutflow_max);
+      FillHist("NumberOfEvents_"+regions.at(it_rg), 4.5, 1., cutflow_bin, 0., cutflow_max);
 
       // Triggers
       if(ev.PassTrigger(MuonTriggers)){
@@ -425,7 +445,7 @@ void HNtypeI_SM_CR::executeEventFromParameter(AnalyzerParameter param){
         else if(electrons.size()>0 && electrons.at(0).Pt()<ElectronPtCut) continue;
       }
 
-      FillHist("NumberOfEvents_"+channels.at(it_ch), 5.5, 1., cutflow_bin, 0., cutflow_max);
+      FillHist("NumberOfEvents_"+regions.at(it_rg), 5.5, 1., cutflow_bin, 0., cutflow_max);
 
       // sort 4 leptons with pT order
       for(unsigned int imu=0; imu<muons.size(); imu++){
@@ -467,17 +487,17 @@ void HNtypeI_SM_CR::executeEventFromParameter(AnalyzerParameter param){
       }
       else continue;
 
-      FillHist("NumberOfEvents_"+channels.at(it_ch), 6.5, 1., cutflow_bin, 0., cutflow_max);
+      FillHist("NumberOfEvents_"+regions.at(it_rg), 6.5, 1., cutflow_bin, 0., cutflow_max);
 
       // cuts on kinematic variables
       if(ZCand1.M()<10. || ZCand2.M()<10.) continue;
-      FillHist("NumberOfEvents_"+channels.at(it_ch), 7.5, 1., cutflow_bin, 0., cutflow_max);
+      FillHist("NumberOfEvents_"+regions.at(it_rg), 7.5, 1., cutflow_bin, 0., cutflow_max);
 
-      if(n_bjet_csvv2 > 0) continue;
-      FillHist("NumberOfEvents_"+channels.at(it_ch), 8.5, 1., cutflow_bin, 0., cutflow_max);
+      if(n_bjet_deepcsv > 0) continue;
+      FillHist("NumberOfEvents_"+regions.at(it_rg), 8.5, 1., cutflow_bin, 0., cutflow_max);
    
       if(!IsOnZ(ZCand1.M(), 15.) || !IsOnZ(ZCand2.M(), 15.)) continue;
-      FillHist("NumberOfEvents_"+channels.at(it_ch), 9.5, 1., cutflow_bin, 0., cutflow_max);
+      FillHist("NumberOfEvents_"+regions.at(it_rg), 9.5, 1., cutflow_bin, 0., cutflow_max);
 
       // weights for MC
       if(!IsDATA){
@@ -499,14 +519,14 @@ void HNtypeI_SM_CR::executeEventFromParameter(AnalyzerParameter param){
       }
  
       // Histograms
-      FillHist("ZCand1_Mass_"+channels.at(it_ch), ZCand1.M(), weight, 80, 50., 130.);
-      FillHist("ZCand2_Mass_"+channels.at(it_ch), ZCand2.M(), weight, 80, 50., 130.);
-      FillHist("Lep1_Pt_"+channels.at(it_ch), leptons.at(0)->Pt(), weight, 400, 0., 400.);
-      FillHist("Lep2_Pt_"+channels.at(it_ch), leptons.at(1)->Pt(), weight, 400, 0., 400.);
-      FillHist("Lep3_Pt_"+channels.at(it_ch), leptons.at(2)->Pt(), weight, 400, 0., 400.);
-      FillHist("Lep4_Pt_"+channels.at(it_ch), leptons.at(3)->Pt(), weight, 400, 0., 400.);
-      FillHist("MET_"+channels.at(it_ch), MET, weight, 400, 0., 400.);
-      FillHist("NumberOfEvents_weighted_"+channels.at(it_ch), 0.5, weight, 2, 0., 2.);
+      FillHist("ZCand1_Mass_"+regions.at(it_rg), ZCand1.M(), weight, 80, 50., 130.);
+      FillHist("ZCand2_Mass_"+regions.at(it_rg), ZCand2.M(), weight, 80, 50., 130.);
+      FillHist("Lep1_Pt_"+regions.at(it_rg), leptons.at(0)->Pt(), weight, 400, 0., 400.);
+      FillHist("Lep2_Pt_"+regions.at(it_rg), leptons.at(1)->Pt(), weight, 400, 0., 400.);
+      FillHist("Lep3_Pt_"+regions.at(it_rg), leptons.at(2)->Pt(), weight, 400, 0., 400.);
+      FillHist("Lep4_Pt_"+regions.at(it_rg), leptons.at(3)->Pt(), weight, 400, 0., 400.);
+      FillHist("MET_"+regions.at(it_rg), MET, weight, 400, 0., 400.);
+      FillHist("NumberOfEvents_weighted_"+regions.at(it_rg), 0.5, weight, 2, 0., 2.);
     }
   }
 }
