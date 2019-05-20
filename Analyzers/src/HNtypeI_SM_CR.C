@@ -28,7 +28,7 @@ void HNtypeI_SM_CR::initializeAnalyzer(){
   }
   else if(DataYear==2017){
     MuonTriggers.push_back("HLT_IsoMu27_v");
-    ElectronTriggers.push_back("HLT_Ele27_WPTight_Gsf_L1DoubleEG_v");
+//    ElectronTriggers.push_back("HLT_Ele27_WPTight_Gsf_L1DoubleEG_v");
     ElectronTriggers.push_back("HLT_Ele35_WPTight_Gsf_v");
     MuonPtCut = 29.;
     ElectronPtCut = 37.;
