@@ -20,18 +20,35 @@ void HNtypeI_SM_CR::initializeAnalyzer(){
   //==== IsoMuTriggerName is a year-dependent variable, and you don't want to do "if(Dataer==~~)" for every event (let's save cpu time).
   //==== Then, do it here, which only ran once for each macro
   if(DataYear==2016){
-    MuonTriggers.push_back("HLT_IsoMu24_v");
+    MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v");
+    MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_v");
+    MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v");
+    MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_v");
+    ElectronTriggers.push_back("HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v");
+    MuonPtCut1 = 20., MuonPtCut2 = 10.;
+    ElectronPtCut1 = 25., ElectronPtCut2 = 15.;
+/*    MuonTriggers.push_back("HLT_IsoMu24_v");
     MuonTriggers.push_back("HLT_IsoTkMu24_v");
     ElectronTriggers.push_back("HLT_Ele27_WPTight_Gsf_v");
     MuonPtCut = 26.;
-    ElectronPtCut = 29.;
+    ElectronPtCut = 29.;*/
   }
   else if(DataYear==2017){
-    MuonTriggers.push_back("HLT_IsoMu27_v");
+    MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8_v");
+    ElectronTriggers.push_back("HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_v");
+    MuonPtCut1 = 20., MuonPtCut2 = 10.;
+    ElectronPtCut1 = 25., ElectronPtCut2 = 15.;
+/*    MuonTriggers.push_back("HLT_IsoMu27_v");
 //    ElectronTriggers.push_back("HLT_Ele27_WPTight_Gsf_L1DoubleEG_v");
     ElectronTriggers.push_back("HLT_Ele35_WPTight_Gsf_v");
     MuonPtCut = 29.;
-    ElectronPtCut = 37.;
+    ElectronPtCut = 37.;*/
+  }
+  else if(DataYear==2018){
+    MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8_v");
+    ElectronTriggers.push_back("HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v");
+    MuonPtCut1 = 20., MuonPtCut2 = 10.;
+    ElectronPtCut1 = 25., ElectronPtCut2 = 15.;
   }
 
 //  cout << "[HNtypeI_SM_CR::initializeAnalyzer] IsoMuTriggerName = " << IsoMuTriggerName << endl;
@@ -151,9 +168,21 @@ void HNtypeI_SM_CR::executeEventFromParameter(AnalyzerParameter param){
 
   if(!IsDATA && !(ev.PassTrigger(MuonTriggers) || ev.PassTrigger(ElectronTriggers))) return;
   if(IsDATA){
-    if(DataStream.Contains("SingleMuon") && !ev.PassTrigger(MuonTriggers)) return;
+/*    if(DataStream.Contains("SingleMuon") && !ev.PassTrigger(MuonTriggers)) return;
     else if(DataStream.Contains("SingleElectron")){
       if(ev.PassTrigger(MuonTriggers) || !ev.PassTrigger(ElectronTriggers)) return;
+    }*/
+    if(DataYear==2016 || DataYear==2017){
+      if(DataStream.Contains("DoubleMuon") && !ev.PassTrigger(MuonTriggers)) return;
+      else if(DataStream.Contains("DoubleEG")){
+        if(ev.PassTrigger(MuonTriggers) || !ev.PassTrigger(ElectronTriggers)) return;
+      }
+    }
+    if(DataYear==2018){
+      if(DataStream.Contains("SignleMuon") && !ev.PassTrigger(MuonTriggers)) return;
+      else if(DataStream.Contains("EGamma")){
+        if(ev.PassTrigger(MuonTriggers) || !ev.PassTrigger(ElectronTriggers)) return;
+      }
     }
   }
   FillHist("NumberOfEvents_WZ", 2.5, 1., cutflow_bin, 0., cutflow_max);
@@ -277,12 +306,14 @@ void HNtypeI_SM_CR::executeEventFromParameter(AnalyzerParameter param){
 
       // Triggers
       if(ev.PassTrigger(MuonTriggers)){
-        if(muons.size()==0) continue;
-        else if(muons.size()>0 && muons.at(0).Pt()<MuonPtCut) continue;
+//        if(muons.size()==0) continue;
+        if(muons.size()<2) continue;
+        else if(muons.size()>=2 && (muons.at(0).Pt()<MuonPtCut1 || muons.at(1).Pt()<MuonPtCut2)) continue;
       }
       else if(!ev.PassTrigger(MuonTriggers) && ev.PassTrigger(ElectronTriggers)){
-        if(electrons.size()==0) continue;
-        else if(electrons.size()>0 && electrons.at(0).Pt()<ElectronPtCut) continue;
+//        if(electrons.size()==0) continue;
+        if(electrons.size()<2) continue;
+        else if(electrons.size()>=2 && (electrons.at(0).Pt()<ElectronPtCut1 || electrons.at(1).Pt()<ElectronPtCut2)) continue;
       }
 
       FillHist("NumberOfEvents_"+regions.at(it_rg), 5.5, 1., cutflow_bin, 0., cutflow_max);
@@ -437,12 +468,14 @@ void HNtypeI_SM_CR::executeEventFromParameter(AnalyzerParameter param){
 
       // Triggers
       if(ev.PassTrigger(MuonTriggers)){
-        if(muons.size()==0) continue;
-        else if(muons.size()>0 && muons.at(0).Pt()<MuonPtCut) continue;
+//        if(muons.size()==0) continue;
+        if(muons.size()<2) continue;
+        else if(muons.size()>=2 && (muons.at(0).Pt()<MuonPtCut1 || muons.at(1).Pt()<MuonPtCut2)) continue;
       }
       else if(!ev.PassTrigger(MuonTriggers) && ev.PassTrigger(ElectronTriggers)){
-        if(electrons.size()==0) continue;
-        else if(electrons.size()>0 && electrons.at(0).Pt()<ElectronPtCut) continue;
+//        if(electrons.size()==0) continue;
+        if(electrons.size()<2) continue;
+        else if(electrons.size()>=2 && (electrons.at(0).Pt()<ElectronPtCut1 || electrons.at(1).Pt()<ElectronPtCut2)) continue;
       }
 
       FillHist("NumberOfEvents_"+regions.at(it_rg), 5.5, 1., cutflow_bin, 0., cutflow_max);

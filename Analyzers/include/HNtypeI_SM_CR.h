@@ -19,8 +19,10 @@ public:
   
   vector<TString> MuonTriggers;
   vector<TString> ElectronTriggers;
-  double MuonPtCut;
-  double ElectronPtCut;
+  double MuonPtCut1;
+  double MuonPtCut2;
+  double ElectronPtCut1;
+  double ElectronPtCut2;
 
 //  vector<TString> EleIDs, EleIDSFKeys, MuonIDs, MuonIDSFKeys;
   vector<Electron> AllElectrons;
