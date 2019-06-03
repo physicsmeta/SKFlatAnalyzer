@@ -48,6 +48,7 @@ void SkimTree_LRSMHighPt::initializeAnalyzer(){
     cout << "[SkimTree_LRSMHighPt::initializeAnalyzer]   " << triggers.at(i) << endl;
   }
 
+
 }
 
 void SkimTree_LRSMHighPt::executeEvent(){
