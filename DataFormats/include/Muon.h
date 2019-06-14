@@ -100,6 +100,10 @@ public:
   bool Pass_POGHighPtWithLooseTrkIso();
   bool Pass_TESTID();
 
+  bool Pass_HNVeto();
+  bool Pass_HNLoose();
+  bool Pass_HNTight();
+
 private:
 
   unsigned int j_TypeBit, j_IDBit;

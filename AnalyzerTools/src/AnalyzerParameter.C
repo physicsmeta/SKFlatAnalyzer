@@ -10,6 +10,7 @@ void AnalyzerParameter::Clear(){
   Electron_Loose_ID = "";
   Electron_Veto_ID = "";
   Electron_ID_SF_Key = "";
+  Electron_Trigger_SF_Key = "";
   Electron_FR_ID = "";
   Electron_FR_Key = "";
   Electron_CF_ID = "";

@@ -96,6 +96,9 @@ bool Muon::PassID(TString ID){
   if(ID=="POGHighPtWithLooseTrkIso") return Pass_POGHighPtWithLooseTrkIso();
   //==== Customized
   if(ID=="TEST") return Pass_TESTID();
+  if(ID=="HNVeto") return Pass_HNVeto();
+  if(ID=="HNLoose") return Pass_HNLoose();
+  if(ID=="HNTight") return Pass_HNTight();
 
   cout << "[Electron::PassID] No id : " << ID << endl;
   exit(EXIT_FAILURE);
@@ -113,6 +116,31 @@ bool Muon::Pass_POGHighPtWithLooseTrkIso(){
   if(!( TrkIso()/TuneP4().Pt()<0.1 )) return false;
   return true;
 }
+
+bool Muon::Pass_HNVeto(){
+  if(!( isPOGLoose() )) return false;
+  if(!( fabs(dXY())<0.2 && fabs(dZ())<0.5) ) return false;
+  if(!( RelIso()<0.6 ))  return false;
+  if(!( Chi2()<50. )) return false;
+  return true;
+}
+
+bool Muon::Pass_HNLoose(){
+  if(!( isPOGLoose() )) return false;
+  if(!( fabs(dXY())<0.2 && fabs(dZ())<0.1 && fabs(IP3D()/IP3Derr())<3.) ) return false;
+  if(!( RelIso()<0.4 ))  return false;
+  if(!( Chi2()<50. )) return false;
+  return true;
+}
+
+bool Muon::Pass_HNTight(){
+  if(!( isPOGTight() )) return false;
+  if(!( fabs(dXY())<0.005 && fabs(dZ())<0.04 && fabs(IP3D()/IP3Derr())<3.) ) return false;
+  if(!( RelIso()<0.07 ))  return false;
+  if(!( Chi2()<10. )) return false;
+  return true;
+}
+
 
 //==== TEST ID
 

@@ -17,6 +17,7 @@ Electron::Electron(){
   j_EnergyUnCorr = -999.;
   j_passConversionVeto = false;
   j_NMissingHits = 0;
+  j_isGsfCtfScPixChargeConsistent = false;
   j_Full5x5_sigmaIetaIeta = -999.;
   j_dEtaSeed = -999.;
   j_dPhiIn = -999.;
@@ -67,6 +68,10 @@ void Electron::SetPassConversionVeto(bool b){
 
 void Electron::SetNMissingHits(int n){
   j_NMissingHits = n;
+}
+
+void Electron::SetIsGsfCtfScPixChargeConsistent(bool b){
+  j_isGsfCtfScPixChargeConsistent = b;
 }
 
 void Electron::SetCutBasedIDVariables(
@@ -139,6 +144,10 @@ bool Electron::PassID(TString ID){
   if(ID=="SUSYLoose") return Pass_SUSYLoose();
   if(ID=="NOCUT") return true;
   if(ID=="TEST") return Pass_TESTID();
+  if(ID=="TightWithIPcut") return Pass_CutBasedTightWithIPcut();
+  if(ID=="HNVeto") return Pass_HNVeto();
+  if(ID=="HNLoose") return Pass_HNLoose();
+  if(ID=="HNTight") return Pass_HNTight();
 
   cout << "[Electron::PassID] No id : " << ID << endl;
   exit(EXIT_FAILURE);
@@ -190,6 +199,43 @@ bool Electron::Pass_SUSYLoose(){
   if(! (fabs(dXY())<0.05 && fabs(dZ())<0.1 && fabs(IP3D()/IP3Derr())<8.) ) return false;
   if(! PassConversionVeto() ) return false;
   if(! (NMissingHits()==0) ) return false;
+
+  return true;
+}
+
+bool Electron::Pass_CutBasedTightWithIPcut(){
+  if(! passTightID() ) return false;
+  if( fabs(scEta()) <= 1.479 ){
+    if(! (fabs(dXY())<0.05 && fabs(dZ())<0.1) ) return false;
+  }
+  else{
+    if(! (fabs(dXY())<0.1 && fabs(dZ())<0.2) ) return false;
+  }
+  return true;
+}
+
+bool Electron::Pass_HNVeto(){
+  return true;
+}
+
+bool Electron::Pass_HNLoose(){
+  return true;
+}
+
+bool Electron::Pass_HNTight(){
+  if( fabs(scEta()) <= 0.8 ){
+    if(! (MVANoIso()>0.9) ) return false;
+  }
+  else if( fabs(scEta()) > 0.8 && fabs(scEta()) <= 1.479 ){
+    if(! (MVANoIso()>0.825) ) return false;
+  }
+  else{
+    if(! (MVANoIso()>0.5) ) return false;
+  }
+  if(! (fabs(dXY())<0.01 && fabs(dZ())<0.04 && fabs(IP3D()/IP3Derr())<4.) ) return false;
+  if(! (RelIso()<0.08) ) return false;
+  if(! (PassConversionVeto()) ) return false;
+  if(! (IsGsfCtfScPixChargeConsistent()) ) return false;
 
   return true;
 }
