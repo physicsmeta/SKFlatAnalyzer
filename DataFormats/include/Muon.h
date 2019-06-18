@@ -99,9 +99,9 @@ public:
   bool Pass_POGHighPtWithLooseTrkIso() const;
   bool Pass_TESTID() const;
 
-  bool Pass_HNVeto();
-  bool Pass_HNLoose();
-  bool Pass_HNTight();
+  bool Pass_HNVeto() const;
+  bool Pass_HNLoose() const;
+  bool Pass_HNTight() const;
 
 private:
 

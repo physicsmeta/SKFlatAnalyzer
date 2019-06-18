@@ -117,7 +117,7 @@ bool Muon::Pass_POGHighPtWithLooseTrkIso() const {
   return true;
 }
 
-bool Muon::Pass_HNVeto(){
+bool Muon::Pass_HNVeto() const{
   if(!( isPOGLoose() )) return false;
   if(!( fabs(dXY())<0.2 && fabs(dZ())<0.5) ) return false;
   if(!( RelIso()<0.6 ))  return false;
@@ -125,7 +125,7 @@ bool Muon::Pass_HNVeto(){
   return true;
 }
 
-bool Muon::Pass_HNLoose(){
+bool Muon::Pass_HNLoose() const{
   if(!( isPOGLoose() )) return false;
   if(!( fabs(dXY())<0.2 && fabs(dZ())<0.1 && fabs(IP3D()/IP3Derr())<3.) ) return false;
   if(!( RelIso()<0.4 ))  return false;
@@ -133,7 +133,7 @@ bool Muon::Pass_HNLoose(){
   return true;
 }
 
-bool Muon::Pass_HNTight(){
+bool Muon::Pass_HNTight() const{
   if(!( isPOGTight() )) return false;
   if(!( fabs(dXY())<0.005 && fabs(dZ())<0.04 && fabs(IP3D()/IP3Derr())<3.) ) return false;
   if(!( RelIso()<0.07 ))  return false;

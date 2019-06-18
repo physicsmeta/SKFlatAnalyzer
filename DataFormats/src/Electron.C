@@ -203,7 +203,7 @@ bool Electron::Pass_SUSYLoose() const{
   return true;
 }
 
-bool Electron::Pass_CutBasedTightWithIPcut(){
+bool Electron::Pass_CutBasedTightWithIPcut() const{
   if(! passTightID() ) return false;
   if( fabs(scEta()) <= 1.479 ){
     if(! (fabs(dXY())<0.05 && fabs(dZ())<0.1) ) return false;
@@ -214,15 +214,41 @@ bool Electron::Pass_CutBasedTightWithIPcut(){
   return true;
 }
 
-bool Electron::Pass_HNVeto(){
+bool Electron::Pass_HNVeto() const{
+  if( fabs(scEta()) <= 0.8 ){
+    if(! (MVANoIso()>-0.1) ) return false;
+  }
+  else if( fabs(scEta()) > 0.8 && fabs(scEta()) <= 1.479 ){
+    if(! (MVANoIso()>0.1) ) return false;
+  }
+  else{
+    if(! (MVANoIso()>-0.1) ) return false;
+  }
+  if(! (fabs(dXY())<0.2 && fabs(dZ())<0.5) ) return false;
+  if(! (RelIso()<0.6) ) return false;
+
   return true;
 }
 
-bool Electron::Pass_HNLoose(){
+bool Electron::Pass_HNLoose() const{
+  if( fabs(scEta()) <= 0.8 ){
+    if(! (MVANoIso()>-0.1) ) return false;
+  }
+  else if( fabs(scEta()) > 0.8 && fabs(scEta()) <= 1.479 ){
+    if(! (MVANoIso()>0.1) ) return false;
+  }
+  else{
+    if(! (MVANoIso()>-0.1) ) return false;
+  }
+  if(! (fabs(dXY())<0.2 && fabs(dZ())<0.1 && fabs(IP3D()/IP3Derr())<10.) ) return false;
+  if(! (RelIso()<0.6) ) return false;
+  if(! (PassConversionVeto()) ) return false;
+  if(! (IsGsfCtfScPixChargeConsistent()) ) return false;
+
   return true;
 }
 
-bool Electron::Pass_HNTight(){
+bool Electron::Pass_HNTight() const{
   if( fabs(scEta()) <= 0.8 ){
     if(! (MVANoIso()>0.9) ) return false;
   }

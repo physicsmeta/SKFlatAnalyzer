@@ -110,10 +110,10 @@ public:
   bool Pass_SUSYTight() const;
   bool Pass_SUSYLoose() const;
 
-  bool Pass_CutBasedTightWithIPcut();
-  bool Pass_HNVeto();
-  bool Pass_HNLoose();
-  bool Pass_HNTight();
+  bool Pass_CutBasedTightWithIPcut() const;
+  bool Pass_HNVeto() const;
+  bool Pass_HNLoose() const;
+  bool Pass_HNTight() const;
 
   void SetRelPFIso_Rho(double r);
   double EA();
