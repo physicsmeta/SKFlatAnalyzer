@@ -131,6 +131,7 @@ void HNtypeI_SM_CR::executeEvent(){
   param.Electron_Veto_ID = "HNVeto";
   param.Electron_ID_SF_Key = "";
   param.Electron_Trigger_SF_Key = "";
+  param.Muon_Tight_ID = MuonID;
   param.Muon_Veto_ID = "HNVeto";
   param.Muon_ID_SF_Key = "";
   param.Muon_ISO_SF_Key = "";
