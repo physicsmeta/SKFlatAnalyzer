@@ -147,8 +147,8 @@ else:
       InputSamples.append(args.InputSample+":"+args.DataPeriod)
       StringForHash += args.InputSample+":"+args.DataPeriod
   else:
-    InputSamples.append(args.InputSample)
-    StringForHash += args.InputSample
+    InputSamples.append(args.InputSample) #JH: InputSamples = ["DYJets"]
+    StringForHash += args.InputSample #JH: StringForHash = "DYJets"
 FileRangesForEachSample = []
 
 ## Get Random Number for webdir
@@ -157,7 +157,7 @@ random.seed(hash(StringForHash+timestamp+args.Year))
 RandomNumber = int(random.random()*1000000)
 str_RandomNumber = str(RandomNumber)
 webdirname = timestamp+"_"+str_RandomNumber
-webdirpathbase = SKFlatRunlogDir+'/www/SKFlatAnalyzerJobLogs/'+webdirname
+webdirpathbase = SKFlatRunlogDir+'/www/SKFlatAnalyzerJobLogs/'+webdirname #JH: SKFlatRunlog/www/SKFlatAnalyzerJobLogs/2019_07_19_132946_890812
 while os.path.isdir(webdirpathbase):
   webdirpathbase += '_'
 
@@ -178,7 +178,7 @@ MasterJobDir += '__'+HOSTNAME+'/'
 
 ## Copy libray
 
-os.system('mkdir -p '+MasterJobDir+'/lib/')
+os.system('mkdir -p '+MasterJobDir+'/lib/') #JH: SKFlatRunlog/2019_07_19_132946__890812__ExampleRun__Year2016__TAMSA1/lib/
 os.system('cp '+SKFlat_LIB_PATH+'/* '+MasterJobDir+'/lib')
 
 ## Loop over samples
@@ -187,7 +187,7 @@ os.system('cp '+SKFlat_LIB_PATH+'/* '+MasterJobDir+'/lib')
 SampleFinishedForEachSample = []
 PostJobFinishedForEachSample = []
 BaseDirForEachSample = []
-for InputSample in InputSamples:
+for InputSample in InputSamples: #JH: "DYJets"
 
   NJobs = args.NJobs
 
@@ -198,7 +198,7 @@ for InputSample in InputSamples:
 
   IsDATA = False
   DataPeriod = ""
-  if ":" in InputSample:
+  if ":" in InputSample: #JH: If InputSample is data, then it contains "InputSample:DataPeriod", see L141
     IsDATA = True
     tmp = InputSample
     InputSample = tmp.split(":")[0]
@@ -206,7 +206,7 @@ for InputSample in InputSamples:
 
   ## Prepare output
 
-  base_rundir = MasterJobDir+InputSample
+  base_rundir = MasterJobDir+InputSample #JH: SKFlatRunlog/2019_07_19_132946__890812__ExampleRun__Year2016__TAMSA1/DYJets
   if IsDATA:
     base_rundir = base_rundir+'_period'+DataPeriod
   base_rundir = base_rundir+"/"
@@ -218,7 +218,7 @@ for InputSample in InputSamples:
   ## cf) base_rundir = $SKFlatRunlogDir/2019_02_26_222038__GetEffLumi__Year2016__KISTI/WW_pythia/
 
   this_webdir = webdirpathbase+'/'+base_rundir.replace(SKFlatRunlogDir,'').replace(HOSTNAME+'/',HOSTNAME+'__')
-  os.system('mkdir -p '+this_webdir)
+  os.system('mkdir -p '+this_webdir) #JH: SKFlatRunlog/www/SKFlatAnalyzerJobLogs/2019_07_19_132946_890812/2019_07_19_132946__890812__ExampleRun__Year2016__TAMSA1__DYJets
 
   ## If KNU, copy grid cert
 
@@ -229,11 +229,11 @@ for InputSample in InputSamples:
 
   lines_files = []
 
-  tmpfilepath = SAMPLE_DATA_DIR+'/For'+SampleHOSTNAME+'/'+SkimString+InputSample+'.txt'
+  tmpfilepath = SAMPLE_DATA_DIR+'/For'+SampleHOSTNAME+'/'+SkimString+InputSample+'.txt' #JH: SKFlatAnalyzer/data/Run2Legacy_v3/2016/Sample/ForSNU/DYJets.txt
   if IsDATA:
     tmpfilepath = SAMPLE_DATA_DIR+'/For'+SampleHOSTNAME+'/'+SkimString+InputSample+'_'+DataPeriod+'.txt'
   lines_files = open(tmpfilepath).readlines()
-  os.system('cp '+tmpfilepath+' '+base_rundir+'/input_filelist.txt')
+  os.system('cp '+tmpfilepath+' '+base_rundir+'/input_filelist.txt') #JH: SKFlatRunlog/2019_07_19_132946__890812__ExampleRun__Year2016__TAMSA1/DYJets/input_filelist.txt
 
   NTotalFiles = len(lines_files)
 
@@ -244,9 +244,9 @@ for InputSample in InputSamples:
 
   SubmitOutput.write("<SKFlat> NTotalFiles = "+str(NTotalFiles)+'\n')
   SubmitOutput.write("<SKFlat> NJobs = "+str(NJobs)+'\n')
-  nfilepjob = int(NTotalFiles/NJobs)
+  nfilepjob = int(NTotalFiles/NJobs) #JH: 871/50 = 17
   SubmitOutput.write("<SKFlat> --> # of files per job = "+str(nfilepjob)+'\n')
-  nfilepjob_remainder = NTotalFiles-(NJobs)*(nfilepjob)
+  nfilepjob_remainder = NTotalFiles-(NJobs)*(nfilepjob) #JH: 21
   if nfilepjob_remainder>=(NJobs):
     SubmitOutput.write('nfilepjob_remainder = '+str(nfilepjob_remainder)+'\n')
     SubmitOutput.write('while, NJobs = '+str(NJobs)+'\n')
@@ -259,15 +259,16 @@ for InputSample in InputSamples:
 
   ## First nfilepjob_remainder jobs will have (nfilepjob+1) files per job
 
-  for it_job in range(0,nfilepjob_remainder):
-    FileRanges.append(range(it_job*(nfilepjob+1),(it_job+1)*(nfilepjob+1)))
-    temp_end_largerjob = (it_job+1)*(nfilepjob+1)
-    nfile_checksum += len(range(it_job*(nfilepjob+1),(it_job+1)*(nfilepjob+1)))
+  for it_job in range(0,nfilepjob_remainder): #JH: range(0,21)
+    FileRanges.append(range(it_job*(nfilepjob+1),(it_job+1)*(nfilepjob+1))) #JH: range(0,18), ..., range(20*18, 21*18)
+    temp_end_largerjob = (it_job+1)*(nfilepjob+1) #JH: 21*18 = 378
+    nfile_checksum += len(range(it_job*(nfilepjob+1),(it_job+1)*(nfilepjob+1))) #JH: 21*18 = 378
 
   ## Remaining NJobs-nfilepjob_remainder jobs will have (nfilepjob) files per job
 
-  for it_job in range(0,NJobs-nfilepjob_remainder):
-    FileRanges.append(range(temp_end_largerjob+(it_job*nfilepjob),temp_end_largerjob+((it_job+1)*nfilepjob) ))
+  for it_job in range(0,NJobs-nfilepjob_remainder): #JH: 50-21 = 29
+    FileRanges.append(range(temp_end_largerjob+(it_job*nfilepjob),temp_end_largerjob+((it_job+1)*nfilepjob) )) #JH: range(21*18,21*18+17), ..., range(21*18+28*17,21*18+29*17)
+#JH: aq+b = b(q+1) + (a-b)q. No problem of excessive range because bq+b < aq+b always
     nfile_checksum += len(range(temp_end_largerjob+(it_job*nfilepjob),temp_end_largerjob+((it_job+1)*nfilepjob) ))
   SubmitOutput.write('nfile_checksum = '+str(nfile_checksum)+'\n')
   SubmitOutput.write('NTotalFiles = '+str(NTotalFiles)+'\n')
@@ -300,7 +301,7 @@ for InputSample in InputSamples:
       commandsfilename += '_'+DataPeriod
     for flag in Userflags:
       commandsfilename += '__'+flag
-    run_commands = open(base_rundir+'/'+commandsfilename+'.sh','w')
+    run_commands = open(base_rundir+'/'+commandsfilename+'.sh','w') #JH: SKFlatRunlog/2019_07_19_132946__890812__ExampleRun__Year2016__TAMSA1/DYJets/ExampleRun_2016_DYJets.sh
     print>>run_commands,'''#!/bin/bash
 SECTION=`printf $1`
 WORKDIR=`pwd`
@@ -354,7 +355,7 @@ cat err.log >&2
 '''.format(SKFlatV, base_rundir, SCRAM_ARCH, cmsswrel)
     run_commands.close()
 
-    submit_command = open(base_rundir+'/submit.jds','w')
+    submit_command = open(base_rundir+'/submit.jds','w') #JH: SKFlatRunlog/2019_07_19_132946__890812__ExampleRun__Year2016__TAMSA1/DYJets/submit.jds
     if IsUI10:
       print>>submit_command,'''executable = {1}.sh
 universe   = vanilla
