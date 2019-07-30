@@ -145,7 +145,9 @@ bool Electron::PassID(TString ID) const{
   if(ID=="NOCUT") return true;
   if(ID=="TEST") return Pass_TESTID();
   if(ID=="TightWithIPcut") return Pass_CutBasedTightWithIPcut();
-  if(ID=="HNVeto") return Pass_HNVeto();
+  if(ID=="HNVeto2016") return Pass_HNVeto2016();
+  if(ID=="HNLoose2016") return Pass_HNLoose2016();
+  if(ID=="HNTight2016") return Pass_HNTight2016();
   if(ID=="HNLoose") return Pass_HNLoose();
   if(ID=="HNTight") return Pass_HNTight();
 
@@ -214,7 +216,7 @@ bool Electron::Pass_CutBasedTightWithIPcut() const{
   return true;
 }
 
-bool Electron::Pass_HNVeto() const{
+bool Electron::Pass_HNVeto2016() const{
   if( fabs(scEta()) <= 0.8 ){
     if(! (MVANoIso()>-0.1) ) return false;
   }
@@ -230,7 +232,7 @@ bool Electron::Pass_HNVeto() const{
   return true;
 }
 
-bool Electron::Pass_HNLoose() const{
+bool Electron::Pass_HNLoose2016() const{
   if( fabs(scEta()) <= 0.8 ){
     if(! (MVANoIso()>-0.1) ) return false;
   }
@@ -248,7 +250,7 @@ bool Electron::Pass_HNLoose() const{
   return true;
 }
 
-bool Electron::Pass_HNTight() const{
+bool Electron::Pass_HNTight2016() const{
   if( fabs(scEta()) <= 0.8 ){
     if(! (MVANoIso()>0.9) ) return false;
   }
@@ -266,6 +268,13 @@ bool Electron::Pass_HNTight() const{
   return true;
 }
 
+bool Electron::Pass_HNLoose() const{
+  return true;
+}
+
+bool Electron::Pass_HNTight() const{
+  return true;
+}
 //==== TEST ID
 
 bool Electron::Pass_TESTID() const{

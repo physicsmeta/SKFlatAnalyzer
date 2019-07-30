@@ -111,7 +111,10 @@ public:
   bool Pass_SUSYLoose() const;
 
   bool Pass_CutBasedTightWithIPcut() const;
-  bool Pass_HNVeto() const;
+  bool Pass_HNVeto2016() const;
+  bool Pass_HNLoose2016() const;
+  bool Pass_HNTight2016() const;
+
   bool Pass_HNLoose() const;
   bool Pass_HNTight() const;
 

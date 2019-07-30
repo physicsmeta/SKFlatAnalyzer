@@ -73,3 +73,7 @@ WZ_pythia	sig_up	Pileup_reweight_69p2_mb.root
 ZZ_pythia	central	Pileup_reweight_69p2_mb.root
 ZZ_pythia	sig_down	Pileup_reweight_69p2_mb.root
 ZZ_pythia	sig_up	Pileup_reweight_69p2_mb.root
+WZTo3LNu        PUReweight_2017         PUReweight_2017.root
+ZZTo4L_powheg   PUReweight_2017         PUReweight_2017.root
+ZGToLLG_01J     PUReweight_2017         PUReweight_2017.root
+WGToLNuG_01J    PUReweight_2017         PUReweight_2017.root

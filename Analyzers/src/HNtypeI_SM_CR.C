@@ -106,7 +106,7 @@ void HNtypeI_SM_CR::executeEvent(){
 //  for(unsigned int it_MuonID=0; it_MuonID<MuonIDs.size(); it_MuonID++){
 
 //  TString MuonID = "POGTightWithTightIso";  // POG ID
-  TString MuonID = "HNTight";               // HN ID
+  TString MuonID = "HNTight2016";               // HN ID
 
   param.Clear();
 
@@ -127,12 +127,12 @@ void HNtypeI_SM_CR::executeEvent(){
   param.Muon_Trigger_SF_Key = "";*/
 
   // HN ID
-  param.Electron_Tight_ID = "HNTight";
-  param.Electron_Veto_ID = "HNVeto";
+  param.Electron_Tight_ID = "HNTight2016";
+  param.Electron_Veto_ID = "HNVeto2016";
   param.Electron_ID_SF_Key = "";
   param.Electron_Trigger_SF_Key = "";
   param.Muon_Tight_ID = MuonID;
-  param.Muon_Veto_ID = "HNVeto";
+  param.Muon_Veto_ID = "HNVeto2016";
   param.Muon_ID_SF_Key = "";
   param.Muon_ISO_SF_Key = "";
   param.Muon_Trigger_SF_Key = "";

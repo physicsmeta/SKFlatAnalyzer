@@ -134,9 +134,14 @@ void MCCorrection::ReadHistograms(){
     if(DataYear == 2017 && a!=MCSample) continue;
     
     TFile *file = new TFile(PUReweightPath+c);
-    if( (TH1D *)file->Get(a+"_"+b) ){
+/*    if( (TH1D *)file->Get(a+"_"+b) ){
       histDir->cd();
       map_hist_pileup[a+"_"+b+"_pileup"] = (TH1D *)file->Get(a+"_"+b)->Clone();
+    }*/
+    if( (TH1D *)file->Get(a+"_"+b) || (TH1D *)file->Get(b) ){  // For MC samples with correctPU, b = "PUReweight_2017" and c = "PUReweight_2017.root"
+      histDir->cd();
+      if( (TH1D *)file->Get(a+"_"+b) ) map_hist_pileup[a+"_"+b+"_pileup"] = (TH1D *)file->Get(a+"_"+b)->Clone();
+      if( (TH1D *)file->Get(b) ) map_hist_pileup[a+"_pileup"] = (TH1D *)file->Get(b)->Clone();
     }
     else{
       cout << "[MCCorrection::ReadHistograms] No : " << a + "_" + b << endl;
@@ -722,6 +727,30 @@ double MCCorrection::GetPileUpWeight(int N_pileup, int syst){
   }
 
   TH1D *this_hist = map_hist_pileup[this_histname];
+  if(!this_hist){
+    cout << "[MCCorrection::GetPileUpWeightBySampleName] No " << this_histname << endl;
+    exit(EXIT_FAILURE);
+  }
+
+  return this_hist->GetBinContent(this_bin);
+
+}
+
+double MCCorrection::GetPileUpWeight2017(int N_pileup, int syst){
+
+  int this_bin = N_pileup+1;
+  if(N_pileup >= 100) this_bin=100;
+
+  TString this_histname = MCSample;
+  if(syst == 0){
+    this_histname += "_pileup";
+  }
+  else{
+    cout << "[MCCorrection::GetPileUpWeightBySampleName] syst should be 0, -1, or +1" << endl;
+    exit(EXIT_FAILURE);
+  }
+
+  TH1D *this_hist = map_hist_pileup[this_histname]; 
   if(!this_hist){
     cout << "[MCCorrection::GetPileUpWeightBySampleName] No " << this_histname << endl;
     exit(EXIT_FAILURE);

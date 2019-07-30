@@ -14,6 +14,10 @@ Muon::Muon() : Lepton() {
   j_MomentumScaleUp = -999.;
   j_MomentumScaleDown = -999.;
   j_TunePPtError = -999.;
+  j_validmuonhits = 999;
+  j_matchedstations = 999;
+  j_validpixelhits = 999;
+  j_trackerlayers = 999;
 }
 
 Muon::~Muon(){
@@ -42,6 +46,22 @@ void Muon::SetIso(double ch04, double nh04, double ph04, double pu04, double trk
 
 void Muon::SetChi2(double chi2){
   j_chi2 = chi2;
+}
+
+void Muon::SetValidMuonHits(int validmuonhits){
+  j_validmuonhits = validmuonhits;
+}
+
+void Muon::SetMatchedStations(int matchedstations){
+  j_matchedstations = matchedstations;
+}
+
+void Muon::SetValidPixelHits(int validpixelhits){
+  j_validpixelhits = validpixelhits;
+}
+
+void Muon::SetTrackerLayers(int trackerlayers){
+  j_trackerlayers = trackerlayers;
 }
 
 void Muon::CalcPFRelIso(){
@@ -96,7 +116,9 @@ bool Muon::PassID(TString ID) const {
   if(ID=="POGHighPtWithLooseTrkIso") return Pass_POGHighPtWithLooseTrkIso();
   //==== Customized
   if(ID=="TEST") return Pass_TESTID();
-  if(ID=="HNVeto") return Pass_HNVeto();
+  if(ID=="HNVeto2016") return Pass_HNVeto2016();
+  if(ID=="HNLoose2016") return Pass_HNLoose2016();
+  if(ID=="HNTight2016") return Pass_HNTight2016();
   if(ID=="HNLoose") return Pass_HNLoose();
   if(ID=="HNTight") return Pass_HNTight();
 
@@ -117,7 +139,7 @@ bool Muon::Pass_POGHighPtWithLooseTrkIso() const {
   return true;
 }
 
-bool Muon::Pass_HNVeto() const{
+bool Muon::Pass_HNVeto2016() const{
   if(!( isPOGLoose() )) return false;
   if(!( fabs(dXY())<0.2 && fabs(dZ())<0.5) ) return false;
   if(!( RelIso()<0.6 ))  return false;
@@ -125,7 +147,7 @@ bool Muon::Pass_HNVeto() const{
   return true;
 }
 
-bool Muon::Pass_HNLoose() const{
+bool Muon::Pass_HNLoose2016() const{
   if(!( isPOGLoose() )) return false;
   if(!( fabs(dXY())<0.2 && fabs(dZ())<0.1 && fabs(IP3D()/IP3Derr())<3.) ) return false;
   if(!( RelIso()<0.4 ))  return false;
@@ -133,7 +155,7 @@ bool Muon::Pass_HNLoose() const{
   return true;
 }
 
-bool Muon::Pass_HNTight() const{
+bool Muon::Pass_HNTight2016() const{
   if(!( isPOGTight() )) return false;
   if(!( fabs(dXY())<0.005 && fabs(dZ())<0.04 && fabs(IP3D()/IP3Derr())<3.) ) return false;
   if(!( RelIso()<0.07 ))  return false;
@@ -141,6 +163,17 @@ bool Muon::Pass_HNTight() const{
   return true;
 }
 
+bool Muon::Pass_HNLoose() const{
+  if(!( isPOGTight() )) return false;
+  if(!( RelIso()<0.4 )) return false;
+  return true;
+}
+
+bool Muon::Pass_HNTight() const{
+  if(!( isPOGTight() )) return false;
+  if(!( RelIso()<0.15 )) return false;
+  return true;
+}
 
 //==== TEST ID
 

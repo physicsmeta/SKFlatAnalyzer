@@ -77,6 +77,18 @@ public:
   void SetChi2(double chi2);
   inline double Chi2() const { return j_chi2; }
 
+  void SetValidMuonHits(int validmuonhits);
+  inline int ValidMuonHits() const { return j_validmuonhits; }
+
+  void SetMatchedStations(int matchedstations);
+  inline int MatchedStations() const { return j_matchedstations; }
+
+  void SetValidPixelHits(int validpixelhits);
+  inline int ValidPixelHits() const { return j_validpixelhits; }
+
+  void SetTrackerLayers(int trackerlayers);
+  inline int TrackerLayers() const { return j_trackerlayers; }
+
   void SetMiniAODPt(double d);
   void SetMiniAODTunePPt(double d);
   inline double MiniAODPt() const {return j_MiniAODPt;}
@@ -99,7 +111,10 @@ public:
   bool Pass_POGHighPtWithLooseTrkIso() const;
   bool Pass_TESTID() const;
 
-  bool Pass_HNVeto() const;
+  bool Pass_HNVeto2016() const;
+  bool Pass_HNLoose2016() const;
+  bool Pass_HNTight2016() const;
+
   bool Pass_HNLoose() const;
   bool Pass_HNTight() const;
 
@@ -112,7 +127,11 @@ private:
   double j_MiniAODPt, j_MiniAODTunePPt, j_MomentumScaleUp, j_MomentumScaleDown;
   Particle j_TuneP4;
   double j_TunePPtError;
-
+  int j_validmuonhits;
+  int j_matchedstations;
+  int j_validpixelhits;
+  int j_trackerlayers;
+ 
   ClassDef(Muon,1);
 };
 

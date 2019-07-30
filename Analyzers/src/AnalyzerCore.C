@@ -113,6 +113,10 @@ std::vector<Muon> AnalyzerCore::GetAllMuons(){
     mu.SetisPOGHighPt(muon_ishighpt->at(i));
     mu.SetChi2(muon_normchi->at(i));
     mu.SetIso(muon_PfChargedHadronIsoR04->at(i),muon_PfNeutralHadronIsoR04->at(i),muon_PfGammaIsoR04->at(i),muon_PFSumPUIsoR04->at(i),muon_trkiso->at(i));
+    mu.SetValidMuonHits(muon_validmuonhits->at(i));
+    mu.SetMatchedStations(muon_matchedstations->at(i));
+    mu.SetValidPixelHits(muon_pixelHits->at(i));
+    mu.SetTrackerLayers(muon_trackerLayers->at(i));
 
     //==== Should be set after Eta is set
     mu.SetMiniIso(
@@ -992,7 +996,12 @@ double AnalyzerCore::GetPileUpWeight(int N_pileup, int syst){
       return mcCorr->GetPileUpWeight(N_pileup, syst);
     }
     else if(DataYear==2017){
-      return mcCorr->GetPileUpWeightBySampleName(N_pileup, syst);
+      if(MCSample.Contains("WZTo3LNu") || MCSample.Contains("ZZTo4L") || MCSample.Contains("ZGToLLG") || MCSample.Contains("WGToLNuG")){
+        return mcCorr->GetPileUpWeight2017(N_pileup, syst);
+      }
+      else{
+        return mcCorr->GetPileUpWeightBySampleName(N_pileup, syst);
+      }
     }
     else if(DataYear==2018){
       //==== TODO 2018 not yet added
