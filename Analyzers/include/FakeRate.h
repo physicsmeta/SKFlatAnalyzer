@@ -28,7 +28,7 @@ public:
   vector<Muon> AllMuons;
   vector<Jet> AllJets;
 
-  double weight_Prefire;
+//  double weight_Prefire;
 
   FakeRate();
   ~FakeRate();

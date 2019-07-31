@@ -80,7 +80,7 @@ void FakeRate::executeEvent(){
   //==== If MC && DataYear > 2017, 1.;
   //==== If MC && DataYear <= 2017, we have to reweight the event with this value
   //==== I defined "double weight_Prefire;" in Analyzers/include/FakeRate.h
-  weight_Prefire = GetPrefireWeight(0);
+//  weight_Prefire = GetPrefireWeight(0);
 
   AnalyzerParameter param;
 
@@ -101,8 +101,8 @@ void FakeRate::executeEvent(){
   param.Muon_Tight_ID = MuonID;
   param.Muon_Loose_ID = "HNLoose";
   param.Muon_Veto_ID = "";
-  param.Muon_ID_SF_Key = "NUM_TightID_DEN_genTracks";
-  param.Muon_ISO_SF_Key = "NUM_TightRelIso_DEN_TightIDandIPCut";
+  param.Muon_ID_SF_Key = "";
+  param.Muon_ISO_SF_Key = "";
   param.Jet_ID = "tight";
 
   executeEventFromParameter(param);
@@ -158,7 +158,7 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
   if(param.syst_ == AnalyzerParameter::Central){
 
   }
-  else if(param.syst_ == AnalyzerParameter::JetResUp){
+/*  else if(param.syst_ == AnalyzerParameter::JetResUp){
     this_AllJets = SmearJets( this_AllJets, +1 );
     //this_AllFatJets = SmearFatJets( this_AllFatJets, +1 );
   }
@@ -195,7 +195,7 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
   else{
     cout << "[FakeRate::executeEventFromParameter] Wrong syst" << endl;
     exit(EXIT_FAILURE);
-  }
+  }*/
 
   //==================================================
   //==== Then, apply ID selections using this_AllXXX
@@ -231,38 +231,46 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
   //==== Event selections..
   //=========================
 
+  double mu_tight_iso = 0.15;
   double pi = 3.14159265358979323846;
   double MET = ev.GetMETVector().Pt(); 
   double dphi = 0.;
   double weight = 1.;
+  double Mt = 0.;
+  double Pt_ratio = 0.;
 
-  TString triggername = "";
+  double triggerlumi = 0.; 
   double awayjet_ptcut = 40.;
   int awayjet = 0;
   int leadingjet = 0;
 
+  double ptcone_mu = 0.;
+
   if(muons_loose.size() == 1){
+    ptcone_mu = muons_loose.at(0).CalcPtCone(muons_loose.at(0).RelIso(), mu_tight_iso);
     // only 1 trigger for each PtCone range
-    if(muons_loose.at(0).PtCone() < MuonPtconeCut1) return; 
-    if(muons_loose.at(0).PtCone() >= MuonPtconeCut1 && muons_loose.at(0).PtCone() < MuonPtconeCut2){
-      triggername = "HLT_Mu3_PFJet40_v";
-      awayjet_ptcut = 50.;
+    if(ptcone_mu < MuonPtconeCut1) return; 
+    FillHist("Pt", muons_loose.at(0).Pt(), weight, 200, 0., 200.);
+    FillHist("PtCone", ptcone_mu, weight, 200, 0., 200.);
+    if(ptcone_mu >= MuonPtconeCut1 && ptcone_mu < MuonPtconeCut2){
       if(muons_loose.at(0).Pt() < MuonPtCut1) return;
-      if(!(ev.PassTrigger(triggername) && !ev.PassTrigger("HLT_Mu8_TrkIsoVVL_v") && !ev.PassTrigger("HLT_Mu17_TrkIsoVVL_v"))) return;
+      if(!(ev.PassTrigger("HLT_Mu3_PFJet40_v") && !ev.PassTrigger("HLT_Mu8_TrkIsoVVL_v") && !ev.PassTrigger("HLT_Mu17_TrkIsoVVL_v"))) return;
+      triggerlumi = 7.408;
+      awayjet_ptcut = 50.;
     }
-    else if(muons_loose.at(0).PtCone() >= MuonPtconeCut2 && muons_loose.at(0).PtCone() < MuonPtconeCut3){
-      triggername = "HLT_Mu8_TrkIsoVVL_v";
+    else if(ptcone_mu >= MuonPtconeCut2 && ptcone_mu < MuonPtconeCut3){
       if(muons_loose.at(0).Pt() < MuonPtCut2) return;
-      if(!(!ev.PassTrigger("HLT_Mu3_PFJet40_v") && ev.PassTrigger(triggername) && !ev.PassTrigger("HLT_Mu17_TrkIsoVVL_v"))) return;
+      if(!(!ev.PassTrigger("HLT_Mu3_PFJet40_v") && ev.PassTrigger("HLT_Mu8_TrkIsoVVL_v") && !ev.PassTrigger("HLT_Mu17_TrkIsoVVL_v"))) return;
+      triggerlumi = 7.801;
     }
     else{
-      triggername = "HLT_Mu17_TrkIsoVVL_v";
       if(muons_loose.at(0).Pt() < MuonPtCut3) return;
-      if(!(!ev.PassTrigger("HLT_Mu3_PFJet40_v") && !ev.PassTrigger("HLT_Mu8_TrkIsoVVL_v") && ev.PassTrigger(triggername))) return;
+      if(!(!ev.PassTrigger("HLT_Mu3_PFJet40_v") && !ev.PassTrigger("HLT_Mu8_TrkIsoVVL_v") && ev.PassTrigger("HLT_Mu17_TrkIsoVVL_v"))) return;
+      triggerlumi = 216.748;
     }
 
     if(!IsDATA){
-      weight *= weight_norm_1invpb*ev.GetTriggerLumi(triggername);
+      weight *= weight_norm_1invpb*triggerlumi;
       weight *= ev.MCweight();
       weight *= GetPrefireWeight(0);
       weight *= GetPileUpWeight(nPileUp,0);
@@ -280,17 +288,18 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
     if(awayjet == 0) return;
     if(jets.at(leadingjet).Pt() < awayjet_ptcut) return;
 
-    double Mt = MT(muons_loose.at(0), METv);
-    double Pt_ratio = jets.at(leadingjet).Pt()/muons_loose.at(0).Pt();
+    Mt = MT(muons_loose.at(0), METv);
+    Pt_ratio = jets.at(leadingjet).Pt()/muons_loose.at(0).Pt();
 
     // Histograms before applying cuts
     FillHist("MET_nocut", MET, weight, 200, 0., 200.);
     FillHist("Mt_nocut", Mt, weight, 200, 0., 200.);
     FillHist("Ptratio_nocut", Pt_ratio, weight, 30, 0., 3.);
-    FillHist("Mu_loose_PtCone_nocut", muons_loose.at(0).PtCone(), weight, 200, 0., 200.);
+    FillHist("Mu_loose_PtCone_nocut", ptcone_mu, weight, 200, 0., 200.);
     FillHist("Mu_loose_Eta_nocut", muons_loose.at(0).Eta(), weight, 50, -2.5, 2.5);      
     if(muons_tight.size() > 0){
-      FillHist("Mu_tight_PtCone_nocut", muons_tight.at(0).PtCone(), weight, 200, 0., 200.);
+      FillHist("Mu_tight_PtCone_nocut", ptcone_mu, weight, 200, 0., 200.);
+      FillHist("Mu_tight1_Eta_nocut", muons_loose.at(0).Eta(), weight, 50, -2.5, 2.5);
       FillHist("Mu_tight_Eta_nocut", muons_tight.at(0).Eta(), weight, 50, -2.5, 2.5);
     }
 
@@ -300,34 +309,34 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
     if(Pt_ratio < 1.) return;
 
     // Histograms after applying cuts
-    FillHist("Mu_loose_PtCone", muons_loose.at(0).PtCone(), weight, 200, 0., 200.);
+    FillHist("Mu_loose_PtCone", ptcone_mu, weight, 200, 0., 200.);
     FillHist("Mu_loose_Eta", muons_loose.at(0).Eta(), weight, 50, -2.5, 2.5); 
     if(muons_tight.size() > 0){
-      FillHist("Mu_tight_PtCone", muons_tight.at(0).PtCone(), weight, 200, 0., 200.);
+      FillHist("Mu_tight_PtCone", ptcone_mu, weight, 200, 0., 200.);
       FillHist("Mu_tight_Eta", muons_tight.at(0).Eta(), weight, 50, -2.5, 2.5);
     }
 
     // inner barrel ( |eta| < 0.8 )
     if(fabs(muons_loose.at(0).Eta()) < 0.8){
-      FillHist("Mu_loose_PtCone_barrel1", muons_loose.at(0).PtCone(), weight, 200, 0., 200.);
+      FillHist("Mu_loose_PtCone_barrel1", ptcone_mu, weight, 200, 0., 200.);
       if(muons_tight.size() > 0){
-        FillHist("Mu_tight_PtCone_barrel1", muons_tight.at(0).PtCone(), weight, 200, 0., 200.);
+        FillHist("Mu_tight_PtCone_barrel1", ptcone_mu, weight, 200, 0., 200.);
       }
     }
 
     // outer barrel ( 0.8 < |eta| < 1.479 )
     if(fabs(muons_loose.at(0).Eta()) >= 0.8 && fabs(muons_loose.at(0).Eta()) < 1.479){
-      FillHist("Mu_loose_PtCone_barrel2", muons_loose.at(0).PtCone(), weight, 200, 0., 200.);
+      FillHist("Mu_loose_PtCone_barrel2", ptcone_mu, weight, 200, 0., 200.);
       if(muons_tight.size() > 0){
-        FillHist("Mu_tight_PtCone_barrel2", muons_tight.at(0).PtCone(), weight, 200, 0., 200.);
+        FillHist("Mu_tight_PtCone_barrel2", ptcone_mu, weight, 200, 0., 200.);
       }
     }
 
     // endcap ( 1.479 < |eta| < 2.5 )
     if(fabs(muons_loose.at(0).Eta()) >= 0.8 && fabs(muons_loose.at(0).Eta()) < 1.479){
-      FillHist("Mu_loose_PtCone_endcap", muons_loose.at(0).PtCone(), weight, 200, 0., 200.);
+      FillHist("Mu_loose_PtCone_endcap", ptcone_mu, weight, 200, 0., 200.);
       if(muons_tight.size() > 0){
-        FillHist("Mu_tight_PtCone_endcap", muons_tight.at(0).PtCone(), weight, 200, 0., 200.);
+        FillHist("Mu_tight_PtCone_endcap", ptcone_mu, weight, 200, 0., 200.);
       }
     }
   }
