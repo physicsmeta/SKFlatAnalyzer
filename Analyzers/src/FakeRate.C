@@ -305,8 +305,8 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
     }
 
     // cuts on kinematic variables
-    if(MET < 80.) return;
-    if(Mt < 25.) return;
+    if(MET > 80.) return;
+    if(Mt > 25.) return;
     if(Pt_ratio < 1.) return;
 
     // Histograms after applying cuts
