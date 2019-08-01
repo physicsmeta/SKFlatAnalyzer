@@ -248,25 +248,26 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
 
   if(muons_loose.size() == 1){
     ptcone_mu = muons_loose.at(0).CalcPtCone(muons_loose.at(0).RelIso(), mu_tight_iso);
-    // only 1 trigger for each PtCone range
+    // only 1 prescaled trigger for each PtCone range, setup lumi
     if(ptcone_mu < MuonPtconeCut1) return; 
-    FillHist("Pt", muons_loose.at(0).Pt(), weight, 200, 0., 200.);
-    FillHist("PtCone", ptcone_mu, weight, 200, 0., 200.);
     if(ptcone_mu >= MuonPtconeCut1 && ptcone_mu < MuonPtconeCut2){
       if(muons_loose.at(0).Pt() < MuonPtCut1) return;
       if(!(ev.PassTrigger("HLT_Mu3_PFJet40_v") && !ev.PassTrigger("HLT_Mu8_TrkIsoVVL_v") && !ev.PassTrigger("HLT_Mu17_TrkIsoVVL_v"))) return;
-      triggerlumi = 7.408;
+      triggerlumi = 7.408;                     // private : 7.299
+      if(DataYear==2017) triggerlumi = 4.612;  // private : 4.667
       awayjet_ptcut = 50.;
     }
     else if(ptcone_mu >= MuonPtconeCut2 && ptcone_mu < MuonPtconeCut3){
       if(muons_loose.at(0).Pt() < MuonPtCut2) return;
       if(!(!ev.PassTrigger("HLT_Mu3_PFJet40_v") && ev.PassTrigger("HLT_Mu8_TrkIsoVVL_v") && !ev.PassTrigger("HLT_Mu17_TrkIsoVVL_v"))) return;
-      triggerlumi = 7.801;
+      triggerlumi = 7.801;                     // private : 7.618
+      if(DataYear==2017) triggerlumi = 2.932;  // calculated privately
     }
     else{
       if(muons_loose.at(0).Pt() < MuonPtCut3) return;
       if(!(!ev.PassTrigger("HLT_Mu3_PFJet40_v") && !ev.PassTrigger("HLT_Mu8_TrkIsoVVL_v") && ev.PassTrigger("HLT_Mu17_TrkIsoVVL_v"))) return;
-      triggerlumi = 216.748;
+      triggerlumi = 216.748;                   // private : 210.097
+      if(DataYear==2017) triggerlumi = 66.625; // calculated privately
     }
 
     if(!IsDATA){
