@@ -113,11 +113,11 @@ void SKFlatValidation::executeEvent(){
 
   //==== Prefire reweight
 
-  weight_Prefire = GetPrefireWeight(0);
+  weight_Prefire = GetPrefireWeight(0); //JH: return L1PrefireReweight_Central; AnalyzerCore.C
 
   //==== AnalyzerParameter
 
-  AnalyzerParameter param;
+  AnalyzerParameter param; //JH: declare Name, MCCorrectionIgnoreNoHist, Electron/Muon IDs, SF keys, Jet ID, syst_. AnalyzerParameter.C
 
   //==== POG IDs
 
@@ -160,7 +160,7 @@ void SKFlatValidation::executeEventFromParameter(AnalyzerParameter param){
 
   if(!PassMETFilter()) return;
 
-  Event ev = GetEvent();
+  Event ev = GetEvent(); //JH: Event ev; if(!IsDATA) ev.SetMCweight(gen_weight); ev.SetTrigger(*HLT_TriggerName); ev.SetMET(pfMET_Type1_pt,pfMET_Type1_phi); ev.SetnPV(nPV); ev.SetDataYear(DataYear); return ev; AnalyzerCore.C
 
   bool PassSingleElectron, PassSingleMuon;
   TString TriggerNameForSF_Electron, TriggerNameForSF_Muon;

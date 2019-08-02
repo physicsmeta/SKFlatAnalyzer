@@ -68,7 +68,7 @@ AnalyzerParameter::AnalyzerParameter(){
   Jet_ID = "HN";
   FatJet_ID = "HN";
 
-  syst_ = Central;
+  syst_ = Central; //JH: enum Syst{ Central, JetResUp, JetResDown, ..., NSyst }; Syst syst_; AnalyzerParameter.h
 
 }
 
