@@ -206,6 +206,7 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
   vector<Muon> muons_tight = SelectMuons(this_AllMuons, param.Muon_Tight_ID, 10., 2.4);
   vector<Muon> muons_loose = SelectMuons(this_AllMuons, param.Muon_Loose_ID, 5., 2.4);
   vector<Jet> jets = SelectJets(this_AllJets, param.Jet_ID, 30., 2.4);
+  vector<Gen> gens = GetGens(); 
 //  std::vector<Lepton*> leptons;
 
   //=======================
@@ -246,6 +247,11 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
 
   double ptcone_mu = 0.;
 
+/*  Gen gen_test;
+  FillHist("gen_mother", gen_test.MotherIndex(), weight, 4, -2, 2);
+  FillHist("gen_pid", gen_test.PID(), weight, 4, -2, 2);
+  FillHist("gen_status", gen_test.Status(), weight, 4, -2, 2); */
+
   if(muons_loose.size() == 1){
     ptcone_mu = muons_loose.at(0).CalcPtCone(muons_loose.at(0).RelIso(), mu_tight_iso);
     // only 1 prescaled trigger for each PtCone range, setup lumi
@@ -271,6 +277,11 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
     }
 
     if(!IsDATA){
+      // Gen matching
+      Gen truth_lep = GetGenMatchedLepton(muons_loose.at(0), gens);
+      if(truth_lep.PID() == 0) return; // No matched gen lepton -> PID == 0 (See DataFormats/src/Gen.C)
+      
+      // weight
       weight *= weight_norm_1invpb*triggerlumi;
       weight *= ev.MCweight();
       weight *= GetPrefireWeight(0);
@@ -300,7 +311,7 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
     FillHist("Mu_loose_Eta_nocut", muons_loose.at(0).Eta(), weight, 50, -2.5, 2.5);      
     if(muons_tight.size() > 0){
       FillHist("Mu_tight_PtCone_nocut", ptcone_mu, weight, 200, 0., 200.);
-      FillHist("Mu_tight1_Eta_nocut", muons_loose.at(0).Eta(), weight, 50, -2.5, 2.5);
+//      FillHist("Mu_tight1_Eta_nocut", muons_loose.at(0).Eta(), weight, 50, -2.5, 2.5);
       FillHist("Mu_tight_Eta_nocut", muons_tight.at(0).Eta(), weight, 50, -2.5, 2.5);
     }
 
