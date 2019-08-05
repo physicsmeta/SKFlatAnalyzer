@@ -167,7 +167,7 @@ void SKFlatValidation::executeEventFromParameter(AnalyzerParameter param){
   int TriggerSafePt_Electron, TriggerSafePt_Muon;
   double MinLeptonPt = 20.;
   if(param.Name=="POG"){
-    TriggerNameForSF_Electron = TriggerNameForSF_POG_Electron;
+    TriggerNameForSF_Electron = TriggerNameForSF_POG_Electron; //JH: See the above of this script for the trigger definitions
     TriggerNameForSF_Muon = TriggerNameForSF_POG_Muon;
     TriggerSafePt_Electron = TriggerSafePt_POG_Electron;
     TriggerSafePt_Muon = TriggerSafePt_POG_Muon;
@@ -248,7 +248,7 @@ void SKFlatValidation::executeEventFromParameter(AnalyzerParameter param){
 
     }
 
-    Particle METv = ev.GetMETVector();
+    Particle METv = ev.GetMETVector(); //JH: return j_METVector; Event.h. See, Particle j_METVector; Event.h. Note, Particle::Particle() : TLorentzVector(), j_charge(0) {} in Particle.C. 
 
     int n_lepton = leps.size();
     //==== DiLepton variables
