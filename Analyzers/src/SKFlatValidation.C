@@ -189,7 +189,7 @@ void SKFlatValidation::executeEventFromParameter(AnalyzerParameter param){
 
   std::vector<Muon> muons = GetMuons(param.Muon_Tight_ID, MinLeptonPt, 2.4);
   if(param.Muon_UseTuneP) muons = UseTunePMuon(muons);
-  std::vector<Electron> electrons = GetElectrons(param.Electron_Tight_ID, MinLeptonPt, 2.5);
+  std::vector<Electron> electrons = GetElectrons(param.Electron_Tight_ID, MinLeptonPt, 2.5); //JH: Collect electrons passing 1. pt cut 2. eta cut 3. ID. AnalyzerCore.C
 
   std::vector<Jet> myjets = JetsVetoLeptonInside( GetJets("tight", 30., 2.4), electrons, muons);
   int NBJets=0;
@@ -207,7 +207,8 @@ void SKFlatValidation::executeEventFromParameter(AnalyzerParameter param){
   };
   std::vector< bool > PassTriggers = {
     PassSingleMuon && (muons.size()>=1) && (electrons.size()==0),
-    PassSingleElectron && (electrons.size()>=1) && (muons.size()==0),
+    PassSingleElectron && (electrons.size()>=1) && (muons.size()==0), //JH: if(param.Name=="POG") PassSingleElectron = ev.PassTrigger(Triggers_POG_Electron); Note if(DataYear==2016){ Triggers_POG_Electron = { "HLT_Ele27_WPTight_Gsf_v", };
+
   };
 
   for(unsigned int i=0; i<Suffixs.size(); i++){
@@ -242,13 +243,13 @@ void SKFlatValidation::executeEventFromParameter(AnalyzerParameter param){
       leps = MakeLeptonPointerVector(muons);
     }
     else if(Suffix.Contains("SingleElectron")){
-      leps = MakeLeptonPointerVector(electrons);
+      leps = MakeLeptonPointerVector(electrons); //JH: std::vector<Electron> electrons = GetElectrons(param.Electron_Tight_ID, MinLeptonPt, 2.5); See above
     }
     else{
 
     }
 
-    Particle METv = ev.GetMETVector(); //JH: return j_METVector; Event.h. See, Particle j_METVector; Event.h. Note, Particle::Particle() : TLorentzVector(), j_charge(0) {} in Particle.C. 
+    Particle METv = ev.GetMETVector(); //JH: return j_METVector; Event.h. Note, Particle j_METVector; Event.h. Also note, Particle::Particle() : TLorentzVector(), j_charge(0) {} //Particle.C. 
 
     int n_lepton = leps.size();
     //==== DiLepton variables
