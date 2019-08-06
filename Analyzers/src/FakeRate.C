@@ -246,6 +246,7 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
   int leadingjet = 0;
 
   double ptcone_mu = 0.;
+  TString PtConeRange = "";
 
 /*  Gen gen_test;
   FillHist("gen_mother", gen_test.MotherIndex(), weight, 4, -2, 2);
@@ -262,18 +263,21 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
       triggerlumi = 7.408;                     // private : 7.299
       if(DataYear==2017) triggerlumi = 4.612;  // private : 4.667
       awayjet_ptcut = 50.;
+      PtConeRange = "range0";
     }
     else if(ptcone_mu >= MuonPtconeCut2 && ptcone_mu < MuonPtconeCut3){
       if(muons_loose.at(0).Pt() < MuonPtCut2) return;
       if(!(!ev.PassTrigger("HLT_Mu3_PFJet40_v") && ev.PassTrigger("HLT_Mu8_TrkIsoVVL_v") && !ev.PassTrigger("HLT_Mu17_TrkIsoVVL_v"))) return;
       triggerlumi = 7.801;                     // private : 7.618
       if(DataYear==2017) triggerlumi = 2.932;  // calculated privately
+      PtConeRange = "range1";
     }
     else{
       if(muons_loose.at(0).Pt() < MuonPtCut3) return;
       if(!(!ev.PassTrigger("HLT_Mu3_PFJet40_v") && !ev.PassTrigger("HLT_Mu8_TrkIsoVVL_v") && ev.PassTrigger("HLT_Mu17_TrkIsoVVL_v"))) return;
       triggerlumi = 216.748;                   // private : 210.097
       if(DataYear==2017) triggerlumi = 66.625; // calculated privately
+      PtConeRange = "range1";
     }
 
     if(!IsDATA){
@@ -304,15 +308,15 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
     Pt_ratio = jets.at(leadingjet).Pt()/muons_loose.at(0).Pt();
 
     // Histograms before applying cuts
-    FillHist("MET_nocut", MET, weight, 200, 0., 200.);
-    FillHist("Mt_nocut", Mt, weight, 200, 0., 200.);
-    FillHist("Ptratio_nocut", Pt_ratio, weight, 30, 0., 3.);
-    FillHist("Mu_loose_PtCone_nocut", ptcone_mu, weight, 200, 0., 200.);
-    FillHist("Mu_loose_Eta_nocut", muons_loose.at(0).Eta(), weight, 50, -2.5, 2.5);      
+    FillHist("MET_nocut_"+PtConeRange, MET, weight, 200, 0., 200.);
+    FillHist("Mt_nocut_"+PtConeRange, Mt, weight, 200, 0., 200.);
+    FillHist("Ptratio_nocut_"+PtConeRange, Pt_ratio, weight, 30, 0., 3.);
+    FillHist("Mu_loose_PtCone_nocut_"+PtConeRange, ptcone_mu, weight, 200, 0., 200.);
+    FillHist("Mu_loose_Eta_nocut_"+PtConeRange, muons_loose.at(0).Eta(), weight, 50, -2.5, 2.5);
+
     if(muons_tight.size() > 0){
-      FillHist("Mu_tight_PtCone_nocut", ptcone_mu, weight, 200, 0., 200.);
-//      FillHist("Mu_tight1_Eta_nocut", muons_loose.at(0).Eta(), weight, 50, -2.5, 2.5);
-      FillHist("Mu_tight_Eta_nocut", muons_tight.at(0).Eta(), weight, 50, -2.5, 2.5);
+      FillHist("Mu_tight_PtCone_nocut_"+PtConeRange, ptcone_mu, weight, 200, 0., 200.);
+      FillHist("Mu_tight_Eta_nocut_"+PtConeRange, muons_tight.at(0).Eta(), weight, 50, -2.5, 2.5);
     }
 
     // cuts on kinematic variables
@@ -321,34 +325,34 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
     if(Pt_ratio < 1.) return;
 
     // Histograms after applying cuts
-    FillHist("Mu_loose_PtCone", ptcone_mu, weight, 200, 0., 200.);
-    FillHist("Mu_loose_Eta", muons_loose.at(0).Eta(), weight, 50, -2.5, 2.5); 
+    FillHist("Mu_loose_PtCone_"+PtConeRange, ptcone_mu, weight, 200, 0., 200.);
+    FillHist("Mu_loose_Eta_"+PtConeRange, muons_loose.at(0).Eta(), weight, 50, -2.5, 2.5); 
     if(muons_tight.size() > 0){
-      FillHist("Mu_tight_PtCone", ptcone_mu, weight, 200, 0., 200.);
-      FillHist("Mu_tight_Eta", muons_tight.at(0).Eta(), weight, 50, -2.5, 2.5);
+      FillHist("Mu_tight_PtCone_"+PtConeRange, ptcone_mu, weight, 200, 0., 200.);
+      FillHist("Mu_tight_Eta_"+PtConeRange, muons_tight.at(0).Eta(), weight, 50, -2.5, 2.5);
     }
 
     // inner barrel ( |eta| < 0.8 )
     if(fabs(muons_loose.at(0).Eta()) < 0.8){
-      FillHist("Mu_loose_PtCone_barrel1", ptcone_mu, weight, 200, 0., 200.);
+      FillHist("Mu_loose_PtCone_barrel1_"+PtConeRange, ptcone_mu, weight, 200, 0., 200.);
       if(muons_tight.size() > 0){
-        FillHist("Mu_tight_PtCone_barrel1", ptcone_mu, weight, 200, 0., 200.);
+        FillHist("Mu_tight_PtCone_barrel1_"+PtConeRange, ptcone_mu, weight, 200, 0., 200.);
       }
     }
 
     // outer barrel ( 0.8 < |eta| < 1.479 )
     if(fabs(muons_loose.at(0).Eta()) >= 0.8 && fabs(muons_loose.at(0).Eta()) < 1.479){
-      FillHist("Mu_loose_PtCone_barrel2", ptcone_mu, weight, 200, 0., 200.);
+      FillHist("Mu_loose_PtCone_barrel2_"+PtConeRange, ptcone_mu, weight, 200, 0., 200.);
       if(muons_tight.size() > 0){
-        FillHist("Mu_tight_PtCone_barrel2", ptcone_mu, weight, 200, 0., 200.);
+        FillHist("Mu_tight_PtCone_barrel2_"+PtConeRange, ptcone_mu, weight, 200, 0., 200.);
       }
     }
 
     // endcap ( 1.479 < |eta| < 2.5 )
-    if(fabs(muons_loose.at(0).Eta()) >= 0.8 && fabs(muons_loose.at(0).Eta()) < 1.479){
-      FillHist("Mu_loose_PtCone_endcap", ptcone_mu, weight, 200, 0., 200.);
+    if(fabs(muons_loose.at(0).Eta()) >= 1.479 && fabs(muons_loose.at(0).Eta()) < 2.5){
+      FillHist("Mu_loose_PtCone_endcap_"+PtConeRange, ptcone_mu, weight, 200, 0., 200.);
       if(muons_tight.size() > 0){
-        FillHist("Mu_tight_PtCone_endcap", ptcone_mu, weight, 200, 0., 200.);
+        FillHist("Mu_tight_PtCone_endcap_"+PtConeRange, ptcone_mu, weight, 200, 0., 200.);
       }
     }
   }
