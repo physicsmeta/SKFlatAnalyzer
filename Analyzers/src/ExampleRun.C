@@ -102,6 +102,8 @@ ExampleRun::~ExampleRun(){
 
 }
 
+//JH : Note executeEvent() is after fChain->GetEntry(jentry); in Loop() in SKFlatNtuple.C
+
 void ExampleRun::executeEvent(){
 
   //================================================================
@@ -126,7 +128,7 @@ void ExampleRun::executeEvent(){
   //==== If MC && DataYear > 2017, 1.;
   //==== If MC && DataYear <= 2017, we have to reweight the event with this value
   //==== I defined "double weight_Prefire;" in Analyzers/include/ExampleRun.h
-  weight_Prefire = GetPrefireWeight(0);
+  weight_Prefire = GetPrefireWeight(0); //JH: 0 means the central value; see AnalyzerCore.C
 
   //==== Declare AnalyzerParameter
 
@@ -316,7 +318,7 @@ void ExampleRun::executeEventFromParameter(AnalyzerParameter param){
   //==== Then, apply ID selections using this_AllXXX
   //==================================================
 
-  vector<Muon> muons = SelectMuons(this_AllMuons, param.Muon_Tight_ID, 20., 2.4);
+  vector<Muon> muons = SelectMuons(this_AllMuons, param.Muon_Tight_ID, 20., 2.4); //JH: AnalyzerCore.C
   vector<Jet> jets = SelectJets(this_AllJets, param.Jet_ID, 30., 2.4);
 
   //=======================
@@ -373,7 +375,7 @@ void ExampleRun::executeEventFromParameter(AnalyzerParameter param){
     //==== Example of applying Muon scale factors
     for(unsigned int i=0; i<muons.size(); i++){
 
-      double this_idsf  = mcCorr->MuonID_SF (param.Muon_ID_SF_Key,  muons.at(i).Eta(), muons.at(i).MiniAODPt());
+      double this_idsf  = mcCorr->MuonID_SF (param.Muon_ID_SF_Key,  muons.at(i).Eta(), muons.at(i).MiniAODPt()); //JH: TODO where is sys? See MuonID_SF in MCCorrection.C
 
       //==== If you have iso SF, do below. Here we don't.
       //double this_isosf = mcCorr->MuonISO_SF(param.Muon_ISO_SF_Key, muons.at(i).Eta(), muons.at(i).MiniAODPt());
