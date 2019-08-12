@@ -119,6 +119,7 @@ void FakeRate::executeEvent(){
 
 void FakeRate::executeEventFromParameter(AnalyzerParameter param){
 
+  vector<TString> regions = {"muonFR", "muonDY", "muonWj"};
   //=============
   //==== No Cut
   //=============
@@ -234,6 +235,7 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
 
   double mu_tight_iso = 0.15;
   double pi = 3.14159265358979323846;
+  double MZ = 91.1876;
   double MET = ev.GetMETVector().Pt(); 
   double dphi = 0.;
   double weight = 1.;
@@ -247,116 +249,204 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
 
   double ptcone_mu = 0.;
   TString PtConeRange = "";
+  Particle ZCand;
 
 /*  Gen gen_test;
   FillHist("gen_mother", gen_test.MotherIndex(), weight, 4, -2, 2);
   FillHist("gen_pid", gen_test.PID(), weight, 4, -2, 2);
   FillHist("gen_status", gen_test.Status(), weight, 4, -2, 2); */
 
-  if(muons_loose.size() == 1){
-    ptcone_mu = muons_loose.at(0).CalcPtCone(muons_loose.at(0).RelIso(), mu_tight_iso);
-    // only 1 prescaled trigger for each PtCone range, setup lumi
-    if(ptcone_mu < MuonPtconeCut1) return; 
-    if(ptcone_mu >= MuonPtconeCut1 && ptcone_mu < MuonPtconeCut2){
-      if(muons_loose.at(0).Pt() < MuonPtCut1) return;
-      if(!(ev.PassTrigger("HLT_Mu3_PFJet40_v") && !ev.PassTrigger("HLT_Mu8_TrkIsoVVL_v") && !ev.PassTrigger("HLT_Mu17_TrkIsoVVL_v"))) return;
-      triggerlumi = 7.408;                     // private : 7.299
-      if(DataYear==2017) triggerlumi = 4.612;  // private : 4.667
-      awayjet_ptcut = 50.;
-      PtConeRange = "range0";
-    }
-    else if(ptcone_mu >= MuonPtconeCut2 && ptcone_mu < MuonPtconeCut3){
-      if(muons_loose.at(0).Pt() < MuonPtCut2) return;
-      if(!(!ev.PassTrigger("HLT_Mu3_PFJet40_v") && ev.PassTrigger("HLT_Mu8_TrkIsoVVL_v") && !ev.PassTrigger("HLT_Mu17_TrkIsoVVL_v"))) return;
-      triggerlumi = 7.801;                     // private : 7.618
-      if(DataYear==2017) triggerlumi = 2.932;  // calculated privately
-      PtConeRange = "range1";
-    }
-    else{
-      if(muons_loose.at(0).Pt() < MuonPtCut3) return;
-      if(!(!ev.PassTrigger("HLT_Mu3_PFJet40_v") && !ev.PassTrigger("HLT_Mu8_TrkIsoVVL_v") && ev.PassTrigger("HLT_Mu17_TrkIsoVVL_v"))) return;
-      triggerlumi = 216.748;                   // private : 210.097
-      if(DataYear==2017) triggerlumi = 66.625; // calculated privately
-      PtConeRange = "range1";
-    }
+  for(unsigned int it_rg=0; it_rg<regions.size(); it_rg++){
+    weight = 1.;
 
-    if(!IsDATA){
-      // Gen matching
-      Gen truth_lep = GetGenMatchedLepton(muons_loose.at(0), gens);
-      if(truth_lep.PID() == 0) return; // No matched gen lepton -> PID == 0 (See DataFormats/src/Gen.C)
+    if(muons_loose.size()==1 && it_rg==0){
+      ptcone_mu = muons_loose.at(0).CalcPtCone(muons_loose.at(0).RelIso(), mu_tight_iso);
+      // only 1 prescaled trigger for each PtCone range, setup lumi
+      if(ptcone_mu < MuonPtconeCut1) continue; 
+      if(ptcone_mu >= MuonPtconeCut1 && ptcone_mu < MuonPtconeCut2){
+        if(muons_loose.at(0).Pt() < MuonPtCut1) continue;
+        if(!(ev.PassTrigger("HLT_Mu3_PFJet40_v") && !ev.PassTrigger("HLT_Mu8_TrkIsoVVL_v") && !ev.PassTrigger("HLT_Mu17_TrkIsoVVL_v"))) continue;
+        triggerlumi = 7.408;                     // private : 7.299
+        if(DataYear==2017) triggerlumi = 4.612;  // private : 4.667
+        awayjet_ptcut = 50.;
+        PtConeRange = "range0";
+      }
+      else if(ptcone_mu >= MuonPtconeCut2 && ptcone_mu < MuonPtconeCut3){
+        if(muons_loose.at(0).Pt() < MuonPtCut2) continue;
+        if(!(!ev.PassTrigger("HLT_Mu3_PFJet40_v") && ev.PassTrigger("HLT_Mu8_TrkIsoVVL_v") && !ev.PassTrigger("HLT_Mu17_TrkIsoVVL_v"))) continue;
+        triggerlumi = 7.801;                     // private : 7.618
+        if(DataYear==2017) triggerlumi = 2.932;  // calculated privately
+        PtConeRange = "range1";
+      }
+      else{
+        if(muons_loose.at(0).Pt() < MuonPtCut3) continue;
+        if(!(!ev.PassTrigger("HLT_Mu3_PFJet40_v") && !ev.PassTrigger("HLT_Mu8_TrkIsoVVL_v") && ev.PassTrigger("HLT_Mu17_TrkIsoVVL_v"))) continue;
+        triggerlumi = 216.748;                   // private : 210.097
+        if(DataYear==2017) triggerlumi = 66.625; // calculated privately
+        PtConeRange = "range1";
+      }
+
+      if(!IsDATA){
+        // Gen matching
+        Gen truth_lep = GetGenMatchedLepton(muons_loose.at(0), gens);
+        if(truth_lep.PID() == 0) continue; // No matched gen lepton -> PID == 0 (See DataFormats/src/Gen.C)
       
-      // weight
-      weight *= weight_norm_1invpb*triggerlumi;
-      weight *= ev.MCweight();
-      weight *= GetPrefireWeight(0);
-      weight *= GetPileUpWeight(nPileUp,0);
-    }
+        // weight
+        weight *= weight_norm_1invpb*triggerlumi;
+        weight *= ev.MCweight();
+        weight *= GetPrefireWeight(0);
+        weight *= GetPileUpWeight(nPileUp,0);
+      }
 
-    for(unsigned int ijet=0; ijet<jets.size(); ijet++){
-      // define dphi
-      dphi = fabs(jets.at(ijet).Eta()-muons_loose.at(0).Eta());
-      if(dphi > pi) dphi = 2*pi-dphi;
+      for(unsigned int ijet=0; ijet<jets.size(); ijet++){
+        // define dphi
+        dphi = fabs(jets.at(ijet).Eta()-muons_loose.at(0).Eta());
+        if(dphi > pi) dphi = 2*pi-dphi;
 
-      if(dphi > 2.5) awayjet++; 
-      if(dphi > 2.5 && awayjet == 1) leadingjet = ijet;
-    }
+        if(dphi > 2.5) awayjet++; 
+        if(dphi > 2.5 && awayjet == 1) leadingjet = ijet;
+      }
 
-    if(awayjet == 0) return;
-    if(jets.at(leadingjet).Pt() < awayjet_ptcut) return;
+      if(awayjet == 0) continue;
+      if(jets.at(leadingjet).Pt() < awayjet_ptcut) continue;
+ 
+      Mt = MT(muons_loose.at(0), METv);
+      Pt_ratio = jets.at(leadingjet).Pt()/muons_loose.at(0).Pt();
 
-    Mt = MT(muons_loose.at(0), METv);
-    Pt_ratio = jets.at(leadingjet).Pt()/muons_loose.at(0).Pt();
+      // Histograms before applying cuts
+      FillHist("MET_nocut_"+PtConeRange+"_"+regions.at(it_rg), MET, weight, 200, 0., 200.);
+      FillHist("Mt_nocut_"+PtConeRange+"_"+regions.at(it_rg), Mt, weight, 200, 0., 200.);
+      FillHist("Ptratio_nocut_"+PtConeRange+"_"+regions.at(it_rg), Pt_ratio, weight, 30, 0., 3.);
+      FillHist("Mu_loose_PtCone_nocut_"+PtConeRange+"_"+regions.at(it_rg), ptcone_mu, weight, 200, 0., 200.);
+      FillHist("Mu_loose_Eta_nocut_"+PtConeRange+"_"+regions.at(it_rg), muons_loose.at(0).Eta(), weight, 50, -2.5, 2.5);
 
-    // Histograms before applying cuts
-    FillHist("MET_nocut_"+PtConeRange, MET, weight, 200, 0., 200.);
-    FillHist("Mt_nocut_"+PtConeRange, Mt, weight, 200, 0., 200.);
-    FillHist("Ptratio_nocut_"+PtConeRange, Pt_ratio, weight, 30, 0., 3.);
-    FillHist("Mu_loose_PtCone_nocut_"+PtConeRange, ptcone_mu, weight, 200, 0., 200.);
-    FillHist("Mu_loose_Eta_nocut_"+PtConeRange, muons_loose.at(0).Eta(), weight, 50, -2.5, 2.5);
-
-    if(muons_tight.size() > 0){
-      FillHist("Mu_tight_PtCone_nocut_"+PtConeRange, ptcone_mu, weight, 200, 0., 200.);
-      FillHist("Mu_tight_Eta_nocut_"+PtConeRange, muons_tight.at(0).Eta(), weight, 50, -2.5, 2.5);
-    }
-
-    // cuts on kinematic variables
-    if(MET > 80.) return;
-    if(Mt > 25.) return;
-    if(Pt_ratio < 1.) return;
-
-    // Histograms after applying cuts
-    FillHist("Mu_loose_PtCone_"+PtConeRange, ptcone_mu, weight, 200, 0., 200.);
-    FillHist("Mu_loose_Eta_"+PtConeRange, muons_loose.at(0).Eta(), weight, 50, -2.5, 2.5); 
-    if(muons_tight.size() > 0){
-      FillHist("Mu_tight_PtCone_"+PtConeRange, ptcone_mu, weight, 200, 0., 200.);
-      FillHist("Mu_tight_Eta_"+PtConeRange, muons_tight.at(0).Eta(), weight, 50, -2.5, 2.5);
-    }
-
-    // inner barrel ( |eta| < 0.8 )
-    if(fabs(muons_loose.at(0).Eta()) < 0.8){
-      FillHist("Mu_loose_PtCone_barrel1_"+PtConeRange, ptcone_mu, weight, 200, 0., 200.);
       if(muons_tight.size() > 0){
-        FillHist("Mu_tight_PtCone_barrel1_"+PtConeRange, ptcone_mu, weight, 200, 0., 200.);
+        FillHist("Mu_tight_PtCone_nocut_"+PtConeRange+"_"+regions.at(it_rg), ptcone_mu, weight, 200, 0., 200.);
+        FillHist("Mu_tight_Eta_nocut_"+PtConeRange+"_"+regions.at(it_rg), muons_tight.at(0).Eta(), weight, 50, -2.5, 2.5);
+      }
+
+      // cuts on kinematic variables
+      if(MET > 80.) continue;
+      if(Mt > 25.) continue;
+      if(Pt_ratio < 1.) continue;
+
+      // Histograms after applying cuts
+      FillHist("Mu_loose_PtCone_"+PtConeRange+"_"+regions.at(it_rg), ptcone_mu, weight, 200, 0., 200.);
+      FillHist("Mu_loose_Eta_"+PtConeRange+"_"+regions.at(it_rg), muons_loose.at(0).Eta(), weight, 50, -2.5, 2.5); 
+      if(muons_tight.size() > 0){
+        FillHist("Mu_tight_PtCone_"+PtConeRange+"_"+regions.at(it_rg), ptcone_mu, weight, 200, 0., 200.);
+        FillHist("Mu_tight_Eta_"+PtConeRange+"_"+regions.at(it_rg), muons_tight.at(0).Eta(), weight, 50, -2.5, 2.5);
+      }
+
+      // inner barrel ( |eta| < 0.8 )
+      if(fabs(muons_loose.at(0).Eta()) < 0.8){
+        FillHist("Mu_loose_PtCone_barrel1_"+PtConeRange+"_"+regions.at(it_rg), ptcone_mu, weight, 200, 0., 200.);
+        if(muons_tight.size() > 0){
+          FillHist("Mu_tight_PtCone_barrel1_"+PtConeRange+"_"+regions.at(it_rg), ptcone_mu, weight, 200, 0., 200.);
+        }
+      }
+
+      // outer barrel ( 0.8 < |eta| < 1.479 )
+      if(fabs(muons_loose.at(0).Eta()) >= 0.8 && fabs(muons_loose.at(0).Eta()) < 1.479){
+        FillHist("Mu_loose_PtCone_barrel2_"+PtConeRange+"_"+regions.at(it_rg), ptcone_mu, weight, 200, 0., 200.);
+        if(muons_tight.size() > 0){
+          FillHist("Mu_tight_PtCone_barrel2_"+PtConeRange+"_"+regions.at(it_rg), ptcone_mu, weight, 200, 0., 200.);
+        }
+      }
+
+      // endcap ( 1.479 < |eta| < 2.5 )
+      if(fabs(muons_loose.at(0).Eta()) >= 1.479 && fabs(muons_loose.at(0).Eta()) < 2.5){
+        FillHist("Mu_loose_PtCone_endcap_"+PtConeRange+"_"+regions.at(it_rg), ptcone_mu, weight, 200, 0., 200.);
+        if(muons_tight.size() > 0){
+          FillHist("Mu_tight_PtCone_endcap_"+PtConeRange+"_"+regions.at(it_rg), ptcone_mu, weight, 200, 0., 200.);
+        }
       }
     }
 
-    // outer barrel ( 0.8 < |eta| < 1.479 )
-    if(fabs(muons_loose.at(0).Eta()) >= 0.8 && fabs(muons_loose.at(0).Eta()) < 1.479){
-      FillHist("Mu_loose_PtCone_barrel2_"+PtConeRange, ptcone_mu, weight, 200, 0., 200.);
-      if(muons_tight.size() > 0){
-        FillHist("Mu_tight_PtCone_barrel2_"+PtConeRange, ptcone_mu, weight, 200, 0., 200.);
+    if(muons_tight.size()==2 && it_rg==1){
+      ZCand = muons_tight.at(0) + muons_tight.at(1);
+      FillHist("Mu1_Pt_"+regions.at(it_rg), muons_tight.at(0).Pt(), weight, 200, 0., 200.);
+      FillHist("Mu2_Pt_"+regions.at(it_rg), muons_tight.at(1).Pt(), weight, 200, 0., 200.);
+      FillHist("ZCand_Mass_"+regions.at(it_rg), ZCand.M(), weight, 80, 50., 130.);
+ 
+      if(muons_tight.at(0).Pt() < 20. || muons_tight.at(1).Pt() < 10.) continue;
+      if(fabs(ZCand.M() - MZ) > 20.) continue;
+
+      if(!IsDATA){
+        weight *= ev.MCweight();
+        weight *= GetPrefireWeight(0);
+        weight *= GetPileUpWeight(nPileUp,0);
+      }
+
+      // weight for each trigger
+      if(ev.PassTrigger("HLT_Mu3_PFJet40_v")){
+        if(!IsDATA){
+          if(DataYear == 2016) weight *= weight_norm_1invpb*7.408;
+          if(DataYear == 2017) weight *= weight_norm_1invpb*4.612; 
+        }
+        FillHist("ZCand_Mass_Mu3_"+regions.at(it_rg), ZCand.M(), weight, 40, 70., 110.);
+        FillHist("Number_Events_Mu3_"+regions.at(it_rg), 0.5, weight, 2, 0., 2.);
+      }
+      if(ev.PassTrigger("HLT_Mu8_TrkIsoVVL_v")){
+        if(!IsDATA){
+          if(DataYear == 2016) weight *= weight_norm_1invpb*7.801;
+          if(DataYear == 2017) weight *= weight_norm_1invpb*2.932;
+        }
+        FillHist("ZCand_Mass_Mu8_"+regions.at(it_rg), ZCand.M(), weight, 40, 70., 110.);
+        FillHist("Number_Events_Mu8_"+regions.at(it_rg), 0.5, weight, 2, 0., 2.);
+      }
+      if(ev.PassTrigger("HLT_Mu17_TrkIsoVVL_v")){
+        if(!IsDATA){
+          if(DataYear == 2016) weight *= weight_norm_1invpb*216.748;
+          if(DataYear == 2017) weight *= weight_norm_1invpb*66.625;
+        }
+        FillHist("ZCand_Mass_Mu17_"+regions.at(it_rg), ZCand.M(), weight, 40, 70., 110.);
+        FillHist("Number_Events_Mu17_"+regions.at(it_rg), 0.5, weight, 2, 0., 2.);
       }
     }
 
-    // endcap ( 1.479 < |eta| < 2.5 )
-    if(fabs(muons_loose.at(0).Eta()) >= 1.479 && fabs(muons_loose.at(0).Eta()) < 2.5){
-      FillHist("Mu_loose_PtCone_endcap_"+PtConeRange, ptcone_mu, weight, 200, 0., 200.);
-      if(muons_tight.size() > 0){
-        FillHist("Mu_tight_PtCone_endcap_"+PtConeRange, ptcone_mu, weight, 200, 0., 200.);
+    if(muons_tight.size()==1 && it_rg==2){
+      Mt = MT(muons_tight.at(0), METv);
+      FillHist("Mu1_Pt_"+regions.at(it_rg), muons_tight.at(0).Pt(), weight, 200, 0., 200.);
+      FillHist("MET_"+regions.at(it_rg), MET, weight, 200, 0., 200.);
+      FillHist("Mt_"+regions.at(it_rg), Mt, weight, 200, 0., 200.);
+
+      if(muons_tight.at(0).Pt() < 20.) continue;
+      if(MET < 40.) continue;
+      if(Mt < 60. || Mt > 100.) continue;
+
+      if(!IsDATA){
+        weight *= ev.MCweight();
+        weight *= GetPrefireWeight(0);
+        weight *= GetPileUpWeight(nPileUp,0);
+      }
+      
+      // weight for each trigger
+      if(ev.PassTrigger("HLT_Mu3_PFJet40_v")){
+        if(!IsDATA){
+          if(DataYear == 2016) weight *= weight_norm_1invpb*7.408;
+          if(DataYear == 2017) weight *= weight_norm_1invpb*4.612; 
+        }
+        FillHist("Mt_Mu3_"+regions.at(it_rg), Mt, weight, 200, 0., 200.);
+        FillHist("Number_Events_Mu3_"+regions.at(it_rg), 0.5, weight, 2, 0., 2.);
+      }
+      if(ev.PassTrigger("HLT_Mu8_TrkIsoVVL_v")){
+        if(!IsDATA){
+          if(DataYear == 2016) weight *= weight_norm_1invpb*7.801;
+          if(DataYear == 2017) weight *= weight_norm_1invpb*2.932;
+        }
+        FillHist("Mt_Mu8_"+regions.at(it_rg), Mt, weight, 200, 0., 200.);
+        FillHist("Number_Events_Mu8_"+regions.at(it_rg), 0.5, weight, 2, 0., 2.);
+      }
+      if(ev.PassTrigger("HLT_Mu17_TrkIsoVVL_v")){
+        if(!IsDATA){
+          if(DataYear == 2016) weight *= weight_norm_1invpb*216.748;
+          if(DataYear == 2017) weight *= weight_norm_1invpb*66.625;
+        }
+        FillHist("Mt_Mu17_"+regions.at(it_rg), Mt, weight, 200, 0., 200.);
+        FillHist("Number_Events_Mu17_"+regions.at(it_rg), 0.5, weight, 2, 0., 2.);
       }
     }
   }
 }
-
-
 
