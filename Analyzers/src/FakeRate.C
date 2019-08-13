@@ -259,6 +259,7 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
   for(unsigned int it_rg=0; it_rg<regions.size(); it_rg++){
     weight = 1.;
 
+    // Fake rate measurement region
     if(muons_loose.size()==1 && it_rg==0){
       ptcone_mu = muons_loose.at(0).CalcPtCone(muons_loose.at(0).RelIso(), mu_tight_iso);
       // only 1 prescaled trigger for each PtCone range, setup lumi
@@ -300,7 +301,7 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
 
       for(unsigned int ijet=0; ijet<jets.size(); ijet++){
         // define dphi
-        dphi = fabs(jets.at(ijet).Eta()-muons_loose.at(0).Eta());
+        dphi = fabs(jets.at(ijet).Phi() - muons_loose.at(0).Phi());
         if(dphi > pi) dphi = 2*pi-dphi;
 
         if(dphi > 2.5) awayjet++; 
@@ -363,6 +364,7 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
       }
     }
 
+    // DY control region
     if(muons_tight.size()==2 && it_rg==1){
       ZCand = muons_tight.at(0) + muons_tight.at(1);
       FillHist("Mu1_Pt_"+regions.at(it_rg), muons_tight.at(0).Pt(), weight, 200, 0., 200.);
@@ -405,6 +407,7 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
       }
     }
 
+    // W+jets control region
     if(muons_tight.size()==1 && it_rg==2){
       Mt = MT(muons_tight.at(0), METv);
       FillHist("Mu1_Pt_"+regions.at(it_rg), muons_tight.at(0).Pt(), weight, 200, 0., 200.);
