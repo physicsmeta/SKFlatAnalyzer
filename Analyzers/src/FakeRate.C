@@ -272,14 +272,14 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
         awayjet_ptcut = 50.;
         PtConeRange = "range0";
       }
-      else if(ptcone_mu >= MuonPtconeCut2 && ptcone_mu < MuonPtconeCut3){
+      if(ptcone_mu >= MuonPtconeCut2 && ptcone_mu < MuonPtconeCut3){
         if(muons_loose.at(0).Pt() < MuonPtCut2) continue;
         if(!(!ev.PassTrigger("HLT_Mu3_PFJet40_v") && ev.PassTrigger("HLT_Mu8_TrkIsoVVL_v") && !ev.PassTrigger("HLT_Mu17_TrkIsoVVL_v"))) continue;
         triggerlumi = 7.801;                     // private : 7.618
         if(DataYear==2017) triggerlumi = 2.932;  // calculated privately
         PtConeRange = "range1";
       }
-      else{
+      if(ptcone_mu >= MuonPtconeCut3){
         if(muons_loose.at(0).Pt() < MuonPtCut3) continue;
         if(!(!ev.PassTrigger("HLT_Mu3_PFJet40_v") && !ev.PassTrigger("HLT_Mu8_TrkIsoVVL_v") && ev.PassTrigger("HLT_Mu17_TrkIsoVVL_v"))) continue;
         triggerlumi = 216.748;                   // private : 210.097
@@ -298,6 +298,8 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
         weight *= GetPrefireWeight(0);
         weight *= GetPileUpWeight(nPileUp,0);
       }
+
+      awayjet = 0, leadingjet = 0;
 
       for(unsigned int ijet=0; ijet<jets.size(); ijet++){
         // define dphi
@@ -320,10 +322,12 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
       FillHist("Ptratio_nocut_"+PtConeRange+"_"+regions.at(it_rg), Pt_ratio, weight, 30, 0., 3.);
       FillHist("Mu_loose_PtCone_nocut_"+PtConeRange+"_"+regions.at(it_rg), ptcone_mu, weight, 200, 0., 200.);
       FillHist("Mu_loose_Eta_nocut_"+PtConeRange+"_"+regions.at(it_rg), muons_loose.at(0).Eta(), weight, 50, -2.5, 2.5);
+      FillHist("Number_Events_nocut_"+PtConeRange+"_"+regions.at(it_rg), 0.5, weight, 2, 0., 2.);
 
       if(muons_tight.size() > 0){
         FillHist("Mu_tight_PtCone_nocut_"+PtConeRange+"_"+regions.at(it_rg), ptcone_mu, weight, 200, 0., 200.);
         FillHist("Mu_tight_Eta_nocut_"+PtConeRange+"_"+regions.at(it_rg), muons_tight.at(0).Eta(), weight, 50, -2.5, 2.5);
+        FillHist("Number_Events_nocut_"+PtConeRange+"_"+regions.at(it_rg), 1.5, weight, 2, 0., 2.);
       }
 
       // cuts on kinematic variables
@@ -333,33 +337,41 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
 
       // Histograms after applying cuts
       FillHist("Mu_loose_PtCone_"+PtConeRange+"_"+regions.at(it_rg), ptcone_mu, weight, 200, 0., 200.);
-      FillHist("Mu_loose_Eta_"+PtConeRange+"_"+regions.at(it_rg), muons_loose.at(0).Eta(), weight, 50, -2.5, 2.5); 
+      FillHist("Mu_loose_Eta_"+PtConeRange+"_"+regions.at(it_rg), muons_loose.at(0).Eta(), weight, 50, -2.5, 2.5);
+      FillHist("Number_Events_"+PtConeRange+"_"+regions.at(it_rg), 0.5, weight, 2, 0., 2.); 
       if(muons_tight.size() > 0){
         FillHist("Mu_tight_PtCone_"+PtConeRange+"_"+regions.at(it_rg), ptcone_mu, weight, 200, 0., 200.);
         FillHist("Mu_tight_Eta_"+PtConeRange+"_"+regions.at(it_rg), muons_tight.at(0).Eta(), weight, 50, -2.5, 2.5);
+        FillHist("Number_Events_"+PtConeRange+"_"+regions.at(it_rg), 1.5, weight, 2, 0., 2.);
       }
 
       // inner barrel ( |eta| < 0.8 )
       if(fabs(muons_loose.at(0).Eta()) < 0.8){
         FillHist("Mu_loose_PtCone_barrel1_"+PtConeRange+"_"+regions.at(it_rg), ptcone_mu, weight, 200, 0., 200.);
+        FillHist("Number_Events_barrel1_"+PtConeRange+"_"+regions.at(it_rg), 0.5, weight, 2, 0., 2.);
         if(muons_tight.size() > 0){
           FillHist("Mu_tight_PtCone_barrel1_"+PtConeRange+"_"+regions.at(it_rg), ptcone_mu, weight, 200, 0., 200.);
+          FillHist("Number_Events_barrel1_"+PtConeRange+"_"+regions.at(it_rg), 1.5, weight, 2, 0., 2.);
         }
       }
 
       // outer barrel ( 0.8 < |eta| < 1.479 )
       if(fabs(muons_loose.at(0).Eta()) >= 0.8 && fabs(muons_loose.at(0).Eta()) < 1.479){
         FillHist("Mu_loose_PtCone_barrel2_"+PtConeRange+"_"+regions.at(it_rg), ptcone_mu, weight, 200, 0., 200.);
+        FillHist("Number_Events_barrel2_"+PtConeRange+"_"+regions.at(it_rg), 0.5, weight, 2, 0., 2.);
         if(muons_tight.size() > 0){
           FillHist("Mu_tight_PtCone_barrel2_"+PtConeRange+"_"+regions.at(it_rg), ptcone_mu, weight, 200, 0., 200.);
+          FillHist("Number_Events_barrel2_"+PtConeRange+"_"+regions.at(it_rg), 1.5, weight, 2, 0., 2.);
         }
       }
 
       // endcap ( 1.479 < |eta| < 2.5 )
       if(fabs(muons_loose.at(0).Eta()) >= 1.479 && fabs(muons_loose.at(0).Eta()) < 2.5){
         FillHist("Mu_loose_PtCone_endcap_"+PtConeRange+"_"+regions.at(it_rg), ptcone_mu, weight, 200, 0., 200.);
+        FillHist("Number_Events_endcap_"+PtConeRange+"_"+regions.at(it_rg), 0.5, weight, 2, 0., 2.);
         if(muons_tight.size() > 0){
           FillHist("Mu_tight_PtCone_endcap_"+PtConeRange+"_"+regions.at(it_rg), ptcone_mu, weight, 200, 0., 200.);
+          FillHist("Number_Events_endcap_"+PtConeRange+"_"+regions.at(it_rg), 1.5, weight, 2, 0., 2.);
         }
       }
     }
