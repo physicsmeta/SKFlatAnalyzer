@@ -138,7 +138,7 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
   //==============
   //==== Trigger
   //==============
-  if(! (ev.PassTrigger(MuonTriggers) )) return;
+//  if(! (ev.PassTrigger(MuonTriggers) )) return;
 
 
 
@@ -248,6 +248,7 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
   int leadingjet = 0;
 
   double ptcone_mu = 0.;
+//  double ptcone_mu1 = 0.;
   TString PtConeRange = "";
   Particle ZCand;
 
@@ -262,8 +263,40 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
     // Fake rate measurement region
     if(muons_loose.size()==1 && it_rg==0){
       ptcone_mu = muons_loose.at(0).CalcPtCone(muons_loose.at(0).RelIso(), mu_tight_iso);
+//      ptcone_mu1 = muons_loose.at(0).Pt()*(1.+std::max(0., muons_loose.at(0).RelIso()-mu_tight_iso));
+//      FillHist("PtCone_ratio", ptcone_mu1/ptcone_mu, weight, 20, 0., 2.);
+
+      FillHist("Mu_loose_Eta_notrig_"+regions.at(it_rg), muons_loose.at(0).Eta(), weight, 50, -2.5, 2.5);
+
+      if(ev.PassTrigger("HLT_Mu3_PFJet40_v") && muons_loose.at(0).Pt() > MuonPtCut1){
+        FillHist("Mu_loose_Eta_Mu3_"+regions.at(it_rg), muons_loose.at(0).Eta(), weight, 50, -2.5, 2.5);
+        if(ptcone_mu >= MuonPtconeCut1 && ptcone_mu < MuonPtconeCut2) FillHist("Mu_loose_Eta_Mu3_PtConeCut_"+regions.at(it_rg), muons_loose.at(0).Eta(), weight, 50, -2.5, 2.5);
+        if(!ev.PassTrigger("HLT_Mu8_TrkIsoVVL_v") && !ev.PassTrigger("HLT_Mu17_TrkIsoVVL_v")){
+          FillHist("Mu_loose_Eta_Mu3only_"+regions.at(it_rg), muons_loose.at(0).Eta(), weight, 50, -2.5, 2.5);
+          if(ptcone_mu >= MuonPtconeCut1 && ptcone_mu < MuonPtconeCut2) FillHist("Mu_loose_Eta_Mu3only_PtConeCut_"+regions.at(it_rg), muons_loose.at(0).Eta(), weight, 50, -2.5, 2.5);
+        }
+      }
+      if(ev.PassTrigger("HLT_Mu8_TrkIsoVVL_v") && muons_loose.at(0).Pt() > MuonPtCut2){
+        FillHist("Mu_loose_Eta_Mu8_"+regions.at(it_rg), muons_loose.at(0).Eta(), weight, 50, -2.5, 2.5);
+        if(ptcone_mu >= MuonPtconeCut2 && ptcone_mu < MuonPtconeCut3) FillHist("Mu_loose_Eta_Mu8_PtConeCut_"+regions.at(it_rg), muons_loose.at(0).Eta(), weight, 50, -2.5, 2.5);
+        if(!ev.PassTrigger("HLT_Mu3_PFJet40_v") && !ev.PassTrigger("HLT_Mu17_TrkIsoVVL_v")){
+          FillHist("Mu_loose_Eta_Mu8only_"+regions.at(it_rg), muons_loose.at(0).Eta(), weight, 50, -2.5, 2.5);
+          if(ptcone_mu >= MuonPtconeCut2 && ptcone_mu < MuonPtconeCut3) FillHist("Mu_loose_Eta_Mu8only_PtConeCut_"+regions.at(it_rg), muons_loose.at(0).Eta(), weight, 50, -2.5, 2.5);
+        }
+      }
+      if(ev.PassTrigger("HLT_Mu17_TrkIsoVVL_v") && muons_loose.at(0).Pt() > MuonPtCut3){
+         FillHist("Mu_loose_Eta_Mu17_"+regions.at(it_rg), muons_loose.at(0).Eta(), weight, 50, -2.5, 2.5);
+         if(ptcone_mu >= MuonPtconeCut3) FillHist("Mu_loose_Eta_Mu17_PtConeCut_"+regions.at(it_rg), muons_loose.at(0).Eta(), weight, 50, -2.5, 2.5);
+         if(!ev.PassTrigger("HLT_Mu3_PFJet40_v") && !ev.PassTrigger("HLT_Mu8_TrkIsoVVL_v")){
+           FillHist("Mu_loose_Eta_Mu17only_"+regions.at(it_rg), muons_loose.at(0).Eta(), weight, 50, -2.5, 2.5);
+           if(ptcone_mu >= MuonPtconeCut3) FillHist("Mu_loose_Eta_Mu17only_PtConeCut_"+regions.at(it_rg), muons_loose.at(0).Eta(), weight, 50, -2.5, 2.5);
+         }
+      }
+
+       
+
       // only 1 prescaled trigger for each PtCone range, setup lumi
-      if(ptcone_mu < MuonPtconeCut1) continue; 
+      if(ptcone_mu < MuonPtconeCut1) continue;
       if(ptcone_mu >= MuonPtconeCut1 && ptcone_mu < MuonPtconeCut2){
         if(muons_loose.at(0).Pt() < MuonPtCut1) continue;
         if(!(ev.PassTrigger("HLT_Mu3_PFJet40_v") && !ev.PassTrigger("HLT_Mu8_TrkIsoVVL_v") && !ev.PassTrigger("HLT_Mu17_TrkIsoVVL_v"))) continue;
@@ -284,7 +317,7 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
         if(!(!ev.PassTrigger("HLT_Mu3_PFJet40_v") && !ev.PassTrigger("HLT_Mu8_TrkIsoVVL_v") && ev.PassTrigger("HLT_Mu17_TrkIsoVVL_v"))) continue;
         triggerlumi = 216.748;                   // private : 210.097
         if(DataYear==2017) triggerlumi = 66.625; // calculated privately
-        PtConeRange = "range1";
+        PtConeRange = "range2";
       }
 
       if(!IsDATA){
@@ -301,15 +334,19 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
 
       awayjet = 0, leadingjet = 0;
 
+      FillHist("Mu_loose_Eta_nodijet_"+PtConeRange+"_"+regions.at(it_rg), muons_loose.at(0).Eta(), weight, 50, -2.5, 2.5);
+
       for(unsigned int ijet=0; ijet<jets.size(); ijet++){
-        // define dphi
+        // define dphi between a jet and the loose lepton
         dphi = fabs(jets.at(ijet).Phi() - muons_loose.at(0).Phi());
-        if(dphi > pi) dphi = 2*pi-dphi;
+        if(dphi > pi) dphi = 2.*pi-dphi;
+        FillHist("dphi_"+PtConeRange+"_"+regions.at(it_rg), dphi, weight, 32, 0., 3.2);
 
         if(dphi > 2.5) awayjet++; 
         if(dphi > 2.5 && awayjet == 1) leadingjet = ijet;
       }
 
+      // away jet selection
       if(awayjet == 0) continue;
       if(jets.at(leadingjet).Pt() < awayjet_ptcut) continue;
  
@@ -323,6 +360,7 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
       FillHist("Mu_loose_PtCone_nocut_"+PtConeRange+"_"+regions.at(it_rg), ptcone_mu, weight, 200, 0., 200.);
       FillHist("Mu_loose_Eta_nocut_"+PtConeRange+"_"+regions.at(it_rg), muons_loose.at(0).Eta(), weight, 50, -2.5, 2.5);
       FillHist("Number_Events_nocut_"+PtConeRange+"_"+regions.at(it_rg), 0.5, weight, 2, 0., 2.);
+      if(!IsDATA) FillHist("Mu_loose_Eta_nocut_"+regions.at(it_rg), muons_loose.at(0).Eta(), weight, 50, -2.5, 2.5);
 
       if(muons_tight.size() > 0){
         FillHist("Mu_tight_PtCone_nocut_"+PtConeRange+"_"+regions.at(it_rg), ptcone_mu, weight, 200, 0., 200.);
@@ -330,7 +368,7 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
         FillHist("Number_Events_nocut_"+PtConeRange+"_"+regions.at(it_rg), 1.5, weight, 2, 0., 2.);
       }
 
-      // cuts on kinematic variables
+      // additional cuts to reduce prompt contribution
       if(MET > 80.) continue;
       if(Mt > 25.) continue;
       if(Pt_ratio < 1.) continue;
