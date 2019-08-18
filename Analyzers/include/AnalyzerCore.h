@@ -88,6 +88,7 @@ public:
   //==================================================+
 
   std::vector<Electron> SelectElectrons(const std::vector<Electron>& electrons, TString id, double ptmin, double fetamax);
+  std::vector<Electron> SelectChargeFlipElectrons(const std::vector<Electron>& electrons, double ptmin, double fetamax); //JH: for CF
 
   std::vector<Muon> UseTunePMuon(const std::vector<Muon>& muons);
   std::vector<Muon> SelectMuons(const std::vector<Muon>& muons, TString id, double ptmin, double fetamax);

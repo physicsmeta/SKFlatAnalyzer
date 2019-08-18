@@ -177,6 +177,7 @@ std::vector<Electron> AnalyzerCore::GetAllElectrons(){
     el.SetIP3D(electron_3DIPVTX->at(i), electron_3DIPerrVTX->at(i));
     el.SetMVA(electron_MVAIso->at(i), electron_MVANoIso->at(i));
     el.SetPassConversionVeto(electron_passConversionVeto->at(i));
+    el.SetIsGsfCtfScPixChargeConsistent(electron_isGsfCtfScPixChargeConsistent->at(i)); //JH : for CF
     el.SetNMissingHits(electron_mHits->at(i));
     el.SetRho(Rho);
 
@@ -630,6 +631,39 @@ std::vector<Electron> AnalyzerCore::SelectElectrons(const std::vector<Electron>&
       //cout << "Fail ID" << endl;
       continue;
     }
+    out.push_back(electrons.at(i));
+  }
+  return out;
+
+}
+
+std::vector<Electron> AnalyzerCore::SelectChargeFlipElectrons(const std::vector<Electron>& electrons, double ptmin, double fetamax){ //JH : for CF
+
+  std::vector<Electron> out;
+  for(unsigned int i=0; i<electrons.size(); i++){
+    if(!( electrons.at(i).Pt()>ptmin )){
+      //cout << "Fail Pt : pt = " << electrons.at(i).Pt() << ", cut = " << ptmin << endl;
+      continue;
+    }
+    if(!( fabs(electrons.at(i).scEta())<fetamax )){
+      //cout << "Fail Eta : eta = " << fabs(electrons.at(i).scEta()) << ", cut = " << fetamax << endl;
+      continue;
+    }
+    if(!( electrons.at(i).IsGsfCtfScPixChargeConsistent() )){
+      continue;
+    }
+    if(!( electrons.at(i).PassConversionVeto() )){
+      continue;
+    }
+    if(!( electrons.at(i).dXY()<0.01 )){ //JH : TODO Check the unit! is this really cm?
+      continue;
+    }
+    if(!( electrons.at(i).dZ()<0.04 )){
+      continue;
+    }
+    if(!( electrons.at(i).IP3D()/electrons.at(i).IP3Derr()<4.0 )){
+      continue;
+    } //JH : TODO Now add MVA and isolation cut later!
     out.push_back(electrons.at(i));
   }
   return out;

@@ -16,6 +16,7 @@ Electron::Electron(){
   j_mvanoiso = -999.;
   j_EnergyUnCorr = -999.;
   j_passConversionVeto = false;
+  j_isGsfCtfScPixChargeConsistent = false; //JH : for CF
   j_NMissingHits = 0;
   j_Full5x5_sigmaIetaIeta = -999.;
   j_dEtaSeed = -999.;
@@ -64,6 +65,10 @@ void Electron::SetUncorrE(double une){
 void Electron::SetPassConversionVeto(bool b){
   j_passConversionVeto = b;
 }
+
+void Electron::SetIsGsfCtfScPixChargeConsistent(bool b){
+  j_isGsfCtfScPixChargeConsistent = b;
+} //JH : for CF
 
 void Electron::SetNMissingHits(int n){
   j_NMissingHits = n;
