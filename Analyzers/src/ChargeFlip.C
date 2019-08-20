@@ -44,7 +44,7 @@ void ChargeFlip::executeEvent(){
 
   vector<Electron> eles;
 
-  if(!HasFlag("passTightID")) eles = SelectChargeFlipElectrons(AllEles, 25., 2.5);
+  if(HasFlag("ChargeFlipID")) eles = SelectChargeFlipElectrons(AllEles, 25., 2.5);
 
 	else if(HasFlag("passTightChargeTightID")) eles = SelectChargeTightElectrons(AllEles, "passTightID", 25., 2.5);
 

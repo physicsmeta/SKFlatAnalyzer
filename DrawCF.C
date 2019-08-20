@@ -1,6 +1,6 @@
 {
-//TFile* f1 = new TFile("/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip/2016/passTightChargeTightID__/ChargeFlip_DYJets.root");
-TFile* f1 = new TFile("/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip/2016/passTightID__/ChargeFlip_DYJets.root");
+TFile* f1 = new TFile("/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip/2016/passTightChargeTightID__/ChargeFlip_DYJets.root");
+//TFile* f1 = new TFile("/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip/2016/passTightID__/ChargeFlip_DYJets.root");
 TH1D* h1 = (TH1D*)f1->Get("ChargeFlip/EtaRegion1_Denom");
 TH1D* h2 = (TH1D*)f1->Get("ChargeFlip/EtaRegion1_Num");
 TH1D* h3 = (TH1D*)f1->Get("ChargeFlip/EtaRegion2_Denom");
