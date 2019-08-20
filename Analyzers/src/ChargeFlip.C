@@ -46,7 +46,7 @@ void ChargeFlip::executeEvent(){
 
   if(!HasFlag("passTightID")) eles = SelectChargeFlipElectrons(AllEles, 25., 2.5);
 
-	else eles = SelectElectrons(AllEles, "passTightID", 25., 2.5);
+	else if(HasFlag("passTightChargeTightID")) eles = SelectChargeTightElectrons(AllEles, "passTightID", 25., 2.5);
 
   /* sort */
 

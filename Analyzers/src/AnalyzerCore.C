@@ -637,6 +637,31 @@ std::vector<Electron> AnalyzerCore::SelectElectrons(const std::vector<Electron>&
 
 }
 
+std::vector<Electron> AnalyzerCore::SelectChargeTightElectrons(const std::vector<Electron>& electrons, TString id, double ptmin, double fetamax){
+
+  std::vector<Electron> out;
+  for(unsigned int i=0; i<electrons.size(); i++){
+    if(!( electrons.at(i).Pt()>ptmin )){
+      //cout << "Fail Pt : pt = " << electrons.at(i).Pt() << ", cut = " << ptmin << endl;
+      continue;
+    }
+    if(!( fabs(electrons.at(i).scEta())<fetamax )){
+      //cout << "Fail Eta : eta = " << fabs(electrons.at(i).scEta()) << ", cut = " << fetamax << endl;
+      continue;
+    }
+    if(!( electrons.at(i).PassID(id) )){
+      //cout << "Fail ID" << endl;
+      continue;
+    }
+		if(! (electrons.at(i).IsGsfCtfScPixChargeConsistent() )){
+			continue;
+		}
+    out.push_back(electrons.at(i));
+  }
+  return out;
+
+}
+
 std::vector<Electron> AnalyzerCore::SelectChargeFlipElectrons(const std::vector<Electron>& electrons, double ptmin, double fetamax){ //JH : for CF
 
   std::vector<Electron> out;
