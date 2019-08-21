@@ -35,6 +35,7 @@ gr1->SetMarkerStyle(20);
 //gr1->SetMarkerColor(kMagenta+2);
 gr1->SetLineColor(15);
 gr1->SetTitle("ChargeFlip_|#eta|<0.8");
+gr1->SetMinimum(0.);
 gr1->Draw("ZAP"); //Z : do not draw small horizontal/vertical lines the end of the error bars
 gr1->GetXaxis()->SetRangeUser(0.,0.04);
 gr1->GetXaxis()->SetTitle("#scale[0.8]{1/p_{T} (GeV^{-1})}");
