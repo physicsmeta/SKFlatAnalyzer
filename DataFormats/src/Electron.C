@@ -17,7 +17,6 @@ Electron::Electron(){
   j_EnergyUnCorr = -999.;
   j_passConversionVeto = false;
   j_NMissingHits = 0;
-  j_isGsfCtfScPixChargeConsistent = false;
   j_Full5x5_sigmaIetaIeta = -999.;
   j_dEtaSeed = -999.;
   j_dPhiIn = -999.;
@@ -69,10 +68,6 @@ void Electron::SetPassConversionVeto(bool b){
 
 void Electron::SetNMissingHits(int n){
   j_NMissingHits = n;
-}
-
-void Electron::SetIsGsfCtfScPixChargeConsistent(bool b){
-  j_isGsfCtfScPixChargeConsistent = b;
 }
 
 void Electron::SetCutBasedIDVariables(

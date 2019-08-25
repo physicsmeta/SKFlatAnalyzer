@@ -60,10 +60,6 @@ void Muon::SetValidPixelHits(int validpixelhits){
   j_validpixelhits = validpixelhits;
 }
 
-void Muon::SetTrackerLayers(int trackerlayers){
-  j_trackerlayers = trackerlayers;
-}
-
 void Muon::CalcPFRelIso(){
   double absiso = j_PFCH04+std::max( 0., j_PFNH04 + j_PFPH04 - 0.5*j_PU04 );
   //cout << "[Muon::CalcPFRelIso] j_PFCH04 = " << j_PFCH04 << endl;

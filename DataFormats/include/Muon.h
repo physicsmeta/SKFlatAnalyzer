@@ -86,9 +86,6 @@ public:
   void SetValidPixelHits(int validpixelhits);
   inline int ValidPixelHits() const { return j_validpixelhits; }
 
-  void SetTrackerLayers(int trackerlayers);
-  inline int TrackerLayers() const { return j_trackerlayers; }
-
   void SetMiniAODPt(double d);
   void SetMiniAODTunePPt(double d);
   inline double MiniAODPt() const {return j_MiniAODPt;}

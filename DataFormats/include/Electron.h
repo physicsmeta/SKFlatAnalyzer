@@ -40,8 +40,6 @@ public:
   inline int PassConversionVeto() const { return j_passConversionVeto; }
   void SetNMissingHits(int n);
   inline int NMissingHits() const { return j_NMissingHits; };
-  void SetIsGsfCtfScPixChargeConsistent(bool b);
-  inline int IsGsfCtfScPixChargeConsistent() const { return j_isGsfCtfScPixChargeConsistent; }
 
   enum EtaRegion{
     IB, OB, GAP, EC
@@ -146,7 +144,6 @@ private:
   double j_EnergyUnCorr;
   bool j_passConversionVeto;
   int j_NMissingHits;
-  bool j_isGsfCtfScPixChargeConsistent;
   double j_Full5x5_sigmaIetaIeta, j_dEtaSeed, j_dPhiIn, j_HoverE, j_InvEminusInvP, j_e2x5OverE5x5, j_e1x5OverE5x5, j_trkiso, j_dr03EcalRecHitSumEt, j_dr03HcalDepth1TowerSumEt;
   unsigned int j_IDBit;
   double j_RelPFIso_Rho;
