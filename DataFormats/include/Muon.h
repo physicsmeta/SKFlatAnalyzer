@@ -110,6 +110,9 @@ public:
   bool Pass_POGTightWithTightIso() const;
   bool Pass_POGHighPtWithLooseTrkIso() const;
   bool Pass_TESTID() const;
+  
+  void SetTrackerLayers(int n);
+  inline int TrackerLayers() const { return j_trackerLayers; }
 
   bool Pass_HNVeto2016() const;
   bool Pass_HNLoose2016() const;
@@ -130,8 +133,8 @@ private:
   int j_validmuonhits;
   int j_matchedstations;
   int j_validpixelhits;
-  int j_trackerlayers;
- 
+  int j_trackerLayers;
+
   ClassDef(Muon,1);
 };
 

@@ -17,7 +17,7 @@ Muon::Muon() : Lepton() {
   j_validmuonhits = 999;
   j_matchedstations = 999;
   j_validpixelhits = 999;
-  j_trackerlayers = 999;
+  j_trackerLayers = 0;
 }
 
 Muon::~Muon(){
@@ -179,4 +179,8 @@ bool Muon::Pass_HNTight() const{
 
 bool Muon::Pass_TESTID() const {
   return true;
+}
+
+void Muon::SetTrackerLayers(int n){
+  j_trackerLayers = n;
 }
