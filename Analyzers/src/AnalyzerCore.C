@@ -182,7 +182,6 @@ std::vector<Electron> AnalyzerCore::GetAllElectrons(){
     el.SetMVA(electron_MVAIso->at(i), electron_MVANoIso->at(i));
     el.SetPassConversionVeto(electron_passConversionVeto->at(i));
     el.SetNMissingHits(electron_mHits->at(i));
-    el.SetIsGsfCtfScPixChargeConsistent(electron_isGsfCtfScPixChargeConsistent->at(i));
     el.SetRho(Rho);
     el.SetIsGsfCtfScPixChargeConsistent(electron_isGsfCtfScPixChargeConsistent->at(i));
 
@@ -997,7 +996,7 @@ double AnalyzerCore::GetPileUpWeight(int N_pileup, int syst){
       return mcCorr->GetPileUpWeight(N_pileup, syst);
     }
     else if(DataYear==2017){
-      if(MCSample.Contains("WZTo3LNu") || MCSample.Contains("ZZTo4L") || MCSample.Contains("ZGToLLG") || MCSample.Contains("WGToLNuG")){
+      if(MCSample.Contains("DYJets10to50_MG") || MCSample.Contains("ZGToLLG") || MCSample.Contains("WGToLNuG")){
         return mcCorr->GetPileUpWeight2017(N_pileup, syst);
       }
       else{
@@ -1006,7 +1005,8 @@ double AnalyzerCore::GetPileUpWeight(int N_pileup, int syst){
     }
     else if(DataYear==2018){
       //==== TODO 2018 not yet added
-      return 1.;
+//      return 1.;
+      return mcCorr->GetPileUpWeight2017(N_pileup, syst); // use the same method for 2017 MC
     }
     else{
       cout << "[AnalyzerCore::GetPileUpWeight] Wrong year : " << DataYear << endl;
