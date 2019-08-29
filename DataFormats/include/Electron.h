@@ -47,7 +47,7 @@ public:
   inline EtaRegion etaRegion() const {
     double sceta = fabs(scEta());
     if( sceta < 0.8 ) return IB;
-    else if( sceta < 1.444 ) return OB;
+    else if( sceta < 1.4442 ) return OB;
     else if( sceta < 1.566 ) return GAP;
     else return EC;
   }
@@ -122,6 +122,9 @@ public:
   void SetRho(double r);
   inline double Rho() const { return j_Rho; }
 
+  void SetIsGsfCtfScPixChargeConsistent(bool b);
+  inline bool IsGsfCtfScPixChargeConsistent() const { return j_isGsfCtfScPixChargeConsistent; }
+    
 private:
 
   double j_En_up;
@@ -138,6 +141,7 @@ private:
   double j_RelPFIso_Rho;
 
   double j_Rho;
+  int j_isGsfCtfScPixChargeConsistent;
 
   ClassDef(Electron,1)
 
