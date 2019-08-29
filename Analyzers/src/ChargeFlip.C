@@ -15,9 +15,7 @@ void ChargeFlip::executeEvent(){
   /* MET Filter */
 
   if(HasFlag("passMETFilter")){ 
-
     if(!PassMETFilter()) return;
-
   }
 
   Event ev = GetEvent();
@@ -25,19 +23,13 @@ void ChargeFlip::executeEvent(){
   /* Trigger */
 
   if(HasFlag("passSingleTrigger")) {
-
     TString EleTriggerName = "HLT_Ele27_WPTight_Gsf_v";
-
     if(! (ev.PassTrigger(EleTriggerName) )) return;
-
   }
 
   else if(HasFlag("passDoubleTrigger")){
-
     TString EleTriggerName = "HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v";
-
     if(! (ev.PassTrigger(EleTriggerName) )) return;
-
   }
 
   /* ChargeFlip ID selection */
@@ -45,8 +37,11 @@ void ChargeFlip::executeEvent(){
   vector<Electron> eles;
 
   if(HasFlag("ChargeFlipID")) eles = SelectChargeFlipElectrons(AllEles, 25., 2.5);
-
   else if(HasFlag("passTightChargeTightID")) eles = SelectChargeTightElectrons(AllEles, "passTightID", 25., 2.5);
+  else if(HasFlag("passTightChargeTightIDdXY")) eles = SelectChargeTightElectronsDXY(AllEles, "passTightID", 25., 2.5);
+  else if(HasFlag("passTightChargeTightIDdZ")) eles = SelectChargeTightElectronsDZ(AllEles, "passTightID", 25., 2.5);
+  else if(HasFlag("passTightChargeTightIDdXYdZ")) eles = SelectChargeTightElectronsDXYDZ(AllEles, "passTightID", 25., 2.5);
+  else if(HasFlag("ChargeFlipHE")) eles = SelectElectronsHE(AllEles, "passTightID", 25., 2.5);
 
   /* sort */
 

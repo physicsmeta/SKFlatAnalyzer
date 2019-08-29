@@ -662,6 +662,126 @@ std::vector<Electron> AnalyzerCore::SelectChargeTightElectrons(const std::vector
 
 }
 
+std::vector<Electron> AnalyzerCore::SelectChargeTightElectronsDXY(const std::vector<Electron>& electrons, TString id, double ptmin, double fetamax){
+
+  std::vector<Electron> out;
+  for(unsigned int i=0; i<electrons.size(); i++){
+    if(!( electrons.at(i).Pt()>ptmin )){
+      //cout << "Fail Pt : pt = " << electrons.at(i).Pt() << ", cut = " << ptmin << endl;
+      continue;
+    }
+    if(!( fabs(electrons.at(i).scEta())<fetamax )){
+      //cout << "Fail Eta : eta = " << fabs(electrons.at(i).scEta()) << ", cut = " << fetamax << endl;
+      continue;
+    }
+    if(!( electrons.at(i).PassID(id) )){
+      //cout << "Fail ID" << endl;
+      continue;
+    }
+		if(! (electrons.at(i).IsGsfCtfScPixChargeConsistent() )){
+			continue;
+		}
+    if(!( electrons.at(i).dXY()<0.01 )){ 
+      continue;
+    }
+    out.push_back(electrons.at(i));
+  }
+  return out;
+
+}
+
+std::vector<Electron> AnalyzerCore::SelectChargeTightElectronsDZ(const std::vector<Electron>& electrons, TString id, double ptmin, double fetamax){
+
+  std::vector<Electron> out;
+  for(unsigned int i=0; i<electrons.size(); i++){
+    if(!( electrons.at(i).Pt()>ptmin )){
+      //cout << "Fail Pt : pt = " << electrons.at(i).Pt() << ", cut = " << ptmin << endl;
+      continue;
+    }
+    if(!( fabs(electrons.at(i).scEta())<fetamax )){
+      //cout << "Fail Eta : eta = " << fabs(electrons.at(i).scEta()) << ", cut = " << fetamax << endl;
+      continue;
+    }
+    if(!( electrons.at(i).PassID(id) )){
+      //cout << "Fail ID" << endl;
+      continue;
+    }
+		if(! (electrons.at(i).IsGsfCtfScPixChargeConsistent() )){
+			continue;
+		}
+    if(!( electrons.at(i).dZ()<0.04 )){ 
+      continue;
+    }
+    out.push_back(electrons.at(i));
+  }
+  return out;
+
+}
+
+std::vector<Electron> AnalyzerCore::SelectChargeTightElectronsDXYDZ(const std::vector<Electron>& electrons, TString id, double ptmin, double fetamax){
+
+  std::vector<Electron> out;
+  for(unsigned int i=0; i<electrons.size(); i++){
+    if(!( electrons.at(i).Pt()>ptmin )){
+      //cout << "Fail Pt : pt = " << electrons.at(i).Pt() << ", cut = " << ptmin << endl;
+      continue;
+    }
+    if(!( fabs(electrons.at(i).scEta())<fetamax )){
+      //cout << "Fail Eta : eta = " << fabs(electrons.at(i).scEta()) << ", cut = " << fetamax << endl;
+      continue;
+    }
+    if(!( electrons.at(i).PassID(id) )){
+      //cout << "Fail ID" << endl;
+      continue;
+    }
+		if(! (electrons.at(i).IsGsfCtfScPixChargeConsistent() )){
+			continue;
+		}
+    if(!( electrons.at(i).dXY()<0.01 )){ 
+      continue;
+    }
+    if(!( electrons.at(i).dZ()<0.04 )){ 
+      continue;
+    }
+    out.push_back(electrons.at(i));
+  }
+  return out;
+
+}
+
+std::vector<Electron> AnalyzerCore::SelectElectronsHE(const std::vector<Electron>& electrons, TString id, double ptmin, double fetamax){
+
+  std::vector<Electron> out;
+  for(unsigned int i=0; i<electrons.size(); i++){
+    if(!( electrons.at(i).Pt()>ptmin )){
+      //cout << "Fail Pt : pt = " << electrons.at(i).Pt() << ", cut = " << ptmin << endl;
+      continue;
+    }
+    if(!( fabs(electrons.at(i).scEta())<fetamax )){
+      //cout << "Fail Eta : eta = " << fabs(electrons.at(i).scEta()) << ", cut = " << fetamax << endl;
+      continue;
+    }
+    if(!( electrons.at(i).PassID(id) )){
+      //cout << "Fail ID" << endl;
+      continue;
+    }
+		if(! (electrons.at(i).IsGsfCtfScPixChargeConsistent() )){
+			continue;
+		}
+    if( fabs(electrons.at(i).scEta())<=1.479 ){
+		  if(!( electrons.at(i).dXY()<0.05 )) continue;
+      if(!( electrons.at(i).dZ()<0.10 )) continue;
+    }
+    if( fabs(electrons.at(i).scEta())>1.479 ){
+		  if(!( electrons.at(i).dXY()<0.10 )) continue;
+      if(!( electrons.at(i).dZ()<0.20 )) continue;
+    } //JH : https://twiki.cern.ch/twiki/bin/view/CMS/CutBasedElectronIdentificationRun2#Offline_selection_criteria_for_V HE now using
+    out.push_back(electrons.at(i));
+  }
+  return out;
+
+}
+
 std::vector<Electron> AnalyzerCore::SelectChargeFlipElectrons(const std::vector<Electron>& electrons, double ptmin, double fetamax){ //JH : for CF
 
   std::vector<Electron> out;
