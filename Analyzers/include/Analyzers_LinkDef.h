@@ -13,5 +13,6 @@
 #pragma link C++ class SkimTree_LRSMHighPt+;
 #pragma link C++ class ChargeFlip+;
 #pragma link C++ class ZMass+;
+#pragma link C++ class Practice+;
 
 #endif

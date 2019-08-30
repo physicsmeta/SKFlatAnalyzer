@@ -46,7 +46,8 @@ public :
    virtual void Loop();
 
    virtual void executeEvent(){
-
+   };
+   virtual void executeEvent(Long64_t Nentry){
    };
 
    std::string AddZeroToTime(int twodigit){

@@ -10,23 +10,8 @@ TH1D* h4 = (TH1D*)f1->Get("ChargeFlip/EtaRegion2_Num");
 TH1D* h5 = (TH1D*)f1->Get("ChargeFlip/EtaRegion3_Denom");
 TH1D* h6 = (TH1D*)f1->Get("ChargeFlip/EtaRegion3_Num");
 
+// Let's use vector instead of array, to remove zero bins and nan bins //
 
-//double x[40], ex[40];
-//for (int i=0; i<40; i++) { x[i] = (2*i+1)*(0.04/80.); ex[i] = 0.04/80.; }
-//
-//double y_1[40], y_2[40], y_3[40];
-//for (int i=0; i<40; i++) { y_1[i] = h2->GetBinContent(i+1)/h1->GetBinContent(i+1); }
-//for (int i=0; i<40; i++) { y_2[i] = h4->GetBinContent(i+1)/h3->GetBinContent(i+1); }
-//for (int i=0; i<40; i++) { y_3[i] = h6->GetBinContent(i+1)/h5->GetBinContent(i+1); }
-//y_3[0]=0; //NaN
-//
-//double ey_1[40], ey_2[40], ey_3[40];
-//for (int i=0; i<40; i++) { ey_1[i] = y_1[i]*(sqrt(pow(h2->GetBinError(i+1)/h2->GetBinContent(i+1),2)+pow(h1->GetBinError(i+1)/h1->GetBinContent(i+1),2))); }
-//for (int i=0; i<40; i++) { ey_2[i] = y_2[i]*(sqrt(pow(h4->GetBinError(i+1)/h4->GetBinContent(i+1),2)+pow(h3->GetBinError(i+1)/h3->GetBinContent(i+1),2))); }
-//for (int i=0; i<40; i++) { ey_3[i] = y_3[i]*(sqrt(pow(h6->GetBinError(i+1)/h6->GetBinContent(i+1),2)+pow(h5->GetBinError(i+1)/h5->GetBinContent(i+1),2))); } TODO to be deleted
-
-
-//////////////////////// Let's use vector instead of array, to remove zero bins and nan bins /////////////////////////////////
 vector<double> X_1, EX_1, X_2, EX_2, X_3, EX_3;
 for (int i=0; i<40; i++) {
   X_1.push_back((2*i+1)*(0.04/80.)); EX_1.push_back(0.04/80.); 
@@ -70,8 +55,9 @@ for (int i=0; i<X_3.size();) {
 	}
 	else i++;
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+// Draw the plots //
 
 TCanvas* c1 = new TCanvas("c1","ChargeFlip_EtaRegion1",200,200,900,800);
 TCanvas* c2 = new TCanvas("c2","ChargeFlip_EtaRegion2",250,150,900,800);
@@ -93,6 +79,8 @@ gr1->GetXaxis()->SetTickLength(0.025);
 gr1->GetXaxis()->SetLabelSize(0.025);
 gr1->GetYaxis()->SetLabelSize(0.025);
 
+// Define fit function and range //
+
 TF1 *gr1_fit1 = new TF1("gr1_fit1","pol1",0,0.021);
 TF1 *gr1_fit2 = new TF1("gr1_fit2","pol1",0.021,0.04);
 
@@ -105,6 +93,8 @@ gr1_fit2->SetLineColor(4);
 cout << "//////////////////// Now fitting on EtaRegion1 ... ////////////////////" << endl;
 
 gr1->Fit(gr1_fit1,"R");
+
+// Draw fitting uncertainty //
 
 TGraphErrors *gr1_fit1_err = new TGraphErrors(22);
 for(int i=0; i<22; i++) gr1_fit1_err->SetPoint(i,0.001*i,0);
@@ -122,7 +112,7 @@ gr1_fit2_err->SetFillColor(4);
 gr1_fit2_err->SetFillStyle(3001);
 gr1_fit2_err->Draw("3 same");
 
-
+// Done and repeat for EtaRegion2, 3 //
 
 c2->cd();
 //TGraph* gr2 = new TGraph(40,x,y_2);
@@ -154,7 +144,7 @@ gr2_fit1->SetLineColor(4);
 gr2_fit2->SetLineColor(4);
 gr2_fit3->SetLineColor(4);
 
-cout << "//////////////////// Now fitting on EtaRegion2 ... ////////////////////" << endl;
+cout << endl << "//////////////////// Now fitting on EtaRegion2 ... ////////////////////" << endl;
 
 gr2->Fit(gr2_fit1,"R");
 
@@ -214,7 +204,7 @@ gr3_fit1->SetLineColor(4);
 gr3_fit2->SetLineColor(4);
 gr3_fit3->SetLineColor(4);
 
-cout << "//////////////////// Now fitting on EtaRegion3 ... ////////////////////" << endl;
+cout << endl << "//////////////////// Now fitting on EtaRegion3 ... ////////////////////" << endl;
 
 gr3->Fit(gr3_fit1,"R");
 
@@ -243,23 +233,4 @@ gr3_fit3_err->SetFillColor(4);
 gr3_fit3_err->SetFillStyle(3001);
 gr3_fit3_err->Draw("3 same");
 
-
-//double par[6];
-//gr3_fit1->GetParameters(&par[0]);
-//gr3_fit2->GetParameters(&par[2]);
-//gr3_fit3->GetParameters(&par[4]);
-//
-//TF1 *gr3_fit4 = new TF1("gr3_fit4","CFfit",0,0.04,6);
-//gr3_fit4->SetParameters(par[0],par[1],par[2],par[3],par[4],par[5]);
-//gr3_fit4->SetLineColor(4);
-//gr3_fit4->Draw("SAME");
-
-}
-
-
-double CFfit(double *x, double *par)
-{
-  double xx = x[0];
-  double f = (xx<0.012)*(par[0]+xx*par[1]) + (xx>=0.012 && xx<0.021)*(par[2]+xx*par[3]) + (xx>=0.021 && xx<0.04)*(par[4]+xx*par[5]);
-	return f;
 }
