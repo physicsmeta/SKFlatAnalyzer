@@ -346,7 +346,7 @@ double ChargeFlip::GetCFweight(std::vector<Electron> eles){
     if(abs(eles.at(i).scEta())<0.8){
       if(1/eles.at(i).Pt()<0.021) prob[i] = 1.63348e-04-4.97821e-03/eles.at(i).Pt();
   	  else prob[i] = 5.11382e-05+3.88422e-04/eles.at(i).Pt();
-  	  }
+    }
     else if(0.8<=abs(eles.at(i).scEta())&&abs(eles.at(i).scEta())<1.4442){
   	  if(1/eles.at(i).Pt()<0.0155) prob[i] = 1.94800e-03-9.32813e-02/eles.at(i).Pt();
   	  else if(0.0155<=1/eles.at(i).Pt()&&1/eles.at(i).Pt()<0.023) prob[i] = 6.34964e-04-6.98093e-03/eles.at(i).Pt();
@@ -361,6 +361,8 @@ double ChargeFlip::GetCFweight(std::vector<Electron> eles){
 
   return prob[0]/(1.-prob[0])+prob[1]/(1.-prob[1]);
 
+}
+
 double ChargeFlip::GetCFweight_SF(std::vector<Electron> eles){
   
   double prob[2];
@@ -369,7 +371,7 @@ double ChargeFlip::GetCFweight_SF(std::vector<Electron> eles){
     if(abs(eles.at(i).scEta())<0.8){
       if(1/eles.at(i).Pt()<0.021) prob[i] = (1.63348e-04-4.97821e-03/eles.at(i).Pt())*0.614879;
   	  else prob[i] = (5.11382e-05+3.88422e-04/eles.at(i).Pt())*0.614879;
-  	  }
+ 	  }
     else if(0.8<=abs(eles.at(i).scEta())&&abs(eles.at(i).scEta())<1.4442){
   	  if(1/eles.at(i).Pt()<0.0155) prob[i] = (1.94800e-03-9.32813e-02/eles.at(i).Pt())*0.614879;
   	  else if(0.0155<=1/eles.at(i).Pt()&&1/eles.at(i).Pt()<0.023) prob[i] = (6.34964e-04-6.98093e-03/eles.at(i).Pt())*0.614879;
