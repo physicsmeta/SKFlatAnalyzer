@@ -64,7 +64,7 @@ TCanvas* c2 = new TCanvas("c2","ChargeFlip_EtaRegion2",250,150,900,800);
 TCanvas* c3 = new TCanvas("c3","ChargeFlip_EtaRegion3",300,100,900,800);
 
 c1->cd();
-//TGraphErrors* gr1 = new TGraphErrors(40,x,y_1,ex,ey_1);
+
 TGraphErrors* gr1 = new TGraphErrors(X_1.size(),&X_1[0],&Y_1[0],&EX_1[0],&EY_1[0]);
 gr1->SetMarkerStyle(20);
 //gr1->SetMarkerSize(0.8);
@@ -115,8 +115,7 @@ gr1_fit2_err->Draw("3 same");
 // Done and repeat for EtaRegion2, 3 //
 
 c2->cd();
-//TGraph* gr2 = new TGraph(40,x,y_2);
-//TGraphErrors* gr2 = new TGraphErrors(40,x,y_2,ex,ey_2);
+
 TGraphErrors* gr2 = new TGraphErrors(X_2.size(),&X_2[0],&Y_2[0],&EX_2[0],&EY_2[0]);
 gr2->SetMarkerStyle(20);
 //gr2->SetMarkerSize(0.8);
@@ -176,8 +175,7 @@ gr2_fit3_err->Draw("3 same");
 
 
 c3->cd();
-//TGraph* gr3 = new TGraph(40,x,y_3);
-//TGraphErrors* gr3 = new TGraphErrors(40,x,y_3,ex,ey_3);
+
 TGraphErrors* gr3 = new TGraphErrors(X_3.size(),&X_3[0],&Y_3[0],&EX_3[0],&EY_3[0]);
 gr3->SetMarkerStyle(20);
 //gr3->SetMarkerSize(0.8);

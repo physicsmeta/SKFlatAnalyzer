@@ -386,10 +386,23 @@ void Practice::executeEventFromParameter(AnalyzerParameter param, Long64_t Nentr
   if(Nentry%(LogEvery)==0){
     cout << "ele1_E = " << eles.at(0).E() << endl;
     cout << "ele1_P = " << eles.at(0).P() << endl;
-    cout << "diele_E = " << ZCand.E() << endl;
-    cout << "diele_P = " << ZCand.P() << endl;
+    cout << "ele1_Px = " << eles.at(0).Px() << endl;
+    cout << "ele1_Py = " << eles.at(0).Py() << endl;
+    cout << "ele1_Pz = " << eles.at(0).Pz() << endl;
     cout << "ele1_sqrt(E^2-P^2) = " << sqrt(pow(eles.at(0).E(),2)-pow(eles.at(0).P(),2)) << endl;
     cout << "ele1_m = " << eles.at(0).M() << endl;
+    cout << "ele2_E = " << eles.at(1).E() << endl;
+    cout << "ele2_P = " << eles.at(1).P() << endl;
+    cout << "ele2_Px = " << eles.at(1).Px() << endl;
+    cout << "ele2_Py = " << eles.at(1).Py() << endl;
+    cout << "ele2_Pz = " << eles.at(1).Pz() << endl;
+    cout << "ele2_sqrt(E^2-P^2) = " << sqrt(pow(eles.at(1).E(),2)-pow(eles.at(1).P(),2)) << endl;
+    cout << "ele2_m = " << eles.at(1).M() << endl;
+    cout << "diele_E = " << ZCand.E() << endl;
+    cout << "diele_P = " << ZCand.P() << endl;
+    cout << "diele_Px = " << ZCand.Px() << endl;
+    cout << "diele_Py = " << ZCand.Py() << endl;
+    cout << "diele_Pz = " << ZCand.Pz() << endl;
     cout << "diele_sqrt(E^2-P^2) = " << sqrt(pow(ZCand.E(),2)-pow(ZCand.P(),2)) << endl;
     cout << "diele_m = " << ZCand.M() << endl;
   }

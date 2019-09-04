@@ -7,10 +7,16 @@ class ChargeFlip : public AnalyzerCore {
 
 public:
 
-//  void initializeAnalyzer();
+  void initializeAnalyzer();
 //  void executeEventFromParameter(AnalyzerParameter param);
-  void executeEvent();
+  void executeEvent(Long64_t Nentry);
+	double GetCFweight(std::vector<Electron> eles);
+	double GetCFweight_SF(std::vector<Electron> eles);
 
+  TString EleTriggerName;
+  double lep0ptcut, lep1ptcut;
+
+  vector<TString> EleIDs, EleIDSFKeys;
   vector<Electron> AllEles;
 
   ChargeFlip();

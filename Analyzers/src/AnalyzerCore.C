@@ -790,6 +790,9 @@ std::vector<Electron> AnalyzerCore::SelectChargeFlipElectrons(const std::vector<
       //cout << "Fail Pt : pt = " << electrons.at(i).Pt() << ", cut = " << ptmin << endl;
       continue;
     }
+    if(electrons.at(i).etaRegion()==electrons.at(i).GAP){
+      continue;
+    }
     if(!( fabs(electrons.at(i).scEta())<fetamax )){
       //cout << "Fail Eta : eta = " << fabs(electrons.at(i).scEta()) << ", cut = " << fetamax << endl;
       continue;

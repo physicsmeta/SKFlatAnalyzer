@@ -9,9 +9,9 @@ public:
 
   void initializeAnalyzer();
   void executeEventFromParameter(AnalyzerParameter param);
-  void executeEventFromParameter(AnalyzerParameter param, Long64_t Nentry); //JH
+  void executeEventFromParameter(AnalyzerParameter param, Long64_t Nentry); 
   void executeEvent();
-  void executeEvent(Long64_t Nentry); //JH
+  void executeEvent(Long64_t Nentry); 
 
   TString EleTriggerName;
   double lep0ptcut, lep1ptcut;

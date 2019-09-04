@@ -67,7 +67,7 @@ void ZMass::executeEventFromParameter(AnalyzerParameter param){
   if(!PassMETFilter()) return;
 
   Event ev = GetEvent();
-//Particle METv = ev.GetMETVector(); TODO What is this?
+//Particle METv = ev.GetMETVector(); 
 
 	/* Trigger */
 
