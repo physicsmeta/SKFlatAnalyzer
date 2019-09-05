@@ -19,6 +19,9 @@ void HNtypeI_SM_CR::initializeAnalyzer(){
   //==== I defined "TString IsoMuTriggerName;" and "double TriggerSafePtCut;" in Analyzers/include/HNtypeI_SM_CR.h 
   //==== IsoMuTriggerName is a year-dependent variable, and you don't want to do "if(Dataer==~~)" for every event (let's save cpu time).
   //==== Then, do it here, which only ran once for each macro
+  MuonTriggers.clear();
+  ElectronTriggers.clear();
+
   if(DataYear==2016){
     MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v");
     MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_v");

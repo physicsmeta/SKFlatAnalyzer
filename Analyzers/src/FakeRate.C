@@ -19,6 +19,9 @@ void FakeRate::initializeAnalyzer(){
   //==== I defined "TString IsoMuTriggerName;" and "double TriggerSafePtCut;" in Analyzers/include/FakeRate.h 
   //==== IsoMuTriggerName is a year-dependent variable, and you don't want to do "if(Dataer==~~)" for every event (let's save cpu time).
   //==== Then, do it here, which only ran once for each macro
+  MuonTriggers.clear();
+  ElectronTriggers.clear();
+
   MuonTrig1 = "HLT_Mu3_PFJet40_v";       // DoubleMuon(2016), SingleMuon(2017,2018)
   MuonTrig2 = "HLT_Mu8_TrkIsoVVL_v";     // DoubleMuon
   MuonTrig3 = "HLT_Mu17_TrkIsoVVL_v";    // DoubleMuon
@@ -40,20 +43,20 @@ void FakeRate::initializeAnalyzer(){
   ElectronTriggers.push_back(ElectronTrig3);
   ElectronTriggers.push_back(ElectronTrig4);
   ElectronPtCut1 = 9.5, ElectronPtCut2 = 15., ElectronPtCut3 = 20., ElectronPtCut4 = 25.;
-  ElectronPtconeCut1 = 10., ElectronPtconeCut2 = 23., ElectronPtconeCut3 = 32., ElectronPtconeCut4 = 40.;
+  ElectronPtconeCut1 = 10., ElectronPtconeCut2 = 23., ElectronPtconeCut3 = 35., ElectronPtconeCut4 = 40.;
 
   // luminosity of prescaled triggers
   if(DataYear==2016){
-    MuonLumi1 = 7.408, MuonLumi2 = 7.801, MuonLumi3 = 216.748;
-    ElectronLumi1 = 6.988, ElectronLumi2 = 14.851 , ElectronLumi3 = 62.761, ElectronLumi4 = 62.808;  // Ele17_CaloIdL_TrackIdL_IsoVL_PFJet30_v : 58.639
+    MuonLumi1 = 7.408*0.680163, MuonLumi2 = 7.801*1.22923, MuonLumi3 = 216.748*0.912288;
+    ElectronLumi1 = 6.988*1.05547, ElectronLumi2 = 14.851*0.972706 , ElectronLumi3 = 62.761*0.929557, ElectronLumi4 = 62.808*0.928212;  // Ele17_CaloIdL_TrackIdL_IsoVL_PFJet30_v : 58.639
   }
   if(DataYear==2017){
-    MuonLumi1 = 4.612, MuonLumi2 = 2.903, MuonLumi3 = 65.943;
-    ElectronLumi1 = 3.973, ElectronLumi2 = 27.698, ElectronLumi3 = 35.594, ElectronLumi4 = 43.468;
+    MuonLumi1 = 4.612*1.01916, MuonLumi2 = 2.903*1.22549, MuonLumi3 = 65.943*0.905105;
+    ElectronLumi1 = 3.973*0.962824, ElectronLumi2 = 27.698*0.846783, ElectronLumi3 = 35.594*0.792109, ElectronLumi4 = 43.468*0.767242;
   }
   if(DataYear==2018){
-    MuonLumi1 = 2.696, MuonLumi2 = 8.561, MuonLumi3 = 45.781;
-    ElectronLumi1 = 6.412, ElectronLumi2 = 38.849, ElectronLumi3 = 38.861, ElectronLumi4 = 38.906;
+    MuonLumi1 = 2.696*2.05535, MuonLumi2 = 8.561*1.03262, MuonLumi3 = 45.781*0.901847;
+    ElectronLumi1 = 6.412*0.89131, ElectronLumi2 = 38.849*0.92211, ElectronLumi3 = 38.861*0.79613, ElectronLumi4 = 38.906*0.791474;
   }
 //  cout << "[FakeRate::initializeAnalyzer] IsoMuTriggerName = " << IsoMuTriggerName << endl;
 //  cout << "[FakeRate::initializeAnalyzer TriggerSafePtCut = " << TriggerSafePtCut << endl;
@@ -232,10 +235,10 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
   //==================================================
 
   vector<Electron> ele_tight = SelectElectrons(this_AllElectrons, param.Electron_Tight_ID, 10., 2.5);
-  vector<Electron> ele_loose = SelectElectrons(this_AllElectrons, param.Electron_Loose_ID, 10., 2.5);
+  vector<Electron> ele_loose = SelectElectrons(this_AllElectrons, param.Electron_Loose_ID, ElectronPtCut1, 2.5);
 //  vector<Electron> electrons_veto = SelectElectrons(this_AllElectrons, param.Electron_Veto_ID, 10., 2.5);
   vector<Muon> muons_tight = SelectMuons(this_AllMuons, param.Muon_Tight_ID, 10., 2.4);
-  vector<Muon> muons_loose = SelectMuons(this_AllMuons, param.Muon_Loose_ID, 5., 2.4);
+  vector<Muon> muons_loose = SelectMuons(this_AllMuons, param.Muon_Loose_ID, MuonPtCut1, 2.4);
   vector<Jet> jets = SelectJets(this_AllJets, param.Jet_ID, 30., 2.4);
   vector<Gen> gens = GetGens(); 
 //  std::vector<Lepton*> leptons;
@@ -681,7 +684,14 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
       FillHist("Ele_loose_PtCone_nocut_"+PtConeRange+"_"+regions.at(it_rg), ptcone_el, weight, 200, 0., 200.);
       FillHist("Ele_loose_Eta_nocut_"+PtConeRange+"_"+regions.at(it_rg), ele_loose.at(0).Eta(), weight, 50, -2.5, 2.5);
       FillHist("Jet_ChargedEmEnergyFraction_"+PtConeRange+"_"+regions.at(it_rg), jet_emfraction, weight, 100, 0., 1.);
-      FillHist("Number_Events_nocut_"+PtConeRange+"_"+regions.at(it_rg), 0.5, weight, 2, 0., 2.);      
+      FillHist("Number_Events_nocut_"+PtConeRange+"_"+regions.at(it_rg), 0.5, weight, 2, 0., 2.); 
+
+      if(ele_tight.size() > 0){
+        FillHist("Ele_tight_PtCone_nocut_"+PtConeRange+"_"+regions.at(it_rg), ptcone_el, weight, 200, 0., 200.);
+        FillHist("Ele_tight_Eta_nocut_"+PtConeRange+"_"+regions.at(it_rg), ele_tight.at(0).Eta(), weight, 50, -2.5, 2.5);
+        FillHist("Number_Events_nocut_"+PtConeRange+"_"+regions.at(it_rg), 1.5, weight, 2, 0., 2.);
+      }
+
       // additional cuts to reduce prompt contribution
       if(MET > 80.) continue;
       if(Mt > 25.) continue;
