@@ -30,30 +30,30 @@ for (int i=0; i<40; i++) {
 
 for (int i=0; i<X_1.size();) {
   if ( (Y_1.at(i) == 0) || (isnan(Y_1.at(i)) != 0) ) {
-		X_1.erase(X_1.begin()+i);
-		EX_1.erase(EX_1.begin()+i);
+    X_1.erase(X_1.begin()+i);
+    EX_1.erase(EX_1.begin()+i);
     Y_1.erase(Y_1.begin()+i);
-		EY_1.erase(EY_1.begin()+i);
-	}
-	else i++;
+    EY_1.erase(EY_1.begin()+i);
+  }
+  else i++;
 }
 for (int i=0; i<X_2.size();) {
   if ( (Y_2.at(i) == 0) || (isnan(Y_2.at(i)) != 0) ) {
-		X_2.erase(X_2.begin()+i);
-		EX_2.erase(EX_2.begin()+i);
+    X_2.erase(X_2.begin()+i);
+    EX_2.erase(EX_2.begin()+i);
     Y_2.erase(Y_2.begin()+i);
-		EY_2.erase(EY_2.begin()+i);
-	}
-	else i++;
+    EY_2.erase(EY_2.begin()+i);
+  }
+  else i++;
 }
 for (int i=0; i<X_3.size();) {
   if ( (Y_3.at(i) == 0) || (isnan(Y_3.at(i)) != 0) ) {
-		X_3.erase(X_3.begin()+i);
-		EX_3.erase(EX_3.begin()+i);
+    X_3.erase(X_3.begin()+i);
+    EX_3.erase(EX_3.begin()+i);
     Y_3.erase(Y_3.begin()+i);
-		EY_3.erase(EY_3.begin()+i);
-	}
-	else i++;
+    EY_3.erase(EY_3.begin()+i);
+  }
+  else i++;
 }
 
 
@@ -230,5 +230,9 @@ for(int i=0; i<22; i++) gr3_fit3_err->SetPoint(i,0.02+0.001*i,0);
 gr3_fit3_err->SetFillColor(4);
 gr3_fit3_err->SetFillStyle(3001);
 gr3_fit3_err->Draw("3 same");
+
+//c1->SaveAs("CF_EtaRegion1.pdf");
+//c2->SaveAs("CF_EtaRegion2.pdf");
+//c3->SaveAs("CF_EtaRegion3.pdf");
 
 }
