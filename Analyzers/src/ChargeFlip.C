@@ -64,51 +64,49 @@ void ChargeFlip::executeEvent(Long64_t Nentry){
       if(truth_lep.PID() == 11) truth_lep_Charge = -1;
       else if(truth_lep.PID() == -11) truth_lep_Charge = 1;
     
-      if(MCSample.Contains("DYJets")){
-        if(abs(eles.at(i).scEta())<0.8){
-          JSFillHist("ChargeFlip", "EtaRegion1_Denom", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
-          if(truth_lep_Charge*eles.at(i).Charge()<0){
-            cout << "!!EtaRegion1!! truth lepton charge : " << truth_lep_Charge << ", reco lepton charge : " << eles.at(i).Charge() << endl;
-            JSFillHist("ChargeFlip", "EtaRegion1_Num", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
-            // SH's ask //
-            if(eles.size() == 2&&i == 0){
-            JSFillHist("ChargeFlip", "EtaRegion1_IsLeading", 1, 1, 2, 0, 2);
-            }
-            else if(eles.size() == 2&&i == 1){
-            JSFillHist("ChargeFlip", "EtaRegion1_IsLeading", 0, 1, 2, 0, 2);
-            }
-						//
+      if(abs(eles.at(i).scEta())<0.8){
+        JSFillHist("ChargeFlip", "EtaRegion1_Denom", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
+        if(truth_lep_Charge*eles.at(i).Charge()<0){
+          cout << "!!EtaRegion1!! truth lepton charge : " << truth_lep_Charge << ", reco lepton charge : " << eles.at(i).Charge() << endl;
+          JSFillHist("ChargeFlip", "EtaRegion1_Num", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
+          // SH's ask //
+          if(eles.size() == 2&&i == 0){
+          JSFillHist("ChargeFlip", "EtaRegion1_IsLeading", 1, 1, 2, 0, 2);
           }
+          else if(eles.size() == 2&&i == 1){
+          JSFillHist("ChargeFlip", "EtaRegion1_IsLeading", 0, 1, 2, 0, 2);
+          }
+					//
         }
-        else if(0.8<=abs(eles.at(i).scEta())&&abs(eles.at(i).scEta())<1.4442){
-          JSFillHist("ChargeFlip", "EtaRegion2_Denom", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
-          if(truth_lep_Charge*eles.at(i).Charge()<0){
-            cout << "!!EtaRegion2!! truth lepton charge : " << truth_lep_Charge << ", reco lepton charge : " << eles.at(i).Charge() << endl;
-            JSFillHist("ChargeFlip", "EtaRegion2_Num", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
-            // SH's ask //
-            if(eles.size() == 2&&i == 0){
-            JSFillHist("ChargeFlip", "EtaRegion2_IsLeading", 1, 1, 2, 0, 2);
-            }
-            else if(eles.size() == 2&&i == 1){
-            JSFillHist("ChargeFlip", "EtaRegion2_IsLeading", 0, 1, 2, 0, 2);
-            }
-						//
+      }
+      else if(0.8<=abs(eles.at(i).scEta())&&abs(eles.at(i).scEta())<1.4442){
+        JSFillHist("ChargeFlip", "EtaRegion2_Denom", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
+        if(truth_lep_Charge*eles.at(i).Charge()<0){
+          cout << "!!EtaRegion2!! truth lepton charge : " << truth_lep_Charge << ", reco lepton charge : " << eles.at(i).Charge() << endl;
+          JSFillHist("ChargeFlip", "EtaRegion2_Num", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
+          // SH's ask //
+          if(eles.size() == 2&&i == 0){
+          JSFillHist("ChargeFlip", "EtaRegion2_IsLeading", 1, 1, 2, 0, 2);
           }
+          else if(eles.size() == 2&&i == 1){
+          JSFillHist("ChargeFlip", "EtaRegion2_IsLeading", 0, 1, 2, 0, 2);
+          }
+					//
         }
-        else if(1.556<=abs(eles.at(i).scEta())&&abs(eles.at(i).scEta())<2.5){
-          JSFillHist("ChargeFlip", "EtaRegion3_Denom", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
-          if(truth_lep_Charge*eles.at(i).Charge()<0){
-            cout << "!!EtaRegion3!! truth lepton charge : " << truth_lep_Charge << ", reco lepton charge : " << eles.at(i).Charge() << endl;
-            JSFillHist("ChargeFlip", "EtaRegion3_Num", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
-            // SH's ask //
-            if(eles.size() == 2&&i == 0){
-            JSFillHist("ChargeFlip", "EtaRegion3_IsLeading", 1, 1, 2, 0, 2);
-            }
-            else if(eles.size() == 2&&i == 1){
-            JSFillHist("ChargeFlip", "EtaRegion3_IsLeading", 0, 1, 2, 0, 2);
-            }
-						//
+      }
+      else if(1.556<=abs(eles.at(i).scEta())&&abs(eles.at(i).scEta())<2.5){
+        JSFillHist("ChargeFlip", "EtaRegion3_Denom", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
+        if(truth_lep_Charge*eles.at(i).Charge()<0){
+          cout << "!!EtaRegion3!! truth lepton charge : " << truth_lep_Charge << ", reco lepton charge : " << eles.at(i).Charge() << endl;
+          JSFillHist("ChargeFlip", "EtaRegion3_Num", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
+          // SH's ask //
+          if(eles.size() == 2&&i == 0){
+          JSFillHist("ChargeFlip", "EtaRegion3_IsLeading", 1, 1, 2, 0, 2);
           }
+          else if(eles.size() == 2&&i == 1){
+          JSFillHist("ChargeFlip", "EtaRegion3_IsLeading", 0, 1, 2, 0, 2);
+          }
+					//
         }
       }
   	}
@@ -204,7 +202,7 @@ void ChargeFlip::executeEvent(Long64_t Nentry){
     if(abs(eles.at(0).scEta())<1.4442&&abs(eles.at(1).scEta())<1.4442){
 
       if(eles.at(0).Charge()*eles.at(1).Charge()>0){
-        JSFillHist("ScaleFactor/BB", "ZMass_SS", ZCand.M(), 1., 40, 70., 110.);
+        JSFillHist("ScaleFactor", "BB_ZMass_SS", ZCand.M(), 1., 40, 70., 110.);
       }
     }
 
@@ -212,7 +210,7 @@ void ChargeFlip::executeEvent(Long64_t Nentry){
     if((abs(eles.at(0).scEta())<1.4442&&abs(eles.at(1).scEta())>=1.556)||(abs(eles.at(0).scEta())>=1.556&&abs(eles.at(1).scEta())<1.4442)){
 
       if(eles.at(0).Charge()*eles.at(1).Charge()>0){
-        JSFillHist("ScaleFactor/BE", "ZMass_SS", ZCand.M(), 1., 40, 70., 110.);
+        JSFillHist("ScaleFactor", "BE_ZMass_SS", ZCand.M(), 1., 40, 70., 110.);
       }
     }
 
@@ -220,7 +218,7 @@ void ChargeFlip::executeEvent(Long64_t Nentry){
     if(abs(eles.at(0).scEta())>=1.556&&abs(eles.at(1).scEta())>=1.556){
 
       if(eles.at(0).Charge()*eles.at(1).Charge()>0){
-        JSFillHist("ScaleFactor/EE", "ZMass_SS", ZCand.M(), 1., 40, 70., 110.);
+        JSFillHist("ScaleFactor", "EE_ZMass_SS", ZCand.M(), 1., 40, 70., 110.);
       }
     }
 
@@ -246,19 +244,19 @@ void ChargeFlip::executeEvent(Long64_t Nentry){
 
         // BB
         if(abs(eles_tmp.at(0).scEta())<1.4442&&abs(eles_tmp.at(1).scEta())<1.4442){
-          JSFillHist("ScaleFactor/BB", "ZMass_OS_CFweighted_shifted_1.3%", ZCand_tmp.M(), weight_tmp, 40, 70., 110.);
-          JSFillHist("ScaleFactor/BB", "ZMass_OS_CFSFweighted_shifted_1.3%", ZCand_tmp.M(), weight_tmp_SF, 40, 70., 110.);
+          JSFillHist("ScaleFactor", "BB_ZMass_OS_CFweighted_shifted_1.3%", ZCand_tmp.M(), weight_tmp, 40, 70., 110.);
+          JSFillHist("ScaleFactor", "BB_ZMass_OS_CFSFweighted_shifted_1.3%", ZCand_tmp.M(), weight_tmp_SF, 40, 70., 110.);
         }
     
         // BE
         if((abs(eles_tmp.at(0).scEta())<1.4442&&abs(eles_tmp.at(1).scEta())>=1.556)||(abs(eles_tmp.at(0).scEta())>=1.556&&abs(eles_tmp.at(1).scEta())<1.4442)){
-          JSFillHist("ScaleFactor/BE", "ZMass_OS_CFSFweighted_shifted_1.3%", ZCand_tmp.M(), weight_tmp_SF, 40, 70., 110.);
+          JSFillHist("ScaleFactor", "BE_ZMass_OS_CFSFweighted_shifted_1.3%", ZCand_tmp.M(), weight_tmp_SF, 40, 70., 110.);
         }
     
         // EE
         if(abs(eles_tmp.at(0).scEta())>=1.556&&abs(eles_tmp.at(1).scEta())>=1.556){
-          JSFillHist("ScaleFactor/EE", "ZMass_OS_CFweighted_shifted_1.3%", ZCand_tmp.M(), weight_tmp, 40, 70., 110.);
-          JSFillHist("ScaleFactor/EE", "ZMass_OS_CFSFweighted_shifted_1.3%", ZCand_tmp.M(), weight_tmp_SF, 40, 70., 110.);
+          JSFillHist("ScaleFactor", "EE_ZMass_OS_CFweighted_shifted_1.3%", ZCand_tmp.M(), weight_tmp, 40, 70., 110.);
+          JSFillHist("ScaleFactor", "EE_ZMass_OS_CFSFweighted_shifted_1.3%", ZCand_tmp.M(), weight_tmp_SF, 40, 70., 110.);
         }
 				
       }
