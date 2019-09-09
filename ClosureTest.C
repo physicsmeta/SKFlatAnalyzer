@@ -34,7 +34,7 @@ for (int i=0; i<40; i++) {
 
 // Draw the plots //
 
-TCanvas* c1 = new TCanvas("c1","ZMass : OS_CFweighted vs SS",1000,100,900,800);
+TCanvas* c1 = new TCanvas("c1","ZMass : OS_CFweighted_1.3% vs SS",1000,100,900,800);
 c1->Divide(1,2);
 
 c1->cd(1);
@@ -99,6 +99,11 @@ LineAtOne->SetLineStyle(kDashed);
 LineAtOne->SetLineWidth(2);
 LineAtOne->SetLineColor(2);
 LineAtOne->Draw();
+
+
+cout << "N(SS) : " << h0->Integral() << endl;
+cout << "N(OS_CFweighted_shifted_1.3%) : " << h1->Integral() << endl;
+cout << "Uncert. : " << h0->Integral()/h1->Integral() << endl;
 
 
 //c1->cd(3);
@@ -222,11 +227,14 @@ LineAtOne_2->Draw();
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-TH1D* h2 = (TH1D*)f1->Get("ClosureTest/pt1_SS");
+//TH1D* h2 = (TH1D*)f1->Get("ClosureTest/pt1_SS");
+TH1D* h2 = (TH1D*)f1->Get("ClosureTest/pt1_prmt_SS");
 TH1D* h3 = (TH1D*)f1->Get("ClosureTest/pt1_OS_CFweighted_shifted_13");
-TH1D* h4 = (TH1D*)f1->Get("ClosureTest/pt2_SS");
+//TH1D* h4 = (TH1D*)f1->Get("ClosureTest/pt2_SS");
+TH1D* h4 = (TH1D*)f1->Get("ClosureTest/pt2_prmt_SS");
 TH1D* h5 = (TH1D*)f1->Get("ClosureTest/pt2_OS_CFweighted_shifted_13");
-TH1D* h6 = (TH1D*)f1->Get("ClosureTest/MET_SS");
+//TH1D* h6 = (TH1D*)f1->Get("ClosureTest/MET_SS");
+TH1D* h6 = (TH1D*)f1->Get("ClosureTest/MET_prmt_SS");
 TH1D* h7 = (TH1D*)f1->Get("ClosureTest/MET_OS_CFweighted_shifted_13");
 
 vector<double> pt1_SS_x, pt1_SS_ex, pt2_SS_x, pt2_SS_ex, MET_SS_x, MET_SS_ex, pt1_OS_x, pt1_OS_ex, pt2_OS_x, pt2_OS_ex, MET_OS_x, MET_OS_ex, pt1_R_x, pt1_R_ex, pt2_R_x, pt2_R_ex, MET_R_x, MET_R_ex;
@@ -316,7 +324,9 @@ pt1_R->SetMarkerStyle(20);
 pt1_R->SetMarkerColor(kBlue-4);
 pt1_R->SetMarkerSize(0.8);
 pt1_R->SetTitle("");
-pt1_R->Draw("ZAP");
+pt1_R->SetFillColor(17);
+pt1_R->Draw("A2");
+pt1_R->Draw("ZP");
 pt1_R->GetXaxis()->SetLabelSize(0.06);
 pt1_R->GetXaxis()->SetTitle("#scale[2.2]{P_{T} (GeV)}");
 pt1_R->GetXaxis()->SetTitleOffset(1.6);
@@ -382,7 +392,9 @@ pt2_R->SetMarkerStyle(20);
 pt2_R->SetMarkerColor(kBlue-4);
 pt2_R->SetMarkerSize(0.8);
 pt2_R->SetTitle("");
-pt2_R->Draw("ZAP");
+pt2_R->SetFillColor(17);
+pt2_R->Draw("A2");
+pt2_R->Draw("ZP");
 pt2_R->GetXaxis()->SetLabelSize(0.06);
 pt2_R->GetXaxis()->SetTitle("#scale[2.2]{P_{T} (GeV)}");
 pt2_R->GetXaxis()->SetTitleOffset(1.6);
@@ -449,7 +461,9 @@ MET_R->SetMarkerStyle(20);
 MET_R->SetMarkerColor(kBlue-4);
 MET_R->SetMarkerSize(0.8);
 MET_R->SetTitle("");
-MET_R->Draw("ZAP");
+MET_R->SetFillColor(17);
+MET_R->Draw("A2");
+MET_R->Draw("ZP");
 MET_R->GetXaxis()->SetLabelSize(0.06);
 MET_R->GetXaxis()->SetTitle("#scale[2.2]{E^{miss}_{T} (GeV)}");
 MET_R->GetXaxis()->SetTitleOffset(1.6);

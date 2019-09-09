@@ -1,4 +1,4 @@
-#include "ChargeFlip.h" // For now, 2016 DYJets only
+#include "ChargeFlip.h" 
 
 ChargeFlip::ChargeFlip(){
 
@@ -40,7 +40,7 @@ void ChargeFlip::executeEvent(Long64_t Nentry){
 
   vector<Electron> eles;
 
-  /* Measure CF rate using DY MC */
+  /* Measure CF rate using MC */
 
   if(!IsDATA){
 
@@ -113,37 +113,63 @@ void ChargeFlip::executeEvent(Long64_t Nentry){
 
     /* MC Closure test start */
     
-    if(eles.size() != 2) return;
     if(!PassMETFilter()) return;
     Particle METv = ev.GetMETVector();
 
-    Particle ZCand = eles.at(0)+eles.at(1);
-    if(! (70.<=ZCand.M()&&ZCand.M()<110.) ) return;
-    double weight = GetCFweight(eles);
+    if(eles.size() == 2){
 
+      double weight = GetCFweight(eles);
+
+      Particle ZCand = eles.at(0)+eles.at(1);
+
+      if(70.<=ZCand.M()&&ZCand.M()<110.){
+        if(eles.at(0).Charge()*eles.at(1).Charge()<0){
+          JSFillHist("ClosureTest", "ZMass_OS_CFweighted", ZCand.M(), weight, 40, 70., 110.);
+        }
+        else{
+          JSFillHist("ClosureTest", "ZMass_SS", ZCand.M(), 1., 40, 70., 110.);
+          JSFillHist("ClosureTest", "pt1_SS", eles.at(0).Pt(), 1., 70, 20., 90.);
+          JSFillHist("ClosureTest", "pt2_SS", eles.at(1).Pt(), 1., 70, 20., 90.);
+          JSFillHist("ClosureTest", "MET_SS", METv.Pt(), 1., 100, 0., 100.);
+        }
+      }
+    }
+
+    /* Now see what is changed when requiring only prompt electrons in SS events */
+		
+    vector<Electron> eles_prmt = ElectronPromptOnly(eles, gens); // Get prompt electrons only
+ 
     if(Nentry%(LogEvery*10)==0){
-    cout << "OS event weighted by: " << weight << endl;
-    }
-  
-    JSFillHist("ClosureTest", "ZMass_total", ZCand.M(), 1., 40, 70., 110.);
-  
-    if(eles.at(0).Charge()*eles.at(1).Charge()<0){
-      JSFillHist("ClosureTest", "ZMass_OS_Unweighted", ZCand.M(), 1., 40, 70., 110.);
-      JSFillHist("ClosureTest", "ZMass_OS_CFweighted", ZCand.M(), weight, 40, 70., 110.);
-      JSFillHist("ClosureTest", "pt1_OS_CFweighted", eles.at(0).Pt(), weight, 70, 20., 90.);
-      JSFillHist("ClosureTest", "pt2_OS_CFweighted", eles.at(1).Pt(), weight, 70, 20., 90.);
-      JSFillHist("ClosureTest", "MET_OS_CFweighted", METv.Pt(), weight, 100, 0., 100.);
-    }
-    else{
-      JSFillHist("ClosureTest", "ZMass_SS", ZCand.M(), 1., 40, 70., 110.);
-      JSFillHist("ClosureTest", "pt1_SS", eles.at(0).Pt(), 1., 70, 20., 90.);
-      JSFillHist("ClosureTest", "pt2_SS", eles.at(1).Pt(), 1., 70, 20., 90.);
-      JSFillHist("ClosureTest", "MET_SS", METv.Pt(), 1., 100, 0., 100.);
+      cout << "electrons pt:" << endl;
+      for(unsigned int i=0; i<eles.size(); i++){
+        cout << eles.at(i).Pt() << endl;
+      }
+      cout << "prompt electrons pt:" << endl;
+      for(unsigned int i=0; i<eles_prmt.size(); i++){
+        cout << eles_prmt.at(i).Pt() << endl;
+      }
+    } // To see how many electrons are cut off 
+		
+    if(eles_prmt.size() == 2){
+      Particle ZCand_prmt = eles_prmt.at(0)+eles_prmt.at(1);
+      if(70.<=ZCand_prmt.M()&&ZCand_prmt.M()<110.){
+        if(eles_prmt.at(0).Charge()*eles_prmt.at(1).Charge()>0){
+          JSFillHist("ClosureTest", "ZMass_prmt_SS", ZCand_prmt.M(), 1., 40, 70., 110.);
+          JSFillHist("ClosureTest", "pt1_prmt_SS", eles_prmt.at(0).Pt(), 1., 70, 20., 90.);
+          JSFillHist("ClosureTest", "pt2_prmt_SS", eles_prmt.at(1).Pt(), 1., 70, 20., 90.);
+          JSFillHist("ClosureTest", "MET_prmt_SS", METv.Pt(), 1., 100, 0., 100.);
+        }
+      }
     }
 
-    /* There's disagreement between OS_CFweighted and SS. */
+    //
+
+    /* There's disagreement between OS_CFweighted and SS(where NO requirement on its promptness?). */
     /* Now, Let's shift the electrons' energy */
     
+    if(eles.size() != 2) return;
+
+    Particle ZCand = eles.at(0)+eles.at(1);
     Particle ZCand_tmp;
     Particle METv_tmp;
     double weight_tmp;
@@ -156,7 +182,7 @@ void ChargeFlip::executeEvent(Long64_t Nentry){
       }
 
       ZCand_tmp = eles_tmp.at(0) + eles_tmp.at(1);
-      METv_tmp.SetPxPyPzE(METv.Px()-ZCand.Px()+ZCand_tmp.Px(),METv.Py()-ZCand.Py()+ZCand_tmp.Py(),0,METv.E()-ZCand.E()+ZCand_tmp.E());
+      METv_tmp.SetPxPyPzE(METv.Px()+ZCand.Px()-ZCand_tmp.Px(),METv.Py()+ZCand.Py()-ZCand_tmp.Py(),0,METv.E()+ZCand.E()-ZCand_tmp.E());
       weight_tmp = GetCFweight(eles_tmp);
 
       if(! (70.<=ZCand_tmp.M()&&ZCand_tmp.M()<110.) ) continue;
@@ -192,11 +218,8 @@ void ChargeFlip::executeEvent(Long64_t Nentry){
     if(eles.size() != 2) return;
     //if(eles.at(0).Pt()<lep0ptcut||eles.at(1).Pt()<lep1ptcut) return; //No need already pt min = 25
 
-    Particle METv = ev.GetMETVector();
     Particle ZCand = eles.at(0)+eles.at(1);
     if(! (70.<=ZCand.M()&&ZCand.M()<110.) ) return;
-    double weight = GetCFweight(eles);
-    double weight_SF = GetCFweight_SF(eles);
 
     // BB
     if(abs(eles.at(0).scEta())<1.4442&&abs(eles.at(1).scEta())<1.4442){
@@ -228,7 +251,6 @@ void ChargeFlip::executeEvent(Long64_t Nentry){
     /* Now let's shift the electrons' energy 1.3% */
     
     Particle ZCand_tmp;
-    Particle METv_tmp;
     double weight_tmp, weight_tmp_SF;
 
     vector<Electron> eles_tmp = eles; // copy the vector
@@ -238,7 +260,6 @@ void ChargeFlip::executeEvent(Long64_t Nentry){
     }
 
     ZCand_tmp = eles_tmp.at(0) + eles_tmp.at(1);
-    METv_tmp.SetPxPyPzE(METv.Px()-ZCand.Px()+ZCand_tmp.Px(),METv.Py()-ZCand.Py()+ZCand_tmp.Py(),0,METv.E()-ZCand.E()+ZCand_tmp.E());
     weight_tmp = GetCFweight(eles_tmp);
     weight_tmp_SF = GetCFweight_SF(eles_tmp);
 
@@ -301,7 +322,7 @@ double ChargeFlip::GetCFweight_SF(std::vector<Electron> eles){
     if(abs(eles.at(i).scEta())<0.8){
       if(1/eles.at(i).Pt()<0.021) prob[i] = (1.63348e-04-4.97821e-03/eles.at(i).Pt())*0.614879;
       else prob[i] = (5.11382e-05+3.88422e-04/eles.at(i).Pt())*0.614879;
- 	  }
+    }
     else if(0.8<=abs(eles.at(i).scEta())&&abs(eles.at(i).scEta())<1.4442){
       if(1/eles.at(i).Pt()<0.0155) prob[i] = (1.94800e-03-9.32813e-02/eles.at(i).Pt())*0.614879;
       else if(0.0155<=1/eles.at(i).Pt()&&1/eles.at(i).Pt()<0.023) prob[i] = (6.34964e-04-6.98093e-03/eles.at(i).Pt())*0.614879;

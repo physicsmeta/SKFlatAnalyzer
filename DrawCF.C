@@ -196,6 +196,7 @@ gr3->SetMarkerColor(kMagenta+2);
 //gr3->SetMarkerColor(kGreen+3);
 gr3->SetLineColor(15);
 gr3->SetTitle("ChargeFlip_1.556#leq|#eta|<2.5");
+gr3->SetMinimum(0.);
 gr3->Draw("ZAP");
 gr3->GetXaxis()->SetRangeUser(0.,0.04);
 gr3->GetXaxis()->SetTitle("#scale[0.8]{1/p_{T} (GeV^{-1})}");
