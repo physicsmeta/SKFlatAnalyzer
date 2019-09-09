@@ -1,5 +1,6 @@
 {
-TFile* f1 = new TFile("/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip/2016/ChargeFlipHE__/ChargeFlip_DYJets.root");
+//TFile* f1 = new TFile("/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip/2016/ChargeFlipHE__/ChargeFlip_DYJets.root");
+TFile* f1 = new TFile("/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip/2016/ChargeFlipHE__/ChargeFlip_DYJetsTTLL.root");
 //TFile* f1 = new TFile("/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip/2016/passTightChargeTightIDdXY__/ChargeFlip_DYJets.root");
 //TFile* f1 = new TFile("/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip/2016/passTightChargeTightID__/ChargeFlip_DYJets.root");
 //TFile* f1 = new TFile("/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip/2016/passTightID__/ChargeFlip_DYJets.root");
@@ -68,7 +69,7 @@ c1->cd();
 TGraphErrors* gr1 = new TGraphErrors(X_1.size(),&X_1[0],&Y_1[0],&EX_1[0],&EY_1[0]);
 gr1->SetMarkerStyle(20);
 //gr1->SetMarkerSize(0.8);
-//gr1->SetMarkerColor(kMagenta+2);
+gr1->SetMarkerColor(kMagenta+2);
 gr1->SetLineColor(15);
 gr1->SetTitle("ChargeFlip_|#eta|<0.8");
 gr1->SetMinimum(0.);
@@ -78,6 +79,9 @@ gr1->GetXaxis()->SetTitle("#scale[0.8]{1/p_{T} (GeV^{-1})}");
 gr1->GetXaxis()->SetTickLength(0.025);
 gr1->GetXaxis()->SetLabelSize(0.025);
 gr1->GetYaxis()->SetLabelSize(0.025);
+
+
+/*
 
 // Define fit function and range //
 
@@ -112,6 +116,10 @@ gr1_fit2_err->SetFillColor(4);
 gr1_fit2_err->SetFillStyle(3001);
 gr1_fit2_err->Draw("3 same");
 
+*/
+
+
+
 // Done and repeat for EtaRegion2, 3 //
 
 c2->cd();
@@ -119,7 +127,7 @@ c2->cd();
 TGraphErrors* gr2 = new TGraphErrors(X_2.size(),&X_2[0],&Y_2[0],&EX_2[0],&EY_2[0]);
 gr2->SetMarkerStyle(20);
 //gr2->SetMarkerSize(0.8);
-//gr2->SetMarkerColor(kMagenta+2);
+gr2->SetMarkerColor(kMagenta+2);
 //gr2->SetMarkerColor(kBlue-4);
 gr2->SetLineColor(15);
 gr2->SetTitle("ChargeFlip_0.8#leq|#eta|<1.4442");
@@ -130,6 +138,10 @@ gr2->GetXaxis()->SetTitle("#scale[0.8]{1/p_{T} (GeV^{-1})}");
 gr2->GetXaxis()->SetTickLength(0.025);
 gr2->GetXaxis()->SetLabelSize(0.025);
 gr2->GetYaxis()->SetLabelSize(0.025);
+
+
+
+/*
 
 TF1 *gr2_fit1 = new TF1("gr2_fit1","pol1",0,0.0155);
 TF1 *gr2_fit2 = new TF1("gr2_fit2","pol1",0.0155,0.023);
@@ -172,6 +184,7 @@ gr2_fit3_err->SetFillColor(4);
 gr2_fit3_err->SetFillStyle(3001);
 gr2_fit3_err->Draw("3 same");
 
+*/
 
 
 c3->cd();
@@ -179,7 +192,7 @@ c3->cd();
 TGraphErrors* gr3 = new TGraphErrors(X_3.size(),&X_3[0],&Y_3[0],&EX_3[0],&EY_3[0]);
 gr3->SetMarkerStyle(20);
 //gr3->SetMarkerSize(0.8);
-//gr3->SetMarkerColor(kMagenta+2);
+gr3->SetMarkerColor(kMagenta+2);
 //gr3->SetMarkerColor(kGreen+3);
 gr3->SetLineColor(15);
 gr3->SetTitle("ChargeFlip_1.556#leq|#eta|<2.5");
@@ -189,6 +202,9 @@ gr3->GetXaxis()->SetTitle("#scale[0.8]{1/p_{T} (GeV^{-1})}");
 gr3->GetXaxis()->SetTickLength(0.025);
 gr3->GetXaxis()->SetLabelSize(0.025);
 gr3->GetYaxis()->SetLabelSize(0.025);
+
+
+/*
 
 TF1 *gr3_fit1 = new TF1("gr3_fit1","pol1",0,0.0105);
 TF1 *gr3_fit2 = new TF1("gr3_fit2","pol1",0.0105,0.02);
@@ -230,6 +246,9 @@ for(int i=0; i<22; i++) gr3_fit3_err->SetPoint(i,0.02+0.001*i,0);
 gr3_fit3_err->SetFillColor(4);
 gr3_fit3_err->SetFillStyle(3001);
 gr3_fit3_err->Draw("3 same");
+
+*/
+
 
 //c1->SaveAs("CF_EtaRegion1.pdf");
 //c2->SaveAs("CF_EtaRegion2.pdf");

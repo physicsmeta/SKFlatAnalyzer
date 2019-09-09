@@ -76,7 +76,7 @@ void ChargeFlip::executeEvent(Long64_t Nentry){
           else if(eles.size() == 2&&i == 1){
           JSFillHist("ChargeFlip", "EtaRegion1_IsLeading", 0, 1, 2, 0, 2);
           }
-					//
+          //
         }
       }
       else if(0.8<=abs(eles.at(i).scEta())&&abs(eles.at(i).scEta())<1.4442){
@@ -91,7 +91,7 @@ void ChargeFlip::executeEvent(Long64_t Nentry){
           else if(eles.size() == 2&&i == 1){
           JSFillHist("ChargeFlip", "EtaRegion2_IsLeading", 0, 1, 2, 0, 2);
           }
-					//
+          //
         }
       }
       else if(1.556<=abs(eles.at(i).scEta())&&abs(eles.at(i).scEta())<2.5){
@@ -106,10 +106,10 @@ void ChargeFlip::executeEvent(Long64_t Nentry){
           else if(eles.size() == 2&&i == 1){
           JSFillHist("ChargeFlip", "EtaRegion3_IsLeading", 0, 1, 2, 0, 2);
           }
-					//
+          //
         }
       }
-  	}
+    }
 
     /* MC Closure test start */
     
@@ -142,7 +142,7 @@ void ChargeFlip::executeEvent(Long64_t Nentry){
     }
 
     /* There's disagreement between OS_CFweighted and SS. */
-		/* Now, Let's shift the electrons' energy */
+    /* Now, Let's shift the electrons' energy */
     
     Particle ZCand_tmp;
     Particle METv_tmp;
@@ -155,7 +155,7 @@ void ChargeFlip::executeEvent(Long64_t Nentry){
         eles_tmp.at(j).SetPtEtaPhiE(eles_tmp.at(j).E() * TMath::Sin(eles_tmp.at(j).Theta()), eles_tmp.at(j).Eta(), eles_tmp.at(j).Phi(), eles_tmp.at(j).E());
       }
 
-			ZCand_tmp = eles_tmp.at(0) + eles_tmp.at(1);
+      ZCand_tmp = eles_tmp.at(0) + eles_tmp.at(1);
       METv_tmp.SetPxPyPzE(METv.Px()-ZCand.Px()+ZCand_tmp.Px(),METv.Py()-ZCand.Py()+ZCand_tmp.Py(),0,METv.E()-ZCand.E()+ZCand_tmp.E());
       weight_tmp = GetCFweight(eles_tmp);
 
@@ -204,6 +204,7 @@ void ChargeFlip::executeEvent(Long64_t Nentry){
       if(eles.at(0).Charge()*eles.at(1).Charge()>0){
         JSFillHist("ScaleFactor", "BB_ZMass_SS", ZCand.M(), 1., 40, 70., 110.);
       }
+
     }
 
     // BE
@@ -212,6 +213,7 @@ void ChargeFlip::executeEvent(Long64_t Nentry){
       if(eles.at(0).Charge()*eles.at(1).Charge()>0){
         JSFillHist("ScaleFactor", "BE_ZMass_SS", ZCand.M(), 1., 40, 70., 110.);
       }
+
     }
 
     // EE
@@ -220,6 +222,7 @@ void ChargeFlip::executeEvent(Long64_t Nentry){
       if(eles.at(0).Charge()*eles.at(1).Charge()>0){
         JSFillHist("ScaleFactor", "EE_ZMass_SS", ZCand.M(), 1., 40, 70., 110.);
       }
+
     }
 
     /* Now let's shift the electrons' energy 1.3% */

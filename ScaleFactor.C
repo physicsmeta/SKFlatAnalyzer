@@ -68,34 +68,34 @@ gr->GetXaxis()->SetTitle("m(ee) (GeV)");
 ////////////////////// original fitting //////////////////////////////
 
 
-//// create a TF1 with the range from 70 to 110 and 7 parameters
-//TF1 *fitFcn = new TF1("fitFcn",fitFunction,70,110,7);
-//fitFcn->SetNpx(500);
-////fitFcn->SetLineWidth(4);
-//fitFcn->SetLineColor(kRed);
-//
-////fitFcn->SetParameters(0,0,0,0,100,90,0.5); // Parameters to get SF for BB, EE
-//fitFcn->SetParameters(0,0,0,0,80,90,0.5); // Parameters to get SF for BE
-//gr->Fit("fitFcn","V+","ep");
+// create a TF1 with the range from 70 to 110 and 7 parameters
+TF1 *fitFcn = new TF1("fitFcn",fitFunction,70,110,7);
+fitFcn->SetNpx(500);
+//fitFcn->SetLineWidth(4);
+fitFcn->SetLineColor(kRed);
+
+//fitFcn->SetParameters(0,0,0,0,100,90,0.5); // Parameters to get SF for BB, EE
+fitFcn->SetParameters(0,0,0,0,80,90,0.5); // Parameters to get SF for BE
+gr->Fit("fitFcn","V+","ep");
 
 
-//// improve the picture:
-//TF1 *backFcn = new TF1("backFcn",background,70,110,4);
-////backFcn->SetLineColor(kRed);
-//backFcn->SetLineColor(kBlue);
-//TF1 *signalFcn = new TF1("signalFcn",gaussianPeak,70,110,3);
-//signalFcn->SetLineColor(kMagenta-6);
-//signalFcn->SetNpx(500);
-//Double_t par[7];
-//
-//// writes the fit results into the par array
-//fitFcn->GetParameters(par);
-//
-//backFcn->SetParameters(par);
-//backFcn->Draw("same");
-//
-//signalFcn->SetParameters(&par[4]);
-////signalFcn->Draw("same");
+// improve the picture:
+TF1 *backFcn = new TF1("backFcn",background,70,110,4);
+//backFcn->SetLineColor(kRed);
+backFcn->SetLineColor(kBlue);
+TF1 *signalFcn = new TF1("signalFcn",gaussianPeak,70,110,3);
+signalFcn->SetLineColor(kMagenta-6);
+signalFcn->SetNpx(500);
+Double_t par[7];
+
+// writes the fit results into the par array
+fitFcn->GetParameters(par);
+
+backFcn->SetParameters(par);
+backFcn->Draw("same");
+
+signalFcn->SetParameters(&par[4]);
+//signalFcn->Draw("same");
 
 // draw the legend
 //TLegend *legend_fit=new TLegend(0.6,0.65,0.88,0.85);
@@ -110,32 +110,32 @@ gr->GetXaxis()->SetTitle("m(ee) (GeV)");
 
 ///////////////////////////// tmp fitting /////////////////////////////
 
-// create a TF1 with the range from 70 to 110 and 5 parameters
-TF1 *fitFcn_tmp = new TF1("fitFcn_tmp",fitFunction_tmp,70,110,5);
-fitFcn_tmp->SetNpx(500);
-//fitFcn_tmp->SetLineWidth(4);
-fitFcn_tmp->SetLineColor(kRed);
-
-fitFcn_tmp->SetParameters(0,0,70,90,0.5); 
-gr->Fit("fitFcn_tmp","V+","ep");
-
-// improve the picture:
-TF1 *backFcn_tmp = new TF1("backFcn_tmp",background_tmp,70,110,4);
-//backFcn->SetLineColor(kRed);
-backFcn_tmp->SetLineColor(kBlue);
-TF1 *signalFcn = new TF1("signalFcn",gaussianPeak,70,110,3);
-signalFcn->SetLineColor(kMagenta-6);
-signalFcn->SetNpx(500);
-Double_t par[5];
-
-// writes the fit results into the par array
-fitFcn_tmp->GetParameters(par);
-
-backFcn_tmp->SetParameters(par);
-backFcn_tmp->Draw("same");
-
-signalFcn->SetParameters(&par[2]);
-//signalFcn->Draw("same");
+//// create a TF1 with the range from 70 to 110 and 5 parameters
+//TF1 *fitFcn_tmp = new TF1("fitFcn_tmp",fitFunction_tmp,70,110,5);
+//fitFcn_tmp->SetNpx(500);
+////fitFcn_tmp->SetLineWidth(4);
+//fitFcn_tmp->SetLineColor(kRed);
+//
+//fitFcn_tmp->SetParameters(0,0,70,90,0.5); 
+//gr->Fit("fitFcn_tmp","V+","ep");
+//
+//// improve the picture:
+//TF1 *backFcn_tmp = new TF1("backFcn_tmp",background_tmp,70,110,4);
+////backFcn->SetLineColor(kRed);
+//backFcn_tmp->SetLineColor(kBlue);
+//TF1 *signalFcn = new TF1("signalFcn",gaussianPeak,70,110,3);
+//signalFcn->SetLineColor(kMagenta-6);
+//signalFcn->SetNpx(500);
+//Double_t par[5];
+//
+//// writes the fit results into the par array
+//fitFcn_tmp->GetParameters(par);
+//
+//backFcn_tmp->SetParameters(par);
+//backFcn_tmp->Draw("same");
+//
+//signalFcn->SetParameters(&par[2]);
+////signalFcn->Draw("same");
 
 
 ////////////////////////////////////////////////////////////////////////
@@ -234,8 +234,8 @@ OS2l = h1->Integral();
 cout << "SS2l: " << SS2l << endl;
 cout << "OS2l_CF_shifted_1.3%: " << OS2l << endl;
 cout << "SF: " << SS2l/OS2l << endl;
-//cout << "SS2l(hist) - SS2l(fit) = " << h0->Integral()-signalFcn->Integral(70,110)-backFcn->Integral(70,110) << endl;
-cout << "SS2l(hist) - SS2l(fit) = " << h0->Integral()-signalFcn->Integral(70,110)-backFcn_tmp->Integral(70,110) << endl; // tmp fitting
+cout << "SS2l(hist) - SS2l(fit) = " << h0->Integral()-signalFcn->Integral(70,110)-backFcn->Integral(70,110) << endl;
+//cout << "SS2l(hist) - SS2l(fit) = " << h0->Integral()-signalFcn->Integral(70,110)-backFcn_tmp->Integral(70,110) << endl; // tmp fitting
 
 }
 
