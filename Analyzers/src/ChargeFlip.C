@@ -139,7 +139,7 @@ void ChargeFlip::executeEvent(Long64_t Nentry){
 		
     vector<Electron> eles_prmt = ElectronPromptOnly(eles, gens); // Get prompt electrons only
  
-    if(Nentry%(LogEvery*10)==0){
+    if(Nentry%(LogEvery)==0){
       cout << "electrons pt:" << endl;
       for(unsigned int i=0; i<eles.size(); i++){
         cout << eles.at(i).Pt() << endl;

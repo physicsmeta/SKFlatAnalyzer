@@ -1,7 +1,8 @@
 void ClosureTest(){
 
 TFile* f1 = new TFile("/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip/2016/ChargeFlipHE__/ChargeFlip_DYJets.root");
-TH1D* h0 = (TH1D*)f1->Get("ClosureTest/ZMass_SS");
+//TH1D* h0 = (TH1D*)f1->Get("ClosureTest/ZMass_SS");
+TH1D* h0 = (TH1D*)f1->Get("ClosureTest/ZMass_prmt_SS");
 
 // Chi2Test //
 
@@ -11,6 +12,8 @@ for(int i=0; i<50; i++){
   cout << "Energy shifted " << (i+1)*0.1 << "%:" << endl;
   h0->Chi2Test(h_test,"UW P");
 }
+
+cout << "// Chi2Test ended //" << endl;
 
 // 1.3% //
 
@@ -81,7 +84,9 @@ gr3->SetMarkerStyle(20);
 gr3->SetMarkerColor(kBlue-4);
 gr3->SetMarkerSize(0.8);
 gr3->SetTitle("");
-gr3->Draw("ZAP");
+gr3->SetFillColor(17);
+gr3->Draw("A2");
+gr3->Draw("ZP");
 gr3->GetXaxis()->SetLabelSize(0.06);
 gr3->GetXaxis()->SetTitle("#scale[2.2]{m(ee) (GeV)}");
 gr3->GetXaxis()->SetTitleOffset(1.6);
