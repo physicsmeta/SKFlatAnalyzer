@@ -1,8 +1,8 @@
-void ClosureTest(){
+void ClosureTest_NOprompt(){
 
-TFile* f1 = new TFile("/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip/2016/ChargeFlipHE__/ChargeFlip_DYJets.root");
-//TH1D* h0 = (TH1D*)f1->Get("ClosureTest/ZMass_SS");
-TH1D* h0 = (TH1D*)f1->Get("ClosureTest/ZMass_prmt_SS");
+//TFile* f1 = new TFile("/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip/2016/ChargeFlipHE__/ClosureTest_DYJets_ISprompt_DYonlyCF.root");
+TFile* f1 = new TFile("/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip/2016/ChargeFlipHE__ClosureTest__/ClosureTest_DYJetsTTLL.root");
+TH1D* h0 = (TH1D*)f1->Get("ClosureTest/ZMass_SS");
 
 // Chi2Test //
 
@@ -15,9 +15,9 @@ for(int i=0; i<50; i++){
 
 cout << "// Chi2Test ended //" << endl;
 
-// 1.3% //
+// 1.4% //
 
-TH1D* h1 = (TH1D*)f1->Get("ClosureTest/ZMass_OS_CFweighted_shifted_13");
+TH1D* h1 = (TH1D*)f1->Get("ClosureTest/ZMass_OS_CFweighted_shifted_14");
 
 vector<double> x_1, ex_1, x_2, ex_2, x_3, ex_3;
 for (int i=0; i<40; i++) {
@@ -37,7 +37,7 @@ for (int i=0; i<40; i++) {
 
 // Draw the plots //
 
-TCanvas* c1 = new TCanvas("c1","ZMass : OS_CFweighted_1.3% vs SS",1000,100,900,800);
+TCanvas* c1 = new TCanvas("c1","ZMass : OS_CFweighted_1.4% vs SS",1000,100,900,800);
 c1->Divide(1,2);
 
 c1->cd(1);
@@ -51,7 +51,7 @@ gr1->SetMarkerStyle(20);
 //gr1->SetMarkerSize(0.8);
 //gr1->SetMarkerColor(kMagenta+2);
 gr1->SetLineColor(15);
-gr1->SetTitle("ZMass : OS_CFweighted_1.3% vs SS");
+gr1->SetTitle("ZMass : OS_CFweighted_1.4% vs SS");
 //gr1->GetXaxis()->SetRangeUser(70,110);
 //gr1->SetMinimum(0.);
 gr1->Draw("ZAP"); // Z : do not draw small horizontal/vertical lines the end of the error bars
@@ -66,7 +66,7 @@ gr2->SetLineColor(15);
 gr2->Draw("ZP SAME"); 
 
 TLegend* legend = new TLegend(0.15,0.6,0.4,0.7);
-legend->AddEntry(gr1,"OS_CFweighted_1.3%","lp");
+legend->AddEntry(gr1,"OS_CFweighted_1.4%","lp");
 legend->AddEntry(gr2,"SS","lp");
 legend->Draw();
 
@@ -107,7 +107,7 @@ LineAtOne->Draw();
 
 
 cout << "N(SS) : " << h0->Integral() << endl;
-cout << "N(OS_CFweighted_shifted_1.3%) : " << h1->Integral() << endl;
+cout << "N(OS_CFweighted_shifted_1.4%) : " << h1->Integral() << endl;
 cout << "Uncert. : " << h0->Integral()/h1->Integral() << endl;
 
 
@@ -232,15 +232,12 @@ LineAtOne_2->Draw();
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//TH1D* h2 = (TH1D*)f1->Get("ClosureTest/pt1_SS");
-TH1D* h2 = (TH1D*)f1->Get("ClosureTest/pt1_prmt_SS");
-TH1D* h3 = (TH1D*)f1->Get("ClosureTest/pt1_OS_CFweighted_shifted_13");
-//TH1D* h4 = (TH1D*)f1->Get("ClosureTest/pt2_SS");
-TH1D* h4 = (TH1D*)f1->Get("ClosureTest/pt2_prmt_SS");
-TH1D* h5 = (TH1D*)f1->Get("ClosureTest/pt2_OS_CFweighted_shifted_13");
-//TH1D* h6 = (TH1D*)f1->Get("ClosureTest/MET_SS");
-TH1D* h6 = (TH1D*)f1->Get("ClosureTest/MET_prmt_SS");
-TH1D* h7 = (TH1D*)f1->Get("ClosureTest/MET_OS_CFweighted_shifted_13");
+TH1D* h2 = (TH1D*)f1->Get("ClosureTest/pt1_SS");
+TH1D* h3 = (TH1D*)f1->Get("ClosureTest/pt1_OS_CFweighted_shifted_14");
+TH1D* h4 = (TH1D*)f1->Get("ClosureTest/pt2_SS");
+TH1D* h5 = (TH1D*)f1->Get("ClosureTest/pt2_OS_CFweighted_shifted_14");
+TH1D* h6 = (TH1D*)f1->Get("ClosureTest/MET_SS");
+TH1D* h7 = (TH1D*)f1->Get("ClosureTest/MET_OS_CFweighted_shifted_14");
 
 vector<double> pt1_SS_x, pt1_SS_ex, pt2_SS_x, pt2_SS_ex, MET_SS_x, MET_SS_ex, pt1_OS_x, pt1_OS_ex, pt2_OS_x, pt2_OS_ex, MET_OS_x, MET_OS_ex, pt1_R_x, pt1_R_ex, pt2_R_x, pt2_R_ex, MET_R_x, MET_R_ex;
 for (int i=0; i<55; i++) {
@@ -283,7 +280,7 @@ for (int i=0; i<80; i++){
 
 // pt1
 
-TCanvas* c3 = new TCanvas("c3","pt1 : OS_shifted_1.3% vs SS",100,100,900,800);
+TCanvas* c3 = new TCanvas("c3","pt1 : OS_shifted_1.4% vs SS",100,100,900,800);
 c3->Divide(1,2);
 
 c3->cd(1);
@@ -297,7 +294,7 @@ pt1_SS->SetMarkerStyle(20);
 //pt1->SetMarkerSize(0.8);
 //pt1->SetMarkerColor(kMagenta+2);
 pt1_SS->SetLineColor(15);
-pt1_SS->SetTitle("pt1 : OS_CFweighted_1.3% vs SS");
+pt1_SS->SetTitle("pt1 : OS_CFweighted_1.4% vs SS");
 //pt1->GetXaxis()->SetRangeUser(70,110);
 //pt1->SetMinimum(0.);
 pt1_SS->Draw("ZAP"); // Z : do not draw small horizontal/vertical lines the end of the error bars
@@ -312,7 +309,7 @@ pt1_OS->SetLineColor(15);
 pt1_OS->Draw("ZP SAME"); 
 
 TLegend* legend_pt1 = new TLegend(0.55,0.7,0.8,0.8);
-legend_pt1->AddEntry(pt1_OS,"OS_CFweighted_1.3%","lp");
+legend_pt1->AddEntry(pt1_OS,"OS_CFweighted_1.4%","lp");
 legend_pt1->AddEntry(pt1_SS,"SS","lp");
 legend_pt1->Draw();
 
@@ -351,7 +348,7 @@ LineAtOne_pt1->Draw();
 
 // pt2
 
-TCanvas* c4 = new TCanvas("c4","pt2 : OS_shifted_1.3% vs SS",100,100,900,800);
+TCanvas* c4 = new TCanvas("c4","pt2 : OS_shifted_1.4% vs SS",100,100,900,800);
 c4->Divide(1,2);
 
 c4->cd(1);
@@ -365,7 +362,7 @@ pt2_SS->SetMarkerStyle(20);
 //pt1->SetMarkerSize(0.8);
 //pt1->SetMarkerColor(kMagenta+2);
 pt2_SS->SetLineColor(15);
-pt2_SS->SetTitle("pt2 : OS_CFweighted_1.3% vs SS");
+pt2_SS->SetTitle("pt2 : OS_CFweighted_1.4% vs SS");
 //pt1->GetXaxis()->SetRangeUser(70,110);
 //pt1->SetMinimum(0.);
 pt2_SS->Draw("ZAP"); // Z : do not draw small horizontal/vertical lines the end of the error bars
@@ -380,7 +377,7 @@ pt2_OS->SetLineColor(15);
 pt2_OS->Draw("ZP SAME"); 
 
 TLegend* legend_pt2 = new TLegend(0.55,0.7,0.8,0.8);
-legend_pt2->AddEntry(pt2_OS,"OS_CFweighted_1.3%","lp");
+legend_pt2->AddEntry(pt2_OS,"OS_CFweighted_1.4%","lp");
 legend_pt2->AddEntry(pt2_SS,"SS","lp");
 legend_pt2->Draw();
 
@@ -420,7 +417,7 @@ LineAtOne_pt2->Draw();
 
 // MET
 
-TCanvas* c5 = new TCanvas("c5","MET : OS_shifted_1.3% vs SS",100,100,900,800);
+TCanvas* c5 = new TCanvas("c5","MET : OS_shifted_1.4% vs SS",100,100,900,800);
 c5->Divide(1,2);
 
 c5->cd(1);
@@ -434,7 +431,7 @@ MET_SS->SetMarkerStyle(20);
 //pt1->SetMarkerSize(0.8);
 //pt1->SetMarkerColor(kMagenta+2);
 MET_SS->SetLineColor(15);
-MET_SS->SetTitle("MET : OS_CFweighted_1.3% vs SS");
+MET_SS->SetTitle("MET : OS_CFweighted_1.4% vs SS");
 //pt1->GetXaxis()->SetRangeUser(70,110);
 //pt1->SetMinimum(0.);
 MET_SS->Draw("ZAP"); // Z : do not draw small horizontal/vertical lines the end of the error bars
@@ -449,7 +446,7 @@ MET_OS->SetLineColor(15);
 MET_OS->Draw("ZP SAME"); 
 
 TLegend* legend_MET = new TLegend(0.55,0.7,0.8,0.8);
-legend_MET->AddEntry(MET_OS,"OS_CFweighted_1.3%","lp");
+legend_MET->AddEntry(MET_OS,"OS_CFweighted_1.4%","lp");
 legend_MET->AddEntry(MET_SS,"SS","lp");
 legend_MET->Draw();
 

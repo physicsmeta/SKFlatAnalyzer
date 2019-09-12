@@ -22,10 +22,13 @@ void ScaleFactor(TString EtaRegion){ // BB, BE, EE
 
 TFile* f1 = new TFile("/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip/2016/ChargeFlipHE__/DATA/ChargeFlip_DoubleEG_total_DYTTLLCF.root");
 TH1D* h0 = (TH1D*)f1->Get("ScaleFactor/"+EtaRegion+"_ZMass_SS");
-TH1D* h1 = (TH1D*)f1->Get("ScaleFactor/"+EtaRegion+"_ZMass_OS_CFweighted_shifted_1.4%");
+TH1D* h1 = (TH1D*)f1->Get("ScaleFactor/"+EtaRegion+"_ZMass_OS_CFSFweighted_shifted_1.4%");
 
 //if((EtaRegion == "BB")||(EtaRegion == "EE")){
-//TH1D* h1 = (TH1D*)f1->Get("ScaleFactor/"+EtaRegion+"_ZMass_OS_CFweighted_shifted_1.4%");
+//TH1D* h1 = (TH1D*)f1->Get("ScaleFactor/"+EtaRegion+"_ZMass_OS_CFSFweighted_shifted_1.4%");
+//}
+//else if(EtaRegion == "BE"){
+//TH1D* h1 = (TH1D*)f1->Get("ScaleFactor/"+EtaRegion+"_ZMass_OS_CFSFweighted_shifted_1.4%");
 //} FIXME
 
 vector<double> x_1, ex_1, x_2, ex_2, x_3, ex_3;
@@ -142,7 +145,7 @@ signalFcn->SetParameters(&par[4]);
 
 // Draw the comparison plots //
 
-TCanvas* c2 = new TCanvas("c2","ZMass : OS_CFweighted vs SS ("+EtaRegion+")",1000,100,900,800);
+TCanvas* c2 = new TCanvas("c2","ZMass : OS_CFSFweighted vs SS ("+EtaRegion+")",1000,100,900,800);
 c2->Divide(1,2);
 
 c2->cd(1);
@@ -156,7 +159,7 @@ gr1->SetMarkerStyle(20);
 //gr1->SetMarkerSize(0.8);
 //gr1->SetMarkerColor(kMagenta+2);
 gr1->SetLineColor(15);
-gr1->SetTitle("ZMass : OS_CFweighted_1.4% vs SS ("+EtaRegion+")");
+gr1->SetTitle("ZMass : OS_CFSFweighted_1.4% vs SS ("+EtaRegion+")");
 //gr1->GetXaxis()->SetRangeUser(70,110);
 //gr1->SetMinimum(0.);
 gr1->Draw("ZAP"); // Z : do not draw small horizontal/vertical lines the end of the error bars
@@ -173,7 +176,7 @@ gr2->Draw("ZP SAME");
 signalFcn->Draw("same");
 
 TLegend* legend = new TLegend(0.15,0.6,0.4,0.8);
-legend->AddEntry(gr1,"OS_CFweighted_1.4%","lp");
+legend->AddEntry(gr1,"OS_CFSFweighted_1.4%","lp");
 legend->AddEntry(gr2,"SS","lp");
 legend->AddEntry(signalFcn,"SS_signalFit","l");
 legend->Draw();
@@ -212,7 +215,7 @@ LineAtOne->Draw();
 
 
 
-//TCanvas* c3 = new TCanvas("c3","ZMass : OS_CFweighted vs SS ("+EtaRegion+")",1000,100,900,800);
+//TCanvas* c3 = new TCanvas("c3","ZMass : OS_CFSFweighted vs SS ("+EtaRegion+")",1000,100,900,800);
 //
 //TGraph* gr4 = new TGraph(40);
 //TGraphSmooth* gs1 = new TGraphSmooth();

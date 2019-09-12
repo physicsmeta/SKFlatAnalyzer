@@ -1,8 +1,5 @@
 {
-TFile* f1 = new TFile("/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip/2016/ChargeFlipHE__/ChargeFlip_DYJets.root");
-//TFile* f1 = new TFile("/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip/2016/passTightChargeTightIDdXY__/ChargeFlip_DYJets.root");
-//TFile* f1 = new TFile("/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip/2016/passTightChargeTightID__/ChargeFlip_DYJets.root");
-//TFile* f1 = new TFile("/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip/2016/passTightID__/ChargeFlip_DYJets.root");
+TFile* f1 = new TFile("/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip/2016/ChargeFlipHE__/ChargeFlip_DYJetsNoprompt_TTLL.root");
 TH1D* h1 = (TH1D*)f1->Get("ChargeFlip/EtaRegion1_Denom");
 TH1D* h2 = (TH1D*)f1->Get("ChargeFlip/EtaRegion1_Num");
 TH1D* h3 = (TH1D*)f1->Get("ChargeFlip/EtaRegion2_Denom");
@@ -82,23 +79,26 @@ gr1->GetYaxis()->SetLabelSize(0.025);
 
 // Define fit function and range //
 
-TF1 *gr1_fit1 = new TF1("gr1_fit1","pol1",0,0.021);
-TF1 *gr1_fit2 = new TF1("gr1_fit2","pol1",0.021,0.04);
+TF1 *gr1_fit1 = new TF1("gr1_fit1","pol1",0,0.0075);
+TF1 *gr1_fit2 = new TF1("gr1_fit2","pol1",0.0075,0.0155);
+TF1 *gr1_fit3 = new TF1("gr1_fit2","pol1",0.0155,0.041);
 
 gr1_fit1->SetLineWidth(3);
 gr1_fit2->SetLineWidth(3);
+gr1_fit3->SetLineWidth(3);
 
 gr1_fit1->SetLineColor(4);
 gr1_fit2->SetLineColor(4);
+gr1_fit3->SetLineColor(4);
 
 cout << "//////////////////// Now fitting on EtaRegion1 ... ////////////////////" << endl;
 
+// Draw fitting and its uncertainties //
+
 gr1->Fit(gr1_fit1,"R");
 
-// Draw fitting uncertainty //
-
-TGraphErrors *gr1_fit1_err = new TGraphErrors(22);
-for(int i=0; i<22; i++) gr1_fit1_err->SetPoint(i,0.001*i,0);
+TGraphErrors *gr1_fit1_err = new TGraphErrors(8);
+for(int i=0; i<8; i++) gr1_fit1_err->SetPoint(i,0.001*i,0);
 (TVirtualFitter::GetFitter())->GetConfidenceIntervals(gr1_fit1_err);
 gr1_fit1_err->SetFillColor(4);
 gr1_fit1_err->SetFillStyle(3001);
@@ -106,14 +106,21 @@ gr1_fit1_err->Draw("3 same");
 
 gr1->Fit(gr1_fit2,"R+");
 
-TGraphErrors *gr1_fit2_err = new TGraphErrors(21);
-for(int i=0; i<21; i++) gr1_fit2_err->SetPoint(i,0.021+0.001*i,0);
+TGraphErrors *gr1_fit2_err = new TGraphErrors(9);
+for(int i=0; i<9; i++) gr1_fit2_err->SetPoint(i,0.007+0.001*i,0);
 (TVirtualFitter::GetFitter())->GetConfidenceIntervals(gr1_fit2_err);
 gr1_fit2_err->SetFillColor(4);
 gr1_fit2_err->SetFillStyle(3001);
 gr1_fit2_err->Draw("3 same");
 
+gr1->Fit(gr1_fit3,"R+");
 
+TGraphErrors *gr1_fit3_err = new TGraphErrors(27);
+for(int i=0; i<27; i++) gr1_fit3_err->SetPoint(i,0.015+0.001*i,0);
+(TVirtualFitter::GetFitter())->GetConfidenceIntervals(gr1_fit3_err);
+gr1_fit3_err->SetFillColor(4);
+gr1_fit3_err->SetFillStyle(3001);
+gr1_fit3_err->Draw("3 same");
 
 // Done and repeat for EtaRegion2, 3 //
 
@@ -136,9 +143,9 @@ gr2->GetYaxis()->SetLabelSize(0.025);
 
 
 
-TF1 *gr2_fit1 = new TF1("gr2_fit1","pol1",0,0.0155);
-TF1 *gr2_fit2 = new TF1("gr2_fit2","pol1",0.0155,0.023);
-TF1 *gr2_fit3 = new TF1("gr2_fit3","pol1",0.023,0.04);
+TF1 *gr2_fit1 = new TF1("gr2_fit1","pol1",0,0.0055);
+TF1 *gr2_fit2 = new TF1("gr2_fit2","pol1",0.0055,0.0155);
+TF1 *gr2_fit3 = new TF1("gr2_fit3","pol1",0.0155,0.04);
 
 gr2_fit1->SetLineWidth(3);
 gr2_fit2->SetLineWidth(3);
@@ -152,8 +159,8 @@ cout << endl << "//////////////////// Now fitting on EtaRegion2 ... ////////////
 
 gr2->Fit(gr2_fit1,"R");
 
-TGraphErrors *gr2_fit1_err = new TGraphErrors(16);
-for(int i=0; i<16; i++) gr2_fit1_err->SetPoint(i,0.001*i,0);
+TGraphErrors *gr2_fit1_err = new TGraphErrors(12);
+for(int i=0; i<12; i++) gr2_fit1_err->SetPoint(i,0.0005*i,0);
 (TVirtualFitter::GetFitter())->GetConfidenceIntervals(gr2_fit1_err);
 gr2_fit1_err->SetFillColor(4);
 gr2_fit1_err->SetFillStyle(3001);
@@ -161,8 +168,8 @@ gr2_fit1_err->Draw("3 same");
 
 gr2->Fit(gr2_fit2,"R+");
 
-TGraphErrors *gr2_fit2_err = new TGraphErrors(9);
-for(int i=0; i<9; i++) gr2_fit2_err->SetPoint(i,0.015+0.001*i,0);
+TGraphErrors *gr2_fit2_err = new TGraphErrors(22);
+for(int i=0; i<22; i++) gr2_fit2_err->SetPoint(i,0.005+0.0005*i,0);
 (TVirtualFitter::GetFitter())->GetConfidenceIntervals(gr2_fit2_err);
 gr2_fit2_err->SetFillColor(4);
 gr2_fit2_err->SetFillStyle(3001);
@@ -170,8 +177,8 @@ gr2_fit2_err->Draw("3 same");
 
 gr2->Fit(gr2_fit3,"R+");
 
-TGraphErrors *gr2_fit3_err = new TGraphErrors(19);
-for(int i=0; i<19; i++) gr2_fit3_err->SetPoint(i,0.023+0.001*i,0);
+TGraphErrors *gr2_fit3_err = new TGraphErrors(54);
+for(int i=0; i<54; i++) gr2_fit3_err->SetPoint(i,0.0155+0.0005*i,0);
 (TVirtualFitter::GetFitter())->GetConfidenceIntervals(gr2_fit3_err);
 gr2_fit3_err->SetFillColor(4);
 gr2_fit3_err->SetFillStyle(3001);
@@ -196,10 +203,11 @@ gr3->GetXaxis()->SetTickLength(0.025);
 gr3->GetXaxis()->SetLabelSize(0.025);
 gr3->GetYaxis()->SetLabelSize(0.025);
 
+ 
 
 TF1 *gr3_fit1 = new TF1("gr3_fit1","pol1",0,0.0105);
-TF1 *gr3_fit2 = new TF1("gr3_fit2","pol1",0.0105,0.02);
-TF1 *gr3_fit3 = new TF1("gr3_fit3","pol1",0.02,0.04);
+TF1 *gr3_fit2 = new TF1("gr3_fit2","pol1",0.0105,0.02049);
+TF1 *gr3_fit3 = new TF1("gr3_fit3","pol1",0.02049,0.04);
 
 gr3_fit1->SetLineWidth(3);
 gr3_fit2->SetLineWidth(3);
