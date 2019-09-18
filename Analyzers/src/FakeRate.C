@@ -299,6 +299,7 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
 
     // Fake rate measurement region (Muon)
     if(muons_loose.size()==1 && it_rg==0){
+      if(jets.size() == 0) continue;
       ptcone_mu = muons_loose.at(0).CalcPtCone(muons_loose.at(0).RelIso(), mu_tight_iso);
 //      ptcone_mu1 = muons_loose.at(0).Pt()*(1.+std::max(0., muons_loose.at(0).RelIso()-mu_tight_iso));
 //      FillHist("PtCone_ratio", ptcone_mu1/ptcone_mu, weight, 20, 0., 2.);
@@ -574,6 +575,7 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
 
     // Fake rate measurement region (Electron)
     if(ele_loose.size()==1 && it_rg==3){
+      if(jets.size() == 0) continue;
       el_tight_iso = 0.0287+0.506/ele_loose.at(0).Pt();
       if(fabs(ele_loose.at(0).scEta() > 1.479)) el_tight_iso = 0.0445+0.963/ele_loose.at(0).Pt(); 
       ptcone_el = ele_loose.at(0).CalcPtCone(ele_loose.at(0).RelIso(), el_tight_iso);
