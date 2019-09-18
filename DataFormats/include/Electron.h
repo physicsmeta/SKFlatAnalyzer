@@ -115,6 +115,11 @@ public:
 
   bool Pass_HNLoose() const;
   bool Pass_HNTight() const;
+  bool Pass_HNMVALoose() const;
+  bool Pass_HNMVATight() const;
+
+  bool Pass_ISRLoose() const;
+  bool Pass_ISRTight() const;
 
   void SetRelPFIso_Rho(double r);
   double EA();

@@ -597,7 +597,7 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
     if(ele_loose.size()==1 && it_rg2==0){
       if(jets.size() == 0) continue;
       el_tight_iso = 0.0287+0.506/ele_loose.at(0).Pt();
-      if(fabs(ele_loose.at(0).scEta() > 1.479)) el_tight_iso = 0.0445+0.963/ele_loose.at(0).Pt(); 
+      if(fabs(ele_loose.at(0).scEta()) > 1.479) el_tight_iso = 0.0445+0.963/ele_loose.at(0).Pt(); 
       ptcone_el = ele_loose.at(0).CalcPtCone(ele_loose.at(0).RelIso(), el_tight_iso);
       
       if(!IsDATA){
