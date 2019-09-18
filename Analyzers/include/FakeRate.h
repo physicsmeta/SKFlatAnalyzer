@@ -18,6 +18,8 @@ public:
   
   vector<TString> MuonTriggers;
   vector<TString> ElectronTriggers;
+  vector<TString> ElectronLooseIDs;
+  vector<TString> ElectronTightIDs;
   TString MuonTrig1, MuonTrig2, MuonTrig3;
   TString ElectronTrig1, ElectronTrig2, ElectronTrig3, ElectronTrig4;
   double MuonPtCut1, MuonPtCut2, MuonPtCut3;
