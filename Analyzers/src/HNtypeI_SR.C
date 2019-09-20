@@ -1,0 +1,442 @@
+#include "HNtypeI_SR.h"
+
+HNtypeI_SR::HNtypeI_SR(){
+
+}
+
+void HNtypeI_SR::initializeAnalyzer(){
+
+  //==== if you use "--userflags RunSyst" with SKFlat.py, HasFlag("RunSyst") will return "true"
+//  RunSyst = HasFlag("RunSyst");
+//  cout << "[HNtypeI_SR::initializeAnalyzer] RunSyst = " << RunSyst << endl;
+  RunFake = HasFlag("RunFake");
+  RunCF = HasFlag("RunCF");
+
+  MuonTightIDs = {"HNTight", "HNTightV2", "HNTight2016"};
+  MuonLooseIDs = {"HNLoose", "HNLoose", "HNLoose2016"};
+//  MuonIDSFKeys = { "NUM_TightID_DEN_genTracks" };
+  ElectronTightIDs = {"HNTight", "HNTightV2", "HNTight2016"};
+  ElectronLooseIDs = {"HNLoose", "HNLoose", "HNLoose2016"};
+
+  //==== At this point, sample informations (e.g., IsDATA, DataStream, MCSample, or DataYear) are all set
+  //==== You can define sample-dependent or year-dependent variables here
+  //==== (Example) Year-dependent variables
+  //==== I defined "TString IsoMuTriggerName;" and "double TriggerSafePtCut;" in Analyzers/include/HNtypeI_SR.h 
+  //==== IsoMuTriggerName is a year-dependent variable, and you don't want to do "if(Dataer==~~)" for every event (let's save cpu time).
+  //==== Then, do it here, which only ran once for each macro
+  MuonTriggers.clear();
+  ElectronTriggers.clear();
+
+  if(DataYear==2016){
+    MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v");
+    MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_v");
+    MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v");
+    MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_v");
+    ElectronTriggers.push_back("HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v");
+    MuonPtCut1 = 20., MuonPtCut2 = 10.;
+    ElectronPtCut1 = 25., ElectronPtCut2 = 15.;
+/*    MuonTriggers.push_back("HLT_IsoMu24_v");
+    MuonTriggers.push_back("HLT_IsoTkMu24_v");
+    ElectronTriggers.push_back("HLT_Ele27_WPTight_Gsf_v");
+    MuonPtCut = 26.;
+    ElectronPtCut = 29.;*/
+  }
+  else if(DataYear==2017){
+    MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8_v");
+    ElectronTriggers.push_back("HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_v");
+    MuonPtCut1 = 20., MuonPtCut2 = 10.;
+    ElectronPtCut1 = 25., ElectronPtCut2 = 15.;
+/*    MuonTriggers.push_back("HLT_IsoMu27_v");
+//    ElectronTriggers.push_back("HLT_Ele27_WPTight_Gsf_L1DoubleEG_v");
+    ElectronTriggers.push_back("HLT_Ele35_WPTight_Gsf_v");
+    MuonPtCut = 29.;
+    ElectronPtCut = 37.;*/
+  }
+  else if(DataYear==2018){
+    MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8_v");
+    ElectronTriggers.push_back("HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v");
+    MuonPtCut1 = 20., MuonPtCut2 = 10.;
+    ElectronPtCut1 = 25., ElectronPtCut2 = 15.;
+  }
+
+//  cout << "[HNtypeI_SR::initializeAnalyzer] IsoMuTriggerName = " << IsoMuTriggerName << endl;
+//  cout << "[HNtypeI_SR::initializeAnalyzer TriggerSafePtCut = " << TriggerSafePtCut << endl;
+
+  //==== Test btagging code
+  //==== add taggers and WP that you want to use in analysis
+  std::vector<Jet::Tagger> vtaggers;
+  vtaggers.push_back(Jet::DeepCSV);
+//  vtaggers.push_back(Jet::CSVv2);
+
+  std::vector<Jet::WP> v_wps;
+//  v_wps.push_back(Jet::Medium);
+  v_wps.push_back(Jet::Loose);
+
+  //=== list of taggers, WP, setup systematics, use period SFs
+  SetupBTagger(vtaggers,v_wps, true, true);
+
+}
+
+HNtypeI_SR::~HNtypeI_SR(){
+
+  //==== Destructor of this Analyzer
+
+}
+
+void HNtypeI_SR::executeEvent(){
+
+  //================================================================
+  //====  Example 1
+  //====  Dimuon Z-peak events with two muon IDs, with systematics
+  //================================================================
+
+  //==== *IMPORTANT TO SAVE CPU TIME*
+  //==== Every GetMuon() funtion first collect ALL MINIAOD muons with GetAllMuons(),
+  //==== and then check ID booleans.
+  //==== GetAllMuons not only loops over all MINIAOD muons, but also actually CONSTRUCT muon objects for each muons.
+  //==== We are now running systematics, and you don't want to do this for every systematic sources
+  //==== So, I defined "vector<Muon> AllMuons;" in Analyzers/include/HNtypeI_SR.h,
+  //==== and save muons objects at the very beginning of executeEvent().
+  //==== Later, do "SelectMuons(AllMuons, ID, pt, eta)" to get muons with ID cuts
+  AllMuons = GetAllMuons();
+  AllElectrons = GetAllElectrons();
+  AllJets = GetAllJets();
+  AllFatJets = GetAllFatJets();
+
+  //==== Get L1Prefire reweight
+  //==== If data, 1.;
+  //==== If MC && DataYear > 2017, 1.;
+  //==== If MC && DataYear <= 2017, we have to reweight the event with this value
+  //==== I defined "double weight_Prefire;" in Analyzers/include/HNtypeI_SR.h
+//  weight_Prefire = GetPrefireWeight(0);
+
+  AnalyzerParameter param;
+
+  for(unsigned int it_EleID=0; it_EleID<ElectronTightIDs.size(); it_EleID++){
+    for(unsigned int it_MuonID=0; it_MuonID<MuonTightIDs.size(); it_MuonID++){
+      if(it_EleID != it_MuonID) break;
+      TString MuonTightID = MuonTightIDs.at(it_MuonID);
+      TString MuonLooseID = MuonLooseIDs.at(it_MuonID); 
+      TString ElectronTightID = ElectronTightIDs.at(it_EleID);
+      TString ElectronLooseID = ElectronLooseIDs.at(it_EleID);
+
+      param.Clear();
+
+      param.syst_ = AnalyzerParameter::Central;
+
+//      param.Name = MuonID+"_"+"Central";
+
+      // Muon ID
+      param.Muon_Tight_ID = MuonTightID;
+      param.Muon_Loose_ID = MuonLooseID;
+      param.Muon_Veto_ID = "POGLoose";
+      param.Muon_ID_SF_Key = "NUM_TightID_DEN_genTracks";
+      param.Muon_ISO_SF_Key = "NUM_TightRelIso_DEN_TightIDandIPCut";
+      param.Muon_Trigger_SF_Key = "";
+      param.Muon_UsePtCone = true;
+
+      // Electron Id
+      param.Electron_Tight_ID = ElectronTightID;
+      param.Electron_Loose_ID = ElectronLooseID;
+      param.Electron_Veto_ID = "passVetoID";
+      param.Electron_ID_SF_Key = "passTightID";
+      param.Electron_Trigger_SF_Key = "";
+      param.Electron_UsePtCone = true;
+
+      // Jet ID
+      param.Jet_ID = "tight";
+      param.FatJet_ID = "tight";
+
+      executeEventFromParameter(param);
+
+/*  if(RunSyst){
+      for(int it_syst=1; it_syst<AnalyzerParameter::NSyst; it_syst++){
+        param.syst_ = AnalyzerParameter::Syst(it_syst);
+        param.Name = MuonID+"_"+"Syst_"+param.GetSystType();
+        executeEventFromParameter(param);
+      }
+    }*/
+    }
+  }
+}
+
+void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
+
+  vector<TString> channels = {"dimu", "diel"};
+  vector<TString> regions = {"CR1", "CR2"};
+  TString IDsuffix = "hnV1";
+  if(param.Electron_Tight_ID.Contains("V2")) IDsuffix = "hnV2";
+  if(param.Electron_Tight_ID.Contains("2016")) IDsuffix = "hn16";
+  double cutflow_max = 10.;
+  int cutflow_bin = 10;
+
+  //=============
+  //==== No Cut
+  //=============
+
+//  JSFillHist(param.Name, "NoCut_"+param.Name, 0., 1., 1, 0., 1.);
+  for(unsigned int it_ch=0; it_ch<channels.size(); it_ch++){
+    for(unsigned int it_rg=0; it_rg<regions.size(); it_rg++){
+      FillHist("Number_Events_"+channels.at(it_ch)+"_"+regions.at(it_rg)+"_"+IDsuffix, 0.5, 1., cutflow_bin, 0., cutflow_max);
+    }
+  }
+  //========================
+  //==== MET Filter
+  //========================
+
+  if(!PassMETFilter()) return;
+
+  for(unsigned int it_ch=0; it_ch<channels.size(); it_ch++){
+    for(unsigned int it_rg=0; it_rg<regions.size(); it_rg++){
+      FillHist("Number_Events_"+channels.at(it_ch)+"_"+regions.at(it_rg)+"_"+IDsuffix, 1.5, 1., cutflow_bin, 0., cutflow_max);
+    }
+  }
+
+  Event ev = GetEvent();
+  Particle METv = ev.GetMETVector();
+
+  //==============
+  //==== Trigger
+  //==============
+
+  if(!IsDATA && !(ev.PassTrigger(MuonTriggers) || ev.PassTrigger(ElectronTriggers))) return;
+
+  for(unsigned int it_ch=0; it_ch<channels.size(); it_ch++){
+    for(unsigned int it_rg=0; it_rg<regions.size(); it_rg++){
+      FillHist("Number_Events_"+channels.at(it_ch)+"_"+regions.at(it_rg)+"_"+IDsuffix, 2.5, 1., cutflow_bin, 0., cutflow_max);
+    }
+  }
+
+  //======================
+  //==== Copy AllObjects
+  //======================
+
+  vector<Electron> this_AllElectrons = AllElectrons;
+  vector<Muon> this_AllMuons = AllMuons;
+  vector<Jet> this_AllJets = AllJets;
+  vector<FatJet> this_AllFatJets = AllFatJets;
+
+  //==== Then, for each systematic sources
+  //==== 1) Smear or scale them
+  //==== 2) Then apply ID selections
+  //==== This order should be explicitly followed
+  //==== Below are all variables for available systematic sources
+
+/*  if(param.syst_ == AnalyzerParameter::Central){
+
+  }
+  else if(param.syst_ == AnalyzerParameter::JetResUp){
+    this_AllJets = SmearJets( this_AllJets, +1 );
+    //this_AllFatJets = SmearFatJets( this_AllFatJets, +1 );
+  }
+  else if(param.syst_ == AnalyzerParameter::JetResDown){
+    this_AllJets = SmearJets( this_AllJets, -1 );
+    //this_AllFatJets = SmearFatJets( this_AllFatJets, -1 );
+  }
+  else if(param.syst_ == AnalyzerParameter::JetEnUp){
+    this_AllJets = ScaleJets( this_AllJets, +1 );
+    //this_AllFatJets = ScaleFatJets( this_AllFatJets, +1 );
+  }
+  else if(param.syst_ == AnalyzerParameter::JetEnDown){
+    this_AllJets = ScaleJets( this_AllJets, -1 );
+    //this_AllFatJets = ScaleFatJets( this_AllFatJets, -1 );
+  }
+  else if(param.syst_ == AnalyzerParameter::MuonEnUp){
+    this_AllMuons = ScaleMuons( this_AllMuons, +1 );
+  }
+  else if(param.syst_ == AnalyzerParameter::MuonEnDown){
+    this_AllMuons = ScaleMuons( this_AllMuons, -1 );
+  }
+  else if(param.syst_ == AnalyzerParameter::ElectronResUp){
+    //this_AllElectrons = SmearElectrons( this_AllElectrons, +1 );
+  }
+  else if(param.syst_ == AnalyzerParameter::ElectronResDown){
+    //this_AllElectrons = SmearElectrons( this_AllElectrons, -1 );
+  }
+  else if(param.syst_ == AnalyzerParameter::ElectronEnUp){
+    //this_AllElectrons = ScaleElectrons( this_AllElectrons, +1 );
+  }
+  else if(param.syst_ == AnalyzerParameter::ElectronEnDown){
+    //this_AllElectrons = ScaleElectrons( this_AllElectrons, -1 );
+  }
+  else{
+    cout << "[HNtypeI_SR::executeEventFromParameter] Wrong syst" << endl;
+    exit(EXIT_FAILURE);
+  }*/
+
+  //==================================================
+  //==== Then, apply ID selections using this_AllXXX
+  //==================================================
+
+  TString MuonID = param.Muon_Tight_ID;
+  TString ElectronID = param.Electron_Tight_ID;
+  if(RunFake){
+    MuonID = param.Muon_Loose_ID;
+    ElectronID = param.Electron_Loose_ID;
+  }
+
+  vector<Muon> muons = SelectMuons(this_AllMuons, MuonID, 10., 2.4);
+  vector<Muon> muons_veto = SelectMuons(this_AllMuons, param.Muon_Veto_ID, 5., 2.4);
+  vector<Electron> electrons = SelectElectrons(this_AllElectrons, ElectronID, 10., 2.5);
+  vector<Electron> electrons_veto = SelectElectrons(this_AllElectrons, param.Electron_Veto_ID, 10., 2.5);
+  vector<Jet> jets = SelectJets(this_AllJets, param.Jet_ID, 30., 2.4);
+  vector<FatJet> fatjets = SelectFatJets(this_AllFatJets, param.FatJet_ID, 30., 2.4);
+  std::vector<Lepton*> leptons, leptons_mu, leptons_el;
+  std::vector<Lepton*> leptons_veto;
+
+  //=======================
+  //==== Sort in pt-order
+  //=======================
+
+  std::sort(muons.begin(), muons.end(), PtComparing);
+  std::sort(muons_veto.begin(), muons_veto.end(), PtComparing);
+  std::sort(electrons.begin(), electrons.end(), PtComparing);
+  std::sort(electrons_veto.begin(), electrons_veto.end(), PtComparing);
+  std::sort(jets.begin(), jets.end(), PtComparing);
+  std::sort(fatjets.begin(), fatjets.end(), PtComparing);
+
+//  int n_bjet_deepcsv_m=0;
+//  int n_bjet_deepcsv_m_noSF=0;
+  int n_bjet_deepcsv=0;
+
+  for(unsigned int ij = 0 ; ij < jets.size(); ij++){
+//    if(IsBTagged(jets.at(ij), Jet::DeepCSV, Jet::Medium,true,0)) n_bjet_deepcsv_m++; // method for getting btag with SF applied to MC
+//    if(IsBTagged(jets.at(ij), Jet::DeepCSV, Jet::Medium,false,0)) n_bjet_deepcsv_m_noSF++; // method for getting btag with no SF applied to MC
+//    if(IsBTagged(jets.at(ij), Jet::CSVv2, Jet::Loose,false,0)) n_bjet_csvv2++;
+    if(IsBTagged(jets.at(ij), Jet::DeepCSV, Jet::Loose,true,0)) n_bjet_deepcsv++;
+  }
+  
+  //===================================
+  //==== Set up pTcone, lepton vector
+  //===================================
+
+/*    double MET = ev.GetMETVector().Pt();
+    double Mt = 0.;
+    double MZ = 91.1876;*/
+  double weight = 1.;
+  double muon_idsf = 1.;
+  double muon_isosf = 1.;
+  double ele_idsf = 1.;
+  double ele_recosf = 1.;
+  int lepton_veto_size = 0;
+  double LeptonPtCut1 = 0., LeptonPtCut2 = 0.;
+  Particle DiLep;
+
+  // Set tight_iso cut & calculate pTcone
+  double mu_tight_iso = 0.15;
+  if(IDsuffix == "hnV2") mu_tight_iso = 0.1;
+  if(IDsuffix == "hn16") mu_tight_iso = 0.07;
+
+  double el_tight_iso = 0.;
+
+  for(unsigned int i=0; i<muons.size(); i++){
+    double this_ptcone = muons.at(i).CalcPtCone(muons.at(i).RelIso(), mu_tight_iso);
+    muons.at(i).SetPtCone(this_ptcone);
+  }
+   
+  for(unsigned int i=0; i<electrons.size(); i++){
+    el_tight_iso = 0.0287+0.506/electrons.at(i).UncorrPt();
+    if(fabs(electrons.at(i).scEta()) > 1.479) el_tight_iso = 0.0445+0.963/electrons.at(i).UncorrPt();
+    if(IDsuffix == "hn16") el_tight_iso = 0.08;
+    double this_ptcone = electrons.at(i).CalcPtCone(electrons.at(i).RelIso(), el_tight_iso);
+    electrons.at(i).SetPtCone(this_ptcone);
+  }
+
+  // For fake leptons, replace pT by pTcone
+  if(RunFake){
+    muons = MuonUsePtCone(muons);
+    electrons = ElectronUsePtCone(electrons);
+  }
+
+  // leptons = muons + electrons (pT-ordered separately)
+  leptons_mu = MakeLeptonPointerVector(muons);
+  leptons_el = MakeLeptonPointerVector(electrons);
+  for(unsigned int i=0; i<leptons_mu.size(); i++) leptons.push_back(leptons_mu.at(i));
+  for(unsigned int i=0; i<leptons_el.size(); i++) leptons.push_back(leptons_el.at(i));
+
+  // leptons_veto = muons_veto + electrons_veto (pT-ordered separately)
+  for(unsigned int i=0; i<muons_veto.size(); i++) leptons_veto.push_back(&muons_veto.at(i));
+  for(unsigned int i=0; i<electrons_veto.size(); i++) leptons_veto.push_back(&electrons_veto.at(i));
+
+  //=========================
+  //==== Event selections..
+  //=========================
+
+  // Loop for each channel (mumu, ee)
+  for(unsigned int it_ch=0; it_ch<channels.size(); it_ch++){
+    weight = 1., muon_idsf = 1., muon_isosf = 1., ele_idsf = 1., ele_recosf = 1.;
+    if(it_ch == 0){ LeptonPtCut1 = MuonPtCut1; LeptonPtCut2 = MuonPtCut2; }
+    if(it_ch == 1){ LeptonPtCut1 = ElectronPtCut1; LeptonPtCut2 = ElectronPtCut2; }
+
+    if(leptons.size() == 2){ 
+      if(it_ch==0 && muons.size()<2) continue;
+      if(it_ch==1 && electrons.size()<2) continue;
+      lepton_veto_size = leptons_veto.size() - leptons.size();
+      DiLep = *leptons.at(0) + *leptons.at(1);
+
+      for(unsigned int it_rg=0; it_rg<regions.size(); it_rg++){
+        FillHist("Number_Events_"+channels.at(it_ch)+"_"+regions.at(it_rg)+"_"+IDsuffix, 3.5, 1., cutflow_bin, 0., cutflow_max);
+      }
+
+      // weights for MC
+      if(!IsDATA){
+        weight *= weight_norm_1invpb*ev.GetTriggerLumi("Full");
+        weight *= ev.MCweight();
+        weight *= GetPrefireWeight(0);
+        weight *= GetPileUpWeight(nPileUp,0);
+
+        if(IDsuffix=="hnV1" || IDsuffix=="hnV2"){
+          for(unsigned int i=0; i<muons.size(); i++){
+            muon_idsf = mcCorr->MuonID_SF(param.Muon_ID_SF_Key,  muons.at(i).Eta(), muons.at(i).MiniAODPt(), 0);
+            muon_isosf = mcCorr->MuonISO_SF(param.Muon_ISO_SF_Key, muons.at(i).Eta(), muons.at(i).MiniAODPt(), 0);
+            weight *= muon_idsf*muon_isosf;
+            }
+          for(unsigned int j=0; j<electrons.size(); j++){
+            ele_recosf = mcCorr->ElectronReco_SF(electrons.at(j).scEta(), electrons.at(j).Pt(), 0);
+            ele_idsf = mcCorr->ElectronID_SF(param.Electron_ID_SF_Key, electrons.at(j).scEta(), electrons.at(j).Pt(), 0);
+            weight *= ele_recosf*ele_idsf;
+          }
+        }
+      }
+
+      // weight for fake
+      if(RunFake) weight = fakeEst->GetWeight(leptons, param);
+
+      // Preselection
+      if(it_ch==0 && !ev.PassTrigger(MuonTriggers)) continue;
+      if(it_ch==1 && !ev.PassTrigger(ElectronTriggers)) continue;
+      if(leptons.at(0)->Pt() < LeptonPtCut1 || leptons.at(1)->Pt() < LeptonPtCut2) continue;
+      if(!RunCF && leptons.at(0)->Charge()*leptons.at(1)->Charge() < 0) continue;
+      if(RunCF && leptons.at(0)->Charge()*leptons.at(1)->Charge() > 0) continue;
+      if(lepton_veto_size > 0) continue;
+      if(DiLep.M() < 10.) continue;
+      if(jets.size() + fatjets.size() < 1) continue; // TODO : Add separation between jet and fatjet
+
+      // Event selections for each CR
+      for(unsigned int it_rg=0; it_rg<regions.size(); it_rg++){
+
+        // TODO : Add selections for each CR
+
+        FillHist("Number_Events_"+channels.at(it_ch)+"_"+regions.at(it_rg)+"_"+IDsuffix, 4.5, 1., cutflow_bin, 0., cutflow_max);
+
+
+        // Histograms
+/*        FillHist("Number_Jets_"+regions.at(it_rg), jets.size(), weight, 8, 0., 8.);
+        FillHist("ZCand_Mass_"+regions.at(it_rg), ZCand.M(), weight, 80, 50., 130.);
+        FillHist("TriLep_Mass_"+regions.at(it_rg), TriLep.M(), weight, 80, 50., 130.);
+        FillHist("WtagLep_Pt_"+regions.at(it_rg), WtagLep.Pt(), weight, 400, 0., 400.);
+        FillHist("ZtagLep1_Pt_"+regions.at(it_rg), ZtagLep1.Pt(), weight, 400, 0., 400.);
+        FillHist("ZtagLep2_Pt_"+regions.at(it_rg), ZtagLep2.Pt(), weight, 400, 0., 400.);
+        FillHist("Lep1_Pt_"+regions.at(it_rg), leptons.at(0)->Pt(), weight, 400, 0., 400.);
+        FillHist("Lep2_Pt_"+regions.at(it_rg), leptons.at(1)->Pt(), weight, 400, 0., 400.);
+        FillHist("Lep3_Pt_"+regions.at(it_rg), leptons.at(2)->Pt(), weight, 400, 0., 400.);
+        FillHist("MET_"+regions.at(it_rg), MET, weight, 400, 0., 400.);
+        FillHist("Mt_"+regions.at(it_rg), Mt, weight, 400, 0., 400.);
+        FillHist("Number_Events_weighted_"+regions.at(it_rg), 0.5, weight, 2, 0., 2.);*/
+      }     
+    }
+  }
+}
+
+
+
