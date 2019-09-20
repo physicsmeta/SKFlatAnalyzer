@@ -10,10 +10,11 @@ void FakeRate::initializeAnalyzer(){
 //  RunSyst = HasFlag("RunSyst");
 //  cout << "[FakeRate::initializeAnalyzer] RunSyst = " << RunSyst << endl;
 
-//  MuonIDs = { "POGTight" };
+  MuonTightIDs = {"HNTight", "HNTightV2", "HNTight2016"};
+  MuonLooseIDs = {"HNLoose", "HNLoose", "HNLoose2016"};
 //  MuonIDSFKeys = { "NUM_TightID_DEN_genTracks" };
-  ElectronTightIDs = {"HNTight", "HNMVATight", "ISRTight"};
-  ElectronLooseIDs = {"HNLoose", "HNMVALoose", "ISRLoose"};
+  ElectronTightIDs = {"HNTight", "HNTightV2", "HNMVATight", "HNMVATightV2", "HNTight2016", "ISRTight"};
+  ElectronLooseIDs = {"HNLoose", "HNLoose", "HNMVALoose", "HNMVALoose", "HNLoose2016", "ISRLoose"};
 
   //==== At this point, sample informations (e.g., IsDATA, DataStream, MCSample, or DataYear) are all set
   //==== You can define sample-dependent or year-dependent variables here
@@ -114,34 +115,35 @@ void FakeRate::executeEvent(){
   AnalyzerParameter param;
 
   for(unsigned int it_EleID=0; it_EleID<ElectronTightIDs.size(); it_EleID++){
+    for(unsigned int it_MuonID=0; it_MuonID<MuonTightIDs.size(); it_MuonID++){
+//      TString MuonID = "HNTight";
+//      TString MuonID = "HNTight2016";
+//      TString MuonIDSFKey = "NUM_TightID_DEN_genTracks";
+      TString MuonTightID = MuonTightIDs.at(it_MuonID);
+      TString MuonLooseID = MuonLooseIDs.at(it_MuonID);
+      TString ElectronTightID = ElectronTightIDs.at(it_EleID);
+      TString ElectronLooseID = ElectronLooseIDs.at(it_EleID);
 
-    TString MuonID = "HNTight";
-//    TString MuonID = "HNTight2016";
-//    TString MuonIDSFKey = "NUM_TightID_DEN_genTracks";
-    TString ElectronTightID = ElectronTightIDs.at(it_EleID);
-    TString ElectronLooseID = ElectronLooseIDs.at(it_EleID);
+      param.Clear();
 
-    param.Clear();
+      param.syst_ = AnalyzerParameter::Central;
 
-    param.syst_ = AnalyzerParameter::Central;
+//      param.Name = MuonID+"_"+"Central";
 
-    param.Name = MuonID+"_"+"Central";
+      param.Electron_Tight_ID = ElectronTightID;
+      param.Electron_Loose_ID = ElectronLooseID;
+//      param.Electron_Tight_ID = "HNTight";
+//      param.Electron_Loose_ID = "HNLoose";
+      param.Electron_Veto_ID = "";
+      param.Electron_ID_SF_Key = "";
+      param.Muon_Tight_ID = MuonTightID;
+      param.Muon_Loose_ID = MuonLooseID;
+      param.Muon_Veto_ID = "";
+      param.Muon_ID_SF_Key = "";
+      param.Muon_ISO_SF_Key = "";
+      param.Jet_ID = "tight";
 
-    param.Electron_Tight_ID = ElectronTightID;
-    param.Electron_Loose_ID = ElectronLooseID;
-//    param.Electron_Tight_ID = "HNTight";
-//    param.Electron_Loose_ID = "HNLoose";
-    param.Electron_Veto_ID = "";
-    param.Electron_ID_SF_Key = "";
-    param.Muon_Tight_ID = MuonID;
-    param.Muon_Loose_ID = "HNLoose";
-//    param.Muon_Loose_ID = "HNLoose2016";
-    param.Muon_Veto_ID = "";
-    param.Muon_ID_SF_Key = "";
-    param.Muon_ISO_SF_Key = "";
-    param.Jet_ID = "tight";
-
-    executeEventFromParameter(param);
+      executeEventFromParameter(param);
 
 /*  if(RunSyst){
     for(int it_syst=1; it_syst<AnalyzerParameter::NSyst; it_syst++){
@@ -150,14 +152,22 @@ void FakeRate::executeEvent(){
       executeEventFromParameter(param);
     }
   }*/
+    }
   }
 }
 
 void FakeRate::executeEventFromParameter(AnalyzerParameter param){
 
   vector<TString> regions_mu = {"muonFR", "muonDY", "muonWj"};
+  if(param.Muon_Tight_ID.Contains("V2")) regions_mu = {"muonV2FR", "muonV2DY", "muonV2Wj"};
+  if(param.Muon_Tight_ID.Contains("2016")) regions_mu = {"muon16FR", "muon16DY", "muon16Wj"};
   vector<TString> regions_el = {"eleFR", "eleDY", "eleWj"};
-  if(param.Electron_Tight_ID.Contains("MVA")) regions_el = {"mvaFR", "mvaDY", "mvaWj"};
+  if(param.Electron_Tight_ID.Contains("V2")) regions_el = {"eleV2FR", "eleV2DY", "eleV2Wj"};    
+  if(param.Electron_Tight_ID.Contains("MVA")){ 
+    regions_el = {"mvaFR", "mvaDY", "mvaWj"};
+    if(param.Electron_Tight_ID.Contains("V2")) regions_el = {"mvaV2FR", "mvaV2DY", "mvaV2Wj"};
+  }
+  if(param.Electron_Tight_ID.Contains("2016")) regions_el = {"ele16FR", "ele16DY", "ele16Wj"};
   if(param.Electron_Tight_ID.Contains("ISR")) regions_el = {"isrFR", "isrDY", "isrWj"};
   //=============
   //==== No Cut
@@ -195,10 +205,10 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
   //==== This order should be explicitly followed
   //==== Below are all variables for available systematic sources
 
-  if(param.syst_ == AnalyzerParameter::Central){
+/*  if(param.syst_ == AnalyzerParameter::Central){
 
   }
-/*  else if(param.syst_ == AnalyzerParameter::JetResUp){
+  else if(param.syst_ == AnalyzerParameter::JetResUp){
     this_AllJets = SmearJets( this_AllJets, +1 );
     //this_AllFatJets = SmearFatJets( this_AllFatJets, +1 );
   }
@@ -275,8 +285,10 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
   //=========================
 
   double mu_tight_iso = 0.15;
+  if(param.Muon_Tight_ID.Contains("V2")) mu_tight_iso = 0.1;
+  if(param.Muon_Tight_ID.Contains("2016")) mu_tight_iso = 0.07;
   double el_tight_iso = 0.;     // barrel : 0.0287+0.506/pT, endcap : 0.0445+0.963/pT
-  double pi = 3.14159265358979323846;
+//  double pi = 3.14159265358979323846;
   double MZ = 91.1876;
   double MET = ev.GetMETVector().Pt(); 
   double dphi = 0.;
@@ -307,7 +319,7 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
 
   for(unsigned int it_rg=0; it_rg<regions_mu.size(); it_rg++){
     weight = 1.;
-    if(param.Electron_Tight_ID.Contains("MVA") || param.Electron_Tight_ID.Contains("ISR")) break; // Stack muon hists only once!!
+    if(param.Electron_Tight_ID.Contains("V2") || param.Electron_Tight_ID.Contains("MVA") || param.Electron_Tight_ID.Contains("2016") || param.Electron_Tight_ID.Contains("ISR")) break; // Stack muon hists only once!!
 
     // Fake rate measurement region 
     if(muons_loose.size()==1 && it_rg==0){
@@ -393,8 +405,9 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
 
       for(unsigned int ijet=0; ijet<jets.size(); ijet++){
         // define dphi between a jet and the loose lepton
-        dphi = fabs(jets.at(ijet).Phi() - muons_loose.at(0).Phi());
-        if(dphi > pi) dphi = 2.*pi-dphi;
+//        dphi = fabs(jets.at(ijet).Phi() - muons_loose.at(0).Phi());
+//        if(dphi > pi) dphi = 2.*pi-dphi;
+        dphi = fabs(muons_loose.at(0).DeltaPhi(jets.at(ijet)));
         FillHist("dphi_"+PtConeRange+"_"+regions_mu.at(it_rg), dphi, weight, 32, 0., 3.2);
 
         if(dphi > 2.5) awayjet++; 
@@ -592,12 +605,18 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
  
   for(unsigned int it_rg2=0; it_rg2<regions_el.size(); it_rg2++){
     weight = 1.;
+    if(param.Muon_Tight_ID.Contains("V2") || param.Muon_Tight_ID.Contains("2016")) break;
 
     // Fake rate measurement region 
     if(ele_loose.size()==1 && it_rg2==0){
       if(jets.size() == 0) continue;
-      el_tight_iso = 0.0287+0.506/ele_loose.at(0).Pt();
-      if(fabs(ele_loose.at(0).scEta()) > 1.479) el_tight_iso = 0.0445+0.963/ele_loose.at(0).Pt(); 
+      el_tight_iso = 0.0287+0.506/ele_loose.at(0).UncorrPt();
+      if(fabs(ele_loose.at(0).scEta()) > 1.479) el_tight_iso = 0.0445+0.963/ele_loose.at(0).UncorrPt();
+      if(param.Electron_Tight_ID.Contains("V2")){
+        el_tight_iso = std::min(0.08, 0.0287+0.506/ele_loose.at(0).UncorrPt());
+        if(fabs(ele_loose.at(0).scEta()) > 1.479) el_tight_iso = std::min(0.08, 0.0445+0.963/ele_loose.at(0).UncorrPt());
+      }
+      if(param.Electron_Tight_ID.Contains("2016")) el_tight_iso = 0.08;
       ptcone_el = ele_loose.at(0).CalcPtCone(ele_loose.at(0).RelIso(), el_tight_iso);
       
       if(!IsDATA){
@@ -684,8 +703,9 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
       FillHist("Ele_loose_Eta_nodijet_"+PtConeRange+"_"+regions_el.at(it_rg2), ele_loose.at(0).Eta(), weight, 50, -2.5, 2.5);        
       
       for(unsigned int ijet=0; ijet<jets.size(); ijet++){
-        dphi = fabs(jets.at(ijet).Phi() - ele_loose.at(0).Phi());
-        if(dphi > pi) dphi = 2.*pi-dphi;
+//        dphi = fabs(jets.at(ijet).Phi() - ele_loose.at(0).Phi());
+//        if(dphi > pi) dphi = 2.*pi-dphi;
+        dphi = fabs(ele_loose.at(0).DeltaPhi(jets.at(ijet)));
         FillHist("dphi_"+PtConeRange+"_"+regions_el.at(it_rg2), dphi, weight, 32, 0., 3.2);
 
         if(dphi > 2.5) awayjet++;

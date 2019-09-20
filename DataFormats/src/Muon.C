@@ -117,6 +117,7 @@ bool Muon::PassID(TString ID) const {
   if(ID=="HNTight2016") return Pass_HNTight2016();
   if(ID=="HNLoose") return Pass_HNLoose();
   if(ID=="HNTight") return Pass_HNTight();
+  if(ID=="HNTightV2") return Pass_HNTightV2();
 
   cout << "[Electron::PassID] No id : " << ID << endl;
   exit(EXIT_FAILURE);
@@ -170,6 +171,14 @@ bool Muon::Pass_HNTight() const{
   if(!( RelIso()<0.15 )) return false;
   return true;
 }
+
+bool Muon::Pass_HNTightV2() const{
+  if(!( isPOGTight() )) return false;
+  if(!( RelIso()<0.1 )) return false;
+  if(!( fabs(dXY())<0.01 && fabs(dZ())<0.04) ) return false;
+  return true;
+}
+
 
 //==== TEST ID
 
