@@ -45,10 +45,10 @@ void ChargeFlip::executeEvent(Long64_t Nentry){
     /* CF ID selection */
 
     if(HasFlag("ChargeFlipID")) eles = SelectChargeFlipElectrons(AllEles, 25., 2.5);
-    else if(HasFlag("passTightChargeTightID")) eles = SelectChargeTightElectrons(AllEles, "passTightID", 25., 2.5);
-    else if(HasFlag("passTightChargeTightIDdXY")) eles = SelectChargeTightElectronsDXY(AllEles, "passTightID", 25., 2.5);
-    else if(HasFlag("passTightChargeTightIDdZ")) eles = SelectChargeTightElectronsDZ(AllEles, "passTightID", 25., 2.5);
-    else if(HasFlag("passTightChargeTightIDdXYdZ")) eles = SelectChargeTightElectronsDXYDZ(AllEles, "passTightID", 25., 2.5);
+    //else if(HasFlag("passTightChargeTightID")) eles = SelectChargeTightElectrons(AllEles, "passTightID", 25., 2.5);
+    //else if(HasFlag("passTightChargeTightIDdXY")) eles = SelectChargeTightElectronsDXY(AllEles, "passTightID", 25., 2.5);
+    //else if(HasFlag("passTightChargeTightIDdZ")) eles = SelectChargeTightElectronsDZ(AllEles, "passTightID", 25., 2.5);
+    //else if(HasFlag("passTightChargeTightIDdXYdZ")) eles = SelectChargeTightElectronsDXYDZ(AllEles, "passTightID", 25., 2.5);
     else if(HasFlag("ChargeFlipHE")) eles = SelectElectronsHE(AllEles, "passTightID", 25., 2.5);
     std::sort(eles.begin(), eles.end(), PtComparing);
 
@@ -221,13 +221,15 @@ void ChargeFlip::executeEvent(Long64_t Nentry){
     if(!PassMETFilter()) return;
     if(! (ev.PassTrigger(EleTriggerName) )) return;
     
+    Particle METv = ev.GetMETVector();
+
     /* CF SF ID selection */
 
     if(HasFlag("ChargeFlipID")) eles = SelectChargeFlipElectrons(AllEles, 25., 2.5);
-    else if(HasFlag("passTightChargeTightID")) eles = SelectChargeTightElectrons(AllEles, "passTightID", 25., 2.5);
-    else if(HasFlag("passTightChargeTightIDdXY")) eles = SelectChargeTightElectronsDXY(AllEles, "passTightID", 25., 2.5);
-    else if(HasFlag("passTightChargeTightIDdZ")) eles = SelectChargeTightElectronsDZ(AllEles, "passTightID", 25., 2.5);
-    else if(HasFlag("passTightChargeTightIDdXYdZ")) eles = SelectChargeTightElectronsDXYDZ(AllEles, "passTightID", 25., 2.5);
+    //else if(HasFlag("passTightChargeTightID")) eles = SelectChargeTightElectrons(AllEles, "passTightID", 25., 2.5);
+    //else if(HasFlag("passTightChargeTightIDdXY")) eles = SelectChargeTightElectronsDXY(AllEles, "passTightID", 25., 2.5);
+    //else if(HasFlag("passTightChargeTightIDdZ")) eles = SelectChargeTightElectronsDZ(AllEles, "passTightID", 25., 2.5);
+    //else if(HasFlag("passTightChargeTightIDdXYdZ")) eles = SelectChargeTightElectronsDXYDZ(AllEles, "passTightID", 25., 2.5);
     else if(HasFlag("ChargeFlipHE")) eles = SelectElectronsHE(AllEles, "passTightID", 25., 2.5);
     std::sort(eles.begin(), eles.end(), PtComparing);
 
@@ -250,6 +252,9 @@ void ChargeFlip::executeEvent(Long64_t Nentry){
 
       if(eles.at(0).Charge()*eles.at(1).Charge()>0){
         JSFillHist("ScaleFactor", "BB_ZMass_SS", ZCand.M(), 1., 40, 70., 110.);
+        JSFillHist("ScaleFactor", "BB_pt1_SS", eles.at(0).Pt(), 1., 70, 20., 90.);
+        JSFillHist("ScaleFactor", "BB_pt2_SS", eles.at(1).Pt(), 1., 70, 20., 90.);
+        JSFillHist("ScaleFactor", "BB_MET_SS", METv.Pt(), 1., 100, 0., 100.);
       }
 
     }
@@ -259,6 +264,9 @@ void ChargeFlip::executeEvent(Long64_t Nentry){
 
       if(eles.at(0).Charge()*eles.at(1).Charge()>0){
         JSFillHist("ScaleFactor", "BE_ZMass_SS", ZCand.M(), 1., 40, 70., 110.);
+        JSFillHist("ScaleFactor", "BE_pt1_SS", eles.at(0).Pt(), 1., 70, 20., 90.);
+        JSFillHist("ScaleFactor", "BE_pt2_SS", eles.at(1).Pt(), 1., 70, 20., 90.);
+        JSFillHist("ScaleFactor", "BE_MET_SS", METv.Pt(), 1., 100, 0., 100.);
       }
 
     }
@@ -268,24 +276,28 @@ void ChargeFlip::executeEvent(Long64_t Nentry){
 
       if(eles.at(0).Charge()*eles.at(1).Charge()>0){
         JSFillHist("ScaleFactor", "EE_ZMass_SS", ZCand.M(), 1., 40, 70., 110.);
+        JSFillHist("ScaleFactor", "EE_pt1_SS", eles.at(0).Pt(), 1., 70, 20., 90.);
+        JSFillHist("ScaleFactor", "EE_pt2_SS", eles.at(1).Pt(), 1., 70, 20., 90.);
+        JSFillHist("ScaleFactor", "EE_MET_SS", METv.Pt(), 1., 100, 0., 100.);
       }
 
     }
 
     /* Now let's shift the electrons' energy 1.4% */
     
-    Particle ZCand_tmp;
-    double weight_tmp, weight_tmp_SF;
-
     vector<Electron> eles_tmp = eles; // copy the vector
+		
     for(int j=0;j<2;j++){
       eles_tmp.at(j).SetE(eles_tmp.at(j).E()*(1-0.014));
       eles_tmp.at(j).SetPtEtaPhiE(eles_tmp.at(j).E() * TMath::Sin(eles_tmp.at(j).Theta()), eles_tmp.at(j).Eta(), eles_tmp.at(j).Phi(), eles_tmp.at(j).E());
     }
 
-    ZCand_tmp = eles_tmp.at(0) + eles_tmp.at(1);
-    weight_tmp = GetCFweight(eles_tmp);
-    weight_tmp_SF = GetCFweight_SF(eles_tmp);
+		Particle ZCand_tmp = eles_tmp.at(0) + eles_tmp.at(1);
+    double weight_tmp = GetCFweight(eles_tmp);
+    double weight_tmp_SF = GetCFweight_SF(eles_tmp);
+
+    Particle METv_tmp;
+    METv_tmp.SetPxPyPzE(METv.Px()+ZCand.Px()-ZCand_tmp.Px(),METv.Py()+ZCand.Py()-ZCand_tmp.Py(),0,METv.E()+ZCand.E()-ZCand_tmp.E());
 
     if(70.<=ZCand_tmp.M()&&ZCand_tmp.M()<110.){
       if(eles.at(0).Charge()*eles.at(1).Charge()<0){
@@ -294,17 +306,27 @@ void ChargeFlip::executeEvent(Long64_t Nentry){
         if(abs(eles_tmp.at(0).scEta())<1.4442&&abs(eles_tmp.at(1).scEta())<1.4442){
           JSFillHist("ScaleFactor", "BB_ZMass_OS_CFweighted_shifted_1.4%", ZCand_tmp.M(), weight_tmp, 40, 70., 110.);
           JSFillHist("ScaleFactor", "BB_ZMass_OS_CFSFweighted_shifted_1.4%", ZCand_tmp.M(), weight_tmp_SF, 40, 70., 110.);
+          JSFillHist("ScaleFactor", "BB_pt1_OS_CFSFweighted_shifted_1.4%", eles_tmp.at(0).Pt(), weight_tmp_SF, 70, 20., 90.);
+          JSFillHist("ScaleFactor", "BB_pt2_OS_CFSFweighted_shifted_1.4%", eles_tmp.at(1).Pt(), weight_tmp_SF, 70, 20., 90.);
+          JSFillHist("ScaleFactor", "BB_MET_OS_CFSFweighted_shifted_1.4%", METv_tmp.Pt(), weight_tmp_SF, 100, 0., 100.);
         }
     
         // BE
         if((abs(eles_tmp.at(0).scEta())<1.4442&&abs(eles_tmp.at(1).scEta())>=1.556)||(abs(eles_tmp.at(0).scEta())>=1.556&&abs(eles_tmp.at(1).scEta())<1.4442)){
+          JSFillHist("ScaleFactor", "BE_ZMass_OS_CFweighted_shifted_1.4%", ZCand_tmp.M(), weight_tmp, 40, 70., 110.);
           JSFillHist("ScaleFactor", "BE_ZMass_OS_CFSFweighted_shifted_1.4%", ZCand_tmp.M(), weight_tmp_SF, 40, 70., 110.);
+          JSFillHist("ScaleFactor", "BE_pt1_OS_CFSFweighted_shifted_1.4%", eles.at(0).Pt(), weight_tmp_SF, 70, 20., 90.);
+          JSFillHist("ScaleFactor", "BE_pt2_OS_CFSFweighted_shifted_1.4%", eles.at(1).Pt(), weight_tmp_SF, 70, 20., 90.);
+          JSFillHist("ScaleFactor", "BE_MET_OS_CFSFweighted_shifted_1.4%", METv.Pt(), weight_tmp_SF, 100, 0., 100.);
         }
     
         // EE
         if(abs(eles_tmp.at(0).scEta())>=1.556&&abs(eles_tmp.at(1).scEta())>=1.556){
           JSFillHist("ScaleFactor", "EE_ZMass_OS_CFweighted_shifted_1.4%", ZCand_tmp.M(), weight_tmp, 40, 70., 110.);
           JSFillHist("ScaleFactor", "EE_ZMass_OS_CFSFweighted_shifted_1.4%", ZCand_tmp.M(), weight_tmp_SF, 40, 70., 110.);
+          JSFillHist("ScaleFactor", "EE_pt1_OS_CFSFweighted_shifted_1.4%", eles.at(0).Pt(), weight_tmp_SF, 70, 20., 90.);
+          JSFillHist("ScaleFactor", "EE_pt2_OS_CFSFweighted_shifted_1.4%", eles.at(1).Pt(), weight_tmp_SF, 70, 20., 90.);
+          JSFillHist("ScaleFactor", "EE_MET_OS_CFSFweighted_shifted_1.4%", METv.Pt(), weight_tmp_SF, 100, 0., 100.);
         }
 				
       }

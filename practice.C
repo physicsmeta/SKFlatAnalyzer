@@ -21,8 +21,8 @@ void practice(){
   m.IsFastSim = false;
   m.DataYear = 2016;
   m.Userflags = {
-    "A",
-    "B",
+    "foo",
+    "bar",
   };
   m.AddFile("/data7/DATA/SKFlat/Run2Legacy_v3/2016/MC/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/190423_002438/0000/SKFlatNtuple_2016_MC_1.root");
 //  m.AddFile("/data7/DATA/SKFlat/Run2Legacy_v3/2016/MC/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/190423_002438/0000/SKFlatNtuple_2016_MC_10.root");
