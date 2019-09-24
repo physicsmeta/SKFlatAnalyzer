@@ -16,7 +16,6 @@ Electron::Electron(){
   j_mvanoiso = -999.;
   j_EnergyUnCorr = -999.;
   j_passConversionVeto = false;
-  j_isGsfCtfScPixChargeConsistent = false; //JH : for CF
   j_NMissingHits = 0;
   j_Full5x5_sigmaIetaIeta = -999.;
   j_dEtaSeed = -999.;
@@ -66,10 +65,6 @@ void Electron::SetUncorrE(double une){
 void Electron::SetPassConversionVeto(bool b){
   j_passConversionVeto = b;
 }
-
-void Electron::SetIsGsfCtfScPixChargeConsistent(bool b){
-  j_isGsfCtfScPixChargeConsistent = b;
-} //JH : for CF
 
 void Electron::SetNMissingHits(int n){
   j_NMissingHits = n;
@@ -145,6 +140,10 @@ bool Electron::PassID(TString ID) const{
   if(ID=="SUSYLoose") return Pass_SUSYLoose();
   if(ID=="NOCUT") return true;
   if(ID=="TEST") return Pass_TESTID();
+  if(ID=="HNVeto2016") return Pass_HNVeto2016();
+  if(ID=="HNLoose2016") return Pass_HNLoose2016();
+  if(ID=="HNTight2016") return Pass_HNTight2016(); //JH from HE's git
+  if(ID=="HEID") return Pass_HEID();
 
   cout << "[Electron::PassID] No id : " << ID << endl;
   exit(EXIT_FAILURE);
@@ -182,7 +181,7 @@ bool Electron::Pass_SUSYMVAWP(TString wp) const{
 
 bool Electron::Pass_SUSYTight() const{
   if(! Pass_SUSYMVAWP("Tight") ) return false;
-  if(! (MiniRelIso()<0.1) ) return false;	
+  if(! (MiniRelIso()<0.1) ) return false;
   if(! (fabs(dXY())<0.05 && fabs(dZ())<0.1 && fabs(IP3D()/IP3Derr())<8.) ) return false;
   if(! PassConversionVeto() ) return false;
   if(! (NMissingHits()==0) ) return false;
@@ -200,6 +199,73 @@ bool Electron::Pass_SUSYLoose() const{
   return true;
 }
 
+bool Electron::Pass_HNVeto2016() const{
+  if( fabs(scEta()) <= 0.8 ){
+    if(! (MVANoIso()>-0.1) ) return false;
+  }
+  else if( fabs(scEta()) > 0.8 && fabs(scEta()) <= 1.479 ){
+    if(! (MVANoIso()>0.1) ) return false;
+  }
+  else{
+    if(! (MVANoIso()>-0.1) ) return false;
+  }
+  if(! (fabs(dXY())<0.2 && fabs(dZ())<0.5) ) return false;
+  if(! (RelIso()<0.6) ) return false;
+
+  return true;
+}
+
+bool Electron::Pass_HNLoose2016() const{
+  if( fabs(scEta()) <= 0.8 ){
+    if(! (MVANoIso()>-0.1) ) return false;
+  }
+  else if( fabs(scEta()) > 0.8 && fabs(scEta()) <= 1.479 ){
+    if(! (MVANoIso()>0.1) ) return false;
+  }
+  else{
+    if(! (MVANoIso()>-0.1) ) return false;
+  }
+  if(! (fabs(dXY())<0.2 && fabs(dZ())<0.1 && fabs(IP3D()/IP3Derr())<10.) ) return false;
+  if(! (RelIso()<0.6) ) return false;
+  if(! (PassConversionVeto()) ) return false;
+  if(! (IsGsfCtfScPixChargeConsistent()) ) return false;
+
+  return true;
+}
+
+bool Electron::Pass_HNTight2016() const{
+  if( fabs(scEta()) <= 0.8 ){
+    if(! (MVANoIso()>0.9) ) return false;
+  }
+  else if( fabs(scEta()) > 0.8 && fabs(scEta()) <= 1.479 ){
+    if(! (MVANoIso()>0.825) ) return false;
+  }
+  else{
+    if(! (MVANoIso()>0.5) ) return false;
+  }
+  if(! (fabs(dXY())<0.01 && fabs(dZ())<0.04 && fabs(IP3D()/IP3Derr())<4.) ) return false;
+  if(! (RelIso()<0.08) ) return false;
+  if(! (PassConversionVeto()) ) return false;
+  if(! (IsGsfCtfScPixChargeConsistent()) ) return false;
+
+  return true;
+} //JH from HE's git
+
+bool Electron::Pass_HEID() const{
+  if(! (passTightID()) ) return false;
+  if(! (IsGsfCtfScPixChargeConsistent()) ) return false;
+  if( fabs(scEta())<=1.479 ){
+    if(! fabs(dXY()<0.05) ) return false;
+    if(! fabs(dZ()<0.10) ) return false;
+  }
+  if( fabs(scEta())>1.479 ){
+    if(! fabs(dXY()<0.10) ) return false;
+    if(! fabs(dZ()<0.20) ) return false;
+  }
+
+  return true;
+} //JH
+														
 //==== TEST ID
 
 bool Electron::Pass_TESTID() const{

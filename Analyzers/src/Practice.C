@@ -83,31 +83,70 @@ void Practice::executeEventFromParameter(AnalyzerParameter param, Long64_t Nentr
 
   JSFillHist("", "CutFlow", 0, 1, 6, 0, 6);
 
-  vector<Electron> eles = SelectElectrons(AllEles, param.Electron_Tight_ID, 25., 2.5);
+  if(AllEles.size() == 0) JSFillHist("NoCut", "NoCut_eles_size", AllEles.size(), 1, 5, 0, 5);
+  else if(AllEles.size() == 1) JSFillHist("NoCut", "NoCut_eles_size", AllEles.size(), 1, 5, 0, 5);
+  else if(AllEles.size() == 2) JSFillHist("NoCut", "NoCut_eles_size", AllEles.size(), 1, 5, 0, 5);
+  else if(AllEles.size() == 3) JSFillHist("NoCut", "NoCut_eles_size", AllEles.size(), 1, 5, 0, 5);
+  else if(AllEles.size() == 4) JSFillHist("NoCut", "NoCut_eles_size", AllEles.size(), 1, 5, 0, 5); // To check the number of electrons
 
-  if(eles.size() == 0) JSFillHist("NoCut", "NoCut_eles_size", eles.size(), 1, 5, 0, 5);
-  else if(eles.size() == 1) JSFillHist("NoCut", "NoCut_eles_size", eles.size(), 1, 5, 0, 5);
-  else if(eles.size() == 2) JSFillHist("NoCut", "NoCut_eles_size", eles.size(), 1, 5, 0, 5);
-  else if(eles.size() == 3) JSFillHist("NoCut", "NoCut_eles_size", eles.size(), 1, 5, 0, 5);
-  else if(eles.size() == 4) JSFillHist("NoCut", "NoCut_eles_size", eles.size(), 1, 5, 0, 5); // To check the number of electrons
+  if(AllMuons.size() == 0) JSFillHist("NoCut", "NoCut_muons_size", AllMuons.size(), 1, 5, 0, 5);
+  else if(AllMuons.size() == 1) JSFillHist("NoCut", "NoCut_muons_size", AllMuons.size(), 1, 5, 0, 5);
+  else if(AllMuons.size() == 2) JSFillHist("NoCut", "NoCut_muons_size", AllMuons.size(), 1, 5, 0, 5);
+  else if(AllMuons.size() == 3) JSFillHist("NoCut", "NoCut_muons_size", AllMuons.size(), 1, 5, 0, 5);
+  else if(AllMuons.size() == 4) JSFillHist("NoCut", "NoCut_muons_size", AllMuons.size(), 1, 5, 0, 5); // To check the number of muons
 
-  vector<Muon> muons = SelectMuons(AllMuons, "POGTight", 20., 2.4); 
+  if(AllJets.size() == 0) JSFillHist("NoCut", "NoCut_jets_size", AllJets.size(), 1, 7, 0, 7);
+  else if(AllJets.size() == 1) JSFillHist("NoCut", "NoCut_jets_size", AllJets.size(), 1, 7, 0, 7);
+  else if(AllJets.size() == 2) JSFillHist("NoCut", "NoCut_jets_size", AllJets.size(), 1, 7, 0, 7);
+  else if(AllJets.size() == 3) JSFillHist("NoCut", "NoCut_jets_size", AllJets.size(), 1, 7, 0, 7);
+  else if(AllJets.size() == 4) JSFillHist("NoCut", "NoCut_jets_size", AllJets.size(), 1, 7, 0, 7);
+  else if(AllJets.size() == 5) JSFillHist("NoCut", "NoCut_jets_size", AllJets.size(), 1, 7, 0, 7);
+  else if(AllJets.size() == 6) JSFillHist("NoCut", "NoCut_jets_size", AllJets.size(), 1, 7, 0, 7); // To check the number of jets
 
-  if(muons.size() == 0) JSFillHist("NoCut", "NoCut_muons_size", muons.size(), 1, 5, 0, 5);
-  else if(muons.size() == 1) JSFillHist("NoCut", "NoCut_muons_size", muons.size(), 1, 5, 0, 5);
-  else if(muons.size() == 2) JSFillHist("NoCut", "NoCut_muons_size", muons.size(), 1, 5, 0, 5);
-  else if(muons.size() == 3) JSFillHist("NoCut", "NoCut_muons_size", muons.size(), 1, 5, 0, 5);
-  else if(muons.size() == 4) JSFillHist("NoCut", "NoCut_muons_size", muons.size(), 1, 5, 0, 5); // To check the number of muons
+  vector<Electron> NoCut_sorted_eles = AllEles;
+  std::sort(NoCut_sorted_eles.begin(), NoCut_sorted_eles.end(), PtComparing);
 
-	vector<Jet> jets = SelectJets(AllJets, "tight", 30., 2.4);
+  if(NoCut_sorted_eles.size() >= 2){
 
-  if(jets.size() == 0) JSFillHist("NoCut", "NoCut_jets_size", jets.size(), 1, 7, 0, 7);
-  else if(jets.size() == 1) JSFillHist("NoCut", "NoCut_jets_size", jets.size(), 1, 7, 0, 7);
-  else if(jets.size() == 2) JSFillHist("NoCut", "NoCut_jets_size", jets.size(), 1, 7, 0, 7);
-  else if(jets.size() == 3) JSFillHist("NoCut", "NoCut_jets_size", jets.size(), 1, 7, 0, 7);
-  else if(jets.size() == 4) JSFillHist("NoCut", "NoCut_jets_size", jets.size(), 1, 7, 0, 7);
-  else if(jets.size() == 5) JSFillHist("NoCut", "NoCut_jets_size", jets.size(), 1, 7, 0, 7);
-  else if(jets.size() == 6) JSFillHist("NoCut", "NoCut_jets_size", jets.size(), 1, 7, 0, 7); // To check the number of jets
+    JSFillHist("NoCut", "ele1_dXY",                            NoCut_sorted_eles.at(0).dXY(),                            1, 50, -0.25, 0.25);
+    JSFillHist("NoCut", "ele1_dZ",                             NoCut_sorted_eles.at(0).dZ(),                             1, 50, -0.25, 0.25);
+    JSFillHist("NoCut", "ele1_IP3D",                           NoCut_sorted_eles.at(0).IP3D(),                           1, 50, -0.25, 0.25);
+    JSFillHist("NoCut", "ele1_RelIso",                         NoCut_sorted_eles.at(0).RelIso(),                         1, 100, 0., 1.);
+    JSFillHist("NoCut", "ele1_MVAIso",                         NoCut_sorted_eles.at(0).MVAIso(),                         1, 100, -1, 1);
+    JSFillHist("NoCut", "ele1_MVANoIso",                       NoCut_sorted_eles.at(0).MVANoIso(),                       1, 100, -1, 1);
+    JSFillHist("NoCut", "ele1_PassConversionVeto",             NoCut_sorted_eles.at(0).PassConversionVeto(),             1, 2, 0, 2);
+    JSFillHist("NoCut", "ele1_IsGsfCtfScPixChargeConsistent",  NoCut_sorted_eles.at(0).IsGsfCtfScPixChargeConsistent(),  1, 2, 0, 2);       
+    JSFillHist("NoCut", "ele2_dXY",                            NoCut_sorted_eles.at(1).dXY(),                            1, 50, -0.25, 0.25);
+    JSFillHist("NoCut", "ele2_dZ",                             NoCut_sorted_eles.at(1).dZ(),                             1, 50, -0.25, 0.25);
+    JSFillHist("NoCut", "ele2_IP3D",                           NoCut_sorted_eles.at(1).IP3D(),                           1, 50, -0.25, 0.25);
+    JSFillHist("NoCut", "ele2_RelIso",                         NoCut_sorted_eles.at(1).RelIso(),                         1, 100, 0., 1.);    
+    JSFillHist("NoCut", "ele2_MVAIso",                         NoCut_sorted_eles.at(1).MVAIso(),                         1, 100, -1, 1);    
+    JSFillHist("NoCut", "ele2_MVANoIso",                       NoCut_sorted_eles.at(1).MVANoIso(),                       1, 100, -1, 1);    
+    JSFillHist("NoCut", "ele2_PassConversionVeto",             NoCut_sorted_eles.at(1).PassConversionVeto(),             1, 2, 0, 2);        
+    JSFillHist("NoCut", "ele2_IsGsfCtfScPixChargeConsistent",  NoCut_sorted_eles.at(1).IsGsfCtfScPixChargeConsistent(),  1, 2, 0, 2);        
+  
+    //if(Nentry%(LogEvery)==0){
+    if(NoCut_sorted_eles.at(0).dXY()<-0.05||NoCut_sorted_eles.at(1).dXY()<-0.05||NoCut_sorted_eles.at(0).dZ()<-0.1||NoCut_sorted_eles.at(1).dZ()<-0.1){
+    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!Beware!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! An error on IP occurred at : Run " << Nentry << endl;
+    cout << ">>ele1_dXY = " <<                            NoCut_sorted_eles.at(0).dXY() <<                           endl; 
+    cout << ">>ele1_dZ = " <<                             NoCut_sorted_eles.at(0).dZ() <<                            endl; 
+    cout << "ele1_IP3D = " <<                           NoCut_sorted_eles.at(0).IP3D() <<                          endl; 
+    cout << "ele1_RelIso = " <<                         NoCut_sorted_eles.at(0).RelIso() <<                        endl; 
+    cout << "ele1_MVAIso = " <<                         NoCut_sorted_eles.at(0).MVAIso() <<                        endl; 
+    cout << "ele1_MVANoIso = " <<                       NoCut_sorted_eles.at(0).MVANoIso() <<                      endl; 
+    cout << "ele1_PassConversionVeto = " <<             NoCut_sorted_eles.at(0).PassConversionVeto() <<            endl; 
+    cout << "ele1_IsGsfCtfScPixChargeConsistent = " <<  NoCut_sorted_eles.at(0).IsGsfCtfScPixChargeConsistent() << endl;
+    cout << ">>ele2_dXY = " <<                            NoCut_sorted_eles.at(1).dXY() <<                           endl; 
+    cout << ">>ele2_dZ = " <<                             NoCut_sorted_eles.at(1).dZ() <<                            endl; 
+    cout << "ele2_IP3D = " <<                           NoCut_sorted_eles.at(1).IP3D() <<                          endl; 
+    cout << "ele2_RelIso = " <<                         NoCut_sorted_eles.at(1).RelIso() <<                        endl; 
+    cout << "ele2_MVAIso = " <<                         NoCut_sorted_eles.at(1).MVAIso() <<                        endl; 
+    cout << "ele2_MVANoIso = " <<                       NoCut_sorted_eles.at(1).MVANoIso() <<                      endl; 
+    cout << "ele2_PassConversionVeto = " <<             NoCut_sorted_eles.at(1).PassConversionVeto() <<            endl; 
+    cout << "ele2_IsGsfCtfScPixChargeConsistent = " <<  NoCut_sorted_eles.at(1).IsGsfCtfScPixChargeConsistent() << endl;
+    }
+
+  }
 
   /* MET Filter */
 
@@ -115,11 +154,26 @@ void Practice::executeEventFromParameter(AnalyzerParameter param, Long64_t Nentr
 
   JSFillHist("", "CutFlow", 1, 1, 6, 0, 6);
 
-  if(eles.size() == 0) JSFillHist("PassMETFilter", "PassMETFilter_eles_size", eles.size(), 1, 5, 0, 5);
-  else if(eles.size() == 1) JSFillHist("PassMETFilter", "PassMETFilter_eles_size", eles.size(), 1, 5, 0, 5);
-  else if(eles.size() == 2) JSFillHist("PassMETFilter", "PassMETFilter_eles_size", eles.size(), 1, 5, 0, 5);
-  else if(eles.size() == 3) JSFillHist("PassMETFilter", "PassMETFilter_eles_size", eles.size(), 1, 5, 0, 5);
-  else if(eles.size() == 4) JSFillHist("PassMETFilter", "PassMETFilter_eles_size", eles.size(), 1, 5, 0, 5); // To check the number of electrons
+  if(AllEles.size() == 0) JSFillHist("PassMETFilter", "PassMETFilter_eles_size", AllEles.size(), 1, 5, 0, 5);
+  else if(AllEles.size() == 1) JSFillHist("PassMETFilter", "PassMETFilter_eles_size", AllEles.size(), 1, 5, 0, 5);
+  else if(AllEles.size() == 2) JSFillHist("PassMETFilter", "PassMETFilter_eles_size", AllEles.size(), 1, 5, 0, 5);
+  else if(AllEles.size() == 3) JSFillHist("PassMETFilter", "PassMETFilter_eles_size", AllEles.size(), 1, 5, 0, 5);
+  else if(AllEles.size() == 4) JSFillHist("PassMETFilter", "PassMETFilter_eles_size", AllEles.size(), 1, 5, 0, 5); // To check the number of electrons
+
+  if(AllMuons.size() == 0) JSFillHist("PassMETFilter", "PassMETFilter_muons_size", AllMuons.size(), 1, 5, 0, 5);
+  else if(AllMuons.size() == 1) JSFillHist("PassMETFilter", "PassMETFilter_muons_size", AllMuons.size(), 1, 5, 0, 5);
+  else if(AllMuons.size() == 2) JSFillHist("PassMETFilter", "PassMETFilter_muons_size", AllMuons.size(), 1, 5, 0, 5);
+  else if(AllMuons.size() == 3) JSFillHist("PassMETFilter", "PassMETFilter_muons_size", AllMuons.size(), 1, 5, 0, 5);
+  else if(AllMuons.size() == 4) JSFillHist("PassMETFilter", "PassMETFilter_muons_size", AllMuons.size(), 1, 5, 0, 5); // To check the number of muons
+
+  if(AllJets.size() == 0) JSFillHist("PassMETFilter", "PassMETFilter_jets_size", AllJets.size(), 1, 7, 0, 7);
+  else if(AllJets.size() == 1) JSFillHist("PassMETFilter", "PassMETFilter_jets_size", AllJets.size(), 1, 7, 0, 7);
+  else if(AllJets.size() == 2) JSFillHist("PassMETFilter", "PassMETFilter_jets_size", AllJets.size(), 1, 7, 0, 7);
+  else if(AllJets.size() == 3) JSFillHist("PassMETFilter", "PassMETFilter_jets_size", AllJets.size(), 1, 7, 0, 7);
+  else if(AllJets.size() == 4) JSFillHist("PassMETFilter", "PassMETFilter_jets_size", AllJets.size(), 1, 7, 0, 7);
+  else if(AllJets.size() == 5) JSFillHist("PassMETFilter", "PassMETFilter_jets_size", AllJets.size(), 1, 7, 0, 7);
+  else if(AllJets.size() == 6) JSFillHist("PassMETFilter", "PassMETFilter_jets_size", AllJets.size(), 1, 7, 0, 7); // To check the number of jets
+
 
   Event ev = GetEvent();
 
@@ -131,37 +185,61 @@ void Practice::executeEventFromParameter(AnalyzerParameter param, Long64_t Nentr
 
   JSFillHist("", "CutFlow", 2, 1, 6, 0, 6);
 
+  if(AllEles.size() == 0) JSFillHist("PassTrigger", "PassTrigger_eles_size", AllEles.size(), 1, 5, 0, 5);
+  else if(AllEles.size() == 1) JSFillHist("PassTrigger", "PassTrigger_eles_size", AllEles.size(), 1, 5, 0, 5);
+  else if(AllEles.size() == 2) JSFillHist("PassTrigger", "PassTrigger_eles_size", AllEles.size(), 1, 5, 0, 5);
+  else if(AllEles.size() == 3) JSFillHist("PassTrigger", "PassTrigger_eles_size", AllEles.size(), 1, 5, 0, 5);
+  else if(AllEles.size() == 4) JSFillHist("PassTrigger", "PassTrigger_eles_size", AllEles.size(), 1, 5, 0, 5); // To check the number of electrons
+
+  if(AllMuons.size() == 0) JSFillHist("PassTrigger", "PassTrigger_muons_size", AllMuons.size(), 1, 5, 0, 5);
+  else if(AllMuons.size() == 1) JSFillHist("PassTrigger", "PassTrigger_muons_size", AllMuons.size(), 1, 5, 0, 5);
+  else if(AllMuons.size() == 2) JSFillHist("PassTrigger", "PassTrigger_muons_size", AllMuons.size(), 1, 5, 0, 5);
+  else if(AllMuons.size() == 3) JSFillHist("PassTrigger", "PassTrigger_muons_size", AllMuons.size(), 1, 5, 0, 5);
+  else if(AllMuons.size() == 4) JSFillHist("PassTrigger", "PassTrigger_muons_size", AllMuons.size(), 1, 5, 0, 5); // To check the number of muons
+
+  if(AllJets.size() == 0) JSFillHist("PassTrigger", "PassTrigger_jets_size", AllJets.size(), 1, 7, 0, 7);
+  else if(AllJets.size() == 1) JSFillHist("PassTrigger", "PassTrigger_jets_size", AllJets.size(), 1, 7, 0, 7);
+  else if(AllJets.size() == 2) JSFillHist("PassTrigger", "PassTrigger_jets_size", AllJets.size(), 1, 7, 0, 7);
+  else if(AllJets.size() == 3) JSFillHist("PassTrigger", "PassTrigger_jets_size", AllJets.size(), 1, 7, 0, 7);
+  else if(AllJets.size() == 4) JSFillHist("PassTrigger", "PassTrigger_jets_size", AllJets.size(), 1, 7, 0, 7);
+  else if(AllJets.size() == 5) JSFillHist("PassTrigger", "PassTrigger_jets_size", AllJets.size(), 1, 7, 0, 7);
+  else if(AllJets.size() == 6) JSFillHist("PassTrigger", "PassTrigger_jets_size", AllJets.size(), 1, 7, 0, 7); // To check the number of jets
+
   /* ID selection */
 
-  if(eles.size() == 0) JSFillHist("PassTrigger", "PassTrigger_eles_size", eles.size(), 1, 5, 0, 5);
-  else if(eles.size() == 1) JSFillHist("PassTrigger", "PassTrigger_eles_size", eles.size(), 1, 5, 0, 5);
-  else if(eles.size() == 2) JSFillHist("PassTrigger", "PassTrigger_eles_size", eles.size(), 1, 5, 0, 5);
-  else if(eles.size() == 3) JSFillHist("PassTrigger", "PassTrigger_eles_size", eles.size(), 1, 5, 0, 5);
-  else if(eles.size() == 4) JSFillHist("PassTrigger", "PassTrigger_eles_size", eles.size(), 1, 5, 0, 5); // To check the number of electrons
+  vector<Electron> eles = SelectElectrons(AllEles, param.Electron_Tight_ID, 25., 2.5);
+  vector<Muon> muons = SelectMuons(AllMuons, "POGTight", 20., 2.4); 
+	vector<Jet> jets = SelectJets(AllJets, "tight", 30., 2.4);
 
-  if(muons.size() == 0) JSFillHist("PassTrigger", "PassTrigger_muons_size", muons.size(), 1, 5, 0, 5);
-  else if(muons.size() == 1) JSFillHist("PassTrigger", "PassTrigger_muons_size", muons.size(), 1, 5, 0, 5);
-  else if(muons.size() == 2) JSFillHist("PassTrigger", "PassTrigger_muons_size", muons.size(), 1, 5, 0, 5);
-  else if(muons.size() == 3) JSFillHist("PassTrigger", "PassTrigger_muons_size", muons.size(), 1, 5, 0, 5);
-  else if(muons.size() == 4) JSFillHist("PassTrigger", "PassTrigger_muons_size", muons.size(), 1, 5, 0, 5); // To check the number of muons
+  if(eles.size() == 0) JSFillHist("PassID", "PassMediumID_eles_size", eles.size(), 1, 5, 0, 5);
+  else if(eles.size() == 1) JSFillHist("PassID", "PassMediumID_eles_size", eles.size(), 1, 5, 0, 5);
+  else if(eles.size() == 2) JSFillHist("PassID", "PassMediumID_eles_size", eles.size(), 1, 5, 0, 5);
+  else if(eles.size() == 3) JSFillHist("PassID", "PassMediumID_eles_size", eles.size(), 1, 5, 0, 5);
+  else if(eles.size() == 4) JSFillHist("PassID", "PassMediumID_eles_size", eles.size(), 1, 5, 0, 5); // To check the number of electrons
 
-  if(jets.size() == 0) JSFillHist("PassTrigger", "PassTrigger_jets_size", jets.size(), 1, 7, 0, 7);
-  else if(jets.size() == 1) JSFillHist("PassTrigger", "PassTrigger_jets_size", jets.size(), 1, 7, 0, 7);
-  else if(jets.size() == 2) JSFillHist("PassTrigger", "PassTrigger_jets_size", jets.size(), 1, 7, 0, 7);
-  else if(jets.size() == 3) JSFillHist("PassTrigger", "PassTrigger_jets_size", jets.size(), 1, 7, 0, 7);
-  else if(jets.size() == 4) JSFillHist("PassTrigger", "PassTrigger_jets_size", jets.size(), 1, 7, 0, 7);
-  else if(jets.size() == 5) JSFillHist("PassTrigger", "PassTrigger_jets_size", jets.size(), 1, 7, 0, 7);
-  else if(jets.size() == 6) JSFillHist("PassTrigger", "PassTrigger_jets_size", jets.size(), 1, 7, 0, 7); // To check the number of jets
+  if(muons.size() == 0) JSFillHist("PassID", "PassTightID_muons_size", muons.size(), 1, 5, 0, 5);
+  else if(muons.size() == 1) JSFillHist("PassID", "PassTightID_muons_size", muons.size(), 1, 5, 0, 5);
+  else if(muons.size() == 2) JSFillHist("PassID", "PassTightID_muons_size", muons.size(), 1, 5, 0, 5);
+  else if(muons.size() == 3) JSFillHist("PassID", "PassTightID_muons_size", muons.size(), 1, 5, 0, 5);
+  else if(muons.size() == 4) JSFillHist("PassID", "PassTightID_muons_size", muons.size(), 1, 5, 0, 5); // To check the number of muons
+
+  if(jets.size() == 0) JSFillHist("PassID", "PassTightID_jets_size", jets.size(), 1, 7, 0, 7);
+  else if(jets.size() == 1) JSFillHist("PassID", "PassTightID_jets_size", jets.size(), 1, 7, 0, 7);
+  else if(jets.size() == 2) JSFillHist("PassID", "PassTightID_jets_size", jets.size(), 1, 7, 0, 7);
+  else if(jets.size() == 3) JSFillHist("PassID", "PassTightID_jets_size", jets.size(), 1, 7, 0, 7);
+  else if(jets.size() == 4) JSFillHist("PassID", "PassTightID_jets_size", jets.size(), 1, 7, 0, 7);
+  else if(jets.size() == 5) JSFillHist("PassID", "PassTightID_jets_size", jets.size(), 1, 7, 0, 7);
+  else if(jets.size() == 6) JSFillHist("PassID", "PassTightID_jets_size", jets.size(), 1, 7, 0, 7); // To check the number of jets
 
   std::vector<Jet> jets_LeptonVeto = JetsVetoLeptonInside(jets, eles, muons);
 
-  if(jets_LeptonVeto.size() == 0) JSFillHist("PassTrigger", "PassTrigger_jets_LeptonVeto_size", jets_LeptonVeto.size(), 1, 7, 0, 7);
-  else if(jets_LeptonVeto.size() == 1) JSFillHist("PassTrigger", "PassTrigger_jets_LeptonVeto_size", jets_LeptonVeto.size(), 1, 7, 0, 7);
-  else if(jets_LeptonVeto.size() == 2) JSFillHist("PassTrigger", "PassTrigger_jets_LeptonVeto_size", jets_LeptonVeto.size(), 1, 7, 0, 7);
-  else if(jets_LeptonVeto.size() == 3) JSFillHist("PassTrigger", "PassTrigger_jets_LeptonVeto_size", jets_LeptonVeto.size(), 1, 7, 0, 7);
-  else if(jets_LeptonVeto.size() == 4) JSFillHist("PassTrigger", "PassTrigger_jets_LeptonVeto_size", jets_LeptonVeto.size(), 1, 7, 0, 7);
-  else if(jets_LeptonVeto.size() == 5) JSFillHist("PassTrigger", "PassTrigger_jets_LeptonVeto_size", jets_LeptonVeto.size(), 1, 7, 0, 7);
-  else if(jets_LeptonVeto.size() == 6) JSFillHist("PassTrigger", "PassTrigger_jets_LeptonVeto_size", jets_LeptonVeto.size(), 1, 7, 0, 7); // To check the number of lepton vetoed jets
+  if(jets_LeptonVeto.size() == 0) JSFillHist("PassID", "PassTightID_jets_LeptonVeto_size", jets_LeptonVeto.size(), 1, 7, 0, 7);
+  else if(jets_LeptonVeto.size() == 1) JSFillHist("PassID", "PassTightID_jets_LeptonVeto_size", jets_LeptonVeto.size(), 1, 7, 0, 7);
+  else if(jets_LeptonVeto.size() == 2) JSFillHist("PassID", "PassTightID_jets_LeptonVeto_size", jets_LeptonVeto.size(), 1, 7, 0, 7);
+  else if(jets_LeptonVeto.size() == 3) JSFillHist("PassID", "PassTightID_jets_LeptonVeto_size", jets_LeptonVeto.size(), 1, 7, 0, 7);
+  else if(jets_LeptonVeto.size() == 4) JSFillHist("PassID", "PassTightID_jets_LeptonVeto_size", jets_LeptonVeto.size(), 1, 7, 0, 7);
+  else if(jets_LeptonVeto.size() == 5) JSFillHist("PassID", "PassTightID_jets_LeptonVeto_size", jets_LeptonVeto.size(), 1, 7, 0, 7);
+  else if(jets_LeptonVeto.size() == 6) JSFillHist("PassID", "PassTightID_jets_LeptonVeto_size", jets_LeptonVeto.size(), 1, 7, 0, 7); // To check the number of lepton vetoed jets
 
   double HT=0;
   for(unsigned int i=0; i<jets.size(); i++){
@@ -175,22 +253,22 @@ void Practice::executeEventFromParameter(AnalyzerParameter param, Long64_t Nentr
     HT_LeptonVeto += this_jet_LeptonVeto.Pt();
   }
 
-  JSFillHist("PassTrigger", "HT", HT, 1, 1000, 0., 1000.);
-  JSFillHist("PassTrigger", "HT_LeptonVeto", HT_LeptonVeto, 1, 1000, 0., 1000.);
+  JSFillHist("PassID", "PassTightID_HT", HT, 1, 1000, 0., 1000.);
+  JSFillHist("PassID", "PassTightID_HT_LeptonVeto", HT_LeptonVeto, 1, 1000, 0., 1000.);
+  JSFillHist("PassID", "PassTightID_HT_NoZero", HT, 1, 970, 30., 1000.);
+  JSFillHist("PassID", "PassTightID_HT_LeptonVeto_NoZero", HT_LeptonVeto, 1, 970, 30., 1000.);
 
   if(Nentry%(LogEvery)==0){
-    cout << "Number of jets (PassTrigger) = " << jets.size() << endl;
-    cout << "HT (PassTrigger) = " << HT << endl;
-    cout << "Number of jets_LeptonVeto (PassTrigger) = " << jets_LeptonVeto.size() << endl;
-    cout << "HT_LeptonVeto (PassTrigger) = " << HT_LeptonVeto << endl;
+    cout << "Number of jets (PassTightID) = " << jets.size() << endl;
+    cout << "HT (PassTightID) = " << HT << endl;
+    cout << "Number of jets_LeptonVeto (PassTightID) = " << jets_LeptonVeto.size() << endl;
+    cout << "HT_LeptonVeto (PassTightID) = " << HT_LeptonVeto << endl;
 	}
 
   /* sort */
 
   std::sort(eles.begin(), eles.end(), PtComparing);
-  //==== 1) leptons : after scaling/smearing, pt ordring can differ from MINIAOD
   std::sort(muons.begin(), muons.end(), PtComparing);
-  //==== 2) jets : similar, but also when applying new JEC, ordering is changes. This is important if you use leading jets
   std::sort(jets.begin(), jets.end(), PtComparing);
 
   /* Event selection */

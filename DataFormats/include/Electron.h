@@ -38,8 +38,6 @@ public:
 
   void SetPassConversionVeto(bool b);
   inline int PassConversionVeto() const { return j_passConversionVeto; }
-  void SetIsGsfCtfScPixChargeConsistent(bool b); //JH : for CF
-  inline int IsGsfCtfScPixChargeConsistent() const { return j_isGsfCtfScPixChargeConsistent; } //JH : for CF
   void SetNMissingHits(int n);
   inline int NMissingHits() const { return j_NMissingHits; };
 
@@ -109,6 +107,10 @@ public:
   bool Pass_SUSYMVAWP(TString wp) const;
   bool Pass_SUSYTight() const;
   bool Pass_SUSYLoose() const;
+  bool Pass_HNVeto2016() const;
+  bool Pass_HNLoose2016() const;
+  bool Pass_HNTight2016() const; //JH from HE's git
+  bool Pass_HEID() const; //JH
 
   void SetRelPFIso_Rho(double r);
   double EA();
@@ -137,7 +139,6 @@ private:
   double j_mvaiso, j_mvanoiso;
   double j_EnergyUnCorr;
   bool j_passConversionVeto;
-	bool j_isGsfCtfScPixChargeConsistent; //JH : for CF
   int j_NMissingHits;
   double j_Full5x5_sigmaIetaIeta, j_dEtaSeed, j_dPhiIn, j_HoverE, j_InvEminusInvP, j_e2x5OverE5x5, j_e1x5OverE5x5, j_trkiso, j_dr03EcalRecHitSumEt, j_dr03HcalDepth1TowerSumEt;
   unsigned int j_IDBit;

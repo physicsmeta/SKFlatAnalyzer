@@ -13,7 +13,7 @@ void ChargeFlip::initializeAnalyzer(){
     lep0ptcut = 25.;
     lep1ptcut = 15.;
   }
-//else if(DataYear==2017){
+//  else if(DataYear==2017){
 //    EleIDs = {
 //      "passMediumID",
 //      "passTightID",
