@@ -14,7 +14,7 @@ public:
 
   bool MCCorrrectionIgnoreNoHist;
 
-  TString Electron_Tight_ID, Electron_Loose_ID, Electron_Veto_ID;
+  TString Electron_Tight_ID, Electron_Loose_ID, Electron_Veto_ID, Electron_User_ID; //JH
   TString Electron_ID_SF_Key, Electron_Trigger_SF_Key;
   TString Electron_FR_ID, Electron_FR_Key;
   TString Electron_CF_ID, Electron_CF_Key;
@@ -43,6 +43,16 @@ public:
   };
   Syst syst_;
   TString GetSystType();
+
+  enum CFSyst{
+    CF_Central,
+    MllRangeUp, MllRangeDown,
+    MinPtUp, MinPtDown,
+    NBinUp, NBinDown,
+    N_CFSyst
+  };
+  CFSyst CFsyst_;
+  TString GetCFSystType(); //JH for CF SF syst
 
   void Clear();
 

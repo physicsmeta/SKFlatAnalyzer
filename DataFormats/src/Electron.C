@@ -143,7 +143,7 @@ bool Electron::PassID(TString ID) const{
   if(ID=="HNVeto2016") return Pass_HNVeto2016();
   if(ID=="HNLoose2016") return Pass_HNLoose2016();
   if(ID=="HNTight2016") return Pass_HNTight2016(); //JH from HE's git
-  if(ID=="HEID") return Pass_HEID();
+  if(ID=="HEID") return Pass_HEID(); //JH
 
   cout << "[Electron::PassID] No id : " << ID << endl;
   exit(EXIT_FAILURE);

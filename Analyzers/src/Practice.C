@@ -354,36 +354,113 @@ void Practice::executeEventFromParameter(AnalyzerParameter param, Long64_t Nentr
 
 /* See the energy, momentum */
 
-  JSFillHist("Practice", "ele1_pt", eles.at(0).Pt(), weight, 200, 0., 200.);
-  JSFillHist("Practice", "ele2_pt", eles.at(1).Pt(), weight, 200, 0., 200.);
-  JSFillHist("Practice", "diele_pt", ZCand.Pt(), weight, 200, 0., 200.);
-  JSFillHist("Practice", "ele1_EsinTheta", eles.at(0).E()*TMath::Sin(eles.at(0).Theta()), weight, 200, 0., 200.);
-  JSFillHist("Practice", "ele2_EsinTheta", eles.at(1).E()*TMath::Sin(eles.at(1).Theta()), weight, 200, 0., 200.);
-  JSFillHist("Practice", "diele_EsinTheta", ZCand.E()*TMath::Sin(ZCand.Theta()), weight, 200, 0., 200.);
-  JSFillHist("Practice", "ele1_px", eles.at(0).Px(), weight, 200, 0., 200.);
-  JSFillHist("Practice", "ele2_px", eles.at(1).Px(), weight, 200, 0., 200.);
-  JSFillHist("Practice", "diele_px", ZCand.Px(), weight, 200, 0., 200.);
-  JSFillHist("Practice", "ele1_py", eles.at(0).Py(), weight, 200, 0., 200.);
-  JSFillHist("Practice", "ele2_py", eles.at(1).Py(), weight, 200, 0., 200.);
-  JSFillHist("Practice", "diele_py", ZCand.Py(), weight, 200, 0., 200.);
-  JSFillHist("Practice", "ele1_pz", eles.at(0).Pz(), weight, 200, 0., 200.);
-  JSFillHist("Practice", "ele2_pz", eles.at(1).Pz(), weight, 200, 0., 200.);
-  JSFillHist("Practice", "diele_pz", ZCand.Pz(), weight, 200, 0., 200.);
-  JSFillHist("Practice", "ele1_m", eles.at(0).M(), weight, 200, 0., 200.);
-  JSFillHist("Practice", "ele2_m", eles.at(1).M(), weight, 200, 0., 200.);
-  JSFillHist("Practice", "diele_m", ZCand.M(), weight, 200, 0., 200.);
-  JSFillHist("Practice", "ele1_sqrt(E^2-P^2)", sqrt(pow(eles.at(0).E(),2)-pow(eles.at(0).P(),2)), weight, 200, 0., 200.);
-  JSFillHist("Practice", "ele2_sqrt(E^2-P^2)", sqrt(pow(eles.at(1).E(),2)-pow(eles.at(1).P(),2)), weight, 200, 0., 200.);
-  JSFillHist("Practice", "diele_sqrt(E^2-P^2)", sqrt(pow(ZCand.E(),2)-pow(ZCand.P(),2)), weight, 200, 0., 200.);
-  JSFillHist("Practice", "ele1_E", eles.at(0).E(), weight, 200, 0., 200.);
-  JSFillHist("Practice", "ele2_E", eles.at(1).E(), weight, 200, 0., 200.);
-  JSFillHist("Practice", "diele_E", ZCand.E(), weight, 200, 0., 200.);
-  JSFillHist("Practice", "ele1_P", eles.at(0).P(), weight, 200, 0., 200.);
-  JSFillHist("Practice", "ele2_P", eles.at(1).P(), weight, 200, 0., 200.);
-  JSFillHist("Practice", "diele_P", ZCand.P(), weight, 200, 0., 200.);
-  JSFillHist("Practice", "ele1_sqrt(px^2+py^2+pz^2)", sqrt(pow(eles.at(0).Px(),2)+pow(eles.at(0).Py(),2)+pow(eles.at(0).Pz(),2)), weight, 200, 0., 200.);
-  JSFillHist("Practice", "ele2_sqrt(px^2+py^2+pz^2)", sqrt(pow(eles.at(1).Px(),2)+pow(eles.at(1).Py(),2)+pow(eles.at(1).Pz(),2)), weight, 200, 0., 200.);
-  JSFillHist("Practice", "diele_sqrt(px^2+py^2+pz^2)", sqrt(pow(ZCand.Px(),2)+pow(ZCand.Py(),2)+pow(ZCand.Pz(),2)), weight, 200, 0., 200.);
+  if(MCSample == "DYJets"){
+
+    JSFillHist("Practice", "ele1_pt", eles.at(0).Pt(), weight, 200, 0., 200.);
+    JSFillHist("Practice", "ele2_pt", eles.at(1).Pt(), weight, 200, 0., 200.);
+    JSFillHist("Practice", "diele_pt", ZCand.Pt(), weight, 200, 0., 200.);
+    JSFillHist("Practice", "LT", eles.at(0).Pt()+eles.at(1).Pt(), weight, 500, 0., 500.);
+    JSFillHist("Practice", "ele1_EsinTheta", eles.at(0).E()*TMath::Sin(eles.at(0).Theta()), weight, 200, 0., 200.);
+    JSFillHist("Practice", "ele2_EsinTheta", eles.at(1).E()*TMath::Sin(eles.at(1).Theta()), weight, 200, 0., 200.);
+    JSFillHist("Practice", "diele_EsinTheta", ZCand.E()*TMath::Sin(ZCand.Theta()), weight, 200, 0., 200.);
+    JSFillHist("Practice", "ele1_px", eles.at(0).Px(), weight, 400, -200., 200.);
+    JSFillHist("Practice", "ele2_px", eles.at(1).Px(), weight, 400, -200., 200.);
+    JSFillHist("Practice", "diele_px", ZCand.Px(), weight, 400, -200., 200.);
+    JSFillHist("Practice", "ele1_py", eles.at(0).Py(), weight, 400, -200., 200.);
+    JSFillHist("Practice", "ele2_py", eles.at(1).Py(), weight, 400, -200., 200.);
+    JSFillHist("Practice", "diele_py", ZCand.Py(), weight, 400, -200., 200.);
+    JSFillHist("Practice", "ele1_pz", eles.at(0).Pz(), weight, 400, -200., 200.);
+    JSFillHist("Practice", "ele2_pz", eles.at(1).Pz(), weight, 400, -200., 200.);
+    JSFillHist("Practice", "diele_pz", ZCand.Pz(), weight, 400, -200., 200.);
+    JSFillHist("Practice", "ele1_m", eles.at(0).M(), weight, 200, 0., 200.);
+    JSFillHist("Practice", "ele2_m", eles.at(1).M(), weight, 200, 0., 200.);
+    JSFillHist("Practice", "diele_m", ZCand.M(), weight, 200, 0., 200.);
+    JSFillHist("Practice", "ele1_sqrt(E^2-P^2)", sqrt(pow(eles.at(0).E(),2)-pow(eles.at(0).P(),2)), weight, 200, 0., 200.);
+    JSFillHist("Practice", "ele2_sqrt(E^2-P^2)", sqrt(pow(eles.at(1).E(),2)-pow(eles.at(1).P(),2)), weight, 200, 0., 200.);
+    JSFillHist("Practice", "diele_sqrt(E^2-P^2)", sqrt(pow(ZCand.E(),2)-pow(ZCand.P(),2)), weight, 200, 0., 200.);
+    JSFillHist("Practice", "ele1_E", eles.at(0).E(), weight, 200, 0., 200.);
+    JSFillHist("Practice", "ele2_E", eles.at(1).E(), weight, 200, 0., 200.);
+    JSFillHist("Practice", "diele_E", ZCand.E(), weight, 200, 0., 200.);
+    JSFillHist("Practice", "ele1_P", eles.at(0).P(), weight, 200, 0., 200.);
+    JSFillHist("Practice", "ele2_P", eles.at(1).P(), weight, 200, 0., 200.);
+    JSFillHist("Practice", "diele_P", ZCand.P(), weight, 200, 0., 200.);
+    JSFillHist("Practice", "ele1_sqrt(px^2+py^2+pz^2)", sqrt(pow(eles.at(0).Px(),2)+pow(eles.at(0).Py(),2)+pow(eles.at(0).Pz(),2)), weight, 200, 0., 200.);
+    JSFillHist("Practice", "ele2_sqrt(px^2+py^2+pz^2)", sqrt(pow(eles.at(1).Px(),2)+pow(eles.at(1).Py(),2)+pow(eles.at(1).Pz(),2)), weight, 200, 0., 200.);
+    JSFillHist("Practice", "diele_sqrt(px^2+py^2+pz^2)", sqrt(pow(ZCand.Px(),2)+pow(ZCand.Py(),2)+pow(ZCand.Pz(),2)), weight, 200, 0., 200.);
+
+  }
+
+  if(MCSample == "DYJets_Pt-250To400"){
+
+    JSFillHist("Practice_DYJets_Pt-250To400", "ele1_pt", eles.at(0).Pt(), 1, 500, 0., 500.);
+    JSFillHist("Practice_DYJets_Pt-250To400", "ele2_pt", eles.at(1).Pt(), 1, 500, 0., 500.);
+    JSFillHist("Practice_DYJets_Pt-250To400", "diele_pt", ZCand.Pt(), 1, 1000, 0., 1000.);
+    JSFillHist("Practice_DYJets_Pt-250To400", "LT", eles.at(0).Pt()+eles.at(1).Pt(), 1, 1000, 0., 1000.);
+    JSFillHist("Practice_DYJets_Pt-250To400", "ele1_EsinTheta", eles.at(0).E()*TMath::Sin(eles.at(0).Theta()), 1, 500, 0., 500.);
+    JSFillHist("Practice_DYJets_Pt-250To400", "ele2_EsinTheta", eles.at(1).E()*TMath::Sin(eles.at(1).Theta()), 1, 500, 0., 500.);
+    JSFillHist("Practice_DYJets_Pt-250To400", "diele_EsinTheta", ZCand.E()*TMath::Sin(ZCand.Theta()), 1, 1000, 0., 1000.);
+    JSFillHist("Practice_DYJets_Pt-250To400", "ele1_px", eles.at(0).Px(), 1, 1000, -500., 500.);
+    JSFillHist("Practice_DYJets_Pt-250To400", "ele2_px", eles.at(1).Px(), 1, 1000, -500., 500.);
+    JSFillHist("Practice_DYJets_Pt-250To400", "diele_px", ZCand.Px(), 1, 1000, -500., 500.);
+    JSFillHist("Practice_DYJets_Pt-250To400", "ele1_py", eles.at(0).Py(), 1, 1000, -500., 500.);
+    JSFillHist("Practice_DYJets_Pt-250To400", "ele2_py", eles.at(1).Py(), 1, 1000, -500., 500.);
+    JSFillHist("Practice_DYJets_Pt-250To400", "diele_py", ZCand.Py(), 1, 1000, -500., 500.);
+    JSFillHist("Practice_DYJets_Pt-250To400", "ele1_pz", eles.at(0).Pz(), 1, 800, -400., 400.);
+    JSFillHist("Practice_DYJets_Pt-250To400", "ele2_pz", eles.at(1).Pz(), 1, 800, -400., 400.);
+    JSFillHist("Practice_DYJets_Pt-250To400", "diele_pz", ZCand.Pz(), 1, 800, -400., 400.);
+    JSFillHist("Practice_DYJets_Pt-250To400", "ele1_m", eles.at(0).M(), 1, 200, 0., 200.);
+    JSFillHist("Practice_DYJets_Pt-250To400", "ele2_m", eles.at(1).M(), 1, 200, 0., 200.);
+    JSFillHist("Practice_DYJets_Pt-250To400", "diele_m", ZCand.M(), 1, 200, 0., 200.);
+    JSFillHist("Practice_DYJets_Pt-250To400", "ele1_sqrt(E^2-P^2)", sqrt(pow(eles.at(0).E(),2)-pow(eles.at(0).P(),2)), 1, 200, 0., 200.);
+    JSFillHist("Practice_DYJets_Pt-250To400", "ele2_sqrt(E^2-P^2)", sqrt(pow(eles.at(1).E(),2)-pow(eles.at(1).P(),2)), 1, 200, 0., 200.);
+    JSFillHist("Practice_DYJets_Pt-250To400", "diele_sqrt(E^2-P^2)", sqrt(pow(ZCand.E(),2)-pow(ZCand.P(),2)), 1, 200, 0., 200.);
+    JSFillHist("Practice_DYJets_Pt-250To400", "ele1_E", eles.at(0).E(), 1, 1000, 0., 1000.);
+    JSFillHist("Practice_DYJets_Pt-250To400", "ele2_E", eles.at(1).E(), 1, 1000, 0., 1000.);
+    JSFillHist("Practice_DYJets_Pt-250To400", "diele_E", ZCand.E(), 1, 1000, 0., 1000.);
+    JSFillHist("Practice_DYJets_Pt-250To400", "ele1_P", eles.at(0).P(), 1, 1000, 0., 1000.);
+    JSFillHist("Practice_DYJets_Pt-250To400", "ele2_P", eles.at(1).P(), 1, 1000, 0., 1000.);
+    JSFillHist("Practice_DYJets_Pt-250To400", "diele_P", ZCand.P(), 1, 1000, 0., 1000.);
+    JSFillHist("Practice_DYJets_Pt-250To400", "ele1_sqrt(px^2+py^2+pz^2)", sqrt(pow(eles.at(0).Px(),2)+pow(eles.at(0).Py(),2)+pow(eles.at(0).Pz(),2)), 1, 1000, 0., 1000.);
+    JSFillHist("Practice_DYJets_Pt-250To400", "ele2_sqrt(px^2+py^2+pz^2)", sqrt(pow(eles.at(1).Px(),2)+pow(eles.at(1).Py(),2)+pow(eles.at(1).Pz(),2)), 1, 1000, 0., 1000.);
+    JSFillHist("Practice_DYJets_Pt-250To400", "diele_sqrt(px^2+py^2+pz^2)", sqrt(pow(ZCand.Px(),2)+pow(ZCand.Py(),2)+pow(ZCand.Pz(),2)), 1, 1000, 0., 1000.);
+
+  }
+
+  if(MCSample == "DYJets_Pt-650ToInf"){
+
+    JSFillHist("Practice_DYJets_Pt-650ToInf", "ele1_pt", eles.at(0).Pt(), 1, 1000, 0., 1000.);
+    JSFillHist("Practice_DYJets_Pt-650ToInf", "ele2_pt", eles.at(1).Pt(), 1, 1000, 0., 1000.);
+    JSFillHist("Practice_DYJets_Pt-650ToInf", "diele_pt", ZCand.Pt(), 1, 2000, 0., 2000.);
+    JSFillHist("Practice_DYJets_Pt-650ToInf", "LT", eles.at(0).Pt()+eles.at(1).Pt(), 1, 2000, 0., 2000.);
+    JSFillHist("Practice_DYJets_Pt-650ToInf", "ele1_EsinTheta", eles.at(0).E()*TMath::Sin(eles.at(0).Theta()), 1, 1000, 0., 1000.);
+    JSFillHist("Practice_DYJets_Pt-650ToInf", "ele2_EsinTheta", eles.at(1).E()*TMath::Sin(eles.at(1).Theta()), 1, 1000, 0., 1000.);
+    JSFillHist("Practice_DYJets_Pt-650ToInf", "diele_EsinTheta", ZCand.E()*TMath::Sin(ZCand.Theta()), 1, 2000, 0., 2000.);
+    JSFillHist("Practice_DYJets_Pt-650ToInf", "ele1_px", eles.at(0).Px(), 1, 2000, -1000., 1000.);
+    JSFillHist("Practice_DYJets_Pt-650ToInf", "ele2_px", eles.at(1).Px(), 1, 2000, -1000., 1000.);
+    JSFillHist("Practice_DYJets_Pt-650ToInf", "diele_px", ZCand.Px(), 1, 2000, -1000., 1000.);
+    JSFillHist("Practice_DYJets_Pt-650ToInf", "ele1_py", eles.at(0).Py(), 1, 2000, -1000., 1000.);
+    JSFillHist("Practice_DYJets_Pt-650ToInf", "ele2_py", eles.at(1).Py(), 1, 2000, -1000., 1000.);
+    JSFillHist("Practice_DYJets_Pt-650ToInf", "diele_py", ZCand.Py(), 1, 2000, -1000., 1000.);
+    JSFillHist("Practice_DYJets_Pt-650ToInf", "ele1_pz", eles.at(0).Pz(), 1, 2000, -1000., 1000.);
+    JSFillHist("Practice_DYJets_Pt-650ToInf", "ele2_pz", eles.at(1).Pz(), 1, 2000, -1000., 1000.);
+    JSFillHist("Practice_DYJets_Pt-650ToInf", "diele_pz", ZCand.Pz(), 1, 2000, -1000., 1000.);
+    JSFillHist("Practice_DYJets_Pt-650ToInf", "ele1_m", eles.at(0).M(), 1, 200, 0., 200.);
+    JSFillHist("Practice_DYJets_Pt-650ToInf", "ele2_m", eles.at(1).M(), 1, 200, 0., 200.);
+    JSFillHist("Practice_DYJets_Pt-650ToInf", "diele_m", ZCand.M(), 1, 200, 0., 200.);
+    JSFillHist("Practice_DYJets_Pt-650ToInf", "ele1_sqrt(E^2-P^2)", sqrt(pow(eles.at(0).E(),2)-pow(eles.at(0).P(),2)), 1, 200, 0., 200.);
+    JSFillHist("Practice_DYJets_Pt-650ToInf", "ele2_sqrt(E^2-P^2)", sqrt(pow(eles.at(1).E(),2)-pow(eles.at(1).P(),2)), 1, 200, 0., 200.);
+    JSFillHist("Practice_DYJets_Pt-650ToInf", "diele_sqrt(E^2-P^2)", sqrt(pow(ZCand.E(),2)-pow(ZCand.P(),2)), 1, 200, 0., 200.);
+    JSFillHist("Practice_DYJets_Pt-650ToInf", "ele1_E", eles.at(0).E(), 1, 2000, 0., 2000.);
+    JSFillHist("Practice_DYJets_Pt-650ToInf", "ele2_E", eles.at(1).E(), 1, 2000, 0., 2000.);
+    JSFillHist("Practice_DYJets_Pt-650ToInf", "diele_E", ZCand.E(), 1, 2000, 0., 2000.);
+    JSFillHist("Practice_DYJets_Pt-650ToInf", "ele1_P", eles.at(0).P(), 1, 2000, 0., 2000.);
+    JSFillHist("Practice_DYJets_Pt-650ToInf", "ele2_P", eles.at(1).P(), 1, 2000, 0., 2000.);
+    JSFillHist("Practice_DYJets_Pt-650ToInf", "diele_P", ZCand.P(), 1, 2000, 0., 2000.);
+    JSFillHist("Practice_DYJets_Pt-650ToInf", "ele1_sqrt(px^2+py^2+pz^2)", sqrt(pow(eles.at(0).Px(),2)+pow(eles.at(0).Py(),2)+pow(eles.at(0).Pz(),2)), 1, 2000, 0., 2000.);
+    JSFillHist("Practice_DYJets_Pt-650ToInf", "ele2_sqrt(px^2+py^2+pz^2)", sqrt(pow(eles.at(1).Px(),2)+pow(eles.at(1).Py(),2)+pow(eles.at(1).Pz(),2)), 1, 2000, 0., 2000.);
+    JSFillHist("Practice_DYJets_Pt-650ToInf", "diele_sqrt(px^2+py^2+pz^2)", sqrt(pow(ZCand.Px(),2)+pow(ZCand.Py(),2)+pow(ZCand.Pz(),2)), 1, 2000, 0., 2000.);
+
+  }
 
   if(Nentry%(LogEvery)==0){
     cout << "ele1_E = " << eles.at(0).E() << endl;
@@ -391,6 +468,7 @@ void Practice::executeEventFromParameter(AnalyzerParameter param, Long64_t Nentr
     cout << "ele1_Px = " << eles.at(0).Px() << endl;
     cout << "ele1_Py = " << eles.at(0).Py() << endl;
     cout << "ele1_Pz = " << eles.at(0).Pz() << endl;
+    cout << "ele1_Pt = " << eles.at(0).Pt() << endl;
     cout << "ele1_sqrt(E^2-P^2) = " << sqrt(pow(eles.at(0).E(),2)-pow(eles.at(0).P(),2)) << endl;
     cout << "ele1_m = " << eles.at(0).M() << endl;
     cout << "ele2_E = " << eles.at(1).E() << endl;
@@ -398,6 +476,7 @@ void Practice::executeEventFromParameter(AnalyzerParameter param, Long64_t Nentr
     cout << "ele2_Px = " << eles.at(1).Px() << endl;
     cout << "ele2_Py = " << eles.at(1).Py() << endl;
     cout << "ele2_Pz = " << eles.at(1).Pz() << endl;
+    cout << "ele2_Pt = " << eles.at(1).Pt() << endl;
     cout << "ele2_sqrt(E^2-P^2) = " << sqrt(pow(eles.at(1).E(),2)-pow(eles.at(1).P(),2)) << endl;
     cout << "ele2_m = " << eles.at(1).M() << endl;
     cout << "diele_E = " << ZCand.E() << endl;
@@ -405,8 +484,10 @@ void Practice::executeEventFromParameter(AnalyzerParameter param, Long64_t Nentr
     cout << "diele_Px = " << ZCand.Px() << endl;
     cout << "diele_Py = " << ZCand.Py() << endl;
     cout << "diele_Pz = " << ZCand.Pz() << endl;
+    cout << "diele_Pt = " << ZCand.Pt() << endl;
     cout << "diele_sqrt(E^2-P^2) = " << sqrt(pow(ZCand.E(),2)-pow(ZCand.P(),2)) << endl;
     cout << "diele_m = " << ZCand.M() << endl;
+    cout << "LT = " << eles.at(0).Pt()+eles.at(1).Pt() << endl;
   }
 
 }

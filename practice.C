@@ -14,26 +14,28 @@ void practice(){
   m.SetTreeName("recoTree/SKFlat");
 
   m.LogEvery = 1000;
-  m.MCSample = "DYJets";
+  //m.MCSample = "DYJets";
+  //m.MCSample = "DYJets_Pt-250To400";
+  m.MCSample = "DYJets_Pt-650ToInf";
   m.IsDATA = false;
-  m.xsec = 6225.42;
-  m.sumW = 80924255;
+  //m.xsec = 6225.42;
+  //m.sumW = 80924255;
+  //m.xsec = 3.047;
+  //m.sumW = 7781193;
+  m.xsec = 0.03636;
+  m.sumW = 422153;
   m.IsFastSim = false;
   m.DataYear = 2016;
   m.Userflags = {
     "foo",
     "bar",
   };
-  m.AddFile("/data7/DATA/SKFlat/Run2Legacy_v3/2016/MC/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/190423_002438/0000/SKFlatNtuple_2016_MC_1.root");
-//  m.AddFile("/data7/DATA/SKFlat/Run2Legacy_v3/2016/MC/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/190423_002438/0000/SKFlatNtuple_2016_MC_10.root");
-//  m.AddFile("/data7/DATA/SKFlat/Run2Legacy_v3/2016/MC/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/190423_002438/0000/SKFlatNtuple_2016_MC_100.root");
-//  m.AddFile("/data7/DATA/SKFlat/Run2Legacy_v3/2016/MC/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/190423_002438/0000/SKFlatNtuple_2016_MC_101.root");
-//  m.AddFile("/data7/DATA/SKFlat/Run2Legacy_v3/2016/MC/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/190423_002438/0000/SKFlatNtuple_2016_MC_102.root");
-//  m.AddFile("/data7/DATA/SKFlat/Run2Legacy_v3/2016/MC/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/190423_002438/0000/SKFlatNtuple_2016_MC_103.root");
-//  m.AddFile("/data7/DATA/SKFlat/Run2Legacy_v3/2016/MC/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/190423_002438/0000/SKFlatNtuple_2016_MC_104.root");
-//  m.AddFile("/data7/DATA/SKFlat/Run2Legacy_v3/2016/MC/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/190423_002438/0000/SKFlatNtuple_2016_MC_105.root");
-//  m.AddFile("/data7/DATA/SKFlat/Run2Legacy_v3/2016/MC/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/190423_002438/0000/SKFlatNtuple_2016_MC_106.root");
-  m.SetOutfilePath("practice.root");
+  //m.AddFile("/data7/DATA/SKFlat/Run2Legacy_v3/2016/MC/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/190423_002438/0000/SKFlatNtuple_2016_MC_1.root");
+  //m.AddFile("/data7/DATA/SKFlat/Run2Legacy_v3/2016/MC/DYJetsToLL_Pt-250To400_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/190428_140356/0000/SKFlatNtuple_2016_MC_1.root");
+  m.AddFile("/data7/DATA/SKFlat/Run2Legacy_v3/2016/MC/DYJetsToLL_Pt-650ToInf_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/190428_143538/0000/SKFlatNtuple_2016_MC_1.root");
+  //m.SetOutfilePath("practice.root");
+  //m.SetOutfilePath("practice_DYJets_Pt-250To400.root");
+  m.SetOutfilePath("practice_DYJets_Pt-650ToInf.root");
   m.Init();
   m.initializeAnalyzerTools();
   m.initializeAnalyzer();

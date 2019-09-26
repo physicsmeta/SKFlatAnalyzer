@@ -178,7 +178,6 @@ std::vector<Electron> AnalyzerCore::GetAllElectrons(){
     el.SetIP3D(electron_3DIPVTX->at(i), electron_3DIPerrVTX->at(i));
     el.SetMVA(electron_MVAIso->at(i), electron_MVANoIso->at(i));
     el.SetPassConversionVeto(electron_passConversionVeto->at(i));
-    el.SetIsGsfCtfScPixChargeConsistent(electron_isGsfCtfScPixChargeConsistent->at(i)); //JH : for CF
     el.SetNMissingHits(electron_mHits->at(i));
     el.SetRho(Rho);
     el.SetIsGsfCtfScPixChargeConsistent(electron_isGsfCtfScPixChargeConsistent->at(i));
@@ -2069,33 +2068,33 @@ TH1D* AnalyzerCore::JSGetHist1D(TString suffix, TString histname){
 
   TH1D *h = NULL;
 
-  std::map< TString, std::map<TString, TH1D*> >::iterator mapit = JSmaphist_TH1D.find(suffix);
-  if(mapit==JSmaphist_TH1D.end()){
-    return h;
+  std::map< TString, std::map<TString, TH1D*> >::iterator mapit = JSmaphist_TH1D.find(suffix); //JH : std::map< TString, std::map<TString, TH1D*> > JSmaphist_TH1D; in AnalyzerCore.h. mapit contains the iterator of JSmaphist_TH1D which contains the suffix, or JSmaphist_TH1D.end().
+  if(mapit==JSmaphist_TH1D.end()){ //JH : iter.end() : outside the memory (the last item + 1) => so it demands mapit should not be matched with any suffixed item. BTW JSFillHist assign a histo to JSmaphist_TH1D with a suffix, so it actually inspects whether the suffix is pre-defined or not.
+    return h; //JH : return the TH1D NULL pointer if no suffix crash.
   }
   else{
 
-    std::map<TString, TH1D*> this_maphist = mapit->second;
-    std::map<TString, TH1D*>::iterator mapitit = this_maphist.find(histname);
-    if(mapitit != this_maphist.end()) return mapitit->second;
+    std::map<TString, TH1D*> this_maphist = mapit->second; //JH : the instance of map<TString, TH1D*> which is connected to the pre-defined suffix
+    std::map<TString, TH1D*>::iterator mapitit = this_maphist.find(histname); //JH : With the iterator which has the pre-defined suffix, inspect once more if it has pre-defined histname also.
+    if(mapitit != this_maphist.end()) return mapitit->second; //JH : If it has pre-defined histname also, then return that TH1D (pointer).
 
   }
 
-  return h;
+  return h; //JH : If there is a suffix crash but not histname crash, then return the TH1D NULL pointer.
 
 }
 
 void AnalyzerCore::JSFillHist(TString suffix, TString histname, double value, double weight, int n_bin, double x_min, double x_max){
 
-  TH1D *this_hist = JSGetHist1D(suffix, histname);
-  if( !this_hist ){
+  TH1D *this_hist = JSGetHist1D(suffix, histname); //JH : Inspect if there is predefined suffix or histname. It returns NULL pointer if there was no crash on either suffix or histname
+  if( !this_hist ){ //JH : If this_hist is a NULL pointer (if there hasn't been a crash on both suffix and histname)
 
-    this_hist = new TH1D(histname, "", n_bin, x_min, x_max);
-    (JSmaphist_TH1D[suffix])[histname] = this_hist;
+    this_hist = new TH1D(histname, "", n_bin, x_min, x_max); 
+    (JSmaphist_TH1D[suffix])[histname] = this_hist; //JH : then save the suffix and histname in JSmaphist_TH1D.
 
   }
 
-  this_hist->Fill(value, weight);
+  this_hist->Fill(value, weight); //JH : If this_hist is not a NULL pointer (if there has been a crash on both suffix and histname), then fill that hist
 
 }
 
@@ -2159,7 +2158,7 @@ void AnalyzerCore::WriteHist(){
 
   outfile->cd();
   for(std::map< TString, TH1D* >::iterator mapit = maphist_TH1D.begin(); mapit!=maphist_TH1D.end(); mapit++){
-    TString this_fullname=mapit->second->GetName();
+    TString this_fullname=mapit->second->GetName(); 
     TString this_name=this_fullname(this_fullname.Last('/')+1,this_fullname.Length());
     TString this_suffix=this_fullname(0,this_fullname.Last('/'));
     TDirectory *dir = outfile->GetDirectory(this_suffix);
@@ -2184,15 +2183,15 @@ void AnalyzerCore::WriteHist(){
   }
 
   outfile->cd();
-  for(std::map< TString, std::map<TString, TH1D*> >::iterator mapit=JSmaphist_TH1D.begin(); mapit!=JSmaphist_TH1D.end(); mapit++){
+  for(std::map< TString, std::map<TString, TH1D*> >::iterator mapit=JSmaphist_TH1D.begin(); mapit!=JSmaphist_TH1D.end(); mapit++){ //JH : for each suffix, histname;
 
-    TString this_suffix = mapit->first;
-    std::map< TString, TH1D* > this_maphist = mapit->second;
+    TString this_suffix = mapit->first; //JH : Get suffix in JSmaphist_TH1D;
+    std::map< TString, TH1D* > this_maphist = mapit->second; //JH : Get histname in JSmaphist_TH1D;
 
 
     TDirectory *dir = outfile->GetDirectory(this_suffix);
     if(!dir){
-      outfile->mkdir(this_suffix);
+      outfile->mkdir(this_suffix); //JH : Create a sub-directory
     }
     outfile->cd(this_suffix);
 

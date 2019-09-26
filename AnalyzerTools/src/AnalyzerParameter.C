@@ -9,6 +9,7 @@ void AnalyzerParameter::Clear(){
   Electron_Tight_ID = "";
   Electron_Loose_ID = "";
   Electron_Veto_ID = "";
+  Electron_User_ID = "";
   Electron_ID_SF_Key = "";
   Electron_FR_ID = "";
   Electron_FR_Key = "";
@@ -44,6 +45,7 @@ void AnalyzerParameter::Clear(){
   FatJet_ID = "";
 
   syst_ = Central;
+  CFsyst_ = CF_Central;
 
 }
 
@@ -56,6 +58,7 @@ AnalyzerParameter::AnalyzerParameter(){
   Electron_Tight_ID = "passTightID";
   Electron_Loose_ID = "passLooseID";
   Electron_Veto_ID = "passVetoID";
+  Electron_User_ID = "HEID"; //JH
   Electron_ID_SF_Key = "passTightID";
 
   Muon_Tight_ID = "POGTightWithTightIso";
@@ -69,6 +72,7 @@ AnalyzerParameter::AnalyzerParameter(){
   FatJet_ID = "HN";
 
   syst_ = Central; //JH: enum Syst{ Central, JetResUp, JetResDown, ..., NSyst }; Syst syst_; AnalyzerParameter.h
+  CFsyst_ = CF_Central; //JH for CF SF syst
 
 }
 
@@ -109,6 +113,37 @@ TString AnalyzerParameter::GetSystType(){
   }
   else{
     cout << "[AnalyzerParameter::GetSystType] Wrong Syst" << endl;
+    exit(EXIT_FAILURE);
+    return "ERROR";
+  }
+
+}
+
+TString AnalyzerParameter::GetCFSystType(){
+
+  if(CFsyst_==CFSyst::CF_Central){
+    return "Central";
+  }
+  else if(CFsyst_==CFSyst::MllRangeUp){
+    return "MllRangeUp";
+  }
+  else if(CFsyst_==CFSyst::MllRangeDown){
+    return "MllRangeDown";
+  }
+  else if(CFsyst_==CFSyst::MinPtUp){
+    return "MinPtUp";
+  }
+  else if(CFsyst_==CFSyst::MinPtDown){
+    return "MinPtDown";
+  }
+  else if(CFsyst_==CFSyst::NBinUp){
+    return "NBinUp";
+  }
+  else if(CFsyst_==CFSyst::NBinDown){
+    return "NBinDown";
+  }
+  else{
+    cout << "[AnalyzerParameter::GetCFSystType] Wrong Syst" << endl;
     exit(EXIT_FAILURE);
     return "ERROR";
   }
