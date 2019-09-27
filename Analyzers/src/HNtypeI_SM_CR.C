@@ -64,11 +64,11 @@ void HNtypeI_SM_CR::initializeAnalyzer(){
 //  vtaggers.push_back(Jet::CSVv2);
 
   std::vector<Jet::WP> v_wps;
-//  v_wps.push_back(Jet::Medium);
-  v_wps.push_back(Jet::Loose);
+  v_wps.push_back(Jet::Medium);
+//  v_wps.push_back(Jet::Loose);
 
   //=== list of taggers, WP, setup systematics, use period SFs
-  SetupBTagger(vtaggers,v_wps, true, true);
+  SetupBTagger(vtaggers, v_wps, true, true);
 
 }
 
@@ -230,10 +230,10 @@ void HNtypeI_SM_CR::executeEventFromParameter(AnalyzerParameter param){
   //==== This order should be explicitly followed
   //==== Below are all variables for available systematic sources
 
-  if(param.syst_ == AnalyzerParameter::Central){
+/*  if(param.syst_ == AnalyzerParameter::Central){
 
   }
-/*  else if(param.syst_ == AnalyzerParameter::JetResUp){
+  else if(param.syst_ == AnalyzerParameter::JetResUp){
     this_AllJets = SmearJets( this_AllJets, +1 );
     //this_AllFatJets = SmearFatJets( this_AllFatJets, +1 );
   }
@@ -280,7 +280,7 @@ void HNtypeI_SM_CR::executeEventFromParameter(AnalyzerParameter param){
   vector<Electron> electrons_veto = SelectElectrons(this_AllElectrons, param.Electron_Veto_ID, 10., 2.5);
   vector<Muon> muons = SelectMuons(this_AllMuons, param.Muon_Tight_ID, 10., 2.4);
   vector<Muon> muons_veto = SelectMuons(this_AllMuons, param.Muon_Veto_ID, 5., 2.4);
-  vector<Jet> jets = SelectJets(this_AllJets, param.Jet_ID, 30., 2.4);
+  vector<Jet> jets = SelectJets(this_AllJets, param.Jet_ID, 20., 2.7);
   std::vector<Lepton*> leptons;
   std::vector<Lepton*> leptons_minus;
   std::vector<Lepton*> leptons_plus;
@@ -297,11 +297,12 @@ void HNtypeI_SM_CR::executeEventFromParameter(AnalyzerParameter param){
 //  int n_bjet_deepcsv_m_noSF=0;
   int n_bjet_deepcsv=0;
 
-  for(unsigned int ij = 0 ; ij < jets.size(); ij++){
+  for(unsigned int ij=0; ij<jets.size(); ij++){
 //    if(IsBTagged(jets.at(ij), Jet::DeepCSV, Jet::Medium,true,0)) n_bjet_deepcsv_m++; // method for getting btag with SF applied to MC
 //    if(IsBTagged(jets.at(ij), Jet::DeepCSV, Jet::Medium,false,0)) n_bjet_deepcsv_m_noSF++; // method for getting btag with no SF applied to MC
 //    if(IsBTagged(jets.at(ij), Jet::CSVv2, Jet::Loose,false,0)) n_bjet_csvv2++;
-    if(IsBTagged(jets.at(ij), Jet::DeepCSV, Jet::Loose,true,0)) n_bjet_deepcsv++;
+    if(fabs(jets.at(ij).Eta()) > 2.4) continue;
+    if(IsBTagged(jets.at(ij), Jet::DeepCSV, Jet::Medium, true, 0)) n_bjet_deepcsv++;
   }
   
   //=========================

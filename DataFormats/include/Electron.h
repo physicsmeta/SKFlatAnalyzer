@@ -114,9 +114,11 @@ public:
   bool Pass_HNTight2016() const;
 
   bool Pass_HNLoose() const;
+  bool Pass_HNLooseV2() const;
   bool Pass_HNTight() const;
   bool Pass_HNTightV2() const;
   bool Pass_HNMVALoose() const;
+  bool Pass_HNMVALooseV2() const;
   bool Pass_HNMVATight() const;
   bool Pass_HNMVATightV2() const;
 

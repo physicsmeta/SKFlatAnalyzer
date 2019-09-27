@@ -12,9 +12,12 @@ void FakeRate::initializeAnalyzer(){
 
   MuonTightIDs = {"HNTight", "HNTightV2", "HNTight2016"};
   MuonLooseIDs = {"HNLoose", "HNLoose", "HNLoose2016"};
-//  MuonIDSFKeys = { "NUM_TightID_DEN_genTracks" };
-  ElectronTightIDs = {"HNTight", "HNTightV2", "HNMVATight", "HNMVATightV2", "HNTight2016", "ISRTight"};
-  ElectronLooseIDs = {"HNLoose", "HNLoose", "HNMVALoose", "HNMVALoose", "HNLoose2016", "ISRLoose"};
+  ElectronTightIDs = {"HNTight2016", "HNTight", "HNTight", "HNTightV2", "HNTightV2", "HNMVATight", "HNMVATight", "HNMVATightV2", "HNMVATightV2", "ISRTight"};
+  ElectronLooseIDs = {"HNLoose2016", "HNLoose", "HNLooseV2", "HNLoose", "HNLooseV2", "HNMVALoose", "HNMVALooseV2", "HNMVALoose", "HNMVALooseV2", "ISRLoose"};
+/*  MuonTightIDs = {"HNTightV2"};
+  MuonLooseIDs = {"HNLoose"};
+  ElectronTightIDs = {"HNTight2016"};
+  ElectronLooseIDs = {"HNLoose2016"};*/
 
   //==== At this point, sample informations (e.g., IsDATA, DataStream, MCSample, or DataYear) are all set
   //==== You can define sample-dependent or year-dependent variables here
@@ -46,7 +49,7 @@ void FakeRate::initializeAnalyzer(){
   ElectronTriggers.push_back(ElectronTrig3);
   ElectronTriggers.push_back(ElectronTrig4);
   ElectronPtCut1 = 9.5, ElectronPtCut2 = 15., ElectronPtCut3 = 20., ElectronPtCut4 = 25.;
-  ElectronPtconeCut1 = 10., ElectronPtconeCut2 = 23., ElectronPtconeCut3 = 35., ElectronPtconeCut4 = 40.;
+  ElectronPtconeCut1 = 10., ElectronPtconeCut2 = 25., ElectronPtconeCut3 = 35., ElectronPtconeCut4 = 40.;
 
   // luminosity of prescaled triggers
   if(DataYear==2016){
@@ -71,12 +74,12 @@ void FakeRate::initializeAnalyzer(){
 //  vtaggers.push_back(Jet::CSVv2);
 
   std::vector<Jet::WP> v_wps;
-//  v_wps.push_back(Jet::Medium);
-  v_wps.push_back(Jet::Loose);
+  v_wps.push_back(Jet::Medium);
+//  v_wps.push_back(Jet::Loose);
 
   //=== list of taggers, WP, setup systematics, use period SFs
 //  SetupBTagger(vtaggers,v_wps, true, true);
-  SetupBTagger(vtaggers,v_wps, true, true);  
+  SetupBTagger(vtaggers, v_wps, true, true);  
 
 }
 
@@ -115,8 +118,10 @@ void FakeRate::executeEvent(){
   AnalyzerParameter param;
 
   for(unsigned int it_EleID=0; it_EleID<ElectronTightIDs.size(); it_EleID++){
-    for(unsigned int it_MuonID=0; it_MuonID<MuonTightIDs.size(); it_MuonID++){
-//      TString MuonID = "HNTight";
+    for(unsigned int it_MuonID=0; it_MuonID<MuonTightIDs.size(); it_MuonID++){    
+      if(it_EleID<3 && (it_EleID != it_MuonID)) continue;
+      if(it_EleID>=3 && it_MuonID>=1) continue;
+
 //      TString MuonID = "HNTight2016";
 //      TString MuonIDSFKey = "NUM_TightID_DEN_genTracks";
       TString MuonTightID = MuonTightIDs.at(it_MuonID);
@@ -157,15 +162,25 @@ void FakeRate::executeEvent(){
 }
 
 void FakeRate::executeEventFromParameter(AnalyzerParameter param){
-
-  vector<TString> regions_mu = {"muonFR", "muonDY", "muonWj"};
-  if(param.Muon_Tight_ID.Contains("V2")) regions_mu = {"muonV2FR", "muonV2DY", "muonV2Wj"};
+ 
+  // Version : V(LooseID)(TightID)
+  vector<TString> regions_mu = {"muonV11FR", "muonV11DY", "muonV11Wj"};
+  if(param.Muon_Tight_ID=="V2") regions_mu = {"muonV12FR", "muonV12DY", "muonV12Wj"};
   if(param.Muon_Tight_ID.Contains("2016")) regions_mu = {"muon16FR", "muon16DY", "muon16Wj"};
-  vector<TString> regions_el = {"eleFR", "eleDY", "eleWj"};
-  if(param.Electron_Tight_ID.Contains("V2")) regions_el = {"eleV2FR", "eleV2DY", "eleV2Wj"};    
+
+  vector<TString> regions_el = {"eleV11FR", "eleV11DY", "eleV11Wj"};
+  if(param.Electron_Loose_ID.Contains("V2")) regions_el = {"eleV21FR", "eleV21DY", "eleV21Wj"};
+  if(param.Electron_Tight_ID.Contains("V2")){
+    regions_el = {"eleV12FR", "eleV12DY", "eleV12Wj"};
+    if(param.Electron_Loose_ID.Contains("V2")) regions_el = {"eleV22FR", "eleV22DY", "eleV22Wj"};
+  }
   if(param.Electron_Tight_ID.Contains("MVA")){ 
-    regions_el = {"mvaFR", "mvaDY", "mvaWj"};
-    if(param.Electron_Tight_ID.Contains("V2")) regions_el = {"mvaV2FR", "mvaV2DY", "mvaV2Wj"};
+    regions_el = {"mvaV11FR", "mvaV11DY", "mvaV11Wj"};
+    if(param.Electron_Loose_ID.Contains("V2")) regions_el = {"mvaV21FR", "mvaV21DY", "mvaV21Wj"};
+    if(param.Electron_Tight_ID.Contains("V2")){
+      regions_el = {"mvaV12FR", "mvaV12DY", "mvaV12Wj"};
+      if(param.Electron_Loose_ID.Contains("V2")) regions_el = {"mvaV22FR", "mvaV22DY", "mvaV22Wj"};
+    }
   }
   if(param.Electron_Tight_ID.Contains("2016")) regions_el = {"ele16FR", "ele16DY", "ele16Wj"};
   if(param.Electron_Tight_ID.Contains("ISR")) regions_el = {"isrFR", "isrDY", "isrWj"};
@@ -256,7 +271,7 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
 //  vector<Electron> electrons_veto = SelectElectrons(this_AllElectrons, param.Electron_Veto_ID, 10., 2.5);
   vector<Muon> muons_tight = SelectMuons(this_AllMuons, param.Muon_Tight_ID, 10., 2.4);
   vector<Muon> muons_loose = SelectMuons(this_AllMuons, param.Muon_Loose_ID, MuonPtCut1, 2.4);
-  vector<Jet> jets = SelectJets(this_AllJets, param.Jet_ID, 30., 2.4);
+  vector<Jet> jets = SelectJets(this_AllJets, param.Jet_ID, 20., 2.7);
   vector<Gen> gens = GetGens(); 
 //  std::vector<Lepton*> leptons;
 
@@ -274,10 +289,11 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
 //  int n_bjet_deepcsv_m_noSF=0;
   int n_bjet_deepcsv=0;
 
-  for(unsigned int ij = 0 ; ij < jets.size(); ij++){
+  for(unsigned int ij=0; ij<jets.size(); ij++){
 //    if(IsBTagged(jets.at(ij), Jet::DeepCSV, Jet::Medium,true,0)) n_bjet_deepcsv_m++; // method for getting btag with SF applied to MC
 //    if(IsBTagged(jets.at(ij), Jet::DeepCSV, Jet::Medium,false,0)) n_bjet_deepcsv_m_noSF++; // method for getting btag with no SF applied to MC
-    if(IsBTagged(jets.at(ij), Jet::DeepCSV, Jet::Loose, true, 0)) n_bjet_deepcsv++;
+    if(fabs(jets.at(ij).Eta()) > 2.4) continue;
+    if(IsBTagged(jets.at(ij), Jet::DeepCSV, Jet::Medium, true, 0)) n_bjet_deepcsv++;
   }
   
   //=========================
@@ -287,7 +303,11 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
   double mu_tight_iso = 0.15;
   if(param.Muon_Tight_ID.Contains("V2")) mu_tight_iso = 0.1;
   if(param.Muon_Tight_ID.Contains("2016")) mu_tight_iso = 0.07;
-  double el_tight_iso = 0.;     // barrel : 0.0287+0.506/pT, endcap : 0.0445+0.963/pT
+  double el_tight_iso = 0.;   
+  // POG cut-based Medium  
+  // barrel : 0.0478+0.506/pT, endcap : 0.0658+0.963/pT
+  // POG cut-based Tight
+  // barrel : 0.0287+0.506/pT, endcap : 0.0445+0.963/pT
 //  double pi = 3.14159265358979323846;
   double MZ = 91.1876;
   double MET = ev.GetMETVector().Pt(); 
@@ -319,7 +339,7 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
 
   for(unsigned int it_rg=0; it_rg<regions_mu.size(); it_rg++){
     weight = 1.;
-    if(param.Electron_Tight_ID.Contains("V2") || param.Electron_Tight_ID.Contains("MVA") || param.Electron_Tight_ID.Contains("2016") || param.Electron_Tight_ID.Contains("ISR")) break; // Stack muon hists only once!!
+    if(param.Electron_Tight_ID.Contains("V2") || param.Electron_Tight_ID.Contains("MVA") || param.Electron_Tight_ID.Contains("ISR")) break; // Stack muon hists only once!!
 
     // Fake rate measurement region 
     if(muons_loose.size()==1 && it_rg==0){
@@ -605,7 +625,7 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
  
   for(unsigned int it_rg2=0; it_rg2<regions_el.size(); it_rg2++){
     weight = 1.;
-    if(param.Muon_Tight_ID.Contains("V2") || param.Muon_Tight_ID.Contains("2016")) break;
+//    if(param.Muon_Tight_ID.Contains("V2") || param.Muon_Tight_ID.Contains("2016")) break;
 
     // Fake rate measurement region 
     if(ele_loose.size()==1 && it_rg2==0){
@@ -617,6 +637,11 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
         if(fabs(ele_loose.at(0).scEta()) > 1.479) el_tight_iso = std::min(0.08, 0.0445+0.963/ele_loose.at(0).UncorrPt());
       }
       if(param.Electron_Tight_ID.Contains("2016")) el_tight_iso = 0.08;
+      if(param.Electron_Tight_ID.Contains("ISR")){
+        el_tight_iso = 0.0478+0.506/ele_loose.at(0).UncorrPt();
+        if(fabs(ele_loose.at(0).scEta()) > 1.479) el_tight_iso = 0.0658+0.963/ele_loose.at(0).UncorrPt();
+      }
+
       ptcone_el = ele_loose.at(0).CalcPtCone(ele_loose.at(0).RelIso(), el_tight_iso);
       
       if(!IsDATA){
