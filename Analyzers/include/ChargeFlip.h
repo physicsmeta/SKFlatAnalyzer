@@ -14,12 +14,15 @@ public:
 	
   double GetCFweight(std::vector<Electron> eles, TString id);
 	double GetCFweight_SF(std::vector<Electron> eles, TString id);
+  double GetHalfSampleWeight(const Electron& electron, TString id);
 
   TString EleTriggerName;
   double lep0ptcut, lep1ptcut;
 
   vector<TString> EleIDs, EleIDSFKeys;
   vector<Electron> AllEles;
+  vector<Muon> AllMuons;
+  vector<Jet> AllJets; // Only for Half Sample Test
 
   int MllLeft = 70;
   int MllRight = 110;

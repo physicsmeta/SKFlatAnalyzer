@@ -51,6 +51,8 @@ ChargeFlip::~ChargeFlip(){
 void ChargeFlip::executeEvent(Long64_t Nentry){
 
   AllEles = GetAllElectrons();
+  AllMuons = GetAllMuons();
+  AllJets = GetAllJets();
 
   AnalyzerParameter param;
 
@@ -118,6 +120,8 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
   }
 
   vector<Electron> eles;
+  vector<Muon> muons;
+  vector<Jet> jets;
 
   if(!IsDATA){
 
@@ -146,46 +150,46 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
         else if(truth_lep.PID() == -11) truth_lep_Charge = 1;
       
         if(abs(eles.at(i).scEta())<0.8){
-          JSFillHist(param.Name+"/CFrate", "EtaRegion1_Denom", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
+          FillHist(param.Name+"/CFrate/EtaRegion1_Denom", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
           if(truth_lep_Charge*eles.at(i).Charge()<0){
             cout << "!!EtaRegion1!! truth lepton charge : " << truth_lep_Charge << ", reco lepton charge : " << eles.at(i).Charge() << endl;
-            JSFillHist(param.Name+"/CFrate", "EtaRegion1_Num", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
+            FillHist(param.Name+"/CFrate/EtaRegion1_Num", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
             // SH's ask //
             if(eles.size() == 2&&i == 0){
-            JSFillHist(param.Name+"/CFrate", "EtaRegion1_IsLeading", 1, 1, 2, 0, 2);
+            FillHist(param.Name+"/CFrate/EtaRegion1_IsLeading", 1, 1, 2, 0, 2);
             }
             else if(eles.size() == 2&&i == 1){
-            JSFillHist(param.Name+"/CFrate", "EtaRegion1_IsLeading", 0, 1, 2, 0, 2);
+            FillHist(param.Name+"/CFrate/EtaRegion1_IsLeading", 0, 1, 2, 0, 2);
             }
             //
           }
         }
         else if(0.8<=abs(eles.at(i).scEta())&&abs(eles.at(i).scEta())<1.4442){
-          JSFillHist(param.Name+"/CFrate", "EtaRegion2_Denom", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
+          FillHist(param.Name+"/CFrate/EtaRegion2_Denom", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
           if(truth_lep_Charge*eles.at(i).Charge()<0){
             cout << "!!EtaRegion2!! truth lepton charge : " << truth_lep_Charge << ", reco lepton charge : " << eles.at(i).Charge() << endl;
-            JSFillHist(param.Name+"/CFrate", "EtaRegion2_Num", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
+            FillHist(param.Name+"/CFrate/EtaRegion2_Num", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
             // SH's ask //
             if(eles.size() == 2&&i == 0){
-            JSFillHist(param.Name+"/CFrate", "EtaRegion2_IsLeading", 1, 1, 2, 0, 2);
+            FillHist(param.Name+"/CFrate/EtaRegion2_IsLeading", 1, 1, 2, 0, 2);
             }
             else if(eles.size() == 2&&i == 1){
-            JSFillHist(param.Name+"/CFrate", "EtaRegion2_IsLeading", 0, 1, 2, 0, 2);
+            FillHist(param.Name+"/CFrate/EtaRegion2_IsLeading", 0, 1, 2, 0, 2);
             }
             //
           }
         }
         else if(1.556<=abs(eles.at(i).scEta())&&abs(eles.at(i).scEta())<2.5){
-          JSFillHist(param.Name+"/CFrate", "EtaRegion3_Denom", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
+          FillHist(param.Name+"/CFrate/EtaRegion3_Denom", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
           if(truth_lep_Charge*eles.at(i).Charge()<0){
             cout << "!!EtaRegion3!! truth lepton charge : " << truth_lep_Charge << ", reco lepton charge : " << eles.at(i).Charge() << endl;
-            JSFillHist(param.Name+"/CFrate", "EtaRegion3_Num", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
+            FillHist(param.Name+"/CFrate/EtaRegion3_Num", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
             // SH's ask //
             if(eles.size() == 2&&i == 0){
-            JSFillHist(param.Name+"/CFrate", "EtaRegion3_IsLeading", 1, 1, 2, 0, 2);
+            FillHist(param.Name+"/CFrate/EtaRegion3_IsLeading", 1, 1, 2, 0, 2);
             }
             else if(eles.size() == 2&&i == 1){
-            JSFillHist(param.Name+"/CFrate", "EtaRegion3_IsLeading", 0, 1, 2, 0, 2);
+            FillHist(param.Name+"/CFrate/EtaRegion3_IsLeading", 0, 1, 2, 0, 2);
             }
             //
           }
@@ -208,13 +212,13 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
   
         if(70.<=ZCand.M()&&ZCand.M()<110.){
           if(eles.at(0).Charge()*eles.at(1).Charge()<0){
-            JSFillHist(param.Name+"/ClosureTest", "ZMass_OS_CFweighted", ZCand.M(), weight, 40, 70., 110.);
+            FillHist(param.Name+"/ClosureTest/ZMass_OS_CFweighted", ZCand.M(), weight, 40, 70., 110.);
           }
           else{
-            JSFillHist(param.Name+"/ClosureTest", "ZMass_SS", ZCand.M(), 1., 40, 70., 110.);
-            JSFillHist(param.Name+"/ClosureTest", "pt1_SS", eles.at(0).Pt(), 1., 70, 20., 90.);
-            JSFillHist(param.Name+"/ClosureTest", "pt2_SS", eles.at(1).Pt(), 1., 70, 20., 90.);
-            JSFillHist(param.Name+"/ClosureTest", "MET_SS", METv.Pt(), 1., 100, 0., 100.);
+            FillHist(param.Name+"/ClosureTest/ZMass_SS", ZCand.M(), 1., 40, 70., 110.);
+            FillHist(param.Name+"/ClosureTest/pt1_SS", eles.at(0).Pt(), 1., 70, 20., 90.);
+            FillHist(param.Name+"/ClosureTest/pt2_SS", eles.at(1).Pt(), 1., 70, 20., 90.);
+            FillHist(param.Name+"/ClosureTest/MET_SS", METv.Pt(), 1., 100, 0., 100.);
           }
         }
       }
@@ -223,17 +227,17 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
   		
       vector<Electron> eles_prmt = ElectronPromptOnly(eles, gens); // Get prompt electrons only
   
-      if(eles.size() == 0) JSFillHist(param.Name+"/etc", "eles_size", eles.size(), 1, 5, 0, 5);
-      else if(eles.size() == 1) JSFillHist(param.Name+"/etc", "eles_size", eles.size(), 1, 5, 0, 5);
-      else if(eles.size() == 2) JSFillHist(param.Name+"/etc", "eles_size", eles.size(), 1, 5, 0, 5);
-      else if(eles.size() == 3) JSFillHist(param.Name+"/etc", "eles_size", eles.size(), 1, 5, 0, 5);
-      else if(eles.size() == 4) JSFillHist(param.Name+"/etc", "eles_size", eles.size(), 1, 5, 0, 5); // To check the number of electrons
+      if(eles.size() == 0) FillHist(param.Name+"/etc/eles_size", eles.size(), 1, 5, 0, 5);
+      else if(eles.size() == 1) FillHist(param.Name+"/etc/eles_size", eles.size(), 1, 5, 0, 5);
+      else if(eles.size() == 2) FillHist(param.Name+"/etc/eles_size", eles.size(), 1, 5, 0, 5);
+      else if(eles.size() == 3) FillHist(param.Name+"/etc/eles_size", eles.size(), 1, 5, 0, 5);
+      else if(eles.size() == 4) FillHist(param.Name+"/etc/eles_size", eles.size(), 1, 5, 0, 5); // To check the number of electrons
       
       if((eles.size() >= 2)&&(eles.size() == eles_prmt.size())){
-        JSFillHist(param.Name+"/etc", "IsCut", 0, 1, 2, 0, 2);
+        FillHist(param.Name+"/etc/IsCut", 0, 1, 2, 0, 2);
       }
       else if((eles.size() >= 2)&&(eles.size() != eles_prmt.size())){
-        JSFillHist(param.Name+"/etc", "IsCut", 1, 1, 2, 0, 2);
+        FillHist(param.Name+"/etc/IsCut", 1, 1, 2, 0, 2);
         cout << "[Loop " << Nentry << "]" << endl;
         cout << "electrons pt:" << endl;
         for(unsigned int i=0; i<eles.size(); i++){
@@ -249,10 +253,10 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
         Particle ZCand_prmt = eles_prmt.at(0)+eles_prmt.at(1);
         if(70.<=ZCand_prmt.M()&&ZCand_prmt.M()<110.){
           if(eles_prmt.at(0).Charge()*eles_prmt.at(1).Charge()>0){
-            JSFillHist(param.Name+"/ClosureTest", "ZMass_prmt_SS", ZCand_prmt.M(), 1., 40, 70., 110.);
-            JSFillHist(param.Name+"/ClosureTest", "pt1_prmt_SS", eles_prmt.at(0).Pt(), 1., 70, 20., 90.);
-            JSFillHist(param.Name+"/ClosureTest", "pt2_prmt_SS", eles_prmt.at(1).Pt(), 1., 70, 20., 90.);
-            JSFillHist(param.Name+"/ClosureTest", "MET_prmt_SS", METv.Pt(), 1., 100, 0., 100.);
+            FillHist(param.Name+"/ClosureTest/ZMass_prmt_SS", ZCand_prmt.M(), 1., 40, 70., 110.);
+            FillHist(param.Name+"/ClosureTest/pt1_prmt_SS", eles_prmt.at(0).Pt(), 1., 70, 20., 90.);
+            FillHist(param.Name+"/ClosureTest/pt2_prmt_SS", eles_prmt.at(1).Pt(), 1., 70, 20., 90.);
+            FillHist(param.Name+"/ClosureTest/MET_prmt_SS", METv.Pt(), 1., 100, 0., 100.);
           }
         }
       }
@@ -283,12 +287,110 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
         if(! (70.<=ZCand_tmp.M()&&ZCand_tmp.M()<110.) ) continue;
   
         if(eles.at(0).Charge()*eles.at(1).Charge()<0){
-          JSFillHist(param.Name+"/ClosureTest", "ZMass_OS_CFweighted_shifted_"+TString::Itoa(i+1,10), ZCand_tmp.M(), weight_tmp, 40, 70., 110.);
-          JSFillHist(param.Name+"/ClosureTest", "pt1_OS_CFweighted_shifted_"+TString::Itoa(i+1,10), eles_tmp.at(0).Pt(), weight_tmp, 70, 20., 90.);
-          JSFillHist(param.Name+"/ClosureTest", "pt2_OS_CFweighted_shifted_"+TString::Itoa(i+1,10), eles_tmp.at(1).Pt(), weight_tmp, 70, 20., 90.);
-          JSFillHist(param.Name+"/ClosureTest", "MET_OS_CFweighted_shifted_"+TString::Itoa(i+1,10), METv_tmp.Pt(), weight_tmp, 100, 0., 100.);
+          FillHist(param.Name+"/ClosureTest/ZMass_OS_CFweighted_shifted_"+TString::Itoa(i+1,10), ZCand_tmp.M(), weight_tmp, 40, 70., 110.);
+          FillHist(param.Name+"/ClosureTest/pt1_OS_CFweighted_shifted_"+TString::Itoa(i+1,10), eles_tmp.at(0).Pt(), weight_tmp, 70, 20., 90.);
+          FillHist(param.Name+"/ClosureTest/pt2_OS_CFweighted_shifted_"+TString::Itoa(i+1,10), eles_tmp.at(1).Pt(), weight_tmp, 70, 20., 90.);
+          FillHist(param.Name+"/ClosureTest/MET_OS_CFweighted_shifted_"+TString::Itoa(i+1,10), METv_tmp.Pt(), weight_tmp, 100, 0., 100.);
         }
       }
+    }
+
+    if(HasFlag("HalfSampleTest")){
+
+      /* Start the Half Sample Test : Even -> observed, Odd -> predicted */
+
+      /* Call the needed particles */
+
+      if(!PassMETFilter()) return;
+      Particle METv = ev.GetMETVector();
+ 
+      muons = SelectMuons(AllMuons, "POGTight", 20., 2.4); //Just to calculate HT
+      jets = SelectJets(AllJets, "tight", 30., 2.4); //Just to calculate HT
+      vector<Jet> jets_LeptonVeto = JetsVetoLeptonInside(jets, eles, muons); //To calculate HT
+
+      /* Calculate the needed variables */
+
+      double MET = METv.Pt(); //MET
+
+      double LT = 0;
+      for(unsigned int i=0; i<eles.size(); i++){
+        LT += eles.at(i).Pt();
+      } //LT : Use electron pT sum
+
+      if(muons.size()>0&&eles.size()>0){
+        FillHist(param.Name+"/HalfSampleTest/Error_on_LT", 1, 1, 2, 0, 2);
+      } //To Check if there is any event having ele and muon both (so that causing LT miscalculation - maybe removed after returning NO gen electron tho)
+
+      double HT = 0;
+      for(unsigned int i=0; i<jets_LeptonVeto.size(); i++){
+        HT += jets_LeptonVeto.at(i).Pt();
+      } //HT
+
+      double ST = MET + LT + HT; //
+      double METsquaredOverST = pow(MET,2)/ST; //
+
+      if(Nentry%2==0){ //Even : measure CFrate with pT, eta as before
+
+        for(unsigned int i=0; i<eles.size(); i++){
+          Gen truth_lep = GetGenMatchedLepton(eles.at(i), gens);
+          if(truth_lep.PID() == 0) return; 
+      
+          int truth_lep_Charge;
+          if(truth_lep.PID() == 11) truth_lep_Charge = -1;
+          else if(truth_lep.PID() == -11) truth_lep_Charge = 1;
+        
+          if(abs(eles.at(i).scEta())<0.8){
+            FillHist(param.Name+"/HalfSampleTest/Even/EtaRegion1_Denom", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
+            if(truth_lep_Charge*eles.at(i).Charge()<0){
+              cout << "!!EtaRegion1!! truth lepton charge : " << truth_lep_Charge << ", reco lepton charge : " << eles.at(i).Charge() << endl;
+              FillHist(param.Name+"/HalfSampleTest/Even/EtaRegion1_Num", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
+            }
+          }
+          else if(0.8<=abs(eles.at(i).scEta())&&abs(eles.at(i).scEta())<1.4442){
+            FillHist(param.Name+"/HalfSampleTest/Even/EtaRegion2_Denom", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
+            if(truth_lep_Charge*eles.at(i).Charge()<0){
+              cout << "!!EtaRegion2!! truth lepton charge : " << truth_lep_Charge << ", reco lepton charge : " << eles.at(i).Charge() << endl;
+              FillHist(param.Name+"/HalfSampleTest/Even/EtaRegion2_Num", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
+            }
+          }
+          else if(1.556<=abs(eles.at(i).scEta())&&abs(eles.at(i).scEta())<2.5){
+            FillHist(param.Name+"/HalfSampleTest/Even/EtaRegion3_Denom", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
+            if(truth_lep_Charge*eles.at(i).Charge()<0){
+              cout << "!!EtaRegion3!! truth lepton charge : " << truth_lep_Charge << ", reco lepton charge : " << eles.at(i).Charge() << endl;
+              FillHist(param.Name+"/HalfSampleTest/Even/EtaRegion3_Num", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
+            }
+          }
+        }
+
+      }
+
+      if(Nentry%2==1){ //Odd : measure CFrate with MET, METsquaredOverST. Also apply the weight from the Even set
+
+        for(unsigned int i=0; i<eles.size(); i++){
+          Gen truth_lep = GetGenMatchedLepton(eles.at(i), gens);
+          if(truth_lep.PID() == 0) return; 
+      
+          int truth_lep_Charge;
+          if(truth_lep.PID() == 11) truth_lep_Charge = -1;
+          else if(truth_lep.PID() == -11) truth_lep_Charge = 1;
+        
+          FillHist(param.Name+"/HalfSampleTest/Odd/MET_Denom", MET, 1., 100, 0., 100.);
+          FillHist(param.Name+"/HalfSampleTest/Odd/METsquaredOverST_Denom", METsquaredOverST, 1., 50, 0., 50.);
+          if(truth_lep_Charge*eles.at(i).Charge()<0){
+            cout << "truth lepton charge : " << truth_lep_Charge << ", reco lepton charge : " << eles.at(i).Charge() << endl;
+            FillHist(param.Name+"/HalfSampleTest/Odd/MET_Num", MET, 1., 100, 0., 100.);
+            FillHist(param.Name+"/HalfSampleTest/Odd/METsquaredOverST_Num", METsquaredOverST, 1., 50, 0., 50.);
+          }
+
+          double weight = GetHalfSampleWeight(eles.at(i), param.Electron_User_ID);
+
+          FillHist(param.Name+"/HalfSampleTest/Odd/MET_weight", MET, weight, 100, 0., 100.);
+          FillHist(param.Name+"/HalfSampleTest/Odd/METsquaredOverST_weight", METsquaredOverST, weight, 50, 0., 50.);
+
+        }
+
+      }
+
     }
 
   }
@@ -316,11 +418,11 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
   
       //
   		
-      if(eles.size() == 0) JSFillHist(param.Name+"/etc", "eles_size", eles.size(), 1, 5, 0, 5);
-      else if(eles.size() == 1) JSFillHist(param.Name+"/etc", "eles_size", eles.size(), 1, 5, 0, 5);
-      else if(eles.size() == 2) JSFillHist(param.Name+"/etc", "eles_size", eles.size(), 1, 5, 0, 5);
-      else if(eles.size() == 3) JSFillHist(param.Name+"/etc", "eles_size", eles.size(), 1, 5, 0, 5);
-      else if(eles.size() == 4) JSFillHist(param.Name+"/etc", "eles_size", eles.size(), 1, 5, 0, 5); // To check the number of electrons
+      if(eles.size() == 0) FillHist(param.Name+"/etc/eles_size", eles.size(), 1, 5, 0, 5);
+      else if(eles.size() == 1) FillHist(param.Name+"/etc/eles_size", eles.size(), 1, 5, 0, 5);
+      else if(eles.size() == 2) FillHist(param.Name+"/etc/eles_size", eles.size(), 1, 5, 0, 5);
+      else if(eles.size() == 3) FillHist(param.Name+"/etc/eles_size", eles.size(), 1, 5, 0, 5);
+      else if(eles.size() == 4) FillHist(param.Name+"/etc/eles_size", eles.size(), 1, 5, 0, 5); // To check the number of electrons
   
       if(eles.size() != 2) return;
       //if(eles.at(0).Pt()<lep0ptcut||eles.at(1).Pt()<lep1ptcut) return; //No need already pt min = 25
@@ -332,10 +434,10 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
       if(abs(eles.at(0).scEta())<1.4442&&abs(eles.at(1).scEta())<1.4442){
   
         if(eles.at(0).Charge()*eles.at(1).Charge()>0){
-          JSFillHist(param.Name+"/ScaleFactor", "BB_ZMass_SS", ZCand.M(), 1., NBin, MllLeft, MllRight);
-          JSFillHist(param.Name+"/ScaleFactor", "BB_pt1_SS", eles.at(0).Pt(), 1., 70, 20., 90.);
-          JSFillHist(param.Name+"/ScaleFactor", "BB_pt2_SS", eles.at(1).Pt(), 1., 70, 20., 90.);
-          JSFillHist(param.Name+"/ScaleFactor", "BB_MET_SS", METv.Pt(), 1., 100, 0., 100.);
+          FillHist(param.Name+"/ScaleFactor/BB_ZMass_SS", ZCand.M(), 1., NBin, MllLeft, MllRight);
+          FillHist(param.Name+"/ScaleFactor/BB_pt1_SS", eles.at(0).Pt(), 1., 70, 20., 90.);
+          FillHist(param.Name+"/ScaleFactor/BB_pt2_SS", eles.at(1).Pt(), 1., 70, 20., 90.);
+          FillHist(param.Name+"/ScaleFactor/BB_MET_SS", METv.Pt(), 1., 100, 0., 100.);
         }
   
       }
@@ -344,10 +446,10 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
       if((abs(eles.at(0).scEta())<1.4442&&abs(eles.at(1).scEta())>=1.556)||(abs(eles.at(0).scEta())>=1.556&&abs(eles.at(1).scEta())<1.4442)){
   
         if(eles.at(0).Charge()*eles.at(1).Charge()>0){
-          JSFillHist(param.Name+"/ScaleFactor", "BE_ZMass_SS", ZCand.M(), 1., NBin, MllLeft, MllRight);
-          JSFillHist(param.Name+"/ScaleFactor", "BE_pt1_SS", eles.at(0).Pt(), 1., 70, 20., 90.);
-          JSFillHist(param.Name+"/ScaleFactor", "BE_pt2_SS", eles.at(1).Pt(), 1., 70, 20., 90.);
-          JSFillHist(param.Name+"/ScaleFactor", "BE_MET_SS", METv.Pt(), 1., 100, 0., 100.);
+          FillHist(param.Name+"/ScaleFactor/BE_ZMass_SS", ZCand.M(), 1., NBin, MllLeft, MllRight);
+          FillHist(param.Name+"/ScaleFactor/BE_pt1_SS", eles.at(0).Pt(), 1., 70, 20., 90.);
+          FillHist(param.Name+"/ScaleFactor/BE_pt2_SS", eles.at(1).Pt(), 1., 70, 20., 90.);
+          FillHist(param.Name+"/ScaleFactor/BE_MET_SS", METv.Pt(), 1., 100, 0., 100.);
         }
   
       }
@@ -356,10 +458,10 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
       if(abs(eles.at(0).scEta())>=1.556&&abs(eles.at(1).scEta())>=1.556){
   
         if(eles.at(0).Charge()*eles.at(1).Charge()>0){
-          JSFillHist(param.Name+"/ScaleFactor", "EE_ZMass_SS", ZCand.M(), 1., NBin, MllLeft, MllRight);
-          JSFillHist(param.Name+"/ScaleFactor", "EE_pt1_SS", eles.at(0).Pt(), 1., 70, 20., 90.);
-          JSFillHist(param.Name+"/ScaleFactor", "EE_pt2_SS", eles.at(1).Pt(), 1., 70, 20., 90.);
-          JSFillHist(param.Name+"/ScaleFactor", "EE_MET_SS", METv.Pt(), 1., 100, 0., 100.);
+          FillHist(param.Name+"/ScaleFactor/EE_ZMass_SS", ZCand.M(), 1., NBin, MllLeft, MllRight);
+          FillHist(param.Name+"/ScaleFactor/EE_pt1_SS", eles.at(0).Pt(), 1., 70, 20., 90.);
+          FillHist(param.Name+"/ScaleFactor/EE_pt2_SS", eles.at(1).Pt(), 1., 70, 20., 90.);
+          FillHist(param.Name+"/ScaleFactor/EE_MET_SS", METv.Pt(), 1., 100, 0., 100.);
         }
   
       }
@@ -385,29 +487,29 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
   
           // BB
           if(abs(eles_tmp.at(0).scEta())<1.4442&&abs(eles_tmp.at(1).scEta())<1.4442){
-            JSFillHist(param.Name+"/ScaleFactor", "BB_ZMass_OS_CFweighted_shifted_1.4%", ZCand_tmp.M(), weight_tmp, NBin, MllLeft, MllRight);
-            JSFillHist(param.Name+"/ScaleFactor", "BB_ZMass_OS_CFSFweighted_shifted_1.4%", ZCand_tmp.M(), weight_tmp_SF, NBin, MllLeft, MllRight);
-            JSFillHist(param.Name+"/ScaleFactor", "BB_pt1_OS_CFSFweighted_shifted_1.4%", eles_tmp.at(0).Pt(), weight_tmp_SF, 70, 20., 90.);
-            JSFillHist(param.Name+"/ScaleFactor", "BB_pt2_OS_CFSFweighted_shifted_1.4%", eles_tmp.at(1).Pt(), weight_tmp_SF, 70, 20., 90.);
-            JSFillHist(param.Name+"/ScaleFactor", "BB_MET_OS_CFSFweighted_shifted_1.4%", METv_tmp.Pt(), weight_tmp_SF, 100, 0., 100.);
+            FillHist(param.Name+"/ScaleFactor/BB_ZMass_OS_CFweighted_shifted_1.4%", ZCand_tmp.M(), weight_tmp, NBin, MllLeft, MllRight);
+            FillHist(param.Name+"/ScaleFactor/BB_ZMass_OS_CFSFweighted_shifted_1.4%", ZCand_tmp.M(), weight_tmp_SF, NBin, MllLeft, MllRight);
+            FillHist(param.Name+"/ScaleFactor/BB_pt1_OS_CFSFweighted_shifted_1.4%", eles_tmp.at(0).Pt(), weight_tmp_SF, 70, 20., 90.);
+            FillHist(param.Name+"/ScaleFactor/BB_pt2_OS_CFSFweighted_shifted_1.4%", eles_tmp.at(1).Pt(), weight_tmp_SF, 70, 20., 90.);
+            FillHist(param.Name+"/ScaleFactor/BB_MET_OS_CFSFweighted_shifted_1.4%", METv_tmp.Pt(), weight_tmp_SF, 100, 0., 100.);
           }
       
           // BE
           if((abs(eles_tmp.at(0).scEta())<1.4442&&abs(eles_tmp.at(1).scEta())>=1.556)||(abs(eles_tmp.at(0).scEta())>=1.556&&abs(eles_tmp.at(1).scEta())<1.4442)){
-            JSFillHist(param.Name+"/ScaleFactor", "BE_ZMass_OS_CFweighted_shifted_1.4%", ZCand_tmp.M(), weight_tmp, NBin, MllLeft, MllRight);
-            JSFillHist(param.Name+"/ScaleFactor", "BE_ZMass_OS_CFSFweighted_shifted_1.4%", ZCand_tmp.M(), weight_tmp_SF, NBin, MllLeft, MllRight);
-            JSFillHist(param.Name+"/ScaleFactor", "BE_pt1_OS_CFSFweighted_shifted_1.4%", eles.at(0).Pt(), weight_tmp_SF, 70, 20., 90.);
-            JSFillHist(param.Name+"/ScaleFactor", "BE_pt2_OS_CFSFweighted_shifted_1.4%", eles.at(1).Pt(), weight_tmp_SF, 70, 20., 90.);
-            JSFillHist(param.Name+"/ScaleFactor", "BE_MET_OS_CFSFweighted_shifted_1.4%", METv.Pt(), weight_tmp_SF, 100, 0., 100.);
+            FillHist(param.Name+"/ScaleFactor/BE_ZMass_OS_CFweighted_shifted_1.4%", ZCand_tmp.M(), weight_tmp, NBin, MllLeft, MllRight);
+            FillHist(param.Name+"/ScaleFactor/BE_ZMass_OS_CFSFweighted_shifted_1.4%", ZCand_tmp.M(), weight_tmp_SF, NBin, MllLeft, MllRight);
+            FillHist(param.Name+"/ScaleFactor/BE_pt1_OS_CFSFweighted_shifted_1.4%", eles.at(0).Pt(), weight_tmp_SF, 70, 20., 90.);
+            FillHist(param.Name+"/ScaleFactor/BE_pt2_OS_CFSFweighted_shifted_1.4%", eles.at(1).Pt(), weight_tmp_SF, 70, 20., 90.);
+            FillHist(param.Name+"/ScaleFactor/BE_MET_OS_CFSFweighted_shifted_1.4%", METv.Pt(), weight_tmp_SF, 100, 0., 100.);
           }
       
           // EE
           if(abs(eles_tmp.at(0).scEta())>=1.556&&abs(eles_tmp.at(1).scEta())>=1.556){
-            JSFillHist(param.Name+"/ScaleFactor", "EE_ZMass_OS_CFweighted_shifted_1.4%", ZCand_tmp.M(), weight_tmp, NBin, MllLeft, MllRight);
-            JSFillHist(param.Name+"/ScaleFactor", "EE_ZMass_OS_CFSFweighted_shifted_1.4%", ZCand_tmp.M(), weight_tmp_SF, NBin, MllLeft, MllRight);
-            JSFillHist(param.Name+"/ScaleFactor", "EE_pt1_OS_CFSFweighted_shifted_1.4%", eles.at(0).Pt(), weight_tmp_SF, 70, 20., 90.);
-            JSFillHist(param.Name+"/ScaleFactor", "EE_pt2_OS_CFSFweighted_shifted_1.4%", eles.at(1).Pt(), weight_tmp_SF, 70, 20., 90.);
-            JSFillHist(param.Name+"/ScaleFactor", "EE_MET_OS_CFSFweighted_shifted_1.4%", METv.Pt(), weight_tmp_SF, 100, 0., 100.);
+            FillHist(param.Name+"/ScaleFactor/EE_ZMass_OS_CFweighted_shifted_1.4%", ZCand_tmp.M(), weight_tmp, NBin, MllLeft, MllRight);
+            FillHist(param.Name+"/ScaleFactor/EE_ZMass_OS_CFSFweighted_shifted_1.4%", ZCand_tmp.M(), weight_tmp_SF, NBin, MllLeft, MllRight);
+            FillHist(param.Name+"/ScaleFactor/EE_pt1_OS_CFSFweighted_shifted_1.4%", eles.at(0).Pt(), weight_tmp_SF, 70, 20., 90.);
+            FillHist(param.Name+"/ScaleFactor/EE_pt2_OS_CFSFweighted_shifted_1.4%", eles.at(1).Pt(), weight_tmp_SF, 70, 20., 90.);
+            FillHist(param.Name+"/ScaleFactor/EE_MET_OS_CFSFweighted_shifted_1.4%", METv.Pt(), weight_tmp_SF, 100, 0., 100.);
           }
   				
         }
@@ -443,7 +545,33 @@ double ChargeFlip::GetCFweight(std::vector<Electron> eles, TString id){
 
 */ 
 
-  if(id == "HEID"||id == "HNTight2016"){
+  if(id == "HEID"){
+
+    for(int i=0;i<2;i++){ //DY+TTLL CF
+
+      if(abs(eles.at(i).scEta())<0.8){
+        if(1/eles.at(i).Pt()<0.0075) prob[i] = 4.59433e-04-4.41286e-02/eles.at(i).Pt();
+        else if(0.0075<=1/eles.at(i).Pt()&&1/eles.at(i).Pt()<0.0155) prob[i] = 2.01545e-04-8.19670e-03/eles.at(i).Pt();
+        else prob[i] = 8.74309e-05-5.72703e-04/eles.at(i).Pt();
+      }
+      else if(0.8<=abs(eles.at(i).scEta())&&abs(eles.at(i).scEta())<1.4442){
+        if(1/eles.at(i).Pt()<0.0055) prob[i] = 3.81412e-03-4.74900e-01/eles.at(i).Pt();
+        else if(0.0055<=1/eles.at(i).Pt()&&1/eles.at(i).Pt()<0.0155) prob[i] = 1.60397e-03-6.97824e-02/eles.at(i).Pt();
+        else prob[i] = 6.59614e-04-7.13587e-03/eles.at(i).Pt();
+      }
+      else if(1.556<=abs(eles.at(i).scEta())&&abs(eles.at(i).scEta())<2.5){
+        if(1/eles.at(i).Pt()<0.0105) prob[i] = 1.23549e-02-6.80049e-01/eles.at(i).Pt();
+        else if(0.0105<=1/eles.at(i).Pt()&&1/eles.at(i).Pt()<0.0205) prob[i] = 7.27935e-03-1.88277e-01/eles.at(i).Pt();
+        else prob[i] = 4.06341e-03-3.22562e-02/eles.at(i).Pt();
+      }
+
+    }
+  
+    return prob[0]/(1.-prob[0])+prob[1]/(1.-prob[1]);
+
+  }
+
+  else if(id == "HNTight2016"){
 
     for(int i=0;i<2;i++){ //DY+TTLL CF
 
@@ -496,7 +624,7 @@ double ChargeFlip::GetCFweight_SF(std::vector<Electron> eles, TString id){
 
 */
 
-  if(id == "HEID"||id == "HNTight2016"){
+  if(id == "HEID"){
 
     for(int i=0;i<2;i++){ //DY+TTLL CF
 
@@ -519,6 +647,76 @@ double ChargeFlip::GetCFweight_SF(std::vector<Electron> eles, TString id){
     }
 
     return prob[0]/(1.-prob[0])+prob[1]/(1.-prob[1]);
+
+  }
+
+  else if(id == "HNTight2016"){
+
+    for(int i=0;i<2;i++){ //DY+TTLL CF
+
+      if(abs(eles.at(i).scEta())<0.8){
+        if(1/eles.at(i).Pt()<0.0075) prob[i] = (4.59433e-04-4.41286e-02/eles.at(i).Pt())*0.585841;
+        else if(0.0075<=1/eles.at(i).Pt()&&1/eles.at(i).Pt()<0.0155) prob[i] = (2.01545e-04-8.19670e-03/eles.at(i).Pt())*0.585841;
+        else prob[i] = (8.74309e-05-5.72703e-04/eles.at(i).Pt())*0.585841;
+      }
+      else if(0.8<=abs(eles.at(i).scEta())&&abs(eles.at(i).scEta())<1.4442){
+        if(1/eles.at(i).Pt()<0.0055) prob[i] = (3.81412e-03-4.74900e-01/eles.at(i).Pt())*0.585841;
+        else if(0.0055<=1/eles.at(i).Pt()&&1/eles.at(i).Pt()<0.0155) prob[i] = (1.60397e-03-6.97824e-02/eles.at(i).Pt())*0.585841;
+        else prob[i] = (6.59614e-04-7.13587e-03/eles.at(i).Pt())*0.585841;
+      }
+      else if(1.556<=abs(eles.at(i).scEta())&&abs(eles.at(i).scEta())<2.5){
+        if(1/eles.at(i).Pt()<0.0105) prob[i] = (1.23549e-02-6.80049e-01/eles.at(i).Pt())*0.831539;
+        else if(0.0105<=1/eles.at(i).Pt()&&1/eles.at(i).Pt()<0.0205) prob[i] = (7.27935e-03-1.88277e-01/eles.at(i).Pt())*0.831539;
+        else prob[i] = (4.06341e-03-3.22562e-02/eles.at(i).Pt())*0.831539;
+      }
+
+    }
+
+    return prob[0]/(1.-prob[0])+prob[1]/(1.-prob[1]);
+
+  }
+
+}
+
+double ChargeFlip::GetHalfSampleWeight(const Electron& electron, TString id){;
+
+  if(id == "HEID"){
+
+    if(abs(electron.scEta())<0.8){
+      if(1/electron.Pt()<0.0075) return (4.59433e-04-4.41286e-02/electron.Pt())*0.585841;
+      else if(0.0075<=1/electron.Pt()&&1/electron.Pt()<0.0155) return (2.01545e-04-8.19670e-03/electron.Pt())*0.585841;
+      else return (8.74309e-05-5.72703e-04/electron.Pt())*0.585841;
+    }
+    else if(0.8<=abs(electron.scEta())&&abs(electron.scEta())<1.4442){
+      if(1/electron.Pt()<0.0055) return (3.81412e-03-4.74900e-01/electron.Pt())*0.585841;
+      else if(0.0055<=1/electron.Pt()&&1/electron.Pt()<0.0155) return (1.60397e-03-6.97824e-02/electron.Pt())*0.585841;
+      else return (6.59614e-04-7.13587e-03/electron.Pt())*0.585841;
+    }
+    else if(1.556<=abs(electron.scEta())&&abs(electron.scEta())<2.5){
+      if(1/electron.Pt()<0.0105) return (1.23549e-02-6.80049e-01/electron.Pt())*0.831539;
+      else if(0.0105<=1/electron.Pt()&&1/electron.Pt()<0.0205) return (7.27935e-03-1.88277e-01/electron.Pt())*0.831539;
+      else return (4.06341e-03-3.22562e-02/electron.Pt())*0.831539;
+    }
+
+  }
+
+  else if(id == "HNTight2016"){
+
+    if(abs(electron.scEta())<0.8){
+      if(1/electron.Pt()<0.0075) return (4.59433e-04-4.41286e-02/electron.Pt())*0.585841;
+      else if(0.0075<=1/electron.Pt()&&1/electron.Pt()<0.0155) return (2.01545e-04-8.19670e-03/electron.Pt())*0.585841;
+      else return (8.74309e-05-5.72703e-04/electron.Pt())*0.585841;
+    }
+    else if(0.8<=abs(electron.scEta())&&abs(electron.scEta())<1.4442){
+      if(1/electron.Pt()<0.0055) return (3.81412e-03-4.74900e-01/electron.Pt())*0.585841;
+      else if(0.0055<=1/electron.Pt()&&1/electron.Pt()<0.0155) return (1.60397e-03-6.97824e-02/electron.Pt())*0.585841;
+      else return (6.59614e-04-7.13587e-03/electron.Pt())*0.585841;
+    }
+    else if(1.556<=abs(electron.scEta())&&abs(electron.scEta())<2.5){
+      if(1/electron.Pt()<0.0105) return (1.23549e-02-6.80049e-01/electron.Pt())*0.831539;
+      else if(0.0105<=1/electron.Pt()&&1/electron.Pt()<0.0205) return (7.27935e-03-1.88277e-01/electron.Pt())*0.831539;
+      else return (4.06341e-03-3.22562e-02/electron.Pt())*0.831539;
+    }
 
   }
 
