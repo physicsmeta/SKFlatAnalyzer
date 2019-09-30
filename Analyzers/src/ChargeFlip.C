@@ -143,7 +143,7 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
 
       for(unsigned int i=0; i<eles.size(); i++){
         Gen truth_lep = GetGenMatchedLepton(eles.at(i), gens);
-        if(truth_lep.PID() == 0) return; // TODO check the meaning
+        if(truth_lep.PID() == 0) return; 
     
         int truth_lep_Charge;
         if(truth_lep.PID() == 11) truth_lep_Charge = -1;
@@ -315,11 +315,33 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
       double LT = 0;
       for(unsigned int i=0; i<eles.size(); i++){
         LT += eles.at(i).Pt();
-      } //LT : Use electron pT sum
+      } 
+      for(unsigned int i=0; i<muons.size(); i++){
+        LT += muons.at(i).Pt();
+      }  //LT
 
-      if(muons.size()>0&&eles.size()>0){
-        FillHist(param.Name+"/HalfSampleTest/Error_on_LT", 1, 1, 2, 0, 2);
-      } //To Check if there is any event having ele and muon both (so that causing LT miscalculation - maybe removed after returning NO gen electron tho)
+      if(muons.size()==0&&eles.size()==0) FillHist(param.Name+"/HalfSampleTest/lepton_size_PassID", 0, 1, 7, 0, 7);
+      else if(muons.size()==0&&eles.size()==1) FillHist(param.Name+"/HalfSampleTest/lepton_size_PassID", 1, 1, 7, 0, 7);
+      else if(muons.size()==0&&eles.size()==2) FillHist(param.Name+"/HalfSampleTest/lepton_size_PassID", 2, 1, 7, 0, 7);
+      else if(muons.size()==1&&eles.size()==0) FillHist(param.Name+"/HalfSampleTest/lepton_size_PassID", 3, 1, 7, 0, 7);
+      else if(muons.size()==2&&eles.size()==0) FillHist(param.Name+"/HalfSampleTest/lepton_size_PassID", 4, 1, 7, 0, 7);
+      else if(muons.size()==1&&eles.size()==1) FillHist(param.Name+"/HalfSampleTest/lepton_size_PassID", 5, 1, 7, 0, 7);
+      else if(muons.size()>0&&eles.size()>0) FillHist(param.Name+"/HalfSampleTest/lepton_size_PassID", 6, 1, 7, 0, 7); //To check number of leptons
+
+      int fake_ele = 0;
+      for(unsigned int i=0; i<eles.size(); i++){
+        Gen truth_lep = GetGenMatchedLepton(eles.at(i), gens);
+        if(truth_lep.PID() == 0) fake_ele++;
+      }
+      if(fake_ele==0){
+        if(muons.size()==0&&eles.size()==0) FillHist(param.Name+"/HalfSampleTest/lepton_size_PassID_NoFakeEles", 0, 1, 7, 0, 7);
+        else if(muons.size()==0&&eles.size()==1) FillHist(param.Name+"/HalfSampleTest/lepton_size_PassID_NoFakeEles", 1, 1, 7, 0, 7);
+        else if(muons.size()==0&&eles.size()==2) FillHist(param.Name+"/HalfSampleTest/lepton_size_PassID_NoFakeEles", 2, 1, 7, 0, 7);
+        else if(muons.size()==1&&eles.size()==0) FillHist(param.Name+"/HalfSampleTest/lepton_size_PassID_NoFakeEles", 3, 1, 7, 0, 7);
+        else if(muons.size()==2&&eles.size()==0) FillHist(param.Name+"/HalfSampleTest/lepton_size_PassID_NoFakeEles", 4, 1, 7, 0, 7);
+        else if(muons.size()==1&&eles.size()==1) FillHist(param.Name+"/HalfSampleTest/lepton_size_PassID_NoFakeEles", 5, 1, 7, 0, 7);
+        else if(muons.size()>0&&eles.size()>0) FillHist(param.Name+"/HalfSampleTest/lepton_size_PassID_NoFakeEles", 6, 1, 7, 0, 7); 
+      } //To check number of leptons
 
       double HT = 0;
       for(unsigned int i=0; i<jets_LeptonVeto.size(); i++){

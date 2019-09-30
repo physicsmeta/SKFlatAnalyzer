@@ -1,5 +1,11 @@
 {
-TFile* f1 = new TFile("/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip/2016/CFrate__/ChargeFlip_DYJets.root");
+TString filename = "/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip/2016/CFrate__/ChargeFlip_DYJets_TTLL.root";
+TFile* f1 = new TFile(filename);
+
+TString samplename = filename(filename.Last('/')+12,filename.Length());
+samplename.ReplaceAll(".root","");
+
+gSystem->Exec("mkdir "+samplename);
 
 vector<TString> User_ID;
 User_ID.push_back("HNTight2016");
@@ -63,9 +69,9 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   
   // Draw the plots //
   
-  TCanvas* c1 = new TCanvas("c1",User_ID.at(i)+"/ChargeFlip_EtaRegion1",200,200,900,800);
-  TCanvas* c2 = new TCanvas("c2",User_ID.at(i)+"/ChargeFlip_EtaRegion2",250,150,900,800);
-  TCanvas* c3 = new TCanvas("c3",User_ID.at(i)+"/ChargeFlip_EtaRegion3",300,100,900,800);
+  TCanvas* c1 = new TCanvas("c1","ChargeFlip_EtaRegion1 ("+User_ID.at(i)+")",200,200,900,800);
+  TCanvas* c2 = new TCanvas("c2","ChargeFlip_EtaRegion2 ("+User_ID.at(i)+")",250,150,900,800);
+  TCanvas* c3 = new TCanvas("c3","ChargeFlip_EtaRegion3 ("+User_ID.at(i)+")",300,100,900,800);
   
   c1->cd();
   
@@ -74,7 +80,7 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   //gr1->SetMarkerSize(0.8);
   //gr1->SetMarkerColor(kMagenta+2);
   gr1->SetLineColor(15);
-  gr1->SetTitle(User_ID.at(i)+"/ChargeFlip_|#eta|<0.8");
+  gr1->SetTitle("ChargeFlip_|#eta|<0.8 ("+User_ID.at(i)+")");
   gr1->SetMinimum(0.);
   gr1->Draw("ZAP"); //Z : do not draw small horizontal/vertical lines the end of the error bars
   gr1->GetXaxis()->SetRangeUser(0.,0.04);
@@ -129,7 +135,7 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   //gr2->SetMarkerColor(kMagenta+2);
   //gr2->SetMarkerColor(kBlue-4);
   gr2->SetLineColor(15);
-  gr2->SetTitle(User_ID.at(i)+"/ChargeFlip_0.8#leq|#eta|<1.4442");
+  gr2->SetTitle("ChargeFlip_0.8#leq|#eta|<1.4442 ("+User_ID.at(i)+")");
   gr2->SetMinimum(0.);
   gr2->Draw("ZAP");
   gr2->GetXaxis()->SetRangeUser(0.,0.04);
@@ -191,7 +197,7 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   //gr3->SetMarkerColor(kMagenta+2);
   //gr3->SetMarkerColor(kGreen+3);
   gr3->SetLineColor(15);
-  gr3->SetTitle(User_ID.at(i)+"/ChargeFlip_1.556#leq|#eta|<2.5");
+  gr3->SetTitle("ChargeFlip_1.556#leq|#eta|<2.5 ("+User_ID.at(i)+")");
   gr3->SetMinimum(0.);
   gr3->Draw("ZAP");
   gr3->GetXaxis()->SetRangeUser(0.,0.04);
@@ -244,9 +250,9 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   
   
 
-  c1->SaveAs(User_ID.at(i)+"_CF_EtaRegion1.pdf");
-  c2->SaveAs(User_ID.at(i)+"_CF_EtaRegion2.pdf");
-  c3->SaveAs(User_ID.at(i)+"_CF_EtaRegion3.pdf");
+  c1->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_EtaRegion1.pdf");
+  c2->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_EtaRegion2.pdf");
+  c3->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_EtaRegion3.pdf");
 
 }
 

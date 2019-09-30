@@ -2159,7 +2159,7 @@ void AnalyzerCore::WriteHist(){
   outfile->cd();
   for(std::map< TString, TH1D* >::iterator mapit = maphist_TH1D.begin(); mapit!=maphist_TH1D.end(); mapit++){
     TString this_fullname=mapit->second->GetName(); 
-    TString this_name=this_fullname(this_fullname.Last('/')+1,this_fullname.Length()); //JH : TString.Last('/') returns the position of last character '/' in the string. Also TString(0,6) returns the 0th character to 5th character in the string.
+    TString this_name=this_fullname(this_fullname.Last('/')+1,this_fullname.Length()); //JH : TString.Last('/') returns the position of last character '/' in the string. Also TString(2,6) returns the 2nd character and the next 5 character in the string.
     TString this_suffix=this_fullname(0,this_fullname.Last('/'));
     TDirectory *dir = outfile->GetDirectory(this_suffix);
     if(!dir){

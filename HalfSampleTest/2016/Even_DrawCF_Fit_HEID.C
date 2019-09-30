@@ -1,18 +1,24 @@
 {
-TFile* f1 = new TFile("/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip/2016/CFrate__/ChargeFlip_DYJets.root");
+TString filename = "/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip/2016/HalfSampleTest__/ChargeFlip_DYJets_TTLL.root";
+TFile* f1 = new TFile(filename);
+
+TString samplename = filename(filename.Last('/')+12,filename.Length());
+samplename.ReplaceAll(".root","");
+
+gSystem->Exec("mkdir "+samplename);
 
 vector<TString> User_ID;
-User_ID.push_back("HNTight2016");
+//User_ID.push_back("HNTight2016");
 User_ID.push_back("HEID");
 
 for(unsigned int i=0; i<User_ID.size(); i++){
 
-  TH1D* h1 = (TH1D*)f1->Get(User_ID.at(i)+"/CFrate/EtaRegion1_Denom");
-  TH1D* h2 = (TH1D*)f1->Get(User_ID.at(i)+"/CFrate/EtaRegion1_Num");
-  TH1D* h3 = (TH1D*)f1->Get(User_ID.at(i)+"/CFrate/EtaRegion2_Denom");
-  TH1D* h4 = (TH1D*)f1->Get(User_ID.at(i)+"/CFrate/EtaRegion2_Num");
-  TH1D* h5 = (TH1D*)f1->Get(User_ID.at(i)+"/CFrate/EtaRegion3_Denom");
-  TH1D* h6 = (TH1D*)f1->Get(User_ID.at(i)+"/CFrate/EtaRegion3_Num");
+  TH1D* h1 = (TH1D*)f1->Get(User_ID.at(i)+"/HalfSampleTest/Even/EtaRegion1_Denom");
+  TH1D* h2 = (TH1D*)f1->Get(User_ID.at(i)+"/HalfSampleTest/Even/EtaRegion1_Num");
+  TH1D* h3 = (TH1D*)f1->Get(User_ID.at(i)+"/HalfSampleTest/Even/EtaRegion2_Denom");
+  TH1D* h4 = (TH1D*)f1->Get(User_ID.at(i)+"/HalfSampleTest/Even/EtaRegion2_Num");
+  TH1D* h5 = (TH1D*)f1->Get(User_ID.at(i)+"/HalfSampleTest/Even/EtaRegion3_Denom");
+  TH1D* h6 = (TH1D*)f1->Get(User_ID.at(i)+"/HalfSampleTest/Even/EtaRegion3_Num");
   
   // Let's use vector instead of array, to remove zero bins and nan bins //
   
@@ -63,9 +69,9 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   
   // Draw the plots //
   
-  TCanvas* c1 = new TCanvas("c1",User_ID.at(i)+"/ChargeFlip_EtaRegion1",200,200,900,800);
-  TCanvas* c2 = new TCanvas("c2",User_ID.at(i)+"/ChargeFlip_EtaRegion2",250,150,900,800);
-  TCanvas* c3 = new TCanvas("c3",User_ID.at(i)+"/ChargeFlip_EtaRegion3",300,100,900,800);
+  TCanvas* c1 = new TCanvas("c1","ChargeFlip_EtaRegion1 ("+User_ID.at(i)+")",200,200,900,800);
+  TCanvas* c2 = new TCanvas("c2","ChargeFlip_EtaRegion1 ("+User_ID.at(i)+")",250,150,900,800);
+  TCanvas* c3 = new TCanvas("c3","ChargeFlip_EtaRegion1 ("+User_ID.at(i)+")",300,100,900,800);
   
   c1->cd();
   
@@ -74,7 +80,7 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   //gr1->SetMarkerSize(0.8);
   //gr1->SetMarkerColor(kMagenta+2);
   gr1->SetLineColor(15);
-  gr1->SetTitle(User_ID.at(i)+"/ChargeFlip_|#eta|<0.8");
+  gr1->SetTitle("ChargeFlip_|#eta|<0.8 ("+User_ID.at(i)+")");
   gr1->SetMinimum(0.);
   gr1->Draw("ZAP"); //Z : do not draw small horizontal/vertical lines the end of the error bars
   gr1->GetXaxis()->SetRangeUser(0.,0.04);
@@ -84,21 +90,21 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   gr1->GetYaxis()->SetLabelSize(0.025);
   
   
-  //// Define fit function and range //
-  //
-  //TF1 *gr1_fit1 = new TF1("gr1_fit1","pol1",0,0.021);
-  //TF1 *gr1_fit2 = new TF1("gr1_fit2","pol1",0.021,0.04);
-  //
-  //gr1_fit1->SetLineWidth(3);
-  //gr1_fit2->SetLineWidth(3);
-  //
-  //gr1_fit1->SetLineColor(4);
-  //gr1_fit2->SetLineColor(4);
-  //
-  //cout << "//////////////////// Now fitting on EtaRegion1 ... ////////////////////" << endl;
-  //
-  //gr1->Fit(gr1_fit1,"R");
-  //
+  // Define fit function and range //
+  
+  TF1 *gr1_fit1 = new TF1("gr1_fit1","pol1",0,0.021);
+  TF1 *gr1_fit2 = new TF1("gr1_fit2","pol1",0.021,0.04);
+  
+  gr1_fit1->SetLineWidth(3);
+  gr1_fit2->SetLineWidth(3);
+  
+  gr1_fit1->SetLineColor(4);
+  gr1_fit2->SetLineColor(4);
+  
+  cout << "//////////////////// Now fitting on EtaRegion1 ... ////////////////////" << endl;
+  
+  gr1->Fit(gr1_fit1,"R");
+  
   //// Draw fitting uncertainty //
   //
   //TGraphErrors *gr1_fit1_err = new TGraphErrors(22);
@@ -129,7 +135,7 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   //gr2->SetMarkerColor(kMagenta+2);
   //gr2->SetMarkerColor(kBlue-4);
   gr2->SetLineColor(15);
-  gr2->SetTitle(User_ID.at(i)+"/ChargeFlip_0.8#leq|#eta|<1.4442");
+  gr2->SetTitle("ChargeFlip_0.8#leq|#eta|<1.4442 ("+User_ID.at(i)+")");
   gr2->SetMinimum(0.);
   gr2->Draw("ZAP");
   gr2->GetXaxis()->SetRangeUser(0.,0.04);
@@ -140,22 +146,22 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   
   
   
-  //TF1 *gr2_fit1 = new TF1("gr2_fit1","pol1",0,0.0155);
-  //TF1 *gr2_fit2 = new TF1("gr2_fit2","pol1",0.0155,0.023);
-  //TF1 *gr2_fit3 = new TF1("gr2_fit3","pol1",0.023,0.04);
-  //
-  //gr2_fit1->SetLineWidth(3);
-  //gr2_fit2->SetLineWidth(3);
-  //gr2_fit3->SetLineWidth(3);
-  //
-  //gr2_fit1->SetLineColor(4);
-  //gr2_fit2->SetLineColor(4);
-  //gr2_fit3->SetLineColor(4);
-  //
-  //cout << endl << "//////////////////// Now fitting on EtaRegion2 ... ////////////////////" << endl;
-  //
-  //gr2->Fit(gr2_fit1,"R");
-  //
+  TF1 *gr2_fit1 = new TF1("gr2_fit1","pol1",0,0.0155);
+  TF1 *gr2_fit2 = new TF1("gr2_fit2","pol1",0.0155,0.023);
+  TF1 *gr2_fit3 = new TF1("gr2_fit3","pol1",0.023,0.04);
+  
+  gr2_fit1->SetLineWidth(3);
+  gr2_fit2->SetLineWidth(3);
+  gr2_fit3->SetLineWidth(3);
+  
+  gr2_fit1->SetLineColor(4);
+  gr2_fit2->SetLineColor(4);
+  gr2_fit3->SetLineColor(4);
+  
+  cout << endl << "//////////////////// Now fitting on EtaRegion2 ... ////////////////////" << endl;
+  
+  gr2->Fit(gr2_fit1,"R");
+  
   //TGraphErrors *gr2_fit1_err = new TGraphErrors(16);
   //for(int i=0; i<16; i++) gr2_fit1_err->SetPoint(i,0.001*i,0);
   //(TVirtualFitter::GetFitter())->GetConfidenceIntervals(gr2_fit1_err);
@@ -191,7 +197,7 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   //gr3->SetMarkerColor(kMagenta+2);
   //gr3->SetMarkerColor(kGreen+3);
   gr3->SetLineColor(15);
-  gr3->SetTitle(User_ID.at(i)+"/ChargeFlip_1.556#leq|#eta|<2.5");
+  gr3->SetTitle("ChargeFlip_1.556#leq|#eta|<2.5 ("+User_ID.at(i)+")");
   gr3->SetMinimum(0.);
   gr3->Draw("ZAP");
   gr3->GetXaxis()->SetRangeUser(0.,0.04);
@@ -201,22 +207,22 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   gr3->GetYaxis()->SetLabelSize(0.025);
   
   
-  //TF1 *gr3_fit1 = new TF1("gr3_fit1","pol1",0,0.0105);
-  //TF1 *gr3_fit2 = new TF1("gr3_fit2","pol1",0.0105,0.02);
-  //TF1 *gr3_fit3 = new TF1("gr3_fit3","pol1",0.02,0.04);
-  //
-  //gr3_fit1->SetLineWidth(3);
-  //gr3_fit2->SetLineWidth(3);
-  //gr3_fit3->SetLineWidth(3);
-  //
-  //gr3_fit1->SetLineColor(4);
-  //gr3_fit2->SetLineColor(4);
-  //gr3_fit3->SetLineColor(4);
-  //
-  //cout << endl << "//////////////////// Now fitting on EtaRegion3 ... ////////////////////" << endl;
-  //
-  //gr3->Fit(gr3_fit1,"R");
-  //
+  TF1 *gr3_fit1 = new TF1("gr3_fit1","pol1",0,0.0105);
+  TF1 *gr3_fit2 = new TF1("gr3_fit2","pol1",0.0105,0.02);
+  TF1 *gr3_fit3 = new TF1("gr3_fit3","pol1",0.02,0.04);
+  
+  gr3_fit1->SetLineWidth(3);
+  gr3_fit2->SetLineWidth(3);
+  gr3_fit3->SetLineWidth(3);
+  
+  gr3_fit1->SetLineColor(4);
+  gr3_fit2->SetLineColor(4);
+  gr3_fit3->SetLineColor(4);
+  
+  cout << endl << "//////////////////// Now fitting on EtaRegion3 ... ////////////////////" << endl;
+  
+  gr3->Fit(gr3_fit1,"R");
+  
   //TGraphErrors *gr3_fit1_err = new TGraphErrors(12);
   //for(int i=0; i<12; i++) gr3_fit1_err->SetPoint(i,0.001*i,0);
   //(TVirtualFitter::GetFitter())->GetConfidenceIntervals(gr3_fit1_err);
@@ -244,9 +250,9 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   
   
 
-  c1->SaveAs(User_ID.at(i)+"_CF_EtaRegion1.pdf");
-  c2->SaveAs(User_ID.at(i)+"_CF_EtaRegion2.pdf");
-  c3->SaveAs(User_ID.at(i)+"_CF_EtaRegion3.pdf");
+  c1->SaveAs(samplename+"/"+User_ID.at(i)+"_Fit_EtaRegion1.pdf");
+  c2->SaveAs(samplename+"/"+User_ID.at(i)+"_Fit_EtaRegion2.pdf");
+  c3->SaveAs(samplename+"/"+User_ID.at(i)+"_Fit_EtaRegion3.pdf");
 
 }
 
