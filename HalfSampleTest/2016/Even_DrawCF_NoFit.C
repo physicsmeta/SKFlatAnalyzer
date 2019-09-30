@@ -254,6 +254,10 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   c2->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_EtaRegion2.pdf");
   c3->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_EtaRegion3.pdf");
 
+  c1->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_EtaRegion1.png");
+  c2->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_EtaRegion2.png");
+  c3->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_EtaRegion3.png");
+
 }
 
 }

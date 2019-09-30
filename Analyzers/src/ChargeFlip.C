@@ -546,30 +546,11 @@ double ChargeFlip::GetCFweight(std::vector<Electron> eles, TString id){
   
   double prob[2];
 
-/* == DY only CF ==
-
-  for(int i=0;i<2;i++){
-    if(abs(eles.at(i).scEta())<0.8){
-      if(1/eles.at(i).Pt()<0.021) prob[i] = 1.63348e-04-4.97821e-03/eles.at(i).Pt();
-      else prob[i] = 5.11382e-05+3.88422e-04/eles.at(i).Pt();
-    }
-    else if(0.8<=abs(eles.at(i).scEta())&&abs(eles.at(i).scEta())<1.4442){
-      if(1/eles.at(i).Pt()<0.0155) prob[i] = 1.94800e-03-9.32813e-02/eles.at(i).Pt();
-      else if(0.0155<=1/eles.at(i).Pt()&&1/eles.at(i).Pt()<0.023) prob[i] = 6.34964e-04-6.98093e-03/eles.at(i).Pt();
-      else prob[i] = 5.80094e-04-4.85519e-03/eles.at(i).Pt();
-    }
-    else if(1.556<=abs(eles.at(i).scEta())&&abs(eles.at(i).scEta())<2.5){
-      if(1/eles.at(i).Pt()<0.0105) prob[i] = 1.30143e-02-7.31072e-01/eles.at(i).Pt();
-      else if(0.0105<=1/eles.at(i).Pt()&&1/eles.at(i).Pt()<0.02) prob[i] = 7.46291e-03-2.07999e-01/eles.at(i).Pt();
-      else prob[i] = 3.74301e-03-2.23102e-02/eles.at(i).Pt();
-    }
-  } 
-
-*/ 
-
   if(id == "HEID"){
 
-    for(int i=0;i<2;i++){ //DY+TTLL CF
+    //DY+TTLL CF
+
+    for(int i=0;i<2;i++){ 
 
       if(abs(eles.at(i).scEta())<0.8){
         if(1/eles.at(i).Pt()<0.0075) prob[i] = 4.59433e-04-4.41286e-02/eles.at(i).Pt();
@@ -588,6 +569,8 @@ double ChargeFlip::GetCFweight(std::vector<Electron> eles, TString id){
       }
 
     }
+
+    //
   
     return prob[0]/(1.-prob[0])+prob[1]/(1.-prob[1]);
 
@@ -595,25 +578,29 @@ double ChargeFlip::GetCFweight(std::vector<Electron> eles, TString id){
 
   else if(id == "HNTight2016"){
 
-    for(int i=0;i<2;i++){ //DY+TTLL CF
+    //DY+TTLL CF
+
+    for(int i=0;i<2;i++){
 
       if(abs(eles.at(i).scEta())<0.8){
-        if(1/eles.at(i).Pt()<0.0075) prob[i] = 4.59433e-04-4.41286e-02/eles.at(i).Pt();
-        else if(0.0075<=1/eles.at(i).Pt()&&1/eles.at(i).Pt()<0.0155) prob[i] = 2.01545e-04-8.19670e-03/eles.at(i).Pt();
-        else prob[i] = 8.74309e-05-5.72703e-04/eles.at(i).Pt();
+        if(1/eles.at(i).Pt()<0.0075) prob[i] = 3.92360e-04-4.03780e-02/eles.at(i).Pt();
+        else if(0.0075<=1/eles.at(i).Pt()&&1/eles.at(i).Pt()<0.0155) prob[i] = 1.44985e-04-6.52879e-03/eles.at(i).Pt();
+        else prob[i] = 6.59979e-05-1.32125e-03/eles.at(i).Pt();
       }
       else if(0.8<=abs(eles.at(i).scEta())&&abs(eles.at(i).scEta())<1.4442){
-        if(1/eles.at(i).Pt()<0.0055) prob[i] = 3.81412e-03-4.74900e-01/eles.at(i).Pt();
-        else if(0.0055<=1/eles.at(i).Pt()&&1/eles.at(i).Pt()<0.0155) prob[i] = 1.60397e-03-6.97824e-02/eles.at(i).Pt();
-        else prob[i] = 6.59614e-04-7.13587e-03/eles.at(i).Pt();
+        if(1/eles.at(i).Pt()<0.0055) prob[i] = 2.61602e-03-3.16041e-01/eles.at(i).Pt();
+        else if(0.0055<=1/eles.at(i).Pt()&&1/eles.at(i).Pt()<0.0155) prob[i] = 1.09783e-03-5.16251e-02/eles.at(i).Pt();
+        else prob[i] = 3.85519e-04-8.10426e-03/eles.at(i).Pt();
       }
       else if(1.556<=abs(eles.at(i).scEta())&&abs(eles.at(i).scEta())<2.5){
-        if(1/eles.at(i).Pt()<0.0105) prob[i] = 1.23549e-02-6.80049e-01/eles.at(i).Pt();
-        else if(0.0105<=1/eles.at(i).Pt()&&1/eles.at(i).Pt()<0.0205) prob[i] = 7.27935e-03-1.88277e-01/eles.at(i).Pt();
-        else prob[i] = 4.06341e-03-3.22562e-02/eles.at(i).Pt();
+        if(1/eles.at(i).Pt()<0.0105) prob[i] = 9.63989e-03-7.02277e-01/eles.at(i).Pt();
+        else if(0.0105<=1/eles.at(i).Pt()&&1/eles.at(i).Pt()<0.0205) prob[i] = 4.38753e-03-1.75528e-01/eles.at(i).Pt();
+        else prob[i] = 1.60630e-03-3.15704e-02/eles.at(i).Pt();
       }
 
     }
+
+    //
   
     return prob[0]/(1.-prob[0])+prob[1]/(1.-prob[1]);
 
@@ -624,49 +611,36 @@ double ChargeFlip::GetCFweight(std::vector<Electron> eles, TString id){
 double ChargeFlip::GetCFweight_SF(std::vector<Electron> eles, TString id){
   
   double prob[2];
-
-/* == DY only CF ==
-
-  for(int i=0;i<2;i++){
-    if(abs(eles.at(i).scEta())<0.8){
-      if(1/eles.at(i).Pt()<0.021) prob[i] = (1.63348e-04-4.97821e-03/eles.at(i).Pt())*0.614879;
-      else prob[i] = (5.11382e-05+3.88422e-04/eles.at(i).Pt())*0.614879;
-    }
-    else if(0.8<=abs(eles.at(i).scEta())&&abs(eles.at(i).scEta())<1.4442){
-      if(1/eles.at(i).Pt()<0.0155) prob[i] = (1.94800e-03-9.32813e-02/eles.at(i).Pt())*0.614879;
-      else if(0.0155<=1/eles.at(i).Pt()&&1/eles.at(i).Pt()<0.023) prob[i] = (6.34964e-04-6.98093e-03/eles.at(i).Pt())*0.614879;
-      else prob[i] = (5.80094e-04-4.85519e-03/eles.at(i).Pt())*0.614879;
-    }
-    else if(1.556<=abs(eles.at(i).scEta())&&abs(eles.at(i).scEta())<2.5){
-      if(1/eles.at(i).Pt()<0.0105) prob[i] = (1.30143e-02-7.31072e-01/eles.at(i).Pt())*0.849782;
-      else if(0.0105<=1/eles.at(i).Pt()&&1/eles.at(i).Pt()<0.02) prob[i] = (7.46291e-03-2.07999e-01/eles.at(i).Pt())*0.849782;
-      else prob[i] = (3.74301e-03-2.23102e-02/eles.at(i).Pt())*0.849782;
-    }
-  }
-
-*/
+  double SF_BB, SF_EE;
 
   if(id == "HEID"){
 
-    for(int i=0;i<2;i++){ //DY+TTLL CF
+    //DY+TTLL CF
+    
+    SF_BB = 0.585841;
+    SF_EE = 0.831539;
+
+    for(int i=0;i<2;i++){
 
       if(abs(eles.at(i).scEta())<0.8){
-        if(1/eles.at(i).Pt()<0.0075) prob[i] = (4.59433e-04-4.41286e-02/eles.at(i).Pt())*0.585841;
-        else if(0.0075<=1/eles.at(i).Pt()&&1/eles.at(i).Pt()<0.0155) prob[i] = (2.01545e-04-8.19670e-03/eles.at(i).Pt())*0.585841;
-        else prob[i] = (8.74309e-05-5.72703e-04/eles.at(i).Pt())*0.585841;
+        if(1/eles.at(i).Pt()<0.0075) prob[i] = (4.59433e-04-4.41286e-02/eles.at(i).Pt())*SF_BB;
+        else if(0.0075<=1/eles.at(i).Pt()&&1/eles.at(i).Pt()<0.0155) prob[i] = (2.01545e-04-8.19670e-03/eles.at(i).Pt())*SF_BB;
+        else prob[i] = (8.74309e-05-5.72703e-04/eles.at(i).Pt())*SF_BB;
       }
       else if(0.8<=abs(eles.at(i).scEta())&&abs(eles.at(i).scEta())<1.4442){
-        if(1/eles.at(i).Pt()<0.0055) prob[i] = (3.81412e-03-4.74900e-01/eles.at(i).Pt())*0.585841;
-        else if(0.0055<=1/eles.at(i).Pt()&&1/eles.at(i).Pt()<0.0155) prob[i] = (1.60397e-03-6.97824e-02/eles.at(i).Pt())*0.585841;
-        else prob[i] = (6.59614e-04-7.13587e-03/eles.at(i).Pt())*0.585841;
+        if(1/eles.at(i).Pt()<0.0055) prob[i] = (3.81412e-03-4.74900e-01/eles.at(i).Pt())*SF_BB;
+        else if(0.0055<=1/eles.at(i).Pt()&&1/eles.at(i).Pt()<0.0155) prob[i] = (1.60397e-03-6.97824e-02/eles.at(i).Pt())*SF_BB;
+        else prob[i] = (6.59614e-04-7.13587e-03/eles.at(i).Pt())*SF_BB;
       }
       else if(1.556<=abs(eles.at(i).scEta())&&abs(eles.at(i).scEta())<2.5){
-        if(1/eles.at(i).Pt()<0.0105) prob[i] = (1.23549e-02-6.80049e-01/eles.at(i).Pt())*0.831539;
-        else if(0.0105<=1/eles.at(i).Pt()&&1/eles.at(i).Pt()<0.0205) prob[i] = (7.27935e-03-1.88277e-01/eles.at(i).Pt())*0.831539;
-        else prob[i] = (4.06341e-03-3.22562e-02/eles.at(i).Pt())*0.831539;
+        if(1/eles.at(i).Pt()<0.0105) prob[i] = (1.23549e-02-6.80049e-01/eles.at(i).Pt())*SF_EE;
+        else if(0.0105<=1/eles.at(i).Pt()&&1/eles.at(i).Pt()<0.0205) prob[i] = (7.27935e-03-1.88277e-01/eles.at(i).Pt())*SF_EE;
+        else prob[i] = (4.06341e-03-3.22562e-02/eles.at(i).Pt())*SF_EE;
       }
 
     }
+
+    //
 
     return prob[0]/(1.-prob[0])+prob[1]/(1.-prob[1]);
 
@@ -674,25 +648,32 @@ double ChargeFlip::GetCFweight_SF(std::vector<Electron> eles, TString id){
 
   else if(id == "HNTight2016"){
 
-    for(int i=0;i<2;i++){ //DY+TTLL CF
+    //DY+TTLL CF
+
+    SF_BB = 0.585841;
+    SF_EE = 0.831539;
+
+    for(int i=0;i<2;i++){
 
       if(abs(eles.at(i).scEta())<0.8){
-        if(1/eles.at(i).Pt()<0.0075) prob[i] = (4.59433e-04-4.41286e-02/eles.at(i).Pt())*0.585841;
-        else if(0.0075<=1/eles.at(i).Pt()&&1/eles.at(i).Pt()<0.0155) prob[i] = (2.01545e-04-8.19670e-03/eles.at(i).Pt())*0.585841;
-        else prob[i] = (8.74309e-05-5.72703e-04/eles.at(i).Pt())*0.585841;
+        if(1/eles.at(i).Pt()<0.0075) prob[i] = 3.92360e-04-4.03780e-02/eles.at(i).Pt();
+        else if(0.0075<=1/eles.at(i).Pt()&&1/eles.at(i).Pt()<0.0155) prob[i] = 1.44985e-04-6.52879e-03/eles.at(i).Pt();
+        else prob[i] = 6.59979e-05-1.32125e-03/eles.at(i).Pt();
       }
       else if(0.8<=abs(eles.at(i).scEta())&&abs(eles.at(i).scEta())<1.4442){
-        if(1/eles.at(i).Pt()<0.0055) prob[i] = (3.81412e-03-4.74900e-01/eles.at(i).Pt())*0.585841;
-        else if(0.0055<=1/eles.at(i).Pt()&&1/eles.at(i).Pt()<0.0155) prob[i] = (1.60397e-03-6.97824e-02/eles.at(i).Pt())*0.585841;
-        else prob[i] = (6.59614e-04-7.13587e-03/eles.at(i).Pt())*0.585841;
+        if(1/eles.at(i).Pt()<0.0055) prob[i] = 2.61602e-03-3.16041e-01/eles.at(i).Pt();
+        else if(0.0055<=1/eles.at(i).Pt()&&1/eles.at(i).Pt()<0.0155) prob[i] = 1.09783e-03-5.16251e-02/eles.at(i).Pt();
+        else prob[i] = 3.85519e-04-8.10426e-03/eles.at(i).Pt();
       }
       else if(1.556<=abs(eles.at(i).scEta())&&abs(eles.at(i).scEta())<2.5){
-        if(1/eles.at(i).Pt()<0.0105) prob[i] = (1.23549e-02-6.80049e-01/eles.at(i).Pt())*0.831539;
-        else if(0.0105<=1/eles.at(i).Pt()&&1/eles.at(i).Pt()<0.0205) prob[i] = (7.27935e-03-1.88277e-01/eles.at(i).Pt())*0.831539;
-        else prob[i] = (4.06341e-03-3.22562e-02/eles.at(i).Pt())*0.831539;
+        if(1/eles.at(i).Pt()<0.0105) prob[i] = 9.63989e-03-7.02277e-01/eles.at(i).Pt();
+        else if(0.0105<=1/eles.at(i).Pt()&&1/eles.at(i).Pt()<0.0205) prob[i] = 4.38753e-03-1.75528e-01/eles.at(i).Pt();
+        else prob[i] = 1.60630e-03-3.15704e-02/eles.at(i).Pt();
       }
 
     }
+
+    //
 
     return prob[0]/(1.-prob[0])+prob[1]/(1.-prob[1]);
 
@@ -704,41 +685,49 @@ double ChargeFlip::GetHalfSampleWeight(const Electron& electron, TString id){;
 
   if(id == "HEID"){
 
+    //DY+TTLL
+
     if(abs(electron.scEta())<0.8){
-      if(1/electron.Pt()<0.0075) return (4.59433e-04-4.41286e-02/electron.Pt())*0.585841;
-      else if(0.0075<=1/electron.Pt()&&1/electron.Pt()<0.0155) return (2.01545e-04-8.19670e-03/electron.Pt())*0.585841;
-      else return (8.74309e-05-5.72703e-04/electron.Pt())*0.585841;
+      if(1/electron.Pt()<0.005) return 9.58505e-04-1.59759e-01/electron.Pt();
+      else if(0.005<=1/electron.Pt()&&1/electron.Pt()<0.0155) return 2.07325e-04-8.63460e-03/electron.Pt();
+      else return 9.37334e-05-9.81244e-04/electron.Pt();
     }
     else if(0.8<=abs(electron.scEta())&&abs(electron.scEta())<1.4442){
-      if(1/electron.Pt()<0.0055) return (3.81412e-03-4.74900e-01/electron.Pt())*0.585841;
-      else if(0.0055<=1/electron.Pt()&&1/electron.Pt()<0.0155) return (1.60397e-03-6.97824e-02/electron.Pt())*0.585841;
-      else return (6.59614e-04-7.13587e-03/electron.Pt())*0.585841;
+      if(1/electron.Pt()<0.0055) return 3.82245e-03-4.55401e-01/electron.Pt();
+      else if(0.0055<=1/electron.Pt()&&1/electron.Pt()<0.0155) return 1.65421e-03-7.32609e-02/electron.Pt();
+      else return 6.57784e-04-6.53361e-03/electron.Pt();
     }
     else if(1.556<=abs(electron.scEta())&&abs(electron.scEta())<2.5){
-      if(1/electron.Pt()<0.0105) return (1.23549e-02-6.80049e-01/electron.Pt())*0.831539;
-      else if(0.0105<=1/electron.Pt()&&1/electron.Pt()<0.0205) return (7.27935e-03-1.88277e-01/electron.Pt())*0.831539;
-      else return (4.06341e-03-3.22562e-02/electron.Pt())*0.831539;
+      if(1/electron.Pt()<0.01) return 1.27778e-02-7.44197e-01/electron.Pt();
+      else if(0.01<=1/electron.Pt()&&1/electron.Pt()<0.0205) return 7.25863e-03-1.88640e-01/electron.Pt();
+      else return 4.17112e-03-3.71866e-02/electron.Pt();
     }
+
+    //
 
   }
 
   else if(id == "HNTight2016"){
 
+    //DY+TTLL
+
     if(abs(electron.scEta())<0.8){
-      if(1/electron.Pt()<0.0075) return (4.59433e-04-4.41286e-02/electron.Pt())*0.585841;
-      else if(0.0075<=1/electron.Pt()&&1/electron.Pt()<0.0155) return (2.01545e-04-8.19670e-03/electron.Pt())*0.585841;
-      else return (8.74309e-05-5.72703e-04/electron.Pt())*0.585841;
+      if(1/electron.Pt()<0.0075) return 4.12045e-04-4.45416e-02/electron.Pt();
+      else if(0.0075<=1/electron.Pt()&&1/electron.Pt()<0.0155) return 1.18690e-04-4.48807e-03/electron.Pt();
+      else return 7.28590e-05-1.58132e-03/electron.Pt();
     }
     else if(0.8<=abs(electron.scEta())&&abs(electron.scEta())<1.4442){
-      if(1/electron.Pt()<0.0055) return (3.81412e-03-4.74900e-01/electron.Pt())*0.585841;
-      else if(0.0055<=1/electron.Pt()&&1/electron.Pt()<0.0155) return (1.60397e-03-6.97824e-02/electron.Pt())*0.585841;
-      else return (6.59614e-04-7.13587e-03/electron.Pt())*0.585841;
+      if(1/electron.Pt()<0.0055) return 3.20894e-03-4.20695e-01/electron.Pt();
+      else if(0.0055<=1/electron.Pt()&&1/electron.Pt()<0.0155) return 1.10226e-03-5.22899e-02/electron.Pt();
+      else return 3.83228e-04-8.13698e-03/electron.Pt();
     }
     else if(1.556<=abs(electron.scEta())&&abs(electron.scEta())<2.5){
-      if(1/electron.Pt()<0.0105) return (1.23549e-02-6.80049e-01/electron.Pt())*0.831539;
-      else if(0.0105<=1/electron.Pt()&&1/electron.Pt()<0.0205) return (7.27935e-03-1.88277e-01/electron.Pt())*0.831539;
-      else return (4.06341e-03-3.22562e-02/electron.Pt())*0.831539;
+      if(1/electron.Pt()<0.01) return 1.01037e-02-7.46975e-01/electron.Pt();
+      else if(0.01<=1/electron.Pt()&&1/electron.Pt()<0.019) return 4.40033e-03-1.78011e-01/electron.Pt();
+      else return 1.59123e-03-3.18552e-02/electron.Pt();
     }
+
+    //
 
   }
 
