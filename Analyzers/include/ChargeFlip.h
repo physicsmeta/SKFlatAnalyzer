@@ -24,10 +24,10 @@ public:
   vector<Muon> AllMuons;
   vector<Jet> AllJets; // Only for Half Sample Test
 
-  int MllLeft = 70;
-  int MllRight = 110;
-  int MinPt = 25;
-  int NBin = 40;
+  int MllLeft;
+  int MllRight;
+  int MinPt;
+  int NBin;
 
   ChargeFlip();
   ~ChargeFlip();

@@ -1,4 +1,4 @@
-void Odd_HEID(){
+void Odd_HNTight2016(){
 
 TString filename = "/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip/2016/HalfSampleTest__/ChargeFlip_DYJets_TTLL.root";
 TFile* f1 = new TFile(filename);
@@ -32,7 +32,7 @@ for (int i=0; i<100; i++) {
 
 // Draw the plots //
 
-TCanvas* c1 = new TCanvas("c1","HalfSampleTest : MET ("+User_ID+")",1000,100,900,800);
+TCanvas* c1 = new TCanvas("c1","HalfSampleTest : MET ("+User_ID+")",100,100,900,800);
 c1->Divide(1,2);
 
 c1->cd(1);
@@ -53,7 +53,7 @@ gr1->GetXaxis()->SetTickLength(0.025);
 gr1->GetXaxis()->SetLabelSize(0);
 gr1->GetXaxis()->SetRangeUser(0,100);
 gr1->GetYaxis()->SetLabelSize(0.025);
-gr1->GetYaxis()->SetRangeUser(0,0.002);
+gr1->GetYaxis()->SetRangeUser(0,0.0008);
 
 TGraphErrors* gr2 = new TGraphErrors(x_2.size(),&x_2[0],&y_2[0],&ex_2[0],&ey_2[0]);
 gr2->SetMarkerStyle(20);
@@ -61,7 +61,7 @@ gr2->SetMarkerColor(kMagenta+2);
 gr2->SetLineColor(15);
 gr2->Draw("ZP SAME"); 
 
-TLegend* legend = new TLegend(0.15,0.6,0.4,0.7);
+TLegend* legend = new TLegend(0.75,0.78,0.9,0.92);
 legend->AddEntry(gr1,"Measured","lp");
 legend->AddEntry(gr2,"Predicted","lp");
 legend->Draw();
@@ -84,7 +84,7 @@ gr3->SetFillColor(17);
 gr3->Draw("A2");
 gr3->Draw("ZP");
 gr3->GetXaxis()->SetLabelSize(0.06);
-gr3->GetXaxis()->SetTitle("#scale[2.2]{E_{T}^{miss} (GeV)}");
+gr3->GetXaxis()->SetTitle("#scale[2.2]{#slash{E}_{T} (GeV)}");
 gr3->GetXaxis()->SetTitleOffset(1.6);
 gr3->GetXaxis()->SetTickLength(0.05);
 gr3->GetXaxis()->SetRangeUser(0,100);
@@ -95,10 +95,6 @@ gr3->GetYaxis()->SetRangeUser(0,2);
 gPad->SetGridx();
 gPad->SetGridy();
 
-cout << gr3->GetXaxis()->GetXmax() << endl;
-cout << gr3->GetY()[105] << endl;
-cout << gr3->GetY()[1000] << endl;
-
 TLine* LineAtOne = new TLine(gr3->GetXaxis()->GetXmin(),1,100,1);
 LineAtOne->SetLineStyle(kDashed);
 LineAtOne->SetLineWidth(2);
@@ -106,96 +102,67 @@ LineAtOne->SetLineColor(2);
 LineAtOne->Draw();
 
 
-//cout << "N(SS_prompt) : " << h0->Integral() << endl;
-//cout << "N(OS_CFweighted_shifted_1.3%) : " << h1->Integral() << endl;
-//cout << "Uncert. : " << h0->Integral()/h1->Integral() << endl;
-//cout << endl;
-
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-TH1D* h2 = (TH1D*)f1->Get(User_ID+"/HalfSampleTest/Odd/pt1_prmt_SS");
-TH1D* h3 = (TH1D*)f1->Get(User_ID+"/HalfSampleTest/Odd/pt1_OS_CFweighted_shifted_13");
-TH1D* h4 = (TH1D*)f1->Get(User_ID+"/HalfSampleTest/Odd/pt2_prmt_SS");
-TH1D* h5 = (TH1D*)f1->Get(User_ID+"/HalfSampleTest/Odd/pt2_OS_CFweighted_shifted_13");
-TH1D* h6 = (TH1D*)f1->Get(User_ID+"/HalfSampleTest/Odd/MET_prmt_SS");
-TH1D* h7 = (TH1D*)f1->Get(User_ID+"/HalfSampleTest/Odd/MET_OS_CFweighted_shifted_13");
+TH1D* H0 = (TH1D*)f1->Get(User_ID+"/HalfSampleTest/Odd/METsquaredOverST_Denom");
+TH1D* H1 = (TH1D*)f1->Get(User_ID+"/HalfSampleTest/Odd/METsquaredOverST_weight");
+TH1D* H2 = (TH1D*)f1->Get(User_ID+"/HalfSampleTest/Odd/METsquaredOverST_Num");
 
-vector<double> pt1_SS_x, pt1_SS_ex, pt2_SS_x, pt2_SS_ex, MET_SS_x, MET_SS_ex, pt1_OS_x, pt1_OS_ex, pt2_OS_x, pt2_OS_ex, MET_OS_x, MET_OS_ex, pt1_R_x, pt1_R_ex, pt2_R_x, pt2_R_ex, MET_R_x, MET_R_ex;
-for (int i=0; i<55; i++) {
-  pt1_SS_x.push_back(25+(2*i+1)*(0.5)); pt1_SS_ex.push_back(0.5); 
-  pt1_OS_x.push_back(25+(2*i+1)*(0.5)); pt1_OS_ex.push_back(0.5); 
-  pt1_R_x.push_back(25+(2*i+1)*(0.5)); pt1_R_ex.push_back(0.5); 
-  pt2_SS_x.push_back(25+(2*i+1)*(0.5)); pt2_SS_ex.push_back(0.5); 
-  pt2_OS_x.push_back(25+(2*i+1)*(0.5)); pt2_OS_ex.push_back(0.5); 
-  pt2_R_x.push_back(25+(2*i+1)*(0.5)); pt2_R_ex.push_back(0.5); 
+vector<double> X_1, EX_1, X_2, EX_2, X_3, EX_3;
+for (int i=0; i<50; i++) {
+  X_1.push_back((2*i+1)*(0.5)); EX_1.push_back(0.5); 
+  X_2.push_back((2*i+1)*(0.5)); EX_2.push_back(0.5); 
+  X_3.push_back((2*i+1)*(0.5)); EX_3.push_back(0.5); 
 }
-for (int i=0; i<80; i++){
-  MET_SS_x.push_back((2*i+1)*0.5); MET_SS_ex.push_back(0.5);
-  MET_OS_x.push_back((2*i+1)*0.5); MET_OS_ex.push_back(0.5);
-  MET_R_x.push_back((2*i+1)*0.5); MET_R_ex.push_back(0.5);
-}
-vector<double> pt1_SS_y, pt1_SS_ey, pt2_SS_y, pt2_SS_ey, MET_SS_y, MET_SS_ey, pt1_OS_y, pt1_OS_ey, pt2_OS_y, pt2_OS_ey, MET_OS_y, MET_OS_ey, pt1_R_y, pt1_R_ey, pt2_R_y, pt2_R_ey, MET_R_y, MET_R_ey;
-for (int i=0; i<55; i++) {
-  pt1_SS_y.push_back(h2->GetBinContent(i+6));
-  pt1_SS_ey.push_back(h2->GetBinError(i+6));
-  pt1_OS_y.push_back(h3->GetBinContent(i+6));
-  pt1_OS_ey.push_back(h3->GetBinError(i+6));
-  pt1_R_y.push_back(h2->GetBinContent(i+6)/h3->GetBinContent(i+6));
-  pt1_R_ey.push_back(pt1_R_y[i]*(sqrt(pow(h3->GetBinError(i+6)/h3->GetBinContent(i+6),2)+pow(h2->GetBinError(i+6)/h2->GetBinContent(i+6),2))));
-
-  pt2_SS_y.push_back(h4->GetBinContent(i+6));
-  pt2_SS_ey.push_back(h4->GetBinError(i+6));
-  pt2_OS_y.push_back(h5->GetBinContent(i+6));
-  pt2_OS_ey.push_back(h5->GetBinError(i+6));
-  pt2_R_y.push_back(h4->GetBinContent(i+6)/h5->GetBinContent(i+6));
-  pt2_R_ey.push_back(pt2_R_y[i]*(sqrt(pow(h5->GetBinError(i+6)/h5->GetBinContent(i+6),2)+pow(h4->GetBinError(i+6)/h4->GetBinContent(i+6),2))));
-}
-for (int i=0; i<80; i++){
-  MET_SS_y.push_back(h6->GetBinContent(i+1));
-  MET_SS_ey.push_back(h6->GetBinError(i+1));
-  MET_OS_y.push_back(h7->GetBinContent(i+1));
-  MET_OS_ey.push_back(h7->GetBinError(i+1));
-  MET_R_y.push_back(h6->GetBinContent(i+1)/h7->GetBinContent(i+1));
-  MET_R_ey.push_back(MET_R_y[i]*(sqrt(pow(h7->GetBinError(i+1)/h7->GetBinContent(i+1),2)+pow(h6->GetBinError(i+1)/h6->GetBinContent(i+1),2))));
+vector<double> Y_1, EY_1, Y_2, EY_2, Y_3, EY_3;
+for (int i=0; i<50; i++) {
+  Y_1.push_back(H1->GetBinContent(i+1)/H0->GetBinContent(i+1));
+  EY_1.push_back(Y_1[i]*(sqrt(pow(H1->GetBinError(i+1)/H1->GetBinContent(i+1),2)+pow(H0->GetBinError(i+1)/H0->GetBinContent(i+1),2))));
+  Y_2.push_back(H2->GetBinContent(i+1)/H0->GetBinContent(i+1));
+  EY_2.push_back(Y_2[i]*(sqrt(pow(H2->GetBinError(i+1)/H2->GetBinContent(i+1),2)+pow(H0->GetBinError(i+1)/H0->GetBinContent(i+1),2))));
+  Y_3.push_back(Y_2[i]/Y_1[i]);
+  EY_3.push_back(Y_3[i]*(sqrt(pow(EY_2[i]/Y_2[i],2)+pow(EY_1[i]/Y_1[i],2))));
 }
 
-// pt1
 
-TCanvas* c3 = new TCanvas("c3","pt1 : OS_shifted_1.3% vs SS_prompt ("+User_ID+")",100,100,900,800);
-c3->Divide(1,2);
+// Draw the plots //
 
-c3->cd(1);
+TCanvas* c2 = new TCanvas("c2","HalfSampleTest : MET^{2}/ST ("+User_ID+")",1000,100,900,800);
+c2->Divide(1,2);
+
+c2->cd(1);
 
 gPad->SetPad(0,0.35,1,1);
 gPad->SetTopMargin(0.08);
 gPad->SetBottomMargin(0.02);
 
-TGraphErrors* pt1_SS = new TGraphErrors(pt1_SS_x.size(),&pt1_SS_x[0],&pt1_SS_y[0],&pt1_SS_ex[0],&pt1_SS_ey[0]);
-pt1_SS->SetMarkerStyle(20);
-//pt1->SetMarkerSize(0.8);
-//pt1->SetMarkerColor(kMagenta+2);
-pt1_SS->SetLineColor(15);
-pt1_SS->SetTitle("pt1 : OS_CFweighted_1.3% vs SS_prompt ("+User_ID+")");
-//pt1->GetXaxis()->SetRangeUser(70,110);
-//pt1->SetMinimum(0.);
-pt1_SS->Draw("ZAP"); // Z : do not draw small horizontal/vertical lines the end of the error bars
-pt1_SS->GetXaxis()->SetTickLength(0.025);
-pt1_SS->GetXaxis()->SetLabelSize(0);
-pt1_SS->GetYaxis()->SetLabelSize(0.025);
+TGraphErrors* GR1 = new TGraphErrors(X_1.size(),&X_1[0],&Y_1[0],&EX_1[0],&EY_1[0]);
+GR1->SetMarkerStyle(20);
+//GR1->SetMarkerSize(0.8);
+//GR1->SetMarkerColor(kMagenta+2);
+GR1->SetLineColor(15);
+GR1->SetTitle("HalfSampleTest : MET^{2}/ST ("+User_ID+")");
+//GR1->SetMinimum(0.);
+GR1->Draw("ZAP"); // Z : do not draw small horizontal/vertical lines the end of the error bars
+GR1->GetXaxis()->SetTickLength(0.025);
+GR1->GetXaxis()->SetLabelSize(0);
+GR1->GetXaxis()->SetRangeUser(0,50);
+GR1->GetYaxis()->SetLabelSize(0.025);
+GR1->GetYaxis()->SetRangeUser(0,0.0008);
 
-TGraphErrors* pt1_OS = new TGraphErrors(pt1_OS_x.size(),&pt1_OS_x[0],&pt1_OS_y[0],&pt1_OS_ex[0],&pt1_OS_ey[0]);
-pt1_OS->SetMarkerStyle(20);
-pt1_OS->SetMarkerColor(kMagenta+2);
-pt1_OS->SetLineColor(15);
-pt1_OS->Draw("ZP SAME"); 
+TGraphErrors* GR2 = new TGraphErrors(X_2.size(),&X_2[0],&Y_2[0],&EX_2[0],&EY_2[0]);
+GR2->SetMarkerStyle(20);
+GR2->SetMarkerColor(kMagenta+2);
+GR2->SetLineColor(15);
+GR2->Draw("ZP SAME"); 
 
-TLegend* legend_pt1 = new TLegend(0.55,0.7,0.8,0.8);
-legend_pt1->AddEntry(pt1_OS,"OS_CFweighted_1.3%","lp");
-legend_pt1->AddEntry(pt1_SS,"SS_prompt","lp");
-legend_pt1->Draw();
+TLegend* legend_2 = new TLegend(0.75,0.78,0.9,0.92);
+legend_2->AddEntry(GR1,"Measured","lp");
+legend_2->AddEntry(GR2,"Predicted","lp");
+legend_2->Draw();
 
-c3->cd(2);
+
+c2->cd(2);
 
 gPad->SetPad(0,0,1,0.35);
 gPad->SetTopMargin(0.05);
@@ -203,178 +170,37 @@ gPad->SetBottomMargin(0.15);
 
 // Just ratio plot
 
-TGraphErrors* pt1_R = new TGraphErrors(pt1_R_x.size(),&pt1_R_x[0],&pt1_R_y[0],&pt1_R_ex[0],&pt1_R_ey[0]);
-pt1_R->SetMarkerStyle(20);
-pt1_R->SetMarkerColor(kBlue-4);
-pt1_R->SetMarkerSize(0.8);
-pt1_R->SetTitle("");
-pt1_R->SetFillColor(17);
-pt1_R->Draw("A2");
-pt1_R->Draw("ZP");
-pt1_R->GetXaxis()->SetLabelSize(0.06);
-pt1_R->GetXaxis()->SetTitle("#scale[2.2]{P_{T} (GeV)}");
-pt1_R->GetXaxis()->SetTitleOffset(1.6);
-pt1_R->GetXaxis()->SetTickLength(0.05);
-pt1_R->GetYaxis()->SetLabelSize(0.05);
-pt1_R->GetYaxis()->SetTitle("#scale[2.2]{SS_prompt / OS}");
-pt1_R->GetYaxis()->SetTitleOffset(0.8);
-pt1_R->GetYaxis()->SetRangeUser(0,2);
+TGraphErrors* GR3 = new TGraphErrors(X_3.size(),&X_3[0],&Y_3[0],&EX_3[0],&EY_3[0]);
+GR3->SetMarkerStyle(20);
+GR3->SetMarkerColor(kBlue-4);
+GR3->SetMarkerSize(0.8);
+GR3->SetTitle("");
+GR3->SetFillColor(17);
+GR3->Draw("A2");
+GR3->Draw("ZP");
+GR3->GetXaxis()->SetLabelSize(0.06);
+GR3->GetXaxis()->SetTitle("#scale[2.2]{#slash{E}^{2}_{T}/S_{T} (GeV)}");
+GR3->GetXaxis()->SetTitleOffset(1.6);
+GR3->GetXaxis()->SetTickLength(0.05);
+GR3->GetXaxis()->SetRangeUser(0,50);
+GR3->GetYaxis()->SetLabelSize(0.05);
+GR3->GetYaxis()->SetTitle("#scale[1.5]{#frac{Measured}{Predicted}}");
+GR3->GetYaxis()->SetTitleOffset(0.8);
+GR3->GetYaxis()->SetRangeUser(0,2);
 gPad->SetGridx();
 gPad->SetGridy();
 
-TLine* LineAtOne_pt1 = new TLine(pt1_R->GetXaxis()->GetXmin(),1,pt1_R->GetXaxis()->GetXmax(),1);
-LineAtOne_pt1->SetLineStyle(kDashed);
-LineAtOne_pt1->SetLineWidth(2);
-LineAtOne_pt1->SetLineColor(2);
-LineAtOne_pt1->Draw();
-
-// pt2
-
-TCanvas* c4 = new TCanvas("c4","pt2 : OS_shifted_1.3% vs SS_prompt ("+User_ID+")",100,100,900,800);
-c4->Divide(1,2);
-
-c4->cd(1);
-
-gPad->SetPad(0,0.35,1,1);
-gPad->SetTopMargin(0.08);
-gPad->SetBottomMargin(0.02);
-
-TGraphErrors* pt2_SS = new TGraphErrors(pt2_SS_x.size(),&pt2_SS_x[0],&pt2_SS_y[0],&pt2_SS_ex[0],&pt2_SS_ey[0]);
-pt2_SS->SetMarkerStyle(20);
-//pt1->SetMarkerSize(0.8);
-//pt1->SetMarkerColor(kMagenta+2);
-pt2_SS->SetLineColor(15);
-pt2_SS->SetTitle("pt2 : OS_CFweighted_1.3% vs SS_prompt ("+User_ID+")");
-//pt1->GetXaxis()->SetRangeUser(70,110);
-//pt1->SetMinimum(0.);
-pt2_SS->Draw("ZAP"); // Z : do not draw small horizontal/vertical lines the end of the error bars
-pt2_SS->GetXaxis()->SetTickLength(0.025);
-pt2_SS->GetXaxis()->SetLabelSize(0);
-pt2_SS->GetYaxis()->SetLabelSize(0.025);
-
-TGraphErrors* pt2_OS = new TGraphErrors(pt2_OS_x.size(),&pt2_OS_x[0],&pt2_OS_y[0],&pt2_OS_ex[0],&pt2_OS_ey[0]);
-pt2_OS->SetMarkerStyle(20);
-pt2_OS->SetMarkerColor(kMagenta+2);
-pt2_OS->SetLineColor(15);
-pt2_OS->Draw("ZP SAME"); 
-
-TLegend* legend_pt2 = new TLegend(0.55,0.7,0.8,0.8);
-legend_pt2->AddEntry(pt2_OS,"OS_CFweighted_1.3%","lp");
-legend_pt2->AddEntry(pt2_SS,"SS_prompt ("+User_ID+")","lp");
-legend_pt2->Draw();
-
-c4->cd(2);
-
-gPad->SetPad(0,0,1,0.35);
-gPad->SetTopMargin(0.05);
-gPad->SetBottomMargin(0.15);
-
-// Just ratio plot
-
-TGraphErrors* pt2_R = new TGraphErrors(pt2_R_x.size(),&pt2_R_x[0],&pt2_R_y[0],&pt2_R_ex[0],&pt2_R_ey[0]);
-pt2_R->SetMarkerStyle(20);
-pt2_R->SetMarkerColor(kBlue-4);
-pt2_R->SetMarkerSize(0.8);
-pt2_R->SetTitle("");
-pt2_R->SetFillColor(17);
-pt2_R->Draw("A2");
-pt2_R->Draw("ZP");
-pt2_R->GetXaxis()->SetLabelSize(0.06);
-pt2_R->GetXaxis()->SetTitle("#scale[2.2]{P_{T} (GeV)}");
-pt2_R->GetXaxis()->SetTitleOffset(1.6);
-pt2_R->GetXaxis()->SetTickLength(0.05);
-pt2_R->GetYaxis()->SetLabelSize(0.05);
-pt2_R->GetYaxis()->SetTitle("#scale[2.2]{SS_prompt / OS}");
-pt2_R->GetYaxis()->SetTitleOffset(0.8);
-pt2_R->GetYaxis()->SetRangeUser(0,2);
-gPad->SetGridx();
-gPad->SetGridy();
-
-TLine* LineAtOne_pt2 = new TLine(pt2_R->GetXaxis()->GetXmin(),1,pt2_R->GetXaxis()->GetXmax(),1);
-LineAtOne_pt2->SetLineStyle(kDashed);
-LineAtOne_pt2->SetLineWidth(2);
-LineAtOne_pt2->SetLineColor(2);
-LineAtOne_pt2->Draw();
+TLine* LineAtOne_2 = new TLine(GR3->GetXaxis()->GetXmin(),1,50,1);
+LineAtOne_2->SetLineStyle(kDashed);
+LineAtOne_2->SetLineWidth(2);
+LineAtOne_2->SetLineColor(2);
+LineAtOne_2->Draw();
 
 
-// MET
+c1->SaveAs(samplename+"/"+User_ID+"_MET.pdf");
+c2->SaveAs(samplename+"/"+User_ID+"_METsquaredOverST.pdf");
 
-TCanvas* c5 = new TCanvas("c5","MET : OS_shifted_1.3% vs SS_prompt ("+User_ID+")",100,100,900,800);
-c5->Divide(1,2);
-
-c5->cd(1);
-
-gPad->SetPad(0,0.35,1,1);
-gPad->SetTopMargin(0.08);
-gPad->SetBottomMargin(0.02);
-
-TGraphErrors* MET_SS = new TGraphErrors(MET_SS_x.size(),&MET_SS_x[0],&MET_SS_y[0],&MET_SS_ex[0],&MET_SS_ey[0]);
-MET_SS->SetMarkerStyle(20);
-//pt1->SetMarkerSize(0.8);
-//pt1->SetMarkerColor(kMagenta+2);
-MET_SS->SetLineColor(15);
-MET_SS->SetTitle("MET : OS_CFweighted_1.3% vs SS_prompt ("+User_ID+")");
-//pt1->GetXaxis()->SetRangeUser(70,110);
-//pt1->SetMinimum(0.);
-MET_SS->Draw("ZAP"); // Z : do not draw small horizontal/vertical lines the end of the error bars
-MET_SS->GetXaxis()->SetTickLength(0.025);
-MET_SS->GetXaxis()->SetLabelSize(0);
-MET_SS->GetYaxis()->SetLabelSize(0.025);
-
-TGraphErrors* MET_OS = new TGraphErrors(MET_OS_x.size(),&MET_OS_x[0],&MET_OS_y[0],&MET_OS_ex[0],&MET_OS_ey[0]);
-MET_OS->SetMarkerStyle(20);
-MET_OS->SetMarkerColor(kMagenta+2);
-MET_OS->SetLineColor(15);
-MET_OS->Draw("ZP SAME"); 
-
-TLegend* legend_MET = new TLegend(0.55,0.7,0.8,0.8);
-legend_MET->AddEntry(MET_OS,"OS_CFweighted_1.3%","lp");
-legend_MET->AddEntry(MET_SS,"SS_prompt","lp");
-legend_MET->Draw();
-
-c5->cd(2);
-
-gPad->SetPad(0,0,1,0.35);
-gPad->SetTopMargin(0.05);
-gPad->SetBottomMargin(0.15);
-
-// Just ratio plot
-
-TGraphErrors* MET_R = new TGraphErrors(MET_R_x.size(),&MET_R_x[0],&MET_R_y[0],&MET_R_ex[0],&MET_R_ey[0]);
-MET_R->SetMarkerStyle(20);
-MET_R->SetMarkerColor(kBlue-4);
-MET_R->SetMarkerSize(0.8);
-MET_R->SetTitle("");
-MET_R->SetFillColor(17);
-MET_R->Draw("A2");
-MET_R->Draw("ZP");
-MET_R->GetXaxis()->SetLabelSize(0.06);
-MET_R->GetXaxis()->SetTitle("#scale[2.2]{E^{miss}_{T} (GeV)}");
-MET_R->GetXaxis()->SetTitleOffset(1.6);
-MET_R->GetXaxis()->SetTickLength(0.05);
-MET_R->GetYaxis()->SetLabelSize(0.05);
-MET_R->GetYaxis()->SetTitle("#scale[2.2]{SS_prompt / OS}");
-MET_R->GetYaxis()->SetTitleOffset(0.8);
-MET_R->GetYaxis()->SetRangeUser(0,2);
-gPad->SetGridx();
-gPad->SetGridy();
-
-TLine* LineAtOne_MET = new TLine(MET_R->GetXaxis()->GetXmin(),1,MET_R->GetXaxis()->GetXmax(),1);
-LineAtOne_MET->SetLineStyle(kDashed);
-LineAtOne_MET->SetLineWidth(2);
-LineAtOne_MET->SetLineColor(2);
-LineAtOne_MET->Draw();
-
-//c1->SaveAs(samplename+"/"+User_ID+"_ZMass_prompt.pdf");
-//c2->SaveAs(samplename+"/"+User_ID+"_ZMass_NoEshift_prompt.pdf");
-//c3->SaveAs(samplename+"/"+User_ID+"_pt1_prompt.pdf");
-//c4->SaveAs(samplename+"/"+User_ID+"_pt2_prompt.pdf");
-//c5->SaveAs(samplename+"/"+User_ID+"_MET_prompt.pdf");
-
-//c1->SaveAs(samplename+"/"+User_ID+"_ZMass_prompt.png");
-//c2->SaveAs(samplename+"/"+User_ID+"_ZMass_NoEshift_prompt.png");
-//c3->SaveAs(samplename+"/"+User_ID+"_pt1_prompt.png");
-//c4->SaveAs(samplename+"/"+User_ID+"_pt2_prompt.png");
-//c5->SaveAs(samplename+"/"+User_ID+"_MET_prompt.png");
+c1->SaveAs(samplename+"/"+User_ID+"_MET.png");
+c2->SaveAs(samplename+"/"+User_ID+"_METsquaredOverST.png");
 
 }

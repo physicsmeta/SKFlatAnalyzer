@@ -91,6 +91,11 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
 
   Event ev = GetEvent();
 
+  MllLeft = 70;
+  MllRight = 110;
+  MinPt = 25;
+  NBin = 40; //initialize syst. parameters
+
   if(param.CFsyst_ == AnalyzerParameter::CF_Central){
   
   }
@@ -109,10 +114,10 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
     MinPt = 22;
   }
   else if(param.CFsyst_ == AnalyzerParameter::NBinUp){
-    NBin = 35;
+    NBin = 45;
   }
   else if(param.CFsyst_ == AnalyzerParameter::NBinDown){
-    NBin = 45;
+    NBin = 35;
   }
   else{
     cout << "[ExampleRun::executeEventFromParameter] Wrong syst" << endl;
@@ -488,12 +493,19 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
   
       }
   
-      /* Now let's shift the electrons' energy 1.4% */
+      /* Now let's shift the electrons' energy X% */
       
       vector<Electron> eles_tmp = eles; // copy the vector
+      double X;
+      if(DataYear==2016){
+        if(param.Electron_User_ID=="HEID") X = 1.3;
+        if(param.Electron_User_ID=="HNTight2016") X = 1.2;
+      }
+      TString X_string = Form("%f",X);
+      X_string = X_string(0,3)+"%";
   		
       for(int j=0;j<2;j++){
-        eles_tmp.at(j).SetE(eles_tmp.at(j).E()*(1-0.014));
+        eles_tmp.at(j).SetE(eles_tmp.at(j).E()*(1-X/100));
         eles_tmp.at(j).SetPtEtaPhiE(eles_tmp.at(j).E() * TMath::Sin(eles_tmp.at(j).Theta()), eles_tmp.at(j).Eta(), eles_tmp.at(j).Phi(), eles_tmp.at(j).E());
       }
   
@@ -509,29 +521,29 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
   
           // BB
           if(abs(eles_tmp.at(0).scEta())<1.4442&&abs(eles_tmp.at(1).scEta())<1.4442){
-            FillHist(param.Name+"/ScaleFactor/BB_ZMass_OS_CFweighted_shifted_1.4%", ZCand_tmp.M(), weight_tmp, NBin, MllLeft, MllRight);
-            FillHist(param.Name+"/ScaleFactor/BB_ZMass_OS_CFSFweighted_shifted_1.4%", ZCand_tmp.M(), weight_tmp_SF, NBin, MllLeft, MllRight);
-            FillHist(param.Name+"/ScaleFactor/BB_pt1_OS_CFSFweighted_shifted_1.4%", eles_tmp.at(0).Pt(), weight_tmp_SF, 70, 20., 90.);
-            FillHist(param.Name+"/ScaleFactor/BB_pt2_OS_CFSFweighted_shifted_1.4%", eles_tmp.at(1).Pt(), weight_tmp_SF, 70, 20., 90.);
-            FillHist(param.Name+"/ScaleFactor/BB_MET_OS_CFSFweighted_shifted_1.4%", METv_tmp.Pt(), weight_tmp_SF, 100, 0., 100.);
+            FillHist(param.Name+"/ScaleFactor/BB_ZMass_OS_CFweighted_shifted_"+X_string, ZCand_tmp.M(), weight_tmp, NBin, MllLeft, MllRight);
+            FillHist(param.Name+"/ScaleFactor/BB_ZMass_OS_CFSFweighted_shifted_"+X_string, ZCand_tmp.M(), weight_tmp_SF, NBin, MllLeft, MllRight);
+            FillHist(param.Name+"/ScaleFactor/BB_pt1_OS_CFSFweighted_shifted_"+X_string, eles_tmp.at(0).Pt(), weight_tmp_SF, 70, 20., 90.);
+            FillHist(param.Name+"/ScaleFactor/BB_pt2_OS_CFSFweighted_shifted_"+X_string, eles_tmp.at(1).Pt(), weight_tmp_SF, 70, 20., 90.);
+            FillHist(param.Name+"/ScaleFactor/BB_MET_OS_CFSFweighted_shifted_"+X_string, METv_tmp.Pt(), weight_tmp_SF, 100, 0., 100.);
           }
       
           // BE
           if((abs(eles_tmp.at(0).scEta())<1.4442&&abs(eles_tmp.at(1).scEta())>=1.556)||(abs(eles_tmp.at(0).scEta())>=1.556&&abs(eles_tmp.at(1).scEta())<1.4442)){
-            FillHist(param.Name+"/ScaleFactor/BE_ZMass_OS_CFweighted_shifted_1.4%", ZCand_tmp.M(), weight_tmp, NBin, MllLeft, MllRight);
-            FillHist(param.Name+"/ScaleFactor/BE_ZMass_OS_CFSFweighted_shifted_1.4%", ZCand_tmp.M(), weight_tmp_SF, NBin, MllLeft, MllRight);
-            FillHist(param.Name+"/ScaleFactor/BE_pt1_OS_CFSFweighted_shifted_1.4%", eles.at(0).Pt(), weight_tmp_SF, 70, 20., 90.);
-            FillHist(param.Name+"/ScaleFactor/BE_pt2_OS_CFSFweighted_shifted_1.4%", eles.at(1).Pt(), weight_tmp_SF, 70, 20., 90.);
-            FillHist(param.Name+"/ScaleFactor/BE_MET_OS_CFSFweighted_shifted_1.4%", METv.Pt(), weight_tmp_SF, 100, 0., 100.);
+            FillHist(param.Name+"/ScaleFactor/BE_ZMass_OS_CFweighted_shifted_"+X_string, ZCand_tmp.M(), weight_tmp, NBin, MllLeft, MllRight);
+            FillHist(param.Name+"/ScaleFactor/BE_ZMass_OS_CFSFweighted_shifted_"+X_string, ZCand_tmp.M(), weight_tmp_SF, NBin, MllLeft, MllRight);
+            FillHist(param.Name+"/ScaleFactor/BE_pt1_OS_CFSFweighted_shifted_"+X_string, eles.at(0).Pt(), weight_tmp_SF, 70, 20., 90.);
+            FillHist(param.Name+"/ScaleFactor/BE_pt2_OS_CFSFweighted_shifted_"+X_string, eles.at(1).Pt(), weight_tmp_SF, 70, 20., 90.);
+            FillHist(param.Name+"/ScaleFactor/BE_MET_OS_CFSFweighted_shifted_"+X_string, METv.Pt(), weight_tmp_SF, 100, 0., 100.);
           }
       
           // EE
           if(abs(eles_tmp.at(0).scEta())>=1.556&&abs(eles_tmp.at(1).scEta())>=1.556){
-            FillHist(param.Name+"/ScaleFactor/EE_ZMass_OS_CFweighted_shifted_1.4%", ZCand_tmp.M(), weight_tmp, NBin, MllLeft, MllRight);
-            FillHist(param.Name+"/ScaleFactor/EE_ZMass_OS_CFSFweighted_shifted_1.4%", ZCand_tmp.M(), weight_tmp_SF, NBin, MllLeft, MllRight);
-            FillHist(param.Name+"/ScaleFactor/EE_pt1_OS_CFSFweighted_shifted_1.4%", eles.at(0).Pt(), weight_tmp_SF, 70, 20., 90.);
-            FillHist(param.Name+"/ScaleFactor/EE_pt2_OS_CFSFweighted_shifted_1.4%", eles.at(1).Pt(), weight_tmp_SF, 70, 20., 90.);
-            FillHist(param.Name+"/ScaleFactor/EE_MET_OS_CFSFweighted_shifted_1.4%", METv.Pt(), weight_tmp_SF, 100, 0., 100.);
+            FillHist(param.Name+"/ScaleFactor/EE_ZMass_OS_CFweighted_shifted_"+X_string, ZCand_tmp.M(), weight_tmp, NBin, MllLeft, MllRight);
+            FillHist(param.Name+"/ScaleFactor/EE_ZMass_OS_CFSFweighted_shifted_"+X_string, ZCand_tmp.M(), weight_tmp_SF, NBin, MllLeft, MllRight);
+            FillHist(param.Name+"/ScaleFactor/EE_pt1_OS_CFSFweighted_shifted_"+X_string, eles.at(0).Pt(), weight_tmp_SF, 70, 20., 90.);
+            FillHist(param.Name+"/ScaleFactor/EE_pt2_OS_CFSFweighted_shifted_"+X_string, eles.at(1).Pt(), weight_tmp_SF, 70, 20., 90.);
+            FillHist(param.Name+"/ScaleFactor/EE_MET_OS_CFSFweighted_shifted_"+X_string, METv.Pt(), weight_tmp_SF, 100, 0., 100.);
           }
   				
         }

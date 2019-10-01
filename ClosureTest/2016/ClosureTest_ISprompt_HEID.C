@@ -491,4 +491,10 @@ c3->SaveAs(samplename+"/"+User_ID+"_pt1_prompt.pdf");
 c4->SaveAs(samplename+"/"+User_ID+"_pt2_prompt.pdf");
 c5->SaveAs(samplename+"/"+User_ID+"_MET_prompt.pdf");
 
+c1->SaveAs(samplename+"/"+User_ID+"_ZMass_prompt.png");
+c2->SaveAs(samplename+"/"+User_ID+"_ZMass_NoEshift_prompt.png");
+c3->SaveAs(samplename+"/"+User_ID+"_pt1_prompt.png");
+c4->SaveAs(samplename+"/"+User_ID+"_pt2_prompt.png");
+c5->SaveAs(samplename+"/"+User_ID+"_MET_prompt.png");
+
 }
