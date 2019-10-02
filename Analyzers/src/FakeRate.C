@@ -120,7 +120,9 @@ void FakeRate::executeEvent(){
   for(unsigned int it_EleID=0; it_EleID<ElectronTightIDs.size(); it_EleID++){
     for(unsigned int it_MuonID=0; it_MuonID<MuonTightIDs.size(); it_MuonID++){    
       if(it_EleID<3 && (it_EleID != it_MuonID)) continue;
-      if(it_EleID>=3 && it_MuonID>=1) continue;
+      if(it_EleID >= 3){
+        if(it_MuonID != 0) continue;
+      }
 
 //      TString MuonID = "HNTight2016";
 //      TString MuonIDSFKey = "NUM_TightID_DEN_genTracks";
@@ -165,7 +167,7 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
  
   // Version : V(LooseID)(TightID)
   vector<TString> regions_mu = {"muonV11FR", "muonV11DY", "muonV11Wj"};
-  if(param.Muon_Tight_ID=="V2") regions_mu = {"muonV12FR", "muonV12DY", "muonV12Wj"};
+  if(param.Muon_Tight_ID.Contains("V2")) regions_mu = {"muonV12FR", "muonV12DY", "muonV12Wj"};
   if(param.Muon_Tight_ID.Contains("2016")) regions_mu = {"muon16FR", "muon16DY", "muon16Wj"};
 
   vector<TString> regions_el = {"eleV11FR", "eleV11DY", "eleV11Wj"};

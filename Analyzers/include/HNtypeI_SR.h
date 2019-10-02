@@ -23,6 +23,7 @@ public:
   vector<TString> MuonTightIDs;
   vector<TString> ElectronLooseIDs;
   vector<TString> ElectronTightIDs;
+  vector<TString> FakeRateIDs;
   double MuonPtCut1;
   double MuonPtCut2;
   double ElectronPtCut1;
