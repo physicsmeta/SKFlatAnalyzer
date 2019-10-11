@@ -250,6 +250,22 @@ bool Electron::Pass_HNLoose2016() const{
   if(! (PassConversionVeto()) ) return false;
   if(! (IsGsfCtfScPixChargeConsistent()) ) return false;
 
+  // Trigger emulation
+  if( fabs(scEta()) <= 1.479 ){
+    if(! (Full5x5_sigmaIetaIeta() < 0.011) ) return false;     // < 0.013, 0.011
+    if(! (fabs(dEtaSeed()) < 0.005) ) return false;            // < 0.01 , 0.006
+    if(! (fabs(dPhiIn()) < 0.04) ) return false;               // < 0.07 , 0.15
+    if(! (HoverE() < 0.08) ) return false;                     // < 0.13 , 0.12 
+    if(! (fabs(InvEminusInvP()) < 0.01) ) return false;        // < 9999., 0.05
+  }
+  else{
+    if(! (Full5x5_sigmaIetaIeta() < 0.031) ) return false;     // < 0.035, 0.031
+    if(! (fabs(dEtaSeed()) < 0.007) ) return false;            // < 0.015, 0.0085
+    if(! (fabs(dPhiIn()) < 0.08) ) return false;               // < 0.1  , 0.1
+    if(! (HoverE() < 0.08) ) return false;                     // < 0.13 , 0.1
+    if(! (fabs(InvEminusInvP()) < 0.01) ) return false;        // < 9999., 0.05
+  }
+
   return true;
 }
 
@@ -267,6 +283,22 @@ bool Electron::Pass_HNTight2016() const{
   if(! (RelIso()<0.08) ) return false;
   if(! (PassConversionVeto()) ) return false;
   if(! (IsGsfCtfScPixChargeConsistent()) ) return false;
+
+  // Trigger emulation
+  if( fabs(scEta()) <= 1.479 ){
+    if(! (Full5x5_sigmaIetaIeta() < 0.011) ) return false;     // < 0.013, 0.011
+    if(! (fabs(dEtaSeed()) < 0.005) ) return false;            // < 0.01 , 0.006
+    if(! (fabs(dPhiIn()) < 0.04) ) return false;               // < 0.07 , 0.15
+    if(! (HoverE() < 0.08) ) return false;                     // < 0.13 , 0.12 
+    if(! (fabs(InvEminusInvP()) < 0.01) ) return false;        // < 9999., 0.05
+  }
+  else{
+    if(! (Full5x5_sigmaIetaIeta() < 0.031) ) return false;     // < 0.035, 0.031
+    if(! (fabs(dEtaSeed()) < 0.007) ) return false;            // < 0.015, 0.0085
+    if(! (fabs(dPhiIn()) < 0.08) ) return false;               // < 0.1  , 0.1
+    if(! (HoverE() < 0.08) ) return false;                     // < 0.13 , 0.1
+    if(! (fabs(InvEminusInvP()) < 0.01) ) return false;        // < 9999., 0.05
+  }
 
   return true;
 }
