@@ -1353,6 +1353,139 @@ Particle AnalyzerCore::AddFatJetAndLepton(const FatJet& fatjet, const Lepton& le
 }
 
 //=========================================================
+//==== Electron CF
+
+std::vector<Electron> AnalyzerCore::ShiftElectronEnergy(const std::vector<Electron>& electrons, AnalyzerParameter param, bool applyshift){
+
+  std::vector<Electron> out;
+  
+  for(unsigned int i=0; i<electrons.size(); i++){
+    Electron this_electron = electrons.at(i);
+    if(!param.Electron_Tight_ID.Contains("HNTight")){ out.push_back(this_electron); continue; }
+    if(!applyshift){ out.push_back(this_electron); continue; }
+
+    double shiftrate = 1.;
+//    if(electrons.size() == 1) TODO : add shift rate
+    if(electrons.size() == 2){ 
+      if(param.Electron_Tight_ID == "HNTight") shiftrate = 0.987;       // 1.3%
+      else if(param.Electron_Tight_ID == "HNTightV2") shiftrate = 0.99; // 1.0%
+      else shiftrate = 0.988;                                           // 1.2%
+    } 
+
+    this_electron.SetPtEtaPhiM( electrons.at(i).Pt()*shiftrate, electrons.at(i).Eta(), electrons.at(i).Phi(), electrons.at(i).M() ); // M = 0.511e-03
+    out.push_back(this_electron);
+  }
+
+  return out;
+
+}
+
+double AnalyzerCore::GetCFrates(TString id, double pt, double eta){
+  if(!id.Contains("HNTight")) return 0.;
+  
+  eta = fabs(eta);
+  double ivt_pt = 1./pt;
+  double a = 999., b = 999.;  // fit function = a + b/pT
+
+  if(id == "HNTight"){
+    if(eta < 0.8){
+      if(ivt_pt < 0.005){ a = 9.58505e-04; b = -0.159759; }
+      else if(ivt_pt>=0.005 && ivt_pt<0.0155){ a = 2.07325e-04; b = -0.0086346; }
+      else{ a = 9.37334e-05; b = -9.81244e-04; }
+    }
+    else if(eta>=0.8 && eta<1.479){
+      if(ivt_pt < 0.0055){ a = 0.00382245; b = -0.455401; }
+      else if(ivt_pt>=0.0055 && ivt_pt<0.0155){ a = 0.00165421; b = -0.0732609; }
+      else{ a = 6.57784e-04; b = -0.00653361; }
+    }
+    else{
+      if(ivt_pt < 0.01){ a = 0.0127778; b = -0.744197; }
+      else if(ivt_pt>=0.01 && ivt_pt<0.0205){ a = 0.00725863; b = -0.18864; }
+      else{ a = 0.00417112; b = -0.0371866; }
+    }
+  }
+  else if(id == "HNTightV2"){
+    if(eta < 0.8){
+      if(ivt_pt < 0.0075){ a = 2.91353e-04; b = -0.0296481; }
+      else if(ivt_pt>=0.0075 && ivt_pt<0.0155){ a = 1.25648e-04; b = -0.00616739; }
+      else{ a = 3.75795e-05; b = -7.1692e-04; }
+    }
+    else if(eta>=0.8 && eta<1.479){
+      if(ivt_pt < 0.0055){ a = 0.00293283; b = -0.385095; }
+      else if(ivt_pt>=0.0055 && ivt_pt<0.0155){ a = 0.00101466; b = -0.0496765; }
+      else{ a = 3.4362e-04; b = -0.00840559; }
+    }
+    else{
+      if(ivt_pt < 0.0105){ a = 0.00920799; b = -0.66068; }
+      else if(ivt_pt>=0.0105 && ivt_pt<0.0205){ a = 0.00409673; b = -0.164067; }
+      else{ a = 0.00135968; b = -0.0270099; }
+    }
+  }
+  else{
+    if(eta < 0.8){
+      if(ivt_pt < 0.0075){ a = 4.12045e-04; b = -0.0445416; }
+      else if(ivt_pt>=0.0075 && ivt_pt<0.0155){ a = 1.1869e-04; b = -0.00448807; }
+      else{ a = 7.2859e-05; b = -0.00158132; }
+    }
+    else if(eta>=0.8 && eta<1.479){
+      if(ivt_pt < 0.0055){ a = 0.00320894; b = -0.420695; }
+      else if(ivt_pt>=0.0055 && ivt_pt<0.0155){ a = 0.00110226; b = -0.0522899; }
+      else{ a = 3.83228e-04; b = -0.00813698; }
+    }
+    else{
+      if(ivt_pt < 0.01){ a = 0.0101037; b = -0.746975; }
+      else if(ivt_pt>=0.01 && ivt_pt<0.019){ a = 0.00440033; b = -0.178011; }
+      else{ a = 0.00159123; b = -0.0318552; }
+    }
+  }
+
+  double rate = a + b*ivt_pt;
+  if(rate < 0.) rate = 0.;
+  return rate;
+
+}
+
+double AnalyzerCore::GetCFweight(vector<Lepton *> lepptrs, AnalyzerParameter param, bool applySF, int syst){
+  if(!param.Electron_Tight_ID.Contains("HNTight")) return 0.;
+  if(lepptrs.size() > 2) return 0.; 
+ 
+  std::vector<Electron> el;
+  for(unsigned int i=0; i<lepptrs.size(); i++){
+    if(lepptrs.at(i)->LeptonFlavour() == Lepton::ELECTRON){
+      Electron *el_tmp = (Electron *)lepptrs.at(i);
+      el.push_back(*el_tmp);
+    }
+  }
+  if(el.size()==2 && el.at(0).Charge()*el.at(1).Charge()>0) return 0.; 
+
+  std::vector<double> CFrate, CFweight, sf;
+  double cfweight = 0.;
+  for(unsigned int i=0; i<el.size(); i++){
+    CFrate.push_back(GetCFrates(param.Electron_Tight_ID, el.at(i).Pt(), el.at(i).scEta()));
+    CFweight.push_back(CFrate.at(i)/(1.-CFrate.at(i)));
+
+    if(applySF){
+      if(fabs(el.at(i).scEta()) < 1.479){
+        if(param.Electron_Tight_ID == "HNTight") sf.push_back(0.585533 + syst*0.);
+        else if(param.Electron_Tight_ID == "HNTightV2") sf.push_back(0.4584 + syst*0.);
+        else sf.push_back(0.49666 + syst*0.);
+      }
+      else{
+        if(param.Electron_Tight_ID == "HNTight") sf.push_back(0.831019 + syst*0.);
+        else if(param.Electron_Tight_ID == "HNTightV2") sf.push_back(0.66078 + syst*0.);
+        else sf.push_back(0.652357 + syst*0.);
+      }
+    }
+    else sf.push_back(1.);
+
+    cfweight += sf.at(i)*CFweight.at(i);
+  }
+
+  return cfweight;
+  
+}
+
+//=========================================================
 //==== Gen Matching Tools
 
 void AnalyzerCore::PrintGen(const std::vector<Gen>& gens){
