@@ -1,4 +1,5 @@
 DYJets10to50_MG    PUReweight_2018         PUReweight_2018.root
+DYJets     PUReweight_2018         PUReweight_2018.root
 DYJets_MG     PUReweight_2018         PUReweight_2018.root
 WJets_MG     PUReweight_2018         PUReweight_2018.root
 TTJJ_powheg     PUReweight_2018         PUReweight_2018.root

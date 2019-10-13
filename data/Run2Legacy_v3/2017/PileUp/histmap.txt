@@ -75,4 +75,5 @@ ZZ_pythia	sig_down	Pileup_reweight_69p2_mb.root
 ZZ_pythia	sig_up	Pileup_reweight_69p2_mb.root
 ZGToLLG_01J     PUReweight_2017         PUReweight_2017.root
 WGToLNuG_01J    PUReweight_2017         PUReweight_2017.root
+WGToLNuG_MG    PUReweight_2017         PUReweight_2017.root
 DYJets10to50_MG    PUReweight_2017         PUReweight_2017.root
