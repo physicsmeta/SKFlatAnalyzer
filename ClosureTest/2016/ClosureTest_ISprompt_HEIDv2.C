@@ -1,23 +1,24 @@
-void ClosureTest_NOprompt(){
+void ClosureTest_ISprompt_HEIDv2(){ // All /* */ comments are for comparison btw OS vs OS_prmt
 
-//TFile* f1 = new TFile("/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip/2016/ChargeFlipHE__/ClosureTest_DYJets_ISprompt_DYonlyCF.root");
-TFile* f1 = new TFile("/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip/2016/ChargeFlipHE__ClosureTest__/ClosureTest_DYJetsTTLL.root");
-TH1D* h0 = (TH1D*)f1->Get("ClosureTest/ZMass_SS");
+TString filename = "/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip_IDv2/2016/ClosureTest__/ChargeFlip_IDv2_DYJets_TTLL.root";
+TFile* f1 = new TFile(filename);
 
-// Chi2Test //
+TString samplename = filename(filename.Last('/')+12,filename.Length());
+samplename.ReplaceAll(".root","");
 
-TString s = "ClosureTest/ZMass_OS_CFweighted_shifted_";
-for(int i=0; i<50; i++){
-  TH1D* h_test = (TH1D*)f1->Get(s+TString::Itoa((i+1),10));
-  cout << "Energy shifted " << (i+1)*0.1 << "%:" << endl;
-  h0->Chi2Test(h_test,"UW P");
-}
+gSystem->Exec("mkdir "+samplename);
 
-cout << "// Chi2Test ended //" << endl;
+TString User_ID = "HEIDv2";
 
-// 1.4% //
+TH1D* h0 = (TH1D*)f1->Get(User_ID+"/ClosureTest/ZMass_prmt_SS");
 
-TH1D* h1 = (TH1D*)f1->Get("ClosureTest/ZMass_OS_CFweighted_shifted_14");
+/*
+TH1D* h0 = (TH1D*)f1->Get(User_ID+"/ClosureTest/ZMass_prmt_OS_CFweighted");
+*/
+
+// 1.0% //
+
+TH1D* h1 = (TH1D*)f1->Get(User_ID+"/ClosureTest/ZMass_OS_CFweighted_shifted_10");
 
 vector<double> x_1, ex_1, x_2, ex_2, x_3, ex_3;
 for (int i=0; i<40; i++) {
@@ -37,7 +38,7 @@ for (int i=0; i<40; i++) {
 
 // Draw the plots //
 
-TCanvas* c1 = new TCanvas("c1","ZMass : OS_CFweighted_1.4% vs SS",1000,100,900,800);
+TCanvas* c1 = new TCanvas("c1","ZMass : OS_CFweighted_1.0% vs SS_prompt ("+User_ID+")",1000,100,900,800);
 c1->Divide(1,2);
 
 c1->cd(1);
@@ -51,7 +52,7 @@ gr1->SetMarkerStyle(20);
 //gr1->SetMarkerSize(0.8);
 //gr1->SetMarkerColor(kMagenta+2);
 gr1->SetLineColor(15);
-gr1->SetTitle("ZMass : OS_CFweighted_1.4% vs SS");
+gr1->SetTitle("ZMass : OS_CFweighted_1.0% vs SS_prompt ("+User_ID+")");
 //gr1->GetXaxis()->SetRangeUser(70,110);
 //gr1->SetMinimum(0.);
 gr1->Draw("ZAP"); // Z : do not draw small horizontal/vertical lines the end of the error bars
@@ -66,8 +67,8 @@ gr2->SetLineColor(15);
 gr2->Draw("ZP SAME"); 
 
 TLegend* legend = new TLegend(0.15,0.6,0.4,0.7);
-legend->AddEntry(gr1,"OS_CFweighted_1.4%","lp");
-legend->AddEntry(gr2,"SS","lp");
+legend->AddEntry(gr1,"OS_CFweighted_1.0%","lp");
+legend->AddEntry(gr2,"SS_prompt","lp");
 legend->Draw();
 
 
@@ -92,7 +93,7 @@ gr3->GetXaxis()->SetTitle("#scale[2.2]{m(ee) (GeV)}");
 gr3->GetXaxis()->SetTitleOffset(1.6);
 gr3->GetXaxis()->SetTickLength(0.05);
 gr3->GetYaxis()->SetLabelSize(0.05);
-gr3->GetYaxis()->SetTitle("#scale[2.2]{SS / OS}");
+gr3->GetYaxis()->SetTitle("#scale[2.2]{SS_prompt / OS}");
 gr3->GetYaxis()->SetTitleOffset(0.8);
 gr3->GetYaxis()->SetRangeUser(0,2);
 gPad->SetGridx();
@@ -106,9 +107,10 @@ LineAtOne->SetLineColor(2);
 LineAtOne->Draw();
 
 
-cout << "N(SS) : " << h0->Integral() << endl;
-cout << "N(OS_CFweighted_shifted_1.4%) : " << h1->Integral() << endl;
+cout << "N(SS_prompt) : " << h0->Integral() << endl;
+cout << "N(OS_CFweighted_shifted_1.0%) : " << h1->Integral() << endl;
 cout << "Uncert. : " << h0->Integral()/h1->Integral() << endl;
+cout << endl;
 
 
 //c1->cd(3);
@@ -145,7 +147,7 @@ cout << "Uncert. : " << h0->Integral()/h1->Integral() << endl;
 //qqplot->SetTitle("Q-Q plot of Normalized Residuals");
 //qqplot->Draw("AP");
 
-TH1D* H1 = (TH1D*)f1->Get("ClosureTest/ZMass_OS_CFweighted");
+TH1D* H1 = (TH1D*)f1->Get(User_ID+"/ClosureTest/ZMass_OS_CFweighted");
 
 vector<double> X_1, EX_1, X_2, EX_2, X_3, EX_3;
 for (int i=0; i<40; i++) {
@@ -165,7 +167,7 @@ for (int i=0; i<40; i++) {
 
 // Draw the plots //
 
-TCanvas* c2 = new TCanvas("c2","ZMass : OS_CFweighted vs SS",100,100,900,800);
+TCanvas* c2 = new TCanvas("c2","ZMass : OS_CFweighted vs SS_prompt ("+User_ID+")",100,100,900,800);
 c2->Divide(1,2);
 
 c2->cd(1);
@@ -179,7 +181,12 @@ GR1->SetMarkerStyle(20);
 //GR1->SetMarkerSize(0.8);
 //GR1->SetMarkerColor(kMagenta+2);
 GR1->SetLineColor(15);
-GR1->SetTitle("ZMass : OS_CFweighted vs SS");
+GR1->SetTitle("ZMass : OS_CFweighted vs SS_prompt ("+User_ID+")");
+
+/*
+GR1->SetTitle("ZMass : OS_CFweighted vs OS_prompt_CFweighted ("+User_ID+")");
+*/
+
 //GR1->GetXaxis()->SetRangeUser(70,110);
 //GR1->SetMinimum(0.);
 GR1->Draw("ZAP"); // Z : do not draw small horizontal/vertical lines the end of the error bars
@@ -195,7 +202,12 @@ GR2->Draw("ZP SAME");
 
 TLegend* legend_2 = new TLegend(0.15,0.6,0.35,0.7);
 legend_2->AddEntry(GR1,"OS_CFweighted","lp");
-legend_2->AddEntry(GR2,"SS","lp");
+legend_2->AddEntry(GR2,"SS_prompt","lp");
+
+/*
+legend_2->AddEntry(GR2,"OS_prompt_CFweighted","lp");
+*/
+
 legend_2->Draw();
 
 
@@ -218,9 +230,20 @@ GR3->GetXaxis()->SetTitle("#scale[2.2]{m(ee) (GeV)}");
 GR3->GetXaxis()->SetTitleOffset(1.6);
 GR3->GetXaxis()->SetTickLength(0.05);
 GR3->GetYaxis()->SetLabelSize(0.05);
-GR3->GetYaxis()->SetTitle("#scale[2.2]{SS / OS}");
+GR3->GetYaxis()->SetTitle("#scale[2.2]{SS_prompt / OS}");
+
+/*
+GR3->GetYaxis()->SetTitle("#scale[2.2]{OS_prompt / OS}");
+*/
+
 GR3->GetYaxis()->SetTitleOffset(0.8);
 GR3->GetYaxis()->SetRangeUser(0,2);
+
+/*
+GR3->GetYaxis()->SetTitleOffset(1);
+GR3->GetYaxis()->SetRangeUser(0.975,1.02);
+*/
+
 gPad->SetGridx();
 gPad->SetGridy();
 
@@ -232,12 +255,15 @@ LineAtOne_2->Draw();
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-TH1D* h2 = (TH1D*)f1->Get("ClosureTest/pt1_SS");
-TH1D* h3 = (TH1D*)f1->Get("ClosureTest/pt1_OS_CFweighted_shifted_14");
-TH1D* h4 = (TH1D*)f1->Get("ClosureTest/pt2_SS");
-TH1D* h5 = (TH1D*)f1->Get("ClosureTest/pt2_OS_CFweighted_shifted_14");
-TH1D* h6 = (TH1D*)f1->Get("ClosureTest/MET_SS");
-TH1D* h7 = (TH1D*)f1->Get("ClosureTest/MET_OS_CFweighted_shifted_14");
+//TH1D* h2 = (TH1D*)f1->Get(User_ID+"/ClosureTest/pt1_SS");
+TH1D* h2 = (TH1D*)f1->Get(User_ID+"/ClosureTest/pt1_prmt_SS");
+TH1D* h3 = (TH1D*)f1->Get(User_ID+"/ClosureTest/pt1_OS_CFweighted_shifted_10");
+//TH1D* h4 = (TH1D*)f1->Get(User_ID+"/ClosureTest/pt2_SS");
+TH1D* h4 = (TH1D*)f1->Get(User_ID+"/ClosureTest/pt2_prmt_SS");
+TH1D* h5 = (TH1D*)f1->Get(User_ID+"/ClosureTest/pt2_OS_CFweighted_shifted_10");
+//TH1D* h6 = (TH1D*)f1->Get(User_ID+"/ClosureTest/MET_SS");
+TH1D* h6 = (TH1D*)f1->Get(User_ID+"/ClosureTest/MET_prmt_SS");
+TH1D* h7 = (TH1D*)f1->Get(User_ID+"/ClosureTest/MET_OS_CFweighted_shifted_10");
 
 vector<double> pt1_SS_x, pt1_SS_ex, pt2_SS_x, pt2_SS_ex, MET_SS_x, MET_SS_ex, pt1_OS_x, pt1_OS_ex, pt2_OS_x, pt2_OS_ex, MET_OS_x, MET_OS_ex, pt1_R_x, pt1_R_ex, pt2_R_x, pt2_R_ex, MET_R_x, MET_R_ex;
 for (int i=0; i<55; i++) {
@@ -280,7 +306,7 @@ for (int i=0; i<80; i++){
 
 // pt1
 
-TCanvas* c3 = new TCanvas("c3","pt1 : OS_shifted_1.4% vs SS",100,100,900,800);
+TCanvas* c3 = new TCanvas("c3","pt1 : OS_shifted_1.0% vs SS_prompt ("+User_ID+")",100,100,900,800);
 c3->Divide(1,2);
 
 c3->cd(1);
@@ -294,7 +320,7 @@ pt1_SS->SetMarkerStyle(20);
 //pt1->SetMarkerSize(0.8);
 //pt1->SetMarkerColor(kMagenta+2);
 pt1_SS->SetLineColor(15);
-pt1_SS->SetTitle("pt1 : OS_CFweighted_1.4% vs SS");
+pt1_SS->SetTitle("pt1 : OS_CFweighted_1.0% vs SS_prompt ("+User_ID+")");
 //pt1->GetXaxis()->SetRangeUser(70,110);
 //pt1->SetMinimum(0.);
 pt1_SS->Draw("ZAP"); // Z : do not draw small horizontal/vertical lines the end of the error bars
@@ -309,8 +335,8 @@ pt1_OS->SetLineColor(15);
 pt1_OS->Draw("ZP SAME"); 
 
 TLegend* legend_pt1 = new TLegend(0.55,0.7,0.8,0.8);
-legend_pt1->AddEntry(pt1_OS,"OS_CFweighted_1.4%","lp");
-legend_pt1->AddEntry(pt1_SS,"SS","lp");
+legend_pt1->AddEntry(pt1_OS,"OS_CFweighted_1.0%","lp");
+legend_pt1->AddEntry(pt1_SS,"SS_prompt","lp");
 legend_pt1->Draw();
 
 c3->cd(2);
@@ -334,7 +360,7 @@ pt1_R->GetXaxis()->SetTitle("#scale[2.2]{P_{T} (GeV)}");
 pt1_R->GetXaxis()->SetTitleOffset(1.6);
 pt1_R->GetXaxis()->SetTickLength(0.05);
 pt1_R->GetYaxis()->SetLabelSize(0.05);
-pt1_R->GetYaxis()->SetTitle("#scale[2.2]{SS / OS}");
+pt1_R->GetYaxis()->SetTitle("#scale[2.2]{SS_prompt / OS}");
 pt1_R->GetYaxis()->SetTitleOffset(0.8);
 pt1_R->GetYaxis()->SetRangeUser(0,2);
 gPad->SetGridx();
@@ -348,7 +374,7 @@ LineAtOne_pt1->Draw();
 
 // pt2
 
-TCanvas* c4 = new TCanvas("c4","pt2 : OS_shifted_1.4% vs SS",100,100,900,800);
+TCanvas* c4 = new TCanvas("c4","pt2 : OS_shifted_1.0% vs SS_prompt ("+User_ID+")",100,100,900,800);
 c4->Divide(1,2);
 
 c4->cd(1);
@@ -362,7 +388,7 @@ pt2_SS->SetMarkerStyle(20);
 //pt1->SetMarkerSize(0.8);
 //pt1->SetMarkerColor(kMagenta+2);
 pt2_SS->SetLineColor(15);
-pt2_SS->SetTitle("pt2 : OS_CFweighted_1.4% vs SS");
+pt2_SS->SetTitle("pt2 : OS_CFweighted_1.0% vs SS_prompt ("+User_ID+")");
 //pt1->GetXaxis()->SetRangeUser(70,110);
 //pt1->SetMinimum(0.);
 pt2_SS->Draw("ZAP"); // Z : do not draw small horizontal/vertical lines the end of the error bars
@@ -377,8 +403,8 @@ pt2_OS->SetLineColor(15);
 pt2_OS->Draw("ZP SAME"); 
 
 TLegend* legend_pt2 = new TLegend(0.55,0.7,0.8,0.8);
-legend_pt2->AddEntry(pt2_OS,"OS_CFweighted_1.4%","lp");
-legend_pt2->AddEntry(pt2_SS,"SS","lp");
+legend_pt2->AddEntry(pt2_OS,"OS_CFweighted_1.0%","lp");
+legend_pt2->AddEntry(pt2_SS,"SS_prompt ("+User_ID+")","lp");
 legend_pt2->Draw();
 
 c4->cd(2);
@@ -402,7 +428,7 @@ pt2_R->GetXaxis()->SetTitle("#scale[2.2]{P_{T} (GeV)}");
 pt2_R->GetXaxis()->SetTitleOffset(1.6);
 pt2_R->GetXaxis()->SetTickLength(0.05);
 pt2_R->GetYaxis()->SetLabelSize(0.05);
-pt2_R->GetYaxis()->SetTitle("#scale[2.2]{SS / OS}");
+pt2_R->GetYaxis()->SetTitle("#scale[2.2]{SS_prompt / OS}");
 pt2_R->GetYaxis()->SetTitleOffset(0.8);
 pt2_R->GetYaxis()->SetRangeUser(0,2);
 gPad->SetGridx();
@@ -417,7 +443,7 @@ LineAtOne_pt2->Draw();
 
 // MET
 
-TCanvas* c5 = new TCanvas("c5","MET : OS_shifted_1.4% vs SS",100,100,900,800);
+TCanvas* c5 = new TCanvas("c5","MET : OS_shifted_1.0% vs SS_prompt ("+User_ID+")",100,100,900,800);
 c5->Divide(1,2);
 
 c5->cd(1);
@@ -431,7 +457,7 @@ MET_SS->SetMarkerStyle(20);
 //pt1->SetMarkerSize(0.8);
 //pt1->SetMarkerColor(kMagenta+2);
 MET_SS->SetLineColor(15);
-MET_SS->SetTitle("MET : OS_CFweighted_1.4% vs SS");
+MET_SS->SetTitle("MET : OS_CFweighted_1.0% vs SS_prompt ("+User_ID+")");
 //pt1->GetXaxis()->SetRangeUser(70,110);
 //pt1->SetMinimum(0.);
 MET_SS->Draw("ZAP"); // Z : do not draw small horizontal/vertical lines the end of the error bars
@@ -446,8 +472,8 @@ MET_OS->SetLineColor(15);
 MET_OS->Draw("ZP SAME"); 
 
 TLegend* legend_MET = new TLegend(0.55,0.7,0.8,0.8);
-legend_MET->AddEntry(MET_OS,"OS_CFweighted_1.4%","lp");
-legend_MET->AddEntry(MET_SS,"SS","lp");
+legend_MET->AddEntry(MET_OS,"OS_CFweighted_1.0%","lp");
+legend_MET->AddEntry(MET_SS,"SS_prompt","lp");
 legend_MET->Draw();
 
 c5->cd(2);
@@ -471,7 +497,7 @@ MET_R->GetXaxis()->SetTitle("#scale[2.2]{E^{miss}_{T} (GeV)}");
 MET_R->GetXaxis()->SetTitleOffset(1.6);
 MET_R->GetXaxis()->SetTickLength(0.05);
 MET_R->GetYaxis()->SetLabelSize(0.05);
-MET_R->GetYaxis()->SetTitle("#scale[2.2]{SS / OS}");
+MET_R->GetYaxis()->SetTitle("#scale[2.2]{SS_prompt / OS}");
 MET_R->GetYaxis()->SetTitleOffset(0.8);
 MET_R->GetYaxis()->SetRangeUser(0,2);
 gPad->SetGridx();
@@ -482,5 +508,21 @@ LineAtOne_MET->SetLineStyle(kDashed);
 LineAtOne_MET->SetLineWidth(2);
 LineAtOne_MET->SetLineColor(2);
 LineAtOne_MET->Draw();
+
+//c1->SaveAs(samplename+"/"+User_ID+"_ZMass_prompt.pdf");
+//c2->SaveAs(samplename+"/"+User_ID+"_ZMass_NoEshift_prompt.pdf");
+//c3->SaveAs(samplename+"/"+User_ID+"_pt1_prompt.pdf");
+//c4->SaveAs(samplename+"/"+User_ID+"_pt2_prompt.pdf");
+//c5->SaveAs(samplename+"/"+User_ID+"_MET_prompt.pdf");
+
+c1->SaveAs(samplename+"/"+User_ID+"_ZMass_prompt.png");
+c2->SaveAs(samplename+"/"+User_ID+"_ZMass_NoEshift_prompt.png");
+c3->SaveAs(samplename+"/"+User_ID+"_pt1_prompt.png");
+c4->SaveAs(samplename+"/"+User_ID+"_pt2_prompt.png");
+c5->SaveAs(samplename+"/"+User_ID+"_MET_prompt.png");
+
+/*
+c2->SaveAs(samplename+"/"+User_ID+"_ZMass_OSvsOSprompt.png");
+*/
 
 }

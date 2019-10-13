@@ -144,6 +144,7 @@ bool Electron::PassID(TString ID) const{
   if(ID=="HNLoose2016") return Pass_HNLoose2016();
   if(ID=="HNTight2016") return Pass_HNTight2016(); //JH from HE's git
   if(ID=="HEID") return Pass_HEID(); //JH
+  if(ID=="HEIDv2") return Pass_HEIDv2(); //JH
 
   cout << "[Electron::PassID] No id : " << ID << endl;
   exit(EXIT_FAILURE);
@@ -264,6 +265,31 @@ bool Electron::Pass_HEID() const{
   }
 
   return true;
+} //JH
+
+bool Electron::Pass_HEIDv2() const{
+  if(!( passTightID() )) return false;
+  if(! (RelIso()<0.08) ) return false;
+  if(! (fabs(dXY())<0.01 && fabs(dZ())<0.04) ) return false;
+  if( fabs(scEta()) <= 1.479 ){
+    if(! (RelIso() < 0.0287+0.506/UncorrPt()) ) return false;  // If UncorrPt < 9.864, RelIso < 0.08
+    if(! (Full5x5_sigmaIetaIeta() < 0.011) ) return false;     // < 0.013, 0.011
+    if(! (fabs(dEtaSeed()) < 0.005) ) return false;            // < 0.01 , 0.006
+    if(! (fabs(dPhiIn()) < 0.04) ) return false;               // < 0.07 , 0.15
+    if(! (HoverE() < 0.08) ) return false;                     // < 0.13 , 0.12 
+    if(! (fabs(InvEminusInvP()) < 0.01) ) return false;        // < 9999., 0.05
+  }
+  else{
+    if(! (RelIso() < 0.0445+0.963/UncorrPt()) ) return false;  // If UncorrPt < 27.127, RelIso < 0.08
+    if(! (Full5x5_sigmaIetaIeta() < 0.031) ) return false;     // < 0.035, 0.031
+    if(! (fabs(dEtaSeed()) < 0.007) ) return false;            // < 0.015, 0.0085
+    if(! (fabs(dPhiIn()) < 0.08) ) return false;               // < 0.1  , 0.1
+    if(! (HoverE() < 0.08) ) return false;                     // < 0.13 , 0.1
+    if(! (fabs(InvEminusInvP()) < 0.01) ) return false;        // < 9999., 0.05
+  }
+  if(! (IsGsfCtfScPixChargeConsistent()) ) return false;
+ 
+ return true;
 } //JH
 														
 //==== TEST ID

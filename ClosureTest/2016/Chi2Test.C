@@ -1,14 +1,16 @@
 void Chi2Test(){
 
-  TString filename = "/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip/2016/ClosureTest__/ChargeFlip_DYJets_TTLL.root";
+  //TString filename = "/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip/2016/ClosureTest__/ChargeFlip_DYJets_TTLL.root";
+  TString filename = "/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip_IDv2/2016/ClosureTest__/ChargeFlip_IDv2_DYJets_TTLL.root";
   TFile* f1 = new TFile(filename);
   
   TString samplename = filename(filename.Last('/')+12,filename.Length());
   samplename.ReplaceAll(".root","");
   
   vector<TString> User_ID;
-  User_ID.push_back("HNTight2016");
-  User_ID.push_back("HEID");
+  //User_ID.push_back("HNTight2016");
+  //User_ID.push_back("HEID");
+  User_ID.push_back("HEIDv2");
   
   for(unsigned int i=0; i<User_ID.size(); i++){
   

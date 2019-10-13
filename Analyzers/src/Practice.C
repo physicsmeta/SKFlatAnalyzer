@@ -488,6 +488,10 @@ void Practice::executeEventFromParameter(AnalyzerParameter param, Long64_t Nentr
     cout << "diele_sqrt(E^2-P^2) = " << sqrt(pow(ZCand.E(),2)-pow(ZCand.P(),2)) << endl;
     cout << "diele_m = " << ZCand.M() << endl;
     cout << "LT = " << eles.at(0).Pt()+eles.at(1).Pt() << endl;
+    cout << "METv_Px = " << METv.Px() << endl;
+    cout << "METv_Py = " << METv.Py() << endl;
+    cout << "METv_Pz = " << METv.Pz() << endl;
+    cout << "MET = " << METv.Pt() << endl;
   }
 
 }

@@ -1,15 +1,14 @@
-#include "ChargeFlip.h" 
+#include "ChargeFlipValidation.h" 
 
-ChargeFlip::ChargeFlip(){
+ChargeFlipValidation::ChargeFlipValidation(){
 
 }
 
-void ChargeFlip::initializeAnalyzer(){
+void ChargeFlipValidation::initializeAnalyzer(){
 
   if(DataYear==2016){
     EleIDs = {
       "HNTight2016",
-      "HEID",
     }; // PassID() in Electron.C
     EleIDSFKeys = {
       "",
@@ -21,7 +20,6 @@ void ChargeFlip::initializeAnalyzer(){
   else if(DataYear==2017){
     EleIDs = {
       "HNTight2016",
-      "HEID",
     };
     EleIDSFKeys = {
       "",
@@ -33,7 +31,6 @@ void ChargeFlip::initializeAnalyzer(){
   else if(DataYear==2018){
     EleIDs = {
       "HNTight2016",
-      "HEID",
     };
     EleIDSFKeys = {
       "",
@@ -45,11 +42,11 @@ void ChargeFlip::initializeAnalyzer(){
 
 }
 
-ChargeFlip::~ChargeFlip(){
+ChargeFlipValidation::~ChargeFlipValidation(){
 
 }
 
-void ChargeFlip::executeEvent(Long64_t Nentry){
+void ChargeFlipValidation::executeEvent(Long64_t Nentry){
 
   AllEles = GetAllElectrons();
   AllMuons = GetAllMuons();
@@ -88,14 +85,14 @@ void ChargeFlip::executeEvent(Long64_t Nentry){
 
 }
 
-void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nentry){
+void ChargeFlipValidation::executeEventFromParameter(AnalyzerParameter param, Long64_t Nentry){
 
   Event ev = GetEvent();
 
-  MllLeft = 70;
-  MllRight = 110;
+  MllLeft = M_Z-15;
+  MllRight = M_Z+15;
   MinPt = 25;
-  NBin = 40; //initialize syst. parameters
+  NBin = 24; //initialize syst. parameters for 2016 AN
 
   if(param.CFsyst_ == AnalyzerParameter::CF_Central){
   
@@ -161,45 +158,27 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
           FillHist(param.Name+"/CFrate/EtaRegion1_Denom", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
           if(truth_lep_Charge*eles.at(i).Charge()<0){
             cout << "!!EtaRegion1!! truth lepton charge : " << truth_lep_Charge << ", reco lepton charge : " << eles.at(i).Charge() << endl;
+            cout << "Matched gen index : " << truth_lep.Index() << endl;
+            PrintGen(gens);
             FillHist(param.Name+"/CFrate/EtaRegion1_Num", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
-            // SH's ask //
-            if(eles.size() == 2&&i == 0){
-            FillHist(param.Name+"/CFrate/EtaRegion1_IsLeading", 1, 1, 2, 0, 2);
-            }
-            else if(eles.size() == 2&&i == 1){
-            FillHist(param.Name+"/CFrate/EtaRegion1_IsLeading", 0, 1, 2, 0, 2);
-            }
-            //
           }
         }
         else if(0.8<=abs(eles.at(i).scEta())&&abs(eles.at(i).scEta())<1.4442){
           FillHist(param.Name+"/CFrate/EtaRegion2_Denom", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
           if(truth_lep_Charge*eles.at(i).Charge()<0){
             cout << "!!EtaRegion2!! truth lepton charge : " << truth_lep_Charge << ", reco lepton charge : " << eles.at(i).Charge() << endl;
+            cout << "Matched gen index : " << truth_lep.Index() << endl;
+            PrintGen(gens);
             FillHist(param.Name+"/CFrate/EtaRegion2_Num", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
-            // SH's ask //
-            if(eles.size() == 2&&i == 0){
-            FillHist(param.Name+"/CFrate/EtaRegion2_IsLeading", 1, 1, 2, 0, 2);
-            }
-            else if(eles.size() == 2&&i == 1){
-            FillHist(param.Name+"/CFrate/EtaRegion2_IsLeading", 0, 1, 2, 0, 2);
-            }
-            //
           }
         }
         else if(1.556<=abs(eles.at(i).scEta())&&abs(eles.at(i).scEta())<2.5){
           FillHist(param.Name+"/CFrate/EtaRegion3_Denom", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
           if(truth_lep_Charge*eles.at(i).Charge()<0){
             cout << "!!EtaRegion3!! truth lepton charge : " << truth_lep_Charge << ", reco lepton charge : " << eles.at(i).Charge() << endl;
+            cout << "Matched gen index : " << truth_lep.Index() << endl;
+            PrintGen(gens);
             FillHist(param.Name+"/CFrate/EtaRegion3_Num", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
-            // SH's ask //
-            if(eles.size() == 2&&i == 0){
-            FillHist(param.Name+"/CFrate/EtaRegion3_IsLeading", 1, 1, 2, 0, 2);
-            }
-            else if(eles.size() == 2&&i == 1){
-            FillHist(param.Name+"/CFrate/EtaRegion3_IsLeading", 0, 1, 2, 0, 2);
-            }
-            //
           }
         }
       }
@@ -218,7 +197,7 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
   
         Particle ZCand = eles.at(0)+eles.at(1);
   
-        if(70.<=ZCand.M()&&ZCand.M()<110.){
+        if(IsOnZ(ZCand.M(),15)){
           if(eles.at(0).Charge()*eles.at(1).Charge()<0){
             FillHist(param.Name+"/ClosureTest/ZMass_OS_CFweighted", ZCand.M(), weight, 40, 70., 110.);
           }
@@ -235,31 +214,9 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
   		
       vector<Electron> eles_prmt = ElectronPromptOnly(eles, gens); // Get prompt electrons only
   
-      if(eles.size() == 0) FillHist(param.Name+"/etc/eles_size", eles.size(), 1, 5, 0, 5);
-      else if(eles.size() == 1) FillHist(param.Name+"/etc/eles_size", eles.size(), 1, 5, 0, 5);
-      else if(eles.size() == 2) FillHist(param.Name+"/etc/eles_size", eles.size(), 1, 5, 0, 5);
-      else if(eles.size() == 3) FillHist(param.Name+"/etc/eles_size", eles.size(), 1, 5, 0, 5);
-      else if(eles.size() == 4) FillHist(param.Name+"/etc/eles_size", eles.size(), 1, 5, 0, 5); // To check the number of electrons
-      
-      if((eles.size() >= 2)&&(eles.size() == eles_prmt.size())){
-        FillHist(param.Name+"/etc/IsCut", 0, 1, 2, 0, 2);
-      }
-      else if((eles.size() >= 2)&&(eles.size() != eles_prmt.size())){
-        FillHist(param.Name+"/etc/IsCut", 1, 1, 2, 0, 2);
-        cout << "[Loop " << Nentry << "]" << endl;
-        cout << "electrons pt:" << endl;
-        for(unsigned int i=0; i<eles.size(); i++){
-          cout << eles.at(i).Pt() << endl;
-        }
-        cout << "prompt electrons pt:" << endl;
-        for(unsigned int i=0; i<eles_prmt.size(); i++){
-          cout << eles_prmt.at(i).Pt() << endl;
-        }
-      } // To see how many electrons are cut off 
-  		
       if(eles_prmt.size() == 2){
         Particle ZCand_prmt = eles_prmt.at(0)+eles_prmt.at(1);
-        if(70.<=ZCand_prmt.M()&&ZCand_prmt.M()<110.){
+        if(IsOnZ(ZCand_prmt.M(),15)){
           if(eles_prmt.at(0).Charge()*eles_prmt.at(1).Charge()>0){
             FillHist(param.Name+"/ClosureTest/ZMass_prmt_SS", ZCand_prmt.M(), 1., 40, 70., 110.);
             FillHist(param.Name+"/ClosureTest/pt1_prmt_SS", eles_prmt.at(0).Pt(), 1., 70, 20., 90.);
@@ -292,7 +249,7 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
         METv_tmp.SetPxPyPzE(METv.Px()+ZCand.Px()-ZCand_tmp.Px(),METv.Py()+ZCand.Py()-ZCand_tmp.Py(),0,METv.E()+ZCand.E()-ZCand_tmp.E());
         weight_tmp = GetCFweight(eles_tmp, param.Electron_User_ID);
   
-        if(! (70.<=ZCand_tmp.M()&&ZCand_tmp.M()<110.) ) continue;
+        if(! (IsOnZ(ZCand_tmp.M(),15)) ) continue;
   
         if(eles.at(0).Charge()*eles.at(1).Charge()<0){
           FillHist(param.Name+"/ClosureTest/ZMass_OS_CFweighted_shifted_"+TString::Itoa(i+1,10), ZCand_tmp.M(), weight_tmp, 40, 70., 110.);
@@ -432,16 +389,7 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
     if(HasFlag("ScaleFactor")){
 
       if(!PassMETFilter()) return;
-
-      if(HasFlag("TriggerOn")){
-        if(! (ev.PassTrigger(EleTriggerName) )) return;
-      }
-      else if(HasFlag("TriggerOff")){
-      }
-      else{
-      cout << "[ChargeFlip::executeEventFromParameter] Specify trigger on/off" << endl;
-      exit(EXIT_FAILURE);
-      }
+      if(! (ev.PassTrigger(EleTriggerName) )) return;
       
       Particle METv = ev.GetMETVector();
   
@@ -457,17 +405,11 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
   
       //
   		
-      if(eles.size() == 0) FillHist(param.Name+"/etc/eles_size", eles.size(), 1, 5, 0, 5);
-      else if(eles.size() == 1) FillHist(param.Name+"/etc/eles_size", eles.size(), 1, 5, 0, 5);
-      else if(eles.size() == 2) FillHist(param.Name+"/etc/eles_size", eles.size(), 1, 5, 0, 5);
-      else if(eles.size() == 3) FillHist(param.Name+"/etc/eles_size", eles.size(), 1, 5, 0, 5);
-      else if(eles.size() == 4) FillHist(param.Name+"/etc/eles_size", eles.size(), 1, 5, 0, 5); // To check the number of electrons
-  
       if(eles.size() != 2) return;
       //if(eles.at(0).Pt()<lep0ptcut||eles.at(1).Pt()<lep1ptcut) return; //No need already pt min = 25
   
       Particle ZCand = eles.at(0)+eles.at(1);
-      if(! (MllLeft<=ZCand.M()&&ZCand.M()<MllRight) ) return;
+      if(! (IsOnZ(ZCand.M(),15)) ) return;
   
       // BB
       if(abs(eles.at(0).scEta())<1.4442&&abs(eles.at(1).scEta())<1.4442){
@@ -510,7 +452,6 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
       vector<Electron> eles_tmp = eles; // copy the vector
       double X;
       if(DataYear==2016){
-        if(param.Electron_User_ID=="HEID") X = 1.3;
         if(param.Electron_User_ID=="HNTight2016") X = 1.2;
       }
       TString X_string = Form("%f",X);
@@ -535,27 +476,18 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
           if(abs(eles_tmp.at(0).scEta())<1.4442&&abs(eles_tmp.at(1).scEta())<1.4442){
             FillHist(param.Name+"/ScaleFactor/BB_ZMass_OS_CFweighted_shifted_"+X_string, ZCand_tmp.M(), weight_tmp, NBin, MllLeft, MllRight);
             FillHist(param.Name+"/ScaleFactor/BB_ZMass_OS_CFSFweighted_shifted_"+X_string, ZCand_tmp.M(), weight_tmp_SF, NBin, MllLeft, MllRight);
-            FillHist(param.Name+"/ScaleFactor/BB_pt1_OS_CFSFweighted_shifted_"+X_string, eles_tmp.at(0).Pt(), weight_tmp_SF, 70, 20., 90.);
-            FillHist(param.Name+"/ScaleFactor/BB_pt2_OS_CFSFweighted_shifted_"+X_string, eles_tmp.at(1).Pt(), weight_tmp_SF, 70, 20., 90.);
-            FillHist(param.Name+"/ScaleFactor/BB_MET_OS_CFSFweighted_shifted_"+X_string, METv_tmp.Pt(), weight_tmp_SF, 100, 0., 100.);
           }
       
           // BE
           if((abs(eles_tmp.at(0).scEta())<1.4442&&abs(eles_tmp.at(1).scEta())>=1.556)||(abs(eles_tmp.at(0).scEta())>=1.556&&abs(eles_tmp.at(1).scEta())<1.4442)){
             FillHist(param.Name+"/ScaleFactor/BE_ZMass_OS_CFweighted_shifted_"+X_string, ZCand_tmp.M(), weight_tmp, NBin, MllLeft, MllRight);
             FillHist(param.Name+"/ScaleFactor/BE_ZMass_OS_CFSFweighted_shifted_"+X_string, ZCand_tmp.M(), weight_tmp_SF, NBin, MllLeft, MllRight);
-            FillHist(param.Name+"/ScaleFactor/BE_pt1_OS_CFSFweighted_shifted_"+X_string, eles.at(0).Pt(), weight_tmp_SF, 70, 20., 90.);
-            FillHist(param.Name+"/ScaleFactor/BE_pt2_OS_CFSFweighted_shifted_"+X_string, eles.at(1).Pt(), weight_tmp_SF, 70, 20., 90.);
-            FillHist(param.Name+"/ScaleFactor/BE_MET_OS_CFSFweighted_shifted_"+X_string, METv.Pt(), weight_tmp_SF, 100, 0., 100.);
           }
       
           // EE
           if(abs(eles_tmp.at(0).scEta())>=1.556&&abs(eles_tmp.at(1).scEta())>=1.556){
             FillHist(param.Name+"/ScaleFactor/EE_ZMass_OS_CFweighted_shifted_"+X_string, ZCand_tmp.M(), weight_tmp, NBin, MllLeft, MllRight);
             FillHist(param.Name+"/ScaleFactor/EE_ZMass_OS_CFSFweighted_shifted_"+X_string, ZCand_tmp.M(), weight_tmp_SF, NBin, MllLeft, MllRight);
-            FillHist(param.Name+"/ScaleFactor/EE_pt1_OS_CFSFweighted_shifted_"+X_string, eles.at(0).Pt(), weight_tmp_SF, 70, 20., 90.);
-            FillHist(param.Name+"/ScaleFactor/EE_pt2_OS_CFSFweighted_shifted_"+X_string, eles.at(1).Pt(), weight_tmp_SF, 70, 20., 90.);
-            FillHist(param.Name+"/ScaleFactor/EE_MET_OS_CFSFweighted_shifted_"+X_string, METv.Pt(), weight_tmp_SF, 100, 0., 100.);
           }
   				
         }
@@ -566,7 +498,7 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
 
 }
 
-double ChargeFlip::GetCFweight(std::vector<Electron> eles, TString id){
+double ChargeFlipValidation::GetCFweight(std::vector<Electron> eles, TString id){
   
   double prob[2];
 
@@ -632,7 +564,7 @@ double ChargeFlip::GetCFweight(std::vector<Electron> eles, TString id){
 
 }
 
-double ChargeFlip::GetCFweight_SF(std::vector<Electron> eles, TString id){
+double ChargeFlipValidation::GetCFweight_SF(std::vector<Electron> eles, TString id){
   
   double prob[2];
   double SF_BB, SF_EE;
@@ -705,7 +637,7 @@ double ChargeFlip::GetCFweight_SF(std::vector<Electron> eles, TString id){
 
 }
 
-double ChargeFlip::GetHalfSampleWeight(const Electron& electron, TString id){;
+double ChargeFlipValidation::GetHalfSampleWeight(const Electron& electron, TString id){;
 
   if(id == "HEID"){
 

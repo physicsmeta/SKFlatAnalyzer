@@ -1,7 +1,6 @@
 {
-//TString filename = "/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip/2016/CFrate__/ChargeFlip_DYJets_TTLL.root";
+TString filename = "/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip/2016/CFrate__/ChargeFlip_DYJets_TTLL.root";
 //TString filename = "/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip/2016/CFrate__/ChargeFlip_DYJets_TTLL_DYJetsPt100ToInf.root";
-TString filename = "/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip_IDv2/2016/CFrate__/ChargeFlip_IDv2_DYJets_TTLL.root";
 TFile* f1 = new TFile(filename);
 
 TString samplename = filename(filename.Last('/')+12,filename.Length());
@@ -10,9 +9,8 @@ samplename.ReplaceAll(".root","");
 gSystem->Exec("mkdir "+samplename);
 
 vector<TString> User_ID;
-//User_ID.push_back("HNTight2016");
-//User_ID.push_back("HEID");
-User_ID.push_back("HEIDv2");
+User_ID.push_back("HNTight2016");
+User_ID.push_back("HEID");
 
 for(unsigned int i=0; i<User_ID.size(); i++){
 
@@ -91,6 +89,7 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   gr1->GetXaxis()->SetTickLength(0.025);
   gr1->GetXaxis()->SetLabelSize(0.025);
   gr1->GetYaxis()->SetLabelSize(0.025);
+  gr1->GetYaxis()->SetRangeUser(0,0.0004);
   
   
   //// Define fit function and range //
@@ -146,6 +145,7 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   gr2->GetXaxis()->SetTickLength(0.025);
   gr2->GetXaxis()->SetLabelSize(0.025);
   gr2->GetYaxis()->SetLabelSize(0.025);
+  gr2->GetYaxis()->SetRangeUser(0,0.004);
   
   
   
@@ -208,6 +208,7 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   gr3->GetXaxis()->SetTickLength(0.025);
   gr3->GetXaxis()->SetLabelSize(0.025);
   gr3->GetYaxis()->SetLabelSize(0.025);
+  gr3->GetYaxis()->SetRangeUser(0,0.004);
   
   
   //TF1 *gr3_fit1 = new TF1("gr3_fit1","pol1",0,0.0105);
@@ -253,13 +254,13 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   
   
 
-  c1->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_EtaRegion1.pdf");
-  c2->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_EtaRegion2.pdf");
-  c3->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_EtaRegion3.pdf");
+  c1->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_Zoom_EtaRegion1.pdf");
+  c2->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_Zoom_EtaRegion2.pdf");
+  c3->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_Zoom_EtaRegion3.pdf");
 
-  c1->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_EtaRegion1.png");
-  c2->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_EtaRegion2.png");
-  c3->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_EtaRegion3.png");
+  c1->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_Zoom_EtaRegion1.png");
+  c2->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_Zoom_EtaRegion2.png");
+  c3->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_Zoom_EtaRegion3.png");
 
 }
 
