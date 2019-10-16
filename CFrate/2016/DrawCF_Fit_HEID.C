@@ -94,7 +94,7 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   
   TF1 *gr1_fit1 = new TF1("gr1_fit1","pol1",0,0.0075);
   TF1 *gr1_fit2 = new TF1("gr1_fit2","pol1",0.0075,0.0155);
-  TF1 *gr1_fit3 = new TF1("gr1_fit2","pol1",0.0155,0.041);
+  TF1 *gr1_fit3 = new TF1("gr1_fit3","pol1",0.0155,0.041);
   
   gr1_fit1->SetLineWidth(3);
   gr1_fit2->SetLineWidth(3);

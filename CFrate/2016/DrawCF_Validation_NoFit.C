@@ -90,41 +90,6 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   gr1->GetYaxis()->SetRangeUser(0.,0.0002);
   
   
-  //// Define fit function and range //
-  //
-  //TF1 *gr1_fit1 = new TF1("gr1_fit1","pol1",0,0.021);
-  //TF1 *gr1_fit2 = new TF1("gr1_fit2","pol1",0.021,0.04);
-  //
-  //gr1_fit1->SetLineWidth(3);
-  //gr1_fit2->SetLineWidth(3);
-  //
-  //gr1_fit1->SetLineColor(4);
-  //gr1_fit2->SetLineColor(4);
-  //
-  //cout << "//////////////////// Now fitting on EtaRegion1 ... ////////////////////" << endl;
-  //
-  //gr1->Fit(gr1_fit1,"R");
-  //
-  //// Draw fitting uncertainty //
-  //
-  //TGraphErrors *gr1_fit1_err = new TGraphErrors(22);
-  //for(int i=0; i<22; i++) gr1_fit1_err->SetPoint(i,0.001*i,0);
-  //(TVirtualFitter::GetFitter())->GetConfidenceIntervals(gr1_fit1_err);
-  //gr1_fit1_err->SetFillColor(4);
-  //gr1_fit1_err->SetFillStyle(3001);
-  //gr1_fit1_err->Draw("3 same");
-  //
-  //gr1->Fit(gr1_fit2,"R+");
-  //
-  //TGraphErrors *gr1_fit2_err = new TGraphErrors(21);
-  //for(int i=0; i<21; i++) gr1_fit2_err->SetPoint(i,0.021+0.001*i,0);
-  //(TVirtualFitter::GetFitter())->GetConfidenceIntervals(gr1_fit2_err);
-  //gr1_fit2_err->SetFillColor(4);
-  //gr1_fit2_err->SetFillStyle(3001);
-  //gr1_fit2_err->Draw("3 same");
-  
-  
-  
   // Done and repeat for EtaRegion2, 3 //
   
   c2->cd();
@@ -146,50 +111,6 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   gr2->GetYaxis()->SetRangeUser(0.,0.002);
   
   
-  
-  //TF1 *gr2_fit1 = new TF1("gr2_fit1","pol1",0,0.0155);
-  //TF1 *gr2_fit2 = new TF1("gr2_fit2","pol1",0.0155,0.023);
-  //TF1 *gr2_fit3 = new TF1("gr2_fit3","pol1",0.023,0.04);
-  //
-  //gr2_fit1->SetLineWidth(3);
-  //gr2_fit2->SetLineWidth(3);
-  //gr2_fit3->SetLineWidth(3);
-  //
-  //gr2_fit1->SetLineColor(4);
-  //gr2_fit2->SetLineColor(4);
-  //gr2_fit3->SetLineColor(4);
-  //
-  //cout << endl << "//////////////////// Now fitting on EtaRegion2 ... ////////////////////" << endl;
-  //
-  //gr2->Fit(gr2_fit1,"R");
-  //
-  //TGraphErrors *gr2_fit1_err = new TGraphErrors(16);
-  //for(int i=0; i<16; i++) gr2_fit1_err->SetPoint(i,0.001*i,0);
-  //(TVirtualFitter::GetFitter())->GetConfidenceIntervals(gr2_fit1_err);
-  //gr2_fit1_err->SetFillColor(4);
-  //gr2_fit1_err->SetFillStyle(3001);
-  //gr2_fit1_err->Draw("3 same");
-  //
-  //gr2->Fit(gr2_fit2,"R+");
-  //
-  //TGraphErrors *gr2_fit2_err = new TGraphErrors(9);
-  //for(int i=0; i<9; i++) gr2_fit2_err->SetPoint(i,0.015+0.001*i,0);
-  //(TVirtualFitter::GetFitter())->GetConfidenceIntervals(gr2_fit2_err);
-  //gr2_fit2_err->SetFillColor(4);
-  //gr2_fit2_err->SetFillStyle(3001);
-  //gr2_fit2_err->Draw("3 same");
-  //
-  //gr2->Fit(gr2_fit3,"R+");
-  //
-  //TGraphErrors *gr2_fit3_err = new TGraphErrors(19);
-  //for(int i=0; i<19; i++) gr2_fit3_err->SetPoint(i,0.023+0.001*i,0);
-  //(TVirtualFitter::GetFitter())->GetConfidenceIntervals(gr2_fit3_err);
-  //gr2_fit3_err->SetFillColor(4);
-  //gr2_fit3_err->SetFillStyle(3001);
-  //gr2_fit3_err->Draw("3 same");
-  
-  
-  
   c3->cd();
   
   TGraphErrors* gr3 = new TGraphErrors(X_3.size(),&X_3[0],&Y_3[0],&EX_3[0],&EY_3[0]);
@@ -207,57 +128,14 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   gr3->GetXaxis()->SetLabelSize(0.025);
   gr3->GetYaxis()->SetLabelSize(0.025);
   
-  
-  //TF1 *gr3_fit1 = new TF1("gr3_fit1","pol1",0,0.0105);
-  //TF1 *gr3_fit2 = new TF1("gr3_fit2","pol1",0.0105,0.02);
-  //TF1 *gr3_fit3 = new TF1("gr3_fit3","pol1",0.02,0.04);
-  //
-  //gr3_fit1->SetLineWidth(3);
-  //gr3_fit2->SetLineWidth(3);
-  //gr3_fit3->SetLineWidth(3);
-  //
-  //gr3_fit1->SetLineColor(4);
-  //gr3_fit2->SetLineColor(4);
-  //gr3_fit3->SetLineColor(4);
-  //
-  //cout << endl << "//////////////////// Now fitting on EtaRegion3 ... ////////////////////" << endl;
-  //
-  //gr3->Fit(gr3_fit1,"R");
-  //
-  //TGraphErrors *gr3_fit1_err = new TGraphErrors(12);
-  //for(int i=0; i<12; i++) gr3_fit1_err->SetPoint(i,0.001*i,0);
-  //(TVirtualFitter::GetFitter())->GetConfidenceIntervals(gr3_fit1_err);
-  //gr3_fit1_err->SetFillColor(4);
-  //gr3_fit1_err->SetFillStyle(3001);
-  //gr3_fit1_err->Draw("3 same");
-  //
-  //gr3->Fit(gr3_fit2,"R+");
-  //
-  //TGraphErrors *gr3_fit2_err = new TGraphErrors(10);
-  //for(int i=0; i<10; i++) gr3_fit2_err->SetPoint(i,0.011+0.001*i,0);
-  //(TVirtualFitter::GetFitter())->GetConfidenceIntervals(gr3_fit2_err);
-  //gr3_fit2_err->SetFillColor(4);
-  //gr3_fit2_err->SetFillStyle(3001);
-  //gr3_fit2_err->Draw("3 same");
-  //
-  //gr3->Fit(gr3_fit3,"R+");
-  //
-  //TGraphErrors *gr3_fit3_err = new TGraphErrors(22);
-  //for(int i=0; i<22; i++) gr3_fit3_err->SetPoint(i,0.02+0.001*i,0);
-  //(TVirtualFitter::GetFitter())->GetConfidenceIntervals(gr3_fit3_err);
-  //gr3_fit3_err->SetFillColor(4);
-  //gr3_fit3_err->SetFillStyle(3001);
-  //gr3_fit3_err->Draw("3 same");
-  
-  
 
   //c1->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_EtaRegion1.pdf");
   //c2->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_EtaRegion2.pdf");
   //c3->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_EtaRegion3.pdf");
 
-  c1->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_EtaRegion1.png");
-  c2->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_EtaRegion2.png");
-  c3->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_EtaRegion3.png");
+  //c1->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_EtaRegion1.png");
+  //c2->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_EtaRegion2.png");
+  //c3->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_EtaRegion3.png");
 
 }
 

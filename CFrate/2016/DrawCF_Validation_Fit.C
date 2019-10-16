@@ -1,8 +1,8 @@
 {
-TString filename = "/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip/2016/CFrate__/ChargeFlip_DYJets_TTLL.root";
+TString filename = "/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlipValidation/2016/CFrate__/ChargeFlipValidation_DYJets.root";
 TFile* f1 = new TFile(filename);
 
-TString samplename = filename(filename.Last('/')+12,filename.Length());
+TString samplename = filename(filename.Last('/')+11,filename.Length());
 samplename.ReplaceAll(".root","");
 
 gSystem->Exec("mkdir "+samplename);
@@ -88,21 +88,22 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   gr1->GetXaxis()->SetTickLength(0.025);
   gr1->GetXaxis()->SetLabelSize(0.025);
   gr1->GetYaxis()->SetLabelSize(0.025);
+  gr1->GetYaxis()->SetRangeUser(0.,0.0002);
   
   
   // Define fit function and range //
   
-  TF1 *gr1_fit1 = new TF1("gr1_fit1","pol1",0,0.0075);
-  TF1 *gr1_fit2 = new TF1("gr1_fit2","pol1",0.0075,0.0155);
-  TF1 *gr1_fit3 = new TF1("gr1_fit3","pol1",0.0155,0.041);
+  TF1 *gr1_fit1 = new TF1("gr1_fit1","pol1",0,0.0195);
+  TF1 *gr1_fit2 = new TF1("gr1_fit2","pol1",0.0195,0.041);
+  //TF1 *gr1_fit3 = new TF1("gr1_fit3","pol1",0.016,0.041);
   
   gr1_fit1->SetLineWidth(3);
   gr1_fit2->SetLineWidth(3);
-  gr1_fit3->SetLineWidth(3);
+  //gr1_fit3->SetLineWidth(3);
   
   gr1_fit1->SetLineColor(4);
   gr1_fit2->SetLineColor(4);
-  gr1_fit3->SetLineColor(4);
+  //gr1_fit3->SetLineColor(4);
   
   cout << "//////////////////// Now fitting on EtaRegion1 ... ////////////////////" << endl;
  
@@ -126,7 +127,7 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   //gr1_fit2_err->SetFillStyle(3001);
   //gr1_fit2_err->Draw("3 same");
   
-  gr1->Fit(gr1_fit3,"R+");
+  //gr1->Fit(gr1_fit3,"R+");
 
   //TGraphErrors *gr1_fit3_err = new TGraphErrors(51);
   //for(int i=0; i<51; i++) gr1_fit3_err->SetPoint(i,0.0155+0.0005*i,0);
@@ -153,12 +154,13 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   gr2->GetXaxis()->SetTickLength(0.025);
   gr2->GetXaxis()->SetLabelSize(0.025);
   gr2->GetYaxis()->SetLabelSize(0.025);
+  gr2->GetYaxis()->SetRangeUser(0.,0.002);
   
   
   
-  TF1 *gr2_fit1 = new TF1("gr2_fit1","pol1",0,0.0055);
-  TF1 *gr2_fit2 = new TF1("gr2_fit2","pol1",0.0055,0.0155);
-  TF1 *gr2_fit3 = new TF1("gr2_fit3","pol1",0.0155,0.04);
+  TF1 *gr2_fit1 = new TF1("gr2_fit1","pol1",0,0.0095);
+  TF1 *gr2_fit2 = new TF1("gr2_fit2","pol1",0.0095,0.0195);
+  TF1 *gr2_fit3 = new TF1("gr2_fit3","pol1",0.0195,0.04);
   
   gr2_fit1->SetLineWidth(3);
   gr2_fit2->SetLineWidth(3);
@@ -217,9 +219,9 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   gr3->GetYaxis()->SetLabelSize(0.025);
   
   
-  TF1 *gr3_fit1 = new TF1("gr3_fit1","pol1",0,0.010);
-  TF1 *gr3_fit2 = new TF1("gr3_fit2","pol1",0.010,0.019);
-  TF1 *gr3_fit3 = new TF1("gr3_fit3","pol1",0.019,0.04);
+  TF1 *gr3_fit1 = new TF1("gr3_fit1","pol1",0,0.0105);
+  TF1 *gr3_fit2 = new TF1("gr3_fit2","pol1",0.0105,0.0195);
+  TF1 *gr3_fit3 = new TF1("gr3_fit3","pol1",0.0195,0.04);
   
   gr3_fit1->SetLineWidth(3);
   gr3_fit2->SetLineWidth(3);
@@ -264,9 +266,9 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   //c2->SaveAs(samplename+"/"+User_ID.at(i)+"_Fit_EtaRegion2.pdf");
   //c3->SaveAs(samplename+"/"+User_ID.at(i)+"_Fit_EtaRegion3.pdf");
 
-  //c1->SaveAs(samplename+"/"+User_ID.at(i)+"_Fit_EtaRegion1.png");
-  //c2->SaveAs(samplename+"/"+User_ID.at(i)+"_Fit_EtaRegion2.png");
-  //c3->SaveAs(samplename+"/"+User_ID.at(i)+"_Fit_EtaRegion3.png");
+  c1->SaveAs(samplename+"/"+User_ID.at(i)+"_Fit_EtaRegion1.png");
+  c2->SaveAs(samplename+"/"+User_ID.at(i)+"_Fit_EtaRegion2.png");
+  c3->SaveAs(samplename+"/"+User_ID.at(i)+"_Fit_EtaRegion3.png");
 
   //c1->SaveAs(samplename+"/"+User_ID.at(i)+"_FitErrorBand_EtaRegion1.pdf");
   //c2->SaveAs(samplename+"/"+User_ID.at(i)+"_FitErrorBand_EtaRegion2.pdf");
