@@ -16,7 +16,7 @@ void HNtypeI_SR::initializeAnalyzer(){
   MuonLooseIDs = {"HNLoose", "HNLoose", "HNLoose2016"};
 //  MuonIDSFKeys = { "NUM_TightID_DEN_genTracks" };
   ElectronTightIDs = {"HNTight", "HNTightV2", "HNTight2016"};
-  ElectronLooseIDs = {"HNLoose", "HNLooseV2", "HNLoose2016"};
+  ElectronLooseIDs = {"HNLoose", "HNLooseV23", "HNLoose2016"};
   FakeRateIDs = {"HNtypeI_V1", "HNtypeI_V2", "HNtypeI_16"};
 
   //==== At this point, sample informations (e.g., IsDATA, DataStream, MCSample, or DataYear) are all set
@@ -25,6 +25,9 @@ void HNtypeI_SR::initializeAnalyzer(){
   //==== I defined "TString IsoMuTriggerName;" and "double TriggerSafePtCut;" in Analyzers/include/HNtypeI_SR.h 
   //==== IsoMuTriggerName is a year-dependent variable, and you don't want to do "if(Dataer==~~)" for every event (let's save cpu time).
   //==== Then, do it here, which only ran once for each macro
+
+  // We can use SkimTree_SMP for dimuon and dielectron channel. (See https://github.com/sansan9401/SKFlatAnalyzer/blob/Run2Legacy_hsseo/Analyzers/src/SkimTree_SMP.C)
+
   MuonTriggers.clear();
   ElectronTriggers.clear();
 
@@ -464,6 +467,7 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
     weight = 1., muon_idsf = 1., muon_isosf = 1., ele_idsf = 1., ele_recosf = 1.;
     if(it_ch == 0){ LeptonPtCut1 = MuonPtCut1; LeptonPtCut2 = MuonPtCut2; }
     if(it_ch == 1){ LeptonPtCut1 = ElectronPtCut1; LeptonPtCut2 = ElectronPtCut2; }
+    if(it_ch==0 && RunCF) continue;
 
     // Triggers for each channel
     if(it_ch==0 && !ev.PassTrigger(MuonTriggers)) continue;
@@ -514,7 +518,7 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
       //// Preselection (triggers were applied before)
       /////////////////////////////////////////////////////////
 
-      // SS lepton pair
+      // SS lepton pair (OS pair if RunCF is true)
       if(leptons.at(0)->Pt()<LeptonPtCut1 || leptons.at(1)->Pt()<LeptonPtCut2) continue;
       if(!RunCF && leptons.at(0)->Charge()*leptons.at(1)->Charge()<0) continue;
       if(RunCF && leptons.at(0)->Charge()*leptons.at(1)->Charge()>0) continue;
@@ -784,6 +788,7 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
   //////////////////////////////////////
   //// SM background CR
   //////////////////////////////////////
+  if(RunCF) return;
 
   if(IsDATA){
     if(DataStream.Contains("DoubleMuon") && !ev.PassTrigger(MuonTriggers)) return;
@@ -806,7 +811,7 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
   //=========================
   //==== Event selections..
   //========================= 
-
+  
   for(unsigned int it_rg2=0; it_rg2<regionsSM.size(); it_rg2++){
     weight = 1., muon_idsf = 1., muon_isosf = 1., ele_idsf = 1., ele_recosf = 1.;
     ossf_mass10 = 0;

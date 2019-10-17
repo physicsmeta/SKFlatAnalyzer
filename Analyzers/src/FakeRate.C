@@ -12,8 +12,8 @@ void FakeRate::initializeAnalyzer(){
 
   MuonTightIDs = {"HNTight", "HNTightV2", "HNTight2016"};
   MuonLooseIDs = {"HNLoose", "HNLoose", "HNLoose2016"};
-  ElectronTightIDs = {"HNTight2016", "HNTight", "HNTight", "HNTightV2", "HNTightV2", "HNMVATight", "HNMVATight", "HNMVATightV2", "HNMVATightV2", "ISRTight"};
-  ElectronLooseIDs = {"HNLoose2016", "HNLoose", "HNLooseV2", "HNLoose", "HNLooseV2", "HNMVALoose", "HNMVALooseV2", "HNMVALoose", "HNMVALooseV2", "ISRLoose"};
+  ElectronTightIDs = {"ISRTight", "HNTight2016", "HNTight", "HNTightV2", "HNTightV2", "HNTightV2", "HNMVATight", "HNMVATightV2"};
+  ElectronLooseIDs = {"ISRLoose", "HNLoose2016", "HNLoose", "HNLooseV21", "HNLooseV22", "HNLooseV23", "HNMVALoose", "HNMVALooseV2"};
 /*  MuonTightIDs = {"HNTightV2"};
   MuonLooseIDs = {"HNLoose"};
   ElectronTightIDs = {"HNTight2016"};
@@ -170,19 +170,14 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
   if(param.Muon_Tight_ID.Contains("V2")) regions_mu = {"muonV12FR", "muonV12DY", "muonV12Wj"};
   if(param.Muon_Tight_ID.Contains("2016")) regions_mu = {"muon16FR", "muon16DY", "muon16Wj"};
 
-  vector<TString> regions_el = {"eleV11FR", "eleV11DY", "eleV11Wj"};
-  if(param.Electron_Loose_ID.Contains("V2")) regions_el = {"eleV21FR", "eleV21DY", "eleV21Wj"};
-  if(param.Electron_Tight_ID.Contains("V2")){
-    regions_el = {"eleV12FR", "eleV12DY", "eleV12Wj"};
-    if(param.Electron_Loose_ID.Contains("V2")) regions_el = {"eleV22FR", "eleV22DY", "eleV22Wj"};
-  }
+  // Version : Loose ID
+  vector<TString> regions_el = {"eleV1FR", "eleV1DY", "eleV1Wj"};
+  if(param.Electron_Loose_ID.Contains("V21")) regions_el = {"eleV21FR", "eleV21DY", "eleV21Wj"};
+  if(param.Electron_Loose_ID.Contains("V22")) regions_el = {"eleV22FR", "eleV22DY", "eleV22Wj"};
+  if(param.Electron_Loose_ID.Contains("V23")) regions_el = {"eleV23FR", "eleV23DY", "eleV23Wj"};
   if(param.Electron_Tight_ID.Contains("MVA")){ 
-    regions_el = {"mvaV11FR", "mvaV11DY", "mvaV11Wj"};
-    if(param.Electron_Loose_ID.Contains("V2")) regions_el = {"mvaV21FR", "mvaV21DY", "mvaV21Wj"};
-    if(param.Electron_Tight_ID.Contains("V2")){
-      regions_el = {"mvaV12FR", "mvaV12DY", "mvaV12Wj"};
-      if(param.Electron_Loose_ID.Contains("V2")) regions_el = {"mvaV22FR", "mvaV22DY", "mvaV22Wj"};
-    }
+    regions_el = {"mvaV1FR", "mvaV1DY", "mvaV1Wj"};
+    if(param.Electron_Tight_ID.Contains("V2")) regions_el = {"mvaV2FR", "mvaV2DY", "mvaV2Wj"};
   }
   if(param.Electron_Tight_ID.Contains("2016")) regions_el = {"ele16FR", "ele16DY", "ele16Wj"};
   if(param.Electron_Tight_ID.Contains("ISR")) regions_el = {"isrFR", "isrDY", "isrWj"};
@@ -341,7 +336,7 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
 
   for(unsigned int it_rg=0; it_rg<regions_mu.size(); it_rg++){
     weight = 1.;
-    if(param.Electron_Tight_ID.Contains("V2") || param.Electron_Tight_ID.Contains("MVA") || param.Electron_Tight_ID.Contains("ISR")) break; // Stack muon hists only once!!
+    if(param.Electron_Tight_ID.Contains("V2") || param.Electron_Tight_ID.Contains("MVA")) break; // Stack muon hists only once!!
 
     // Fake rate measurement region 
     if(muons_loose.size()==1 && it_rg==0){
@@ -362,37 +357,6 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
         weight *= GetPrefireWeight(0);
         weight *= GetPileUpWeight(nPileUp,0);
       }
-
-/*      if(ev.PassTrigger(MuonTrig1) && muons_loose.at(0).Pt() > MuonPtCut1){
-        triglumi = 1.;
-        if(!IsDATA) triglumi = MuonLumi1;
-        FillHist("Mu_loose_Eta_Mu3_"+regions_mu.at(it_rg), muons_loose.at(0).Eta(), weight*triglumi, 50, -2.5, 2.5);
-        if(ptcone_mu >= MuonPtconeCut1 && ptcone_mu < MuonPtconeCut2) FillHist("Mu_loose_Eta_Mu3_PtConeCut_"+regions_mu.at(it_rg), muons_loose.at(0).Eta(), weight*triglumi, 50, -2.5, 2.5);
-        if(!ev.PassTrigger(MuonTrig2) && !ev.PassTrigger(MuonTrig3)){
-          FillHist("Mu_loose_Eta_Mu3only_"+regions_mu.at(it_rg), muons_loose.at(0).Eta(), weight*triglumi, 50, -2.5, 2.5);
-          if(ptcone_mu >= MuonPtconeCut1 && ptcone_mu < MuonPtconeCut2) FillHist("Mu_loose_Eta_Mu3only_PtConeCut_"+regions_mu.at(it_rg), muons_loose.at(0).Eta(), weight*triglumi, 50, -2.5, 2.5);
-        }
-      }
-      if(ev.PassTrigger(MuonTrig2) && muons_loose.at(0).Pt() > MuonPtCut2){
-        triglumi = 1.;
-        if(!IsDATA) triglumi = MuonLumi2;
-        FillHist("Mu_loose_Eta_Mu8_"+regions_mu.at(it_rg), muons_loose.at(0).Eta(), weight*triglumi, 50, -2.5, 2.5);
-        if(ptcone_mu >= MuonPtconeCut2 && ptcone_mu < MuonPtconeCut3) FillHist("Mu_loose_Eta_Mu8_PtConeCut_"+regions_mu.at(it_rg), muons_loose.at(0).Eta(), weight*triglumi, 50, -2.5, 2.5);
-        if(!ev.PassTrigger(MuonTrig1) && !ev.PassTrigger(MuonTrig3)){
-          FillHist("Mu_loose_Eta_Mu8only_"+regions_mu.at(it_rg), muons_loose.at(0).Eta(), weight*triglumi, 50, -2.5, 2.5);
-          if(ptcone_mu >= MuonPtconeCut2 && ptcone_mu < MuonPtconeCut3) FillHist("Mu_loose_Eta_Mu8only_PtConeCut_"+regions_mu.at(it_rg), muons_loose.at(0).Eta(), weight*triglumi, 50, -2.5, 2.5);
-        }
-      }
-      if(ev.PassTrigger(MuonTrig3) && muons_loose.at(0).Pt() > MuonPtCut3){
-         triglumi = 1.;
-         if(!IsDATA) triglumi = MuonLumi3;
-         FillHist("Mu_loose_Eta_Mu17_"+regions_mu.at(it_rg), muons_loose.at(0).Eta(), weight*triglumi, 50, -2.5, 2.5);
-         if(ptcone_mu >= MuonPtconeCut3) FillHist("Mu_loose_Eta_Mu17_PtConeCut_"+regions_mu.at(it_rg), muons_loose.at(0).Eta(), weight*triglumi, 50, -2.5, 2.5);
-         if(!ev.PassTrigger(MuonTrig1) && !ev.PassTrigger(MuonTrig2)){
-           FillHist("Mu_loose_Eta_Mu17only_"+regions_mu.at(it_rg), muons_loose.at(0).Eta(), weight*triglumi, 50, -2.5, 2.5);
-           if(ptcone_mu >= MuonPtconeCut3) FillHist("Mu_loose_Eta_Mu17only_PtConeCut_"+regions_mu.at(it_rg), muons_loose.at(0).Eta(), weight*triglumi, 50, -2.5, 2.5);
-         }
-      }*/
 
       triglumi = 1.;
       // only 1 prescaled trigger for each PtCone range, setup lumi
@@ -658,43 +622,6 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
         weight *= GetPrefireWeight(0);
         weight *= GetPileUpWeight(nPileUp,0);
       }
-
-/*      if(ev.PassTrigger(ElectronTrig1) && ele_loose.at(0).Pt() > ElectronPtCut1){
-        triglumi = 1.;
-        if(!IsDATA) triglumi = ElectronLumi1;
-        FillHist("Ele_loose_Eta_Ele8_"+regions_el.at(it_rg2), ele_loose.at(0).Eta(), weight*triglumi, 50, -2.5, 2.5);
-        if(ptcone_el >= ElectronPtconeCut1 && ptcone_el < ElectronPtconeCut2) FillHist("Ele_loose_Eta_Ele8_PtConeCut_"+regions_el.at(it_rg2), ele_loose.at(0).Eta(), weight*triglumi, 50, -2.5, 2.5);
-//        if(!ev.PassTrigger(ElectronTrig2) && !ev.PassTrigger(ElectronTrig3)){
-          FillHist("Ele_loose_Eta_Ele8only_"+regions_el.at(it_rg2), ele_loose.at(0).Eta(), weight*triglumi, 50, -2.5, 2.5);
-//          if(ptcone_el >= ElectronPtconeCut1 && ptcone_el < ElectronPtconeCut2) FillHist("Ele_loose_Eta_Ele8only_PtConeCut_"+regions_el.at(it_rg2), ele_loose.at(0).Eta(), weight*triglumi, 50, -2.5, 2.5);
-        }
-      }
-      if(ev.PassTrigger(ElectronTrig2) && ele_loose.at(0).Pt() > ElectronPtCut2){
-        triglumi = 1.;
-        if(!IsDATA) triglumi = ElectronLumi2;
-        FillHist("Ele_loose_Eta_Ele12_"+regions_el.at(it_rg2), ele_loose.at(0).Eta(), weight*triglumi, 50, -2.5, 2.5);
-        if(ptcone_el >= ElectronPtconeCut2 && ptcone_el < ElectronPtconeCut3) FillHist("Ele_loose_Eta_Ele12_PtConeCut_"+regions_el.at(it_rg2), ele_loose.at(0).Eta(), weight*triglumi, 50, -2.5, 2.5);
-//        if(!ev.PassTrigger(ElectronTrig1) && !ev.PassTrigger(ElectronTrig3)){
-          FillHist("Ele_loose_Eta_Ele12only_"+regions_el.at(it_rg2), ele_loose.at(0).Eta(), weight*triglumi, 50, -2.5, 2.5);
-//          if(ptcone_el >= ElectronPtconeCut2 && ptcone_el < ElectronPtconeCut3) FillHist("Ele_loose_Eta_Ele12only_PtConeCut_"+regions_el.at(it_rg2), ele_loose.at(0).Eta(), weight*triglumi, 50, -2.5, 2.5);
-        }
-      }
-      if(ev.PassTrigger(ElectronTrig3) && ele_loose.at(0).Pt() > ElectronPtCut3){
-        triglumi = 1.;
-        if(!IsDATA) triglumi = ElectronLumi3;
-        FillHist("Ele_loose_Eta_Ele17_"+regions_el.at(it_rg2), ele_loose.at(0).Eta(), weight*triglumi, 50, -2.5, 2.5);
-        if(ptcone_el >= ElectronPtconeCut3) FillHist("Ele_loose_Eta_Ele17_PtConeCut_"+regions_el.at(it_rg2), ele_loose.at(0).Eta(), weight*triglumi, 50, -2.5, 2.5);
-      }
-      if(ev.PassTrigger(ElectronTrig4) && ele_loose.at(0).Pt() > ElectronPtCut4){
-        triglumi = 1.;
-        if(!IsDATA) triglumi = ElectronLumi4;
-        FillHist("Ele_loose_Eta_Ele23_"+regions_el.at(it_rg2), ele_loose.at(0).Eta(), weight*triglumi, 50, -2.5, 2.5);
-        if(ptcone_el >= ElectronPtconeCut4) FillHist("Ele_loose_Eta_Ele23_PtConeCut_"+regions_el.at(it_rg2), ele_loose.at(0).Eta(), weight*triglumi, 50, -2.5, 2.5);
-//         if(!ev.PassTrigger(ElectronTrig1) && !ev.PassTrigger(ElectronTrig2)){
-           FillHist("Ele_loose_Eta_Ele23only_"+regions_el.at(it_rg2), ele_loose.at(0).Eta(), weight*triglumi, 50, -2.5, 2.5);
-//           if(ptcone_el >= ElectronPtconeCut3) FillHist("Ele_loose_Eta_Ele23only_PtConeCut_"+regions_el.at(it_rg2), ele_loose.at(0).Eta(), weight*triglumi, 50, -2.5, 2.5);
-         }
-      }*/
 
       triglumi = 1.;
       // only 1 prescaled trigger for each PtCone range, setup lumi

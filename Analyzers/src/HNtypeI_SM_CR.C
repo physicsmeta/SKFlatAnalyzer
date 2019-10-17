@@ -320,7 +320,6 @@ void HNtypeI_SM_CR::executeEventFromParameter(AnalyzerParameter param){
   double ele_idsf = 1.;
   double ele_recosf = 1.;
   int ossf_mass10 = 0;
-  int electron_gap_size = 0;
 
   // Sort leptons with pT order, separate leptons with their charge
   if(lepton_size < 5){
@@ -349,12 +348,6 @@ void HNtypeI_SM_CR::executeEventFromParameter(AnalyzerParameter param){
     weight = 1., muon_idsf = 1., muon_isosf = 1., ele_idsf = 1., ele_recosf = 1.;
     ossf_mass10 = 0;
     
-    // No electrons in ECAL gap (1.4442 < |eta| < 1.566)
-    for(unsigned int it_gap=0; it_gap<electrons.size(); it_gap++){
-      if(fabs(electrons.at(it_gap).scEta())>=1.4442 && fabs(electrons.at(it_gap).scEta())<1.566) electron_gap_size++;
-    }
-    if(electron_gap_size > 0) continue;
-
     // WZ or ZG CR
     if(lepton_size==3 && it_rg<2){
       FillHist("Number_Events_"+regions.at(it_rg), 3.5, 1., cutflow_bin, 0., cutflow_max);
@@ -365,12 +358,10 @@ void HNtypeI_SM_CR::executeEventFromParameter(AnalyzerParameter param){
 
       // Triggers
       if(ev.PassTrigger(MuonTriggers)){
-//        if(muons.size()==0) continue;
         if(muons.size()<2) continue;
         else if(muons.size()>=2 && (muons.at(0).Pt()<MuonPtCut1 || muons.at(1).Pt()<MuonPtCut2)) continue;
       }
       else if(!ev.PassTrigger(MuonTriggers) && ev.PassTrigger(ElectronTriggers)){
-//        if(electrons.size()==0) continue;
         if(electrons.size()<2) continue;
         else if(electrons.size()>=2 && (electrons.at(0).Pt()<ElectronPtCut1 || electrons.at(1).Pt()<ElectronPtCut2)) continue;
       }
@@ -448,14 +439,12 @@ void HNtypeI_SM_CR::executeEventFromParameter(AnalyzerParameter param){
 
       if(it_rg == 0){
         if(!IsOnZ(ZCand.M(), 15.)) continue;
-//        FillHist("Number_Events_"+regions.at(it_rg), 7.5, 1., cutflow_bin, 0., cutflow_max);
         if(MET < 50.) continue;
         if(Mt < 20.) continue;
         if(TriLep.M() < MZ + 15.) continue;
       }
       if(it_rg == 1){
         if(IsOnZ(ZCand.M(), 15.)) continue;
-//        FillHist("Number_Events_"+regions.at(it_rg), 7.5, 1., cutflow_bin, 0., cutflow_max);
         if(MET > 50.) continue;
         if(!IsOnZ(TriLep.M(), 15.)) continue;
       }
@@ -529,12 +518,10 @@ void HNtypeI_SM_CR::executeEventFromParameter(AnalyzerParameter param){
 
       // Triggers
       if(ev.PassTrigger(MuonTriggers)){
-//        if(muons.size()==0) continue;
         if(muons.size()<2) continue;
         else if(muons.size()>=2 && (muons.at(0).Pt()<MuonPtCut1 || muons.at(1).Pt()<MuonPtCut2)) continue;
       }
       else if(!ev.PassTrigger(MuonTriggers) && ev.PassTrigger(ElectronTriggers)){
-//        if(electrons.size()==0) continue;
         if(electrons.size()<2) continue;
         else if(electrons.size()>=2 && (electrons.at(0).Pt()<ElectronPtCut1 || electrons.at(1).Pt()<ElectronPtCut2)) continue;
       }
