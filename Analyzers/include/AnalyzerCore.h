@@ -92,8 +92,6 @@ public:
   std::vector<Electron> SelectChargeTightElectronsDXY(const std::vector<Electron>& electrons, TString id, double ptmin, double fetamax); //JH : for CF, POG ID + tight charge + dXY cut
   std::vector<Electron> SelectChargeTightElectronsDZ(const std::vector<Electron>& electrons, TString id, double ptmin, double fetamax); //JH : for CF, POG ID + tight charge + dZ cut
   std::vector<Electron> SelectChargeTightElectronsDXYDZ(const std::vector<Electron>& electrons, TString id, double ptmin, double fetamax); //JH : for CF, POG ID + tight charge + dXY cut + dZ cut
-  std::vector<Electron> SelectChargeFlipElectrons(const std::vector<Electron>& electrons, double ptmin, double fetamax); //JH: for CF, Charge Flip ID in AN 17-291
-  std::vector<Electron> SelectElectronsHE(const std::vector<Electron>& electrons, TString id, double ptmin, double fetamax); //JH: for CF, Charge Flip ID for what HE required
 
   std::vector<Muon> UseTunePMuon(const std::vector<Muon>& muons);
   std::vector<Muon> SelectMuons(const std::vector<Muon>& muons, TString id, double ptmin, double fetamax);

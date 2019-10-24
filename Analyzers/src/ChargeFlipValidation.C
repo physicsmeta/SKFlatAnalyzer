@@ -146,6 +146,8 @@ void ChargeFlipValidation::executeEventFromParameter(AnalyzerParameter param, Lo
 
       /* Measure CF rate using MC */
 
+      if(HasFlag("OnlyTwo")) if(eles.size()!=2) return;
+
       for(unsigned int i=0; i<eles.size(); i++){
         Gen truth_lep = GetGenMatchedLepton(eles.at(i), gens);
         if(truth_lep.PID() == 0) return; 
@@ -158,7 +160,23 @@ void ChargeFlipValidation::executeEventFromParameter(AnalyzerParameter param, Lo
           FillHist(param.Name+"/CFrate/EtaRegion1_Denom", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
           if(truth_lep_Charge*eles.at(i).Charge()<0){
             cout << "!!EtaRegion1!! truth lepton charge : " << truth_lep_Charge << ", reco lepton charge : " << eles.at(i).Charge() << endl;
+            cout << "Total # of reco electrons : " << eles.size() << endl;
+            if(eles.size()==2){
+              cout << "reco electrons charge : " << eles.at(0).Charge() << ", " << eles.at(1).Charge() << endl;
+              cout << "reco electrons dilepton mass : " << (eles.at(0)+eles.at(1)).M() << endl;
+              cout << "reco electrons pT : " << eles.at(0).Pt() << ", " << eles.at(1).Pt() << endl;
+            }
+            else if(eles.size()==3){
+              cout << "reco electrons charge : " << eles.at(0).Charge() << ", " << eles.at(1).Charge() << ", " << eles.at(2).Charge() << endl;
+              cout << "reco electrons dilepton mass : " << (eles.at(0)+eles.at(1)).M() << endl;
+              cout << "reco electrons pT : " << eles.at(0).Pt() << ", " << eles.at(1).Pt() << ", " << eles.at(2).Pt() << endl;
+            }
             cout << "Matched gen index : " << truth_lep.Index() << endl;
+            cout << "charge flipped electron pT : " << eles.at(0).Pt() << endl;
+            cout << "Matched gen pT : " << truth_lep.Pt() << endl;
+            cout << "charge flipped electron Eta, Phi : " << eles.at(i).Eta() << ", " << eles.at(i).Phi() << endl;
+            cout << "Matched gen Eta, Phi : " << truth_lep.Eta() << ", " << truth_lep.Phi() << endl;
+            cout << "DeltaR : " << truth_lep.DeltaR( eles.at(i) ) << endl;
             PrintGen(gens);
             FillHist(param.Name+"/CFrate/EtaRegion1_Num", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
           }
@@ -167,7 +185,23 @@ void ChargeFlipValidation::executeEventFromParameter(AnalyzerParameter param, Lo
           FillHist(param.Name+"/CFrate/EtaRegion2_Denom", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
           if(truth_lep_Charge*eles.at(i).Charge()<0){
             cout << "!!EtaRegion2!! truth lepton charge : " << truth_lep_Charge << ", reco lepton charge : " << eles.at(i).Charge() << endl;
+            cout << "Total # of reco electrons : " << eles.size() << endl;
+            if(eles.size()==2){
+              cout << "reco electrons charge : " << eles.at(0).Charge() << ", " << eles.at(1).Charge() << endl;
+              cout << "reco electrons dilepton mass : " << (eles.at(0)+eles.at(1)).M() << endl;
+              cout << "reco electrons pT : " << eles.at(0).Pt() << ", " << eles.at(1).Pt() << endl;
+            }
+            else if(eles.size()==3){
+              cout << "reco electrons charge : " << eles.at(0).Charge() << ", " << eles.at(1).Charge() << ", " << eles.at(2).Charge() << endl;
+              cout << "reco electrons dilepton mass : " << (eles.at(0)+eles.at(1)).M() << endl;
+              cout << "reco electrons pT : " << eles.at(0).Pt() << ", " << eles.at(1).Pt() << ", " << eles.at(2).Pt() << endl;
+            }
             cout << "Matched gen index : " << truth_lep.Index() << endl;
+            cout << "charge flipped electron pT : " << eles.at(0).Pt() << endl;
+            cout << "Matched gen pT : " << truth_lep.Pt() << endl;
+            cout << "charge flipped electron Eta, Phi : " << eles.at(i).Eta() << ", " << eles.at(i).Phi() << endl;
+            cout << "Matched gen Eta, Phi : " << truth_lep.Eta() << ", " << truth_lep.Phi() << endl;
+            cout << "DeltaR : " << truth_lep.DeltaR( eles.at(i) ) << endl;
             PrintGen(gens);
             FillHist(param.Name+"/CFrate/EtaRegion2_Num", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
           }
@@ -176,7 +210,23 @@ void ChargeFlipValidation::executeEventFromParameter(AnalyzerParameter param, Lo
           FillHist(param.Name+"/CFrate/EtaRegion3_Denom", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
           if(truth_lep_Charge*eles.at(i).Charge()<0){
             cout << "!!EtaRegion3!! truth lepton charge : " << truth_lep_Charge << ", reco lepton charge : " << eles.at(i).Charge() << endl;
+            cout << "Total # of reco electrons : " << eles.size() << endl;
+            if(eles.size()==2){
+              cout << "reco electrons charge : " << eles.at(0).Charge() << ", " << eles.at(1).Charge() << endl;
+              cout << "reco electrons dilepton mass : " << (eles.at(0)+eles.at(1)).M() << endl;
+              cout << "reco electrons pT : " << eles.at(0).Pt() << ", " << eles.at(1).Pt() << endl;
+            }
+            else if(eles.size()==3){
+              cout << "reco electrons charge : " << eles.at(0).Charge() << ", " << eles.at(1).Charge() << ", " << eles.at(2).Charge() << endl;
+              cout << "reco electrons dilepton mass : " << (eles.at(0)+eles.at(1)).M() << endl;
+              cout << "reco electrons pT : " << eles.at(0).Pt() << ", " << eles.at(1).Pt() << ", " << eles.at(2).Pt() << endl;
+            }
             cout << "Matched gen index : " << truth_lep.Index() << endl;
+            cout << "charge flipped electron pT : " << eles.at(0).Pt() << endl;
+            cout << "Matched gen pT : " << truth_lep.Pt() << endl;
+            cout << "charge flipped electron Eta, Phi : " << eles.at(i).Eta() << ", " << eles.at(i).Phi() << endl;
+            cout << "Matched gen Eta, Phi : " << truth_lep.Eta() << ", " << truth_lep.Phi() << endl;
+            cout << "DeltaR : " << truth_lep.DeltaR( eles.at(i) ) << endl;
             PrintGen(gens);
             FillHist(param.Name+"/CFrate/EtaRegion3_Num", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
           }
