@@ -1,5 +1,6 @@
 {
-TString filename = "/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlipValidation/2016/CFrate__/ChargeFlipValidation_DYJets.root";
+//TString filename = "/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlipValidation/2016/CFrate__/ChargeFlipValidation_DYJets.root";
+TString filename = "/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlipValidation/2016/CFrate__OnlyTwo__/ChargeFlipValidation_DYJets.root";
 TFile* f1 = new TFile(filename);
 
 TString samplename = filename(filename.Last('/')+11,filename.Length());
@@ -129,13 +130,15 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   gr3->GetYaxis()->SetLabelSize(0.025);
   
 
+  if ( !filename.Contains("CFrate__/") ) User_ID.at(i)+="__"+filename(filename.Last('6')+10,filename.Last('/')-filename.Last('6')-11);
+
   //c1->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_EtaRegion1.pdf");
   //c2->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_EtaRegion2.pdf");
   //c3->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_EtaRegion3.pdf");
 
-  //c1->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_EtaRegion1.png");
-  //c2->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_EtaRegion2.png");
-  //c3->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_EtaRegion3.png");
+  c1->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_EtaRegion1.png");
+  c2->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_EtaRegion2.png");
+  c3->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_EtaRegion3.png");
 
 }
 
