@@ -1,29 +1,4 @@
 #i = raw_input("Put job number : ")
-#
-#lines = []
-#
-#with open("/data4/Users/jihkim/SKFlatRunlog/2019_10_16_205309__168954__ChargeFlipValidation__Year2016__CFrate__TAMSA1/DYJets/job_{0}.log".format(i),'r') as f:
-#  lines_tmp = f.readlines()
-#
-#for line in lines_tmp:
-#  if 'electrons :' in line or 'charge flipped electron pT' in line or 'charge flipped electron Eta, Phi' in line:
-#    lines.append(line[:-1])
-#  if 'Matched gen index' in line:
-#    gen_idx = int(line[-3:-1])
-#  try:
-#    int(line.split('\t')[0])
-#  except:
-#    pass
-#  else:
-#    if gen_idx == int(line.split('\t')[0]):
-#      lines.append('Matched gen PID : '+line.split('\t')[1])
-#      if abs(int(line.split('\t')[1])) != 11 :
-#        lines.append('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-#    
-#
-#for j in range(len(lines)):
-#  print lines[j]
-
 
 lines = []
 total = 0
