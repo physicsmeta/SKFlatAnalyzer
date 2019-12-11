@@ -282,15 +282,11 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
   std::sort(muons_tight.begin(), muons_tight.end(), PtComparing);
   std::sort(jets.begin(), jets.end(), PtComparing);
 
-//  int n_bjet_deepcsv_m=0;
-//  int n_bjet_deepcsv_m_noSF=0;
-  int n_bjet_deepcsv=0;
+  int Nbjet_deepcsv=0;
 
   for(unsigned int ij=0; ij<jets.size(); ij++){
-//    if(IsBTagged(jets.at(ij), Jet::DeepCSV, Jet::Medium,true,0)) n_bjet_deepcsv_m++; // method for getting btag with SF applied to MC
-//    if(IsBTagged(jets.at(ij), Jet::DeepCSV, Jet::Medium,false,0)) n_bjet_deepcsv_m_noSF++; // method for getting btag with no SF applied to MC
-    if(fabs(jets.at(ij).Eta()) > 2.4) continue;
-    if(IsBTagged(jets.at(ij), Jet::DeepCSV, Jet::Medium, true, 0)) n_bjet_deepcsv++;
+    if(!(fabs(jets.at(ij).Eta()) < 2.4)) continue;
+    if(IsBTagged(jets.at(ij), Jet::DeepCSV, Jet::Medium, true, 0)) Nbjet_deepcsv++;
   }
   
   //=========================
@@ -363,7 +359,6 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
       if(ptcone_mu < MuonPtconeCut1) continue;
       if(ptcone_mu >= MuonPtconeCut1 && ptcone_mu < MuonPtconeCut2){
         if(muons_loose.at(0).Pt() < MuonPtCut1) continue;
-//        if(!(ev.PassTrigger(MuonTrig1) && !ev.PassTrigger(MuonTrig2) && !ev.PassTrigger(MuonTrig3))) continue;
         if(!ev.PassTrigger(MuonTrig1)) continue;
         if(!IsDATA) triglumi = MuonLumi1;
         awayjet_ptcut = 50.;
@@ -371,14 +366,12 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
       }
       if(ptcone_mu >= MuonPtconeCut2 && ptcone_mu < MuonPtconeCut3){
         if(muons_loose.at(0).Pt() < MuonPtCut2) continue;
-//        if(!(!ev.PassTrigger(MuonTrig1) && ev.PassTrigger(MuonTrig2) && !ev.PassTrigger(MuonTrig3))) continue;
         if(!ev.PassTrigger(MuonTrig2)) continue;
         if(!IsDATA) triglumi = MuonLumi2; 
         PtConeRange = "range1";
       }
       if(ptcone_mu >= MuonPtconeCut3){
         if(muons_loose.at(0).Pt() < MuonPtCut3) continue;
-//        if(!(!ev.PassTrigger(MuonTrig1) && !ev.PassTrigger(MuonTrig2) && ev.PassTrigger(MuonTrig3))) continue;
         if(!ev.PassTrigger(MuonTrig3)) continue;
         if(!IsDATA) triglumi = MuonLumi3; 
         PtConeRange = "range2";

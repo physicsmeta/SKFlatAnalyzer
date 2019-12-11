@@ -1,9 +1,9 @@
-#ifndef HNtypeI_SR_h
-#define HNtypeI_SR_h
+#ifndef HNtypeI_Cutflow_h
+#define HNtypeI_Cutflow_h
 
 #include "AnalyzerCore.h"
 
-class HNtypeI_SR : public AnalyzerCore {
+class HNtypeI_Cutflow : public AnalyzerCore {
 
 public:
 
@@ -39,8 +39,8 @@ public:
 
 //  double weight_Prefire;
 
-  HNtypeI_SR();
-  ~HNtypeI_SR();
+  HNtypeI_Cutflow();
+  ~HNtypeI_Cutflow();
 
 };
 

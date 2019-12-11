@@ -13,8 +13,8 @@
 #pragma link C++ class SkimTree_LRSMHighPt+;
 #pragma link C++ class SkimTree_SMP+;
 #pragma link C++ class FakeRate+;
-#pragma link C++ class FakeRate17+;
 #pragma link C++ class HNtypeI_SM_CR+;
 #pragma link C++ class HNtypeI_SR+;
+#pragma link C++ class HNtypeI_Cutflow+;
 
 #endif
