@@ -18,6 +18,7 @@ public:
   inline double ChargedEmEnergyFraction() const { return j_neutralEmEnergyFraction; }
   void SetMultiplicities(double cM, double nM);
   void SetPileupJetId(double v);
+  inline double PileupJetId() const { return j_PileupJetId; }
 
   void SetEnShift(double en_up, double en_down);
   inline double EnShift(int s) const {
@@ -36,8 +37,10 @@ public:
   void SetTightLepVetoJetID(double b);
   inline bool Pass_tightJetID() const { return j_tightJetID; }
   inline bool Pass_tightLepVetoJetID() const { return j_tightLepVetoJetID; }
+  bool Pass_HNTight() const;
 
   bool PassID(TString ID) const;
+  bool PassPileupMVA(TString WP) const;
 
   enum Tagger{
     CSVv2,

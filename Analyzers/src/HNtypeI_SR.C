@@ -167,7 +167,8 @@ void HNtypeI_SR::executeEvent(){
       param.Electron_UsePtCone = true;
 
       // Jet ID
-      param.Jet_ID = "tightLepVeto";
+//      param.Jet_ID = "tightLepVeto";
+      param.Jet_ID = "HNTight";
       param.FatJet_ID = "HNTight";
 
       executeEventFromParameter(param);
@@ -355,11 +356,11 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
     if(!(this_AllFatJets.at(i).PassID(param.FatJet_ID))) continue;
     if(!(this_AllFatJets.at(i).Pt() > 200.)) continue;
     if(!(fabs(this_AllFatJets.at(i).Eta()) < 2.7)) continue;
-    for(unsigned int j=0; j<muons.size(); j++){
-      if(this_AllFatJets.at(i).DeltaR(muons.at(j)) < 1.0) lepton_count1++;
+    for(unsigned int j=0; j<muons_veto.size(); j++){
+      if(this_AllFatJets.at(i).DeltaR(muons_veto.at(j)) < 1.0) lepton_count1++;
     }
-    for(unsigned int j=0; j<electrons.size(); j++){
-      if(this_AllFatJets.at(i).DeltaR(electrons.at(j)) < 1.0) lepton_count1++;
+    for(unsigned int j=0; j<electrons_veto.size(); j++){
+      if(this_AllFatJets.at(i).DeltaR(electrons_veto.at(j)) < 1.0) lepton_count1++;
     } 
     if(lepton_count1 > 0) continue;
     fatjets.push_back(this_AllFatJets.at(i));

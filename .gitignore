@@ -7,3 +7,8 @@ lib/*.tar.gz
 */obj
 HNtypeI_submit.sh
 python/UserInfo_helee.py
+data/Run2Legacy_v3/2016/FakeRate/*.root
+data/Run2Legacy_v3/2017/FakeRate/*.root
+data/Run2Legacy_v3/2018/FakeRate/*.root
+data/Run2Legacy_v3/2016/Sample/CommonSampleInfo/MajoranaNeutrinoTo*
+data/Run2Legacy_v3/2016/Sample/ForSNU/MajoranaNeutrinoTo*
