@@ -20,13 +20,13 @@ void HNtypeI_SR::initializeAnalyzer(){
   ElectronLooseIDs = {"HNLoose", "HNLooseV23", "HNLoose2016"};
   ElectronVetoIDs  = {"passVetoID", "passVetoID", "HNVeto2016"};
   FakeRateIDs = {"HNtypeI_V1", "HNtypeI_V2", "HNtypeI_16"};*/
-  MuonTightIDs = {"HNTight2016"};
-  MuonLooseIDs = {"HNLoose2016"};
-  MuonVetoIDs  = {"HNVeto2016"};
-  ElectronTightIDs = {"HNTight2016"};
-  ElectronLooseIDs = {"HNLoose2016"};
-  ElectronVetoIDs  = {"HNVeto2016"};
-  FakeRateIDs = {"HNtypeI_16"};
+  MuonTightIDs = {"HNTightV2", "HNTight2016"};
+  MuonLooseIDs = {"HNLoose", "HNLoose2016"};
+  MuonVetoIDs  = {"POGLoose", "HNVeto2016"};
+  ElectronTightIDs = {"HNTightV2", "HNTight2016"};
+  ElectronLooseIDs = {"HNLooseV23", "HNLoose2016"};
+  ElectronVetoIDs  = {"passVetoID", "HNVeto2016"};
+  FakeRateIDs = {"HNtypeI_V2", "HNtypeI_16"};
 
 
   //==== At this point, sample informations (e.g., IsDATA, DataStream, MCSample, or DataYear) are all set
@@ -337,19 +337,24 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
   vector<Electron> electrons = SelectElectrons(this_AllElectrons, ElectronID, 10., 2.5);
   vector<Electron> electrons_veto = SelectElectrons(this_AllElectrons, param.Electron_Veto_ID, 10., 2.5);
   vector<Jet> jets_nolepveto = SelectJets(this_AllJets, "tight", 20., 2.4);
-  vector<FatJet> fatjets = SelectFatJets(this_AllFatJets, param.FatJet_ID, 200., 2.7);
+//  vector<FatJet> fatjets = SelectFatJets(this_AllFatJets, param.FatJet_ID, 200., 2.7);
 
 //  FillHist("Njet_"+IDsuffix, jets_nolepveto.size(), weight, 8, 0., 8.);
 
   // Jet, FatJet selection to avoid double counting due to jets matched geometrically with a lepton
   vector<Jet> jets;
+  vector<FatJet> fatjets;
   jets.clear();
-  int lepton_count2 = 0, fatjet_count = 0; 
+  fatjets.clear();
+  int lepton_count1 = 0, lepton_count2 = 0, fatjet_count = 0; 
 
-/*  for(unsigned int i=0; i<this_AllFatJets.size(); i++){
+  // Fatjet selection in CATanalyzer (see the links)
+  // https://github.com/jedori0228/LQanalyzer/blob/CatAnalyzer_13TeV_v8-0-7.36_HNAnalyzer/CATConfig/SelectionConfig/user_fatjets.sel
+  // https://github.com/jedori0228/LQanalyzer/blob/CatAnalyzer_13TeV_v8-0-7.36_HNAnalyzer/LQCore/Selection/src/FatJetSelection.cc#L113-L124
+  for(unsigned int i=0; i<this_AllFatJets.size(); i++){
+    if(!(this_AllFatJets.at(i).PassID(param.FatJet_ID))) continue;
     if(!(this_AllFatJets.at(i).Pt() > 200.)) continue;
     if(!(fabs(this_AllFatJets.at(i).Eta()) < 2.7)) continue;
-    if(!(this_AllFatJets.at(i).PassID(param.FatJet_ID))) continue;
     for(unsigned int j=0; j<muons.size(); j++){
       if(this_AllFatJets.at(i).DeltaR(muons.at(j)) < 1.0) lepton_count1++;
     }
@@ -358,12 +363,12 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
     } 
     if(lepton_count1 > 0) continue;
     fatjets.push_back(this_AllFatJets.at(i));
-  }*/
+  }
 
   for(unsigned int i=0; i<this_AllJets.size(); i++){
+    if(!(this_AllJets.at(i).PassID(param.Jet_ID))) continue;
     if(!(this_AllJets.at(i).Pt() > 20.)) continue;
     if(!(fabs(this_AllJets.at(i).Eta()) < 2.7)) continue;
-    if(!(this_AllJets.at(i).PassID(param.Jet_ID))) continue;
     for(unsigned int j=0; j<muons_veto.size(); j++){
       if(this_AllJets.at(i).DeltaR(muons_veto.at(j)) < 0.4) lepton_count2++;
     }
