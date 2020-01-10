@@ -5,7 +5,8 @@
 *_Dict.cxx
 lib/*.tar.gz
 */obj
-HNtypeI_submit.sh
+HNtypeI_SR_submit.sh
+HNtypeI_FR_submit.sh
 python/UserInfo_helee.py
 data/Run2Legacy_v3/2016/FakeRate/*.root
 data/Run2Legacy_v3/2017/FakeRate/*.root
