@@ -582,7 +582,7 @@ void HNtypeI_Muon_SR::executeEventFromParameter(AnalyzerParameter param){
       FillHist(channels.at(it_ch)+"/fakeCR2/Number_Events_"+IDsuffix, 3.5, weight, cutflow_bin, 0., cutflow_max);
       FillHist(channels.at(it_ch)+"/fakeCR2/Number_Events_unweighted_"+IDsuffix, 3.5, 1., cutflow_bin, 0., cutflow_max);
 
-      if(muons_veto.size()>2 && electrons_veto.size()>0) continue;
+      if(muons_veto.size()>2 || electrons_veto.size()>0) continue;
 
       // Cutflow : veto 3rd leptons using veto ID
       for(unsigned int it_rg=0; it_rg<regions.size(); it_rg++){
