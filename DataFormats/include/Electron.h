@@ -110,8 +110,9 @@ public:
   bool Pass_HNVeto2016() const;
   bool Pass_HNLoose2016() const;
   bool Pass_HNTight2016() const; //JH from HE's git
-  bool Pass_HEID() const; //JH
-  bool Pass_HEIDv2() const; //JH
+  bool Pass_HNTight() const; //JH
+  bool Pass_HNTightV2() const; //JH
+  bool Pass_HNLooseV23() const; //JH
 
   void SetRelPFIso_Rho(double r);
   double EA();

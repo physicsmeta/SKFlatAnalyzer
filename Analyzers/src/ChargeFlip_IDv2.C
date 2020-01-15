@@ -8,7 +8,8 @@ void ChargeFlip_IDv2::initializeAnalyzer(){
 
   if(DataYear==2016){
     EleIDs = { 
-      "HEIDv2",
+      "HNTightV2",
+      "HNLooseV23",
     }; // PassID() in Electron.C
     EleIDSFKeys = {
       "",
@@ -19,7 +20,8 @@ void ChargeFlip_IDv2::initializeAnalyzer(){
   }
   else if(DataYear==2017){
     EleIDs = {
-      "HEIDv2",
+      "HNTightV2",
+      "HNLooseV23",
     };
     EleIDSFKeys = {
       "",
@@ -30,7 +32,8 @@ void ChargeFlip_IDv2::initializeAnalyzer(){
   }
   else if(DataYear==2018){
     EleIDs = {
-      "HEIDv2",
+      "HNTightV2",
+      "HNLooseV23",
     };
     EleIDSFKeys = {
       "",
@@ -458,7 +461,7 @@ void ChargeFlip_IDv2::executeEventFromParameter(AnalyzerParameter param, Long64_
       vector<Electron> eles_shifted = eles; // copy the vector
       double X;
       if(DataYear==2016){
-        if(param.Electron_User_ID=="HEIDv2") X = 1.0;
+        if(param.Electron_User_ID=="HNTightV2") X = 1.0;
       }
       TString X_string = Form("%f",X);
       X_string = X_string(0,3)+"%";
@@ -538,7 +541,7 @@ double ChargeFlip_IDv2::GetCFweight(std::vector<Electron> eles, TString id){
 
   }
 
-  else if(id == "HEIDv2"){
+  else if(id == "HNTightV2"){
 
     //DY+TTLL CF
 
