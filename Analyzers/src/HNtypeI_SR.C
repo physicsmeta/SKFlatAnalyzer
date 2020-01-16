@@ -47,8 +47,13 @@ void HNtypeI_SR::initializeAnalyzer(){
     MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v");
     MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_v");
     ElectronTriggers.push_back("HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v");
+    EMuTriggers.push_back("HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_v");        // B-G
+    EMuTriggers.push_back("HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_v");       // B-G
+//    EMuTriggers.push_back("HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ_v");     // H
+//    EMuTriggers.push_back("HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v");    // H
     MuonPtCut1 = 20., MuonPtCut2 = 10.;
     ElectronPtCut1 = 25., ElectronPtCut2 = 15.;
+    EMuPtCut1 = 25., EMuPtCut2 = 15.;
 /*    MuonTriggers.push_back("HLT_IsoMu24_v");
     MuonTriggers.push_back("HLT_IsoTkMu24_v");
     ElectronTriggers.push_back("HLT_Ele27_WPTight_Gsf_v");
@@ -58,8 +63,11 @@ void HNtypeI_SR::initializeAnalyzer(){
   else if(DataYear==2017){
     MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8_v");
     ElectronTriggers.push_back("HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_v");
+    EMuTriggers.push_back("HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ_v");
+    EMuTriggers.push_back("HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v");
     MuonPtCut1 = 20., MuonPtCut2 = 10.;
     ElectronPtCut1 = 25., ElectronPtCut2 = 15.;
+    EMuPtCut1 = 25., EMuPtCut2 = 15.;
 /*    MuonTriggers.push_back("HLT_IsoMu27_v");
 //    ElectronTriggers.push_back("HLT_Ele27_WPTight_Gsf_L1DoubleEG_v");
     ElectronTriggers.push_back("HLT_Ele35_WPTight_Gsf_v");
@@ -69,8 +77,11 @@ void HNtypeI_SR::initializeAnalyzer(){
   else if(DataYear==2018){
     MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8_v");
     ElectronTriggers.push_back("HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v");
+    EMuTriggers.push_back("HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ_v");
+    EMuTriggers.push_back("HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v");
     MuonPtCut1 = 20., MuonPtCut2 = 10.;
     ElectronPtCut1 = 25., ElectronPtCut2 = 15.;
+    EMuPtCut1 = 25., EMuPtCut2 = 15.;
   }
 
 //  cout << "[HNtypeI_SR::initializeAnalyzer] IsoMuTriggerName = " << IsoMuTriggerName << endl;
@@ -259,14 +270,6 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
 
   if(!(ev.PassTrigger(MuonTriggers) || ev.PassTrigger(ElectronTriggers))) return;
 
-/*  for(unsigned int it_ch=0; it_ch<channels.size(); it_ch++){
-    if(it_ch==0 && !ev.PassTrigger(MuonTriggers)) continue;
-    if(it_ch==1 && !ev.PassTrigger(ElectronTriggers)) continue;
-    for(unsigned int it_rg=0; it_rg<regions.size(); it_rg++){  // For SM CR, apply the trigger selection later
-      FillHist("Number_Events_"+channels.at(it_ch)+"_"+regions.at(it_rg)+"_"+IDsuffix, 2.5, weight, cutflow_bin, 0., cutflow_max);
-    }
-  }*/
-
   //======================
   //==== Copy AllObjects
   //======================
@@ -276,8 +279,6 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
   vector<Jet> this_AllJets = AllJets;
   vector<FatJet> this_AllFatJets = AllFatJets;
   vector<Gen> gens = GetGens();
-
-//  FillHist("Nfatjet_"+IDsuffix, this_AllFatJets.size(), weight, 5, 0., 5.);
 
   //==== Then, for each systematic sources
   //==== 1) Smear or scale them
@@ -450,11 +451,12 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
   if(IDsuffix == "HN16") mu_tight_iso = 0.07;
 
   double el_tight_iso = 0.;
+  double this_ptcone_muon = 0., this_ptcone_electron = 0.;
 
   // Set pTcone
   for(unsigned int i=0; i<muons.size(); i++){
-    double this_ptcone = muons.at(i).CalcPtCone(muons.at(i).RelIso(), mu_tight_iso);
-    muons.at(i).SetPtCone(this_ptcone);
+    this_ptcone_muon = muons.at(i).CalcPtCone(muons.at(i).RelIso(), mu_tight_iso);
+    muons.at(i).SetPtCone(this_ptcone_muon);
   }
    
   for(unsigned int i=0; i<electrons.size(); i++){
@@ -465,14 +467,28 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
       if(fabs(electrons.at(i).scEta()) > 1.479) el_tight_iso = std::min(0.08, 0.0445+0.963/electrons.at(i).UncorrPt());
     } 
     if(IDsuffix == "HN16") el_tight_iso = 0.08;
-    double this_ptcone = electrons.at(i).CalcPtCone(electrons.at(i).RelIso(), el_tight_iso);
-    electrons.at(i).SetPtCone(this_ptcone);
+    this_ptcone_electron = electrons.at(i).CalcPtCone(electrons.at(i).RelIso(), el_tight_iso);
+    electrons.at(i).SetPtCone(this_ptcone_electron);
+  }
+
+  if(muons.size()==2 && electrons.size()==0){
+    FillHist("Pt_muon1", muons.at(0).Pt(), weight, 1000, 0., 1000.);
+    FillHist("Pt_muon2", muons.at(1).Pt(), weight, 1000, 0., 1000.);
+    FillHist("PtCone_muon1", muons.at(0).PtCone(), weight, 1000, 0., 1000.);
+    FillHist("PtCone_muon2", muons.at(1).PtCone(), weight, 1000, 0., 1000.);
+  }
+  if(muons.size()==0 && electrons.size()==2){
+    FillHist("Pt_electron1", electrons.at(0).Pt(), weight, 1000, 0., 1000.);
+    FillHist("Pt_electron2", electrons.at(1).Pt(), weight, 1000, 0., 1000.);
+    FillHist("PtCone_electron1", electrons.at(0).PtCone(), weight, 1000, 0., 1000.);
+    FillHist("PtCone_electron2", electrons.at(1).PtCone(), weight, 1000, 0., 1000.);
   }
 
 //  if(electrons.size() > 0) cout << electrons.at(0).PtCone() << endl;
 
+  // Shift electron energy when RunCF=true
   if(RunCF){
-    if(electrons.size() == 2) electrons = ShiftElectronEnergy(electrons, param, true); 
+    if(electrons.size()==1 || electrons.size()==2) electrons = ShiftElectronEnergy(electrons, param, true); 
   }
 
   // Define leptons (pT order)
