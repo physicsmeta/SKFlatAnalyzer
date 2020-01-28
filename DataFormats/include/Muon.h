@@ -128,9 +128,6 @@ private:
   double j_MiniAODPt, j_MiniAODTunePPt, j_MomentumScaleUp, j_MomentumScaleDown;
   Particle j_TuneP4;
   double j_TunePPtError;
-  int j_validmuonhits;
-  int j_matchedstations;
-  int j_validpixelhits;
   int j_trackerLayers;
 
   ClassDef(Muon,1);

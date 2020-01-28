@@ -114,9 +114,6 @@ std::vector<Muon> AnalyzerCore::GetAllMuons(){
     mu.SetisPOGHighPt(muon_ishighpt->at(i));
     mu.SetChi2(muon_normchi->at(i));
     mu.SetIso(muon_PfChargedHadronIsoR04->at(i),muon_PfNeutralHadronIsoR04->at(i),muon_PfGammaIsoR04->at(i),muon_PFSumPUIsoR04->at(i),muon_trkiso->at(i));
-    mu.SetValidMuonHits(muon_validmuonhits->at(i));
-    mu.SetMatchedStations(muon_matchedstations->at(i));
-    mu.SetValidPixelHits(muon_pixelHits->at(i));
     mu.SetTrackerLayers(muon_trackerLayers->at(i));
 
     //==== Should be set after Eta is set

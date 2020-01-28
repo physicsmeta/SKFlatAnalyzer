@@ -14,9 +14,6 @@ Muon::Muon() : Lepton() {
   j_MomentumScaleUp = -999.;
   j_MomentumScaleDown = -999.;
   j_TunePPtError = -999.;
-  j_validmuonhits = 999;
-  j_matchedstations = 999;
-  j_validpixelhits = 999;
   j_trackerLayers = 0;
 }
 
@@ -46,18 +43,6 @@ void Muon::SetIso(double ch04, double nh04, double ph04, double pu04, double trk
 
 void Muon::SetChi2(double chi2){
   j_chi2 = chi2;
-}
-
-void Muon::SetValidMuonHits(int validmuonhits){
-  j_validmuonhits = validmuonhits;
-}
-
-void Muon::SetMatchedStations(int matchedstations){
-  j_matchedstations = matchedstations;
-}
-
-void Muon::SetValidPixelHits(int validpixelhits){
-  j_validpixelhits = validpixelhits;
 }
 
 void Muon::CalcPFRelIso(){
