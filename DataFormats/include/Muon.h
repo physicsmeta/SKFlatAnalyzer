@@ -76,15 +76,6 @@ public:
   void SetChi2(double chi2);
   inline double Chi2() const { return j_chi2; }
 
-  void SetValidMuonHits(int validmuonhits);
-  inline int ValidMuonHits() const { return j_validmuonhits; }
-
-  void SetMatchedStations(int matchedstations);
-  inline int MatchedStations() const { return j_matchedstations; }
-
-  void SetValidPixelHits(int validpixelhits);
-  inline int ValidPixelHits() const { return j_validpixelhits; }
-
   void SetMiniAODPt(double d);
   void SetMiniAODTunePPt(double d);
   inline double MiniAODPt() const {return j_MiniAODPt;}
