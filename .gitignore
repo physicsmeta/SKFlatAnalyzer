@@ -5,9 +5,9 @@
 *_Dict.cxx
 lib/*.tar.gz
 */obj
-2016_*
-2017_*
-2018_*
+2016_*.txt
+2017_*.txt
+2018_*.txt
 *_submit.sh
 python/UserInfo_helee.py
 data/Run2Legacy_v3/2016/FakeRate/*.root
