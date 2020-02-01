@@ -18,8 +18,10 @@ public:
 
   // Trigger
   vector<TString> MuonTriggers;
+  vector<TString> MuonTriggersH;
   vector<TString> ElectronTriggers;
   vector<TString> EMuTriggers;
+  vector<TString> EMuTriggersH;
 
   // Lepton ID
   vector<TString> MuonVetoIDs;
