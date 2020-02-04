@@ -113,6 +113,9 @@ bool Muon::PassID(TString ID) const {
   if(ID=="HNTight") return Pass_HNTight();
   if(ID=="HNTightV2") return Pass_HNTightV2();
 
+  //==== No cut
+  if(ID=="NOCUT") return true;
+
   cout << "[Electron::PassID] No id : " << ID << endl;
   exit(EXIT_FAILURE);
 
