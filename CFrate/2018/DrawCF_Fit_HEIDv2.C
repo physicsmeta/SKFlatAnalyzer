@@ -1,5 +1,5 @@
 {
-TString filename = "/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip_IDv2/2018/CFrate__/ChargeFlip_IDv2_DYJets_TTLL.root";
+TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip_IDv2/2018/CFrate__/ChargeFlip_IDv2_DYJets_TTLL.root";
 TFile* f1 = new TFile(filename);
 
 TString samplename = filename(filename.Last('/')+12,filename.Length());

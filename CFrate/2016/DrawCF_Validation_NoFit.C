@@ -1,6 +1,6 @@
 {
-//TString filename = "/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlipValidation/2016/CFrate__/ChargeFlipValidation_DYJets.root";
-TString filename = "/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlipValidation/2016/CFrate__OnlyTwo__/ChargeFlipValidation_DYJets.root";
+//TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlipValidation/2016/CFrate__/ChargeFlipValidation_DYJets.root";
+TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlipValidation/2016/CFrate__OnlyTwo__/ChargeFlipValidation_DYJets.root";
 TFile* f1 = new TFile(filename);
 
 TString samplename = filename(filename.Last('/')+11,filename.Length());

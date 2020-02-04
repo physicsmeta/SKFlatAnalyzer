@@ -38,7 +38,7 @@ void ScaleFactor(TString EtaRegion, TString id = "HEIDv2", int Syst = 0, TString
   RunSyst[6] = "_Syst_NBinUp";
   
   
-  TString filename = "/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip_IDv2/2016/ScaleFactor__/DATA/ChargeFlip_IDv2_DoubleEG_total_DYTTLLCF.root";
+  TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip_IDv2/2016/ScaleFactor__/DATA/ChargeFlip_IDv2_DoubleEG_total_DYTTLLCF.root";
   TFile* f1 = new TFile(filename);
   
   TString samplename = filename(filename.Last('_')+1,filename.Length());

@@ -8,7 +8,7 @@ ls2 = cmd.getoutput('ls')
 os.chdir('/gv0/DATA/SKFlat/Run2Legacy_v3/2018/MC/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/190930_135722/0002')
 ls3 = cmd.getoutput('ls')
 
-os.chdir('/data4/Users/jihkim/SKFlatAnalyzer/data/Run2Legacy_v3/2018/Sample/ForSNU')
+os.chdir('/data6/Users/jihkim/SKFlatAnalyzer/data/Run2Legacy_v3/2018/Sample/ForSNU')
 
 list_ls1 = ls1.split('\n')
 list_ls2 = ls2.split('\n')

@@ -39,7 +39,7 @@ void ScaleFactor(TString id, TString EtaRegion, int Syst = 0, TString SaveAs = "
   RunSyst[6] = "_Syst_NBinUp";
   
   
-  TString filename = "/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip/2016/ScaleFactor__TriggerOff__/DATA/ChargeFlip_DoubleEG_total_TriggerOff_DYTTLLCF.root";
+  TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip/2016/ScaleFactor__TriggerOff__/DATA/ChargeFlip_DoubleEG_total_TriggerOff_DYTTLLCF.root";
   TFile* f1 = new TFile(filename);
   
   TString samplename = "TriggerOff_"+filename(filename.Last('_')+1,filename.Length());

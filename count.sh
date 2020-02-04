@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd /data4/Users/jihkim/SKFlatRunlog/2019_10_16_205309__168954__ChargeFlipValidation__Year2016__CFrate__TAMSA1/DYJets 
+cd /data6/Users/jihkim/SKFlatRunlog/2019_10_16_205309__168954__ChargeFlipValidation__Year2016__CFrate__TAMSA1/DYJets 
 
 myvar=`grep -rF [SKFlatNtuple::Loop\ RUNNING]\ 0`
 myvar1=`grep -r electrons\ :\ 1`;

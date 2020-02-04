@@ -1,5 +1,5 @@
 {
-TString filename = "/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip_IDv2/2016/CFrate__/ChargeFlip_IDv2_DYJets_TTLL.root";
+TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip_IDv2/2016/CFrate__/ChargeFlip_IDv2_DYJets_TTLL.root";
 TFile* f1 = new TFile(filename);
 
 TString samplename = filename(filename.Last('/')+12,filename.Length());
@@ -8,7 +8,7 @@ samplename.ReplaceAll(".root","");
 gSystem->Exec("mkdir "+samplename);
 
 vector<TString> User_ID;
-User_ID.push_back("HEIDv2");
+User_ID.push_back("HNTightV2");
 
 for(unsigned int i=0; i<User_ID.size(); i++){
 
@@ -95,13 +95,13 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   TF1 *gr1_fit2 = new TF1("gr1_fit2","pol1",0.0075,0.0155);
   TF1 *gr1_fit3 = new TF1("gr1_fit3","pol1",0.0155,0.041);
   
-  gr1_fit1->SetLineWidth(3);
-  gr1_fit2->SetLineWidth(3);
-  gr1_fit3->SetLineWidth(3);
+  gr1_fit1->SetLineWidth(2);
+  gr1_fit2->SetLineWidth(2);
+  gr1_fit3->SetLineWidth(2);
   
-  gr1_fit1->SetLineColor(4);
-  gr1_fit2->SetLineColor(4);
-  gr1_fit3->SetLineColor(4);
+  gr1_fit1->SetLineColor(kRed);
+  gr1_fit2->SetLineColor(kGreen);
+  gr1_fit3->SetLineColor(kBlue);
   
   cout << "//////////////////// Now fitting on EtaRegion1 ... ////////////////////" << endl;
  
@@ -134,6 +134,13 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   //gr1_fit3_err->SetFillStyle(3001);
   //gr1_fit3_err->Draw("3 same");
  
+  TLegend* gr1_legend = new TLegend(0.75,0.8,0.9,0.9);
+  gr1_legend->AddEntry(gr1_fit1,"high pt","l");
+  gr1_legend->AddEntry(gr1_fit2,"medium pt","l");
+  gr1_legend->AddEntry(gr1_fit3,"low pt","l");
+  gr1_legend->Draw();
+
+
   // Done and repeat for EtaRegion2, 3 //
   
   c2->cd();
@@ -156,16 +163,16 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   
   
   TF1 *gr2_fit1 = new TF1("gr2_fit1","pol1",0,0.0055);
-  TF1 *gr2_fit2 = new TF1("gr2_fit2","pol1",0.0055,0.0155);
-  TF1 *gr2_fit3 = new TF1("gr2_fit3","pol1",0.0155,0.04);
+  TF1 *gr2_fit2 = new TF1("gr2_fit2","pol1",0.0055,0.02);
+  TF1 *gr2_fit3 = new TF1("gr2_fit3","pol1",0.02,0.04);
   
-  gr2_fit1->SetLineWidth(3);
-  gr2_fit2->SetLineWidth(3);
-  gr2_fit3->SetLineWidth(3);
+  gr2_fit1->SetLineWidth(2);
+  gr2_fit2->SetLineWidth(2);
+  gr2_fit3->SetLineWidth(2);
   
-  gr2_fit1->SetLineColor(4);
-  gr2_fit2->SetLineColor(4);
-  gr2_fit3->SetLineColor(4);
+  gr2_fit1->SetLineColor(kRed);
+  gr2_fit2->SetLineColor(kGreen);
+  gr2_fit3->SetLineColor(kBlue);
   
   cout << endl << "//////////////////// Now fitting on EtaRegion2 ... ////////////////////" << endl;
   
@@ -196,6 +203,11 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   //gr2_fit3_err->SetFillStyle(3001);
   //gr2_fit3_err->Draw("3 same");
   
+  TLegend* gr2_legend = new TLegend(0.75,0.8,0.9,0.9);
+  gr2_legend->AddEntry(gr2_fit1,"high pt","l");
+  gr2_legend->AddEntry(gr2_fit2,"medium pt","l");
+  gr2_legend->AddEntry(gr2_fit3,"low pt","l");
+  gr2_legend->Draw();
 
   
   c3->cd();
@@ -220,13 +232,13 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   TF1 *gr3_fit2 = new TF1("gr3_fit2","pol1",0.0105,0.02049);
   TF1 *gr3_fit3 = new TF1("gr3_fit3","pol1",0.02049,0.04);
   
-  gr3_fit1->SetLineWidth(3);
-  gr3_fit2->SetLineWidth(3);
-  gr3_fit3->SetLineWidth(3);
+  gr3_fit1->SetLineWidth(2);
+  gr3_fit2->SetLineWidth(2);
+  gr3_fit3->SetLineWidth(2);
   
-  gr3_fit1->SetLineColor(4);
-  gr3_fit2->SetLineColor(4);
-  gr3_fit3->SetLineColor(4);
+  gr3_fit1->SetLineColor(kRed);
+  gr3_fit2->SetLineColor(kGreen);
+  gr3_fit3->SetLineColor(kBlue);
   
   cout << endl << "//////////////////// Now fitting on EtaRegion3 ... ////////////////////" << endl;
   
@@ -257,15 +269,20 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   //gr3_fit3_err->SetFillStyle(3001);
   //gr3_fit3_err->Draw("3 same");
   
-  
+  TLegend* gr3_legend = new TLegend(0.75,0.8,0.9,0.9);
+  gr3_legend->AddEntry(gr3_fit1,"high pt","l");
+  gr3_legend->AddEntry(gr3_fit2,"medium pt","l");
+  gr3_legend->AddEntry(gr3_fit3,"low pt","l");
+  gr3_legend->Draw();
+
 
   //c1->SaveAs(samplename+"/"+User_ID.at(i)+"_Fit_EtaRegion1.pdf");
   //c2->SaveAs(samplename+"/"+User_ID.at(i)+"_Fit_EtaRegion2.pdf");
   //c3->SaveAs(samplename+"/"+User_ID.at(i)+"_Fit_EtaRegion3.pdf");
 
-  c1->SaveAs(samplename+"/"+User_ID.at(i)+"_Fit_EtaRegion1.png");
-  c2->SaveAs(samplename+"/"+User_ID.at(i)+"_Fit_EtaRegion2.png");
-  c3->SaveAs(samplename+"/"+User_ID.at(i)+"_Fit_EtaRegion3.png");
+  //c1->SaveAs(samplename+"/"+User_ID.at(i)+"_Fit_EtaRegion1.png");
+  //c2->SaveAs(samplename+"/"+User_ID.at(i)+"_Fit_EtaRegion2.png");
+  //c3->SaveAs(samplename+"/"+User_ID.at(i)+"_Fit_EtaRegion3.png");
 
   //c1->SaveAs(samplename+"/"+User_ID.at(i)+"_FitErrorBand_EtaRegion1.pdf");
   //c2->SaveAs(samplename+"/"+User_ID.at(i)+"_FitErrorBand_EtaRegion2.pdf");

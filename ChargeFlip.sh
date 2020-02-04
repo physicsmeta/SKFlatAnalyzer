@@ -1,7 +1,7 @@
 #!/bin/bash
 
-#python python/SKFlat.py -a ChargeFlip_IDv2 -y 2016 -i DYJets -n 50 --userflags CFrate &
-#python python/SKFlat.py -a ChargeFlip_IDv2 -y 2016 -i TTLL_powheg -n 50 --userflags CFrate &
+python python/SKFlat.py -a ChargeFlip_IDv2 -y 2016 -i DYJets -n 50 --userflags CFrate &
+python python/SKFlat.py -a ChargeFlip_IDv2 -y 2016 -i TTLL_powheg -n 50 --userflags CFrate &
 
 #python python/SKFlat.py -a ChargeFlip -y 2016 -i DoubleEG -n 10 --userflags ScaleFactor,TriggerOff &
 

@@ -6,7 +6,7 @@ fake = 0
 see = []
 
 for i in range(50):
-  with open("/data4/Users/jihkim/SKFlatRunlog/2019_10_16_205309__168954__ChargeFlipValidation__Year2016__CFrate__TAMSA1/DYJets/job_{0}.log".format(i),'r') as f:
+  with open("/data6/Users/jihkim/SKFlatRunlog/2019_10_16_205309__168954__ChargeFlipValidation__Year2016__CFrate__TAMSA1/DYJets/job_{0}.log".format(i),'r') as f:
     lines_tmp = f.readlines()
   
   for line in lines_tmp:

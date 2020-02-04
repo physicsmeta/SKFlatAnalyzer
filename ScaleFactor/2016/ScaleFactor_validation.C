@@ -20,7 +20,7 @@ double fitFunction_tmp(double *x, double *par){
 
 void ScaleFactor(TString EtaRegion){ // BB, BE, EE
 
-TFile* f1 = new TFile("/data4/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip/2016/ChargeFlipHE__/DATA/ChargeFlip_DoubleEG_total_DYTTLLCF.root");
+TFile* f1 = new TFile("/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip/2016/ChargeFlipHE__/DATA/ChargeFlip_DoubleEG_total_DYTTLLCF.root");
 TH1D* h0 = (TH1D*)f1->Get("ScaleFactor/"+EtaRegion+"_ZMass_SS");
 TH1D* h1 = (TH1D*)f1->Get("ScaleFactor/"+EtaRegion+"_ZMass_OS_CFSFweighted_shifted_1.4%");
 

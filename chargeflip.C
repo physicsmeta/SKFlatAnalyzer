@@ -1,9 +1,9 @@
 R__LOAD_LIBRARY(libPhysics.so)
 R__LOAD_LIBRARY(libTree.so)
 R__LOAD_LIBRARY(libHist.so)
-R__LOAD_LIBRARY(/data4/Users/jihkim/SKFlatAnalyzer/lib/libDataFormats.so)
-R__LOAD_LIBRARY(/data4/Users/jihkim/SKFlatAnalyzer/lib/libAnalyzerTools.so)
-R__LOAD_LIBRARY(/data4/Users/jihkim/SKFlatAnalyzer/lib/libAnalyzers.so)
+R__LOAD_LIBRARY(/data6/Users/jihkim/SKFlatAnalyzer/lib/libDataFormats.so)
+R__LOAD_LIBRARY(/data6/Users/jihkim/SKFlatAnalyzer/lib/libAnalyzerTools.so)
+R__LOAD_LIBRARY(/data6/Users/jihkim/SKFlatAnalyzer/lib/libAnalyzers.so)
 R__LOAD_LIBRARY(/cvmfs/cms.cern.ch/slc6_amd64_gcc630/external/lhapdf/6.2.1-fmblme/lib/libLHAPDF.so)
 
 
