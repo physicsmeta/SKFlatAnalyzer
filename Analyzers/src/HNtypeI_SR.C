@@ -197,7 +197,7 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
 
   vector<TString> channels = {"dimu", "diel", "emu"};
   vector<TString> regions = {"fakeCR1", "lowSR1", "lowCR1", "highSR1", "highCR1", "lowSR2", "lowCR2", "highSR2", "highCR2"};
-  vector<TString> regionsSM = {"WZ", "ZG", "ZZ"}; // "WG"
+  vector<TString> regionsSM = {"WZ", "ZG", "WG", "ZZ"}; 
   vector<TString> channels3L = {"eee", "eem", "emm", "mmm"};
   vector<TString> channels4L = {"eeee", "eemm", "mmmm"};
   TString IDsuffix = "HNV1";
@@ -429,6 +429,7 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
 
   double MET = ev.GetMETVector().Pt();
   double Mt = 0.;
+  double Mt3l = 0.;
   double ST = 0.;
   double MET2ST = 0.;
   double MZ = 91.1876;
@@ -441,7 +442,7 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
   double LeptonPtCut1 = 0., LeptonPtCut2 = 0.;
   Particle ZCand, Wtemp1, Wtemp2, WCand1, WCand2;
   Particle llj, l1j, l2j,  lljj, l1jj, l2jj, l1J, l2J;
-  Particle WtagLep, TriLep, ZtagLep1, ZtagLep2, Ztemp, Ztemp1, Ztemp2, Ztemp3, Ztemp4, ZCand1, ZCand2;
+  Particle WtagLep, TriLep, ZtagLep1, ZtagLep2, Ztemp, Ztemp1, Ztemp2, Ztemp3, Ztemp4, ZCand1, ZCand2, GammaCand, GammaLep1, GammaLep2;
   int ossf_mass10 = 0;
   
   // Set tight_iso cut & calculate pTcone
@@ -1265,9 +1266,9 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
     }
 
     //=====================================
-    //==== WZ, ZG control region
+    //==== WZ, ZG, WG control region
     //=====================================
-    if(leptons.size()==3 && it_rg2<2){
+    if(leptons.size()==3 && it_rg2<3){
   
       weight = 1.; 
       // weights for MC 
@@ -1307,71 +1308,108 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
       FillHist(regionsSM.at(it_rg2)+"/Number_Events_"+IDsuffix, 3.5, weight, cutflow_bin, 0., cutflow_max);
       FillHist(regionsSM.at(it_rg2)+"/Number_Events_unweighted_"+IDsuffix, 3.5, 1., cutflow_bin, 0., cutflow_max);
 
-      int l1 = -999, l2 = -999, wlep = -999;
+      int l1 = -999, l2 = -999, l3 = -999, l4 = -999, wlepWZ = -999, wlepWG = -999;
       // OSSF lepton pair, W-tagged lepton
       if(muons.size()==2 && muons.at(0).Charge()*muons.at(1).Charge()<0){
         ZCand = muons.at(0) + muons.at(1);
         WtagLep = electrons.at(0);
         ZtagLep1 = muons.at(0);
         ZtagLep2 = muons.at(1);
+        GammaCand = ZCand;
+        GammaLep1 = ZtagLep1;
+        GammaLep2 = ZtagLep2;
       }
       else if(electrons.size()==2 && electrons.at(0).Charge()*electrons.at(1).Charge()<0){
         ZCand = electrons.at(0) + electrons.at(1);
         WtagLep = muons.at(0);
         ZtagLep1 = electrons.at(0);
         ZtagLep2 = electrons.at(1);
+        GammaCand = ZCand;
+        GammaLep1 = ZtagLep1;
+        GammaLep2 = ZtagLep2;
       }
       else if(muons.size()==3 || electrons.size()==3){
         if(fabs(leptons.at(0)->Charge() + leptons.at(1)->Charge() + leptons.at(2)->Charge()) == 1){
-          double tmpMassDiff = 1000000.;
- 
+
+          // ZCand, GammaCand
+          double tmpMassDiff = 1000000., tmpMass = 100000.; 
           for(int ilep1=0; ilep1<2; ilep1++){
             for(int ilep2=ilep1+1; ilep2<3; ilep2++){
               if(leptons.at(ilep1)->Charge()*leptons.at(ilep2)->Charge()>0) continue;
               Ztemp = *leptons.at(ilep1) + *leptons.at(ilep2);
+              // For WZ, ZG
               if(!(Ztemp.M() > 10.)) ossf_mass10++;
-              if(fabs(Ztemp.M() - MZ) < tmpMassDiff) {
-                  tmpMassDiff= fabs(Ztemp.M() - MZ);
-                  ZCand = Ztemp; l1 = ilep1; l2 = ilep2;
+              if(fabs(Ztemp.M() - MZ) < tmpMassDiff){
+                tmpMassDiff = fabs(Ztemp.M() - MZ);
+                ZCand = Ztemp; l1 = ilep1; l2 = ilep2;
+              }
+              // For WG
+              if(Ztemp.M() < tmpMass){
+                tmpMass = Ztemp.M();
+                GammaCand = Ztemp; l3 = ilep1; l4 = ilep2;
               }
             }
           }
-          for(int ilep3=0; ilep3<3; ilep3++){
-            if(fabs(ilep3-l1)>0 && fabs(ilep3-l2)>0) { wlep = ilep3; break;}
-          }
-          WtagLep = *leptons.at(wlep);
+
           ZtagLep1 = *leptons.at(l1);
           ZtagLep2 = *leptons.at(l2);
+          GammaLep1 = *leptons.at(l3);
+          GammaLep2 = *leptons.at(l4);
 
+          // Set the lepton from W
+          for(int ilep3=0; ilep3<3; ilep3++){
+            if(fabs(ilep3-l1)>0 && fabs(ilep3-l2)>0) wlepWZ = ilep3;
+            if(fabs(ilep3-l3)>0 && fabs(ilep3-l4)>0) wlepWG = ilep3;
+          }
+          if(it_rg2 < 2) WtagLep = *leptons.at(wlepWZ);
+          else WtagLep = *leptons.at(wlepWG);
         }
       } 
       else continue;
 
-      TriLep = ZCand + WtagLep;
+      TriLep = *leptons.at(0) + *leptons.at(1) + *leptons.at(2);
       Mt = MT(WtagLep, METv);
+      Mt3l = MT(TriLep, METv);
 
-      if(!(ossf_mass10 == 0)) continue;
+      if(it_rg2 < 2){   // WZ, ZG control region
+        if(!(ossf_mass10 == 0)) continue;
       
-      // Cutflow : m(ll) > 10 GeV
-      FillHist(regionsSM.at(it_rg2)+"/Number_Events_"+IDsuffix, 4.5, weight, cutflow_bin, 0., cutflow_max);
-      FillHist(regionsSM.at(it_rg2)+"/Number_Events_unweighted_"+IDsuffix, 4.5, 1., cutflow_bin, 0., cutflow_max);
+        // Cutflow : m(ll) > 10 GeV
+        FillHist(regionsSM.at(it_rg2)+"/Number_Events_"+IDsuffix, 4.5, weight, cutflow_bin, 0., cutflow_max);
+        FillHist(regionsSM.at(it_rg2)+"/Number_Events_unweighted_"+IDsuffix, 4.5, 1., cutflow_bin, 0., cutflow_max);
 
-      if(!(Nbjet_loose == 0)) continue;
+        if(!(Nbjet_loose == 0)) continue;
 
-      // Cutflow : No b jets
-      FillHist(regionsSM.at(it_rg2)+"/Number_Events_"+IDsuffix, 5.5, weight, cutflow_bin, 0., cutflow_max);
-      FillHist(regionsSM.at(it_rg2)+"/Number_Events_unweighted_"+IDsuffix, 5.5, 1., cutflow_bin, 0., cutflow_max);
+        // Cutflow : No b jets
+        FillHist(regionsSM.at(it_rg2)+"/Number_Events_"+IDsuffix, 5.5, weight, cutflow_bin, 0., cutflow_max);
+        FillHist(regionsSM.at(it_rg2)+"/Number_Events_unweighted_"+IDsuffix, 5.5, 1., cutflow_bin, 0., cutflow_max);
 
-      if(it_rg2 == 0){
-        if(!IsOnZ(ZCand.M(), 15.)) continue;
-        if(!(MET > 50.)) continue;
-        if(!(Mt > 20.)) continue;
-        if(!(TriLep.M() > MZ + 15.)) continue;
+        if(it_rg2 == 0){
+          if(!IsOnZ(ZCand.M(), 15.)) continue;
+          if(!(MET > 50.)) continue;
+          if(!(Mt > 20.)) continue;
+          if(!(TriLep.M() > MZ + 15.)) continue;
+        }
+        if(it_rg2 == 1){
+          if(IsOnZ(ZCand.M(), 15.)) continue;
+          if(!(MET < 50.)) continue;
+          if(!IsOnZ(TriLep.M(), 15.)) continue;
+        }
       }
-      if(it_rg2 == 1){
-        if(IsOnZ(ZCand.M(), 15.)) continue;
-        if(!(MET < 50.)) continue;
-        if(!IsOnZ(TriLep.M(), 15.)) continue;
+      else{   // WG control region
+        if(!(GammaCand.M() < 4.)) continue;
+
+        // Cutflow : m(ll) < 4 GeV
+        FillHist(regionsSM.at(it_rg2)+"/Number_Events_"+IDsuffix, 4.5, weight, cutflow_bin, 0., cutflow_max);
+        FillHist(regionsSM.at(it_rg2)+"/Number_Events_unweighted_"+IDsuffix, 4.5, 1., cutflow_bin, 0., cutflow_max);
+
+        // Cutflow : No b jets
+        if(!(Nbjet_loose == 0)) continue;
+        FillHist(regionsSM.at(it_rg2)+"/Number_Events_"+IDsuffix, 5.5, weight, cutflow_bin, 0., cutflow_max);
+        FillHist(regionsSM.at(it_rg2)+"/Number_Events_unweighted_"+IDsuffix, 5.5, 1., cutflow_bin, 0., cutflow_max);
+
+        if(!(MET > 30.)) continue;
+        if(!(Mt3l > 30.)) continue;
       }
 
       // weights for MC
@@ -1408,10 +1446,14 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
       FillHist(regionsSM.at(it_rg2)+"/Number_FatJets_"+IDsuffix, fatjets.size(), weight, 5, 0., 5.);
       FillHist(regionsSM.at(it_rg2)+"/ZCand_Mass_"+IDsuffix, ZCand.M(), weight, 80, 50., 130.);
       FillHist(regionsSM.at(it_rg2)+"/TriLep_Mass_"+IDsuffix, TriLep.M(), weight, 80, 50., 130.);
+      FillHist(regionsSM.at(it_rg2)+"/GammaCand_Mass_"+IDsuffix, GammaCand.M(), weight, 50, 0., 5.);
       FillHist(regionsSM.at(it_rg2)+"/ZCand_Pt_"+IDsuffix, ZCand.Pt(), weight, 1000, 0., 1000.);
+      FillHist(regionsSM.at(it_rg2)+"/GammaCand_Pt_"+IDsuffix, GammaCand.Pt(), weight, 1000, 0., 1000.);
       FillHist(regionsSM.at(it_rg2)+"/WtagLep_Pt_"+IDsuffix, WtagLep.Pt(), weight, 1000, 0., 1000.);
       FillHist(regionsSM.at(it_rg2)+"/ZtagLep1_Pt_"+IDsuffix, ZtagLep1.Pt(), weight, 1000, 0., 1000.);
       FillHist(regionsSM.at(it_rg2)+"/ZtagLep2_Pt_"+IDsuffix, ZtagLep2.Pt(), weight, 1000, 0., 1000.);
+      FillHist(regionsSM.at(it_rg2)+"/GammaLep1_Pt_"+IDsuffix, GammaLep1.Pt(), weight, 1000, 0., 1000.);
+      FillHist(regionsSM.at(it_rg2)+"/GammaLep2_Pt_"+IDsuffix, GammaLep2.Pt(), weight, 1000, 0., 1000.);
       FillHist(regionsSM.at(it_rg2)+"/Lep1_Pt_"+IDsuffix, leptons.at(0)->Pt(), weight, 1000, 0., 1000.);
       FillHist(regionsSM.at(it_rg2)+"/Lep2_Pt_"+IDsuffix, leptons.at(1)->Pt(), weight, 1000, 0., 1000.);
       FillHist(regionsSM.at(it_rg2)+"/Lep3_Pt_"+IDsuffix, leptons.at(2)->Pt(), weight, 1000, 0., 1000.);
@@ -1432,10 +1474,14 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
           FillHist(regionsSM.at(it_rg2)+"/"+channels3L.at(it_ch2)+"/Number_FatJets_"+IDsuffix, fatjets.size(), weight, 5, 0., 5.);
           FillHist(regionsSM.at(it_rg2)+"/"+channels3L.at(it_ch2)+"/ZCand_Mass_"+IDsuffix, ZCand.M(), weight, 80, 50., 130.);
           FillHist(regionsSM.at(it_rg2)+"/"+channels3L.at(it_ch2)+"/TriLep_Mass_"+IDsuffix, TriLep.M(), weight, 80, 50., 130.);
+          FillHist(regionsSM.at(it_rg2)+"/"+channels3L.at(it_ch2)+"/GammaCand_Mass_"+IDsuffix, GammaCand.M(), weight, 50, 0., 5.);
           FillHist(regionsSM.at(it_rg2)+"/"+channels3L.at(it_ch2)+"/ZCand_Pt_"+IDsuffix, ZCand.Pt(), weight, 1000, 0., 1000.);
+          FillHist(regionsSM.at(it_rg2)+"/"+channels3L.at(it_ch2)+"/GammaCand_Pt_"+IDsuffix, GammaCand.Pt(), weight, 1000, 0., 1000.);
           FillHist(regionsSM.at(it_rg2)+"/"+channels3L.at(it_ch2)+"/WtagLep_Pt_"+IDsuffix, WtagLep.Pt(), weight, 1000, 0., 1000.);
           FillHist(regionsSM.at(it_rg2)+"/"+channels3L.at(it_ch2)+"/ZtagLep1_Pt_"+IDsuffix, ZtagLep1.Pt(), weight, 1000, 0., 1000.);
           FillHist(regionsSM.at(it_rg2)+"/"+channels3L.at(it_ch2)+"/ZtagLep2_Pt_"+IDsuffix, ZtagLep2.Pt(), weight, 1000, 0., 1000.);
+          FillHist(regionsSM.at(it_rg2)+"/"+channels3L.at(it_ch2)+"/GammaLep1_Pt_"+IDsuffix, GammaLep1.Pt(), weight, 1000, 0., 1000.);
+          FillHist(regionsSM.at(it_rg2)+"/"+channels3L.at(it_ch2)+"/GammaLep2_Pt_"+IDsuffix, GammaLep2.Pt(), weight, 1000, 0., 1000.);
           FillHist(regionsSM.at(it_rg2)+"/"+channels3L.at(it_ch2)+"/Lep1_Pt_"+IDsuffix, leptons.at(0)->Pt(), weight, 1000, 0., 1000.);
           FillHist(regionsSM.at(it_rg2)+"/"+channels3L.at(it_ch2)+"/Lep2_Pt_"+IDsuffix, leptons.at(1)->Pt(), weight, 1000, 0., 1000.);
           FillHist(regionsSM.at(it_rg2)+"/"+channels3L.at(it_ch2)+"/Lep3_Pt_"+IDsuffix, leptons.at(2)->Pt(), weight, 1000, 0., 1000.);
@@ -1452,7 +1498,7 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
     //=====================================
     //==== ZZ control region
     //=====================================
-    if(leptons.size()==4 && it_rg2==2){
+    if(leptons.size()==4 && it_rg2==3){
 
       weight = 1.;
       // weights for MC

@@ -1046,7 +1046,7 @@ double AnalyzerCore::GetPileUpWeight(int N_pileup, int syst){
       return mcCorr->GetPileUpWeight(N_pileup, syst);
     }
     else if(DataYear==2017){
-      if(MCSample.Contains("DYJets10to50_MG") || MCSample.Contains("ZGToLLG") || MCSample.Contains("WGToLNuG")){
+      if(MCSample.Contains("WZTo3LNu") || MCSample.Contains("ZZTo4L") || MCSample.Contains("ZGToLLG") || MCSample.Contains("WGToLNuG") || MCSample.Contains("ttWTo") || MCSample.Contains("ttZTo")){
         return mcCorr->GetPileUpWeight2017(N_pileup, syst);
       }
       else{
