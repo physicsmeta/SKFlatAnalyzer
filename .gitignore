@@ -5,11 +5,8 @@
 *_Dict.cxx
 lib/*.tar.gz
 */obj
-2016_*.txt
-2017_*.txt
-2018_*.txt
-newMClist.txt
 *_submit.sh
+submitList
 python/UserInfo_helee.py
 data/Run2Legacy_v3/2016/FakeRate/*.root
 data/Run2Legacy_v3/2017/FakeRate/*.root
