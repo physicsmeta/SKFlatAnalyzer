@@ -53,7 +53,7 @@ void MakeBTagEfficiencyFiles(TString year, bool set_verbose=false){
   */
   
   TString skout_dir = getenv("SKFlatOutputDir");
-  TString path= skout_dir+"/Run2Legacy_v3/JetTagging/20"+year+"/" + sample ;
+  TString path= skout_dir+"/Run2Legacy_v4/JetTagging/20"+year+"/" + sample ;
 
 
   TFile * f = new TFile(path );
