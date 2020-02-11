@@ -138,10 +138,10 @@ void MCCorrection::ReadHistograms(){
       histDir->cd();
       map_hist_pileup[a+"_"+b+"_pileup"] = (TH1D *)file->Get(a+"_"+b)->Clone();
     }*/
-    if( (TH1D *)file->Get(a+"_"+b) || (TH1D *)file->Get(b) ){  // For MC samples with correctPU, b = "PUReweight_2017" and c = "PUReweight_2017.root"
+    if( (TH1D *)file->Get(a+"_"+b) || (TH1D *)file->Get(b) ){
       histDir->cd();
-      if( (TH1D *)file->Get(a+"_"+b) ) map_hist_pileup[a+"_"+b+"_pileup"] = (TH1D *)file->Get(a+"_"+b)->Clone();
-      if( (TH1D *)file->Get(b) ) map_hist_pileup[a+"_pileup"] = (TH1D *)file->Get(b)->Clone();
+      if( (TH1D *)file->Get(a+"_"+b) ) map_hist_pileup[a+"_"+b+"_pileup"] = (TH1D *)file->Get(a+"_"+b)->Clone(); // wrongPU in 2017, b = central/sig_up/sig_down, c = Pileup_reweight_69p2_mb.root  ||  PU in 2016, 2018
+      if( (TH1D *)file->Get(b) ) map_hist_pileup[a+"_"+b+"_pileup"] = (TH1D *)file->Get(b)->Clone();             // correctPU in 2017, b = PUReweight_2017(+Up/Down), c = PUReweight_2017.root
     }
     else{
       cout << "[MCCorrection::ReadHistograms] No : " << a + "_" + b << endl;
@@ -769,15 +769,19 @@ double MCCorrection::GetPileUpWeight(int N_pileup, int syst){
   int this_bin = N_pileup+1;
   if(N_pileup >= 100) this_bin=100;
 
-  TString this_histname = "MC_" + TString::Itoa(DataYear,10);
+//  TString this_histname = "MC_" + TString::Itoa(DataYear,10);
+  TString this_histname = "PUReweight_";
   if(syst == 0){
-    this_histname += "_central_pileup";
+//    this_histname += "_central_pileup";
+    this_histname += TString::Itoa(DataYear,10)+"_pileup";
   }
   else if(syst == -1){
-    this_histname += "_sig_down_pileup";
+//    this_histname += "_sig_down_pileup";
+    this_histname += TString::Itoa(DataYear,10)+"_Down_pileup";
   }
   else if(syst == 1){
-    this_histname += "_sig_up_pileup";
+//    this_histname += "_sig_up_pileup";
+    this_histname += TString::Itoa(DataYear,10)+"_Up_pileup";
   }
   else{
     cerr << "[MCCorrection::GetPileUpWeightBySampleName] syst should be 0, -1, or +1" << endl;
@@ -801,16 +805,22 @@ double MCCorrection::GetPileUpWeight2017(int N_pileup, int syst){
 
   TString this_histname = MCSample;
   if(syst == 0){
-    this_histname += "_pileup";
+    this_histname += "_PUReweight_2017_pileup";
+  }
+  else if(syst == -1){
+    this_histname += "_PUReweight_2017_Down_pileup";
+  }
+  else if(syst == 1){
+    this_histname += "_PUReweight_2017_Up_pileup";
   }
   else{
-    cout << "[MCCorrection::GetPileUpWeightBySampleName] syst should be 0, -1, or +1" << endl;
+    cerr << "[MCCorrection::GetPileUpWeight2017] syst should be 0, -1, or +1" << endl;
     exit(EXIT_FAILURE);
   }
 
   TH1D *this_hist = map_hist_pileup[this_histname]; 
   if(!this_hist){
-    cout << "[MCCorrection::GetPileUpWeightBySampleName] No " << this_histname << endl;
+    cerr << "[MCCorrection::GetPileUpWeight2017] No " << this_histname << endl;
     exit(EXIT_FAILURE);
   }
 

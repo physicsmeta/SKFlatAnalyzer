@@ -1046,17 +1046,17 @@ double AnalyzerCore::GetPileUpWeight(int N_pileup, int syst){
       return mcCorr->GetPileUpWeight(N_pileup, syst);
     }
     else if(DataYear==2017){
-      if(MCSample.Contains("WZTo3LNu") || MCSample.Contains("ZZTo4L") || MCSample.Contains("ZGToLLG") || MCSample.Contains("WGToLNuG") || MCSample.Contains("ttWTo") || MCSample.Contains("ttZTo")){
-        return mcCorr->GetPileUpWeight2017(N_pileup, syst);
-      }
-      else{
+      if(MCSample.Contains("WZZ")){   // wrongPU
         return mcCorr->GetPileUpWeightBySampleName(N_pileup, syst);
+      }
+      else{   // correctPU
+        return mcCorr->GetPileUpWeight2017(N_pileup, syst);
       }
     }
     else if(DataYear==2018){
       //==== TODO 2018 not yet added
 //      return 1.;
-      return mcCorr->GetPileUpWeight2017(N_pileup, syst); // use the same method for 2017 MC
+      return mcCorr->GetPileUpWeight(N_pileup, syst); // The same method for 2016 MC
     }
     else{
       cout << "[AnalyzerCore::GetPileUpWeight] Wrong year : " << DataYear << endl;
