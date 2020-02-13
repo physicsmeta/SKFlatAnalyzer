@@ -147,7 +147,7 @@ void ChargeFlip_IDv2::executeEventFromParameter(AnalyzerParameter param, Long64_
 
       for(unsigned int i=0; i<eles.size(); i++){
         Gen truth_lep = GetGenMatchedLepton(eles.at(i), gens);
-        if(truth_lep.PID() == 0) return; 
+        if(truth_lep.PID() == 0) continue; 
     
         int truth_lep_Charge;
         if(truth_lep.PID() == 11) truth_lep_Charge = -1;
@@ -282,6 +282,7 @@ void ChargeFlip_IDv2::executeEventFromParameter(AnalyzerParameter param, Long64_
           FillHist(param.Name+"/ClosureTest/MET_OS_CFweighted_shifted_"+TString::Itoa(i+1,10), METv_tmp.Pt(), weight_tmp, 100, 0., 100.);
         }
       }
+
     }
 
     if(HasFlag("HalfSampleTest")){

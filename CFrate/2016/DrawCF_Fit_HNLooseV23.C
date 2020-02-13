@@ -1,5 +1,5 @@
 {
-TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip_IDv2/2016/CFrate__/ChargeFlip_IDv2_DYJets_TTLL.root";
+TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/ChargeFlip_IDv2/2016/CFrate__/ChargeFlip_IDv2_DYJets_TTLL.root";
 TFile* f1 = new TFile(filename);
 
 TString samplename = filename(filename.Last('/')+12,filename.Length());
@@ -8,7 +8,7 @@ samplename.ReplaceAll(".root","");
 //gSystem->Exec("mkdir "+samplename);
 
 vector<TString> User_ID;
-User_ID.push_back("HNTightV2");
+User_ID.push_back("HNLooseV23");
 
 for(unsigned int i=0; i<User_ID.size(); i++){
 
@@ -92,9 +92,9 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   // Define fit function and range //
   
   TF1 *gr1_fit1 = new TF1("gr1_fit1","pol1",0,0.0075);
-  TF1 *gr1_fit2 = new TF1("gr1_fit2","pol1",0.0075,0.0155);
-  TF1 *gr1_fit3 = new TF1("gr1_fit3","pol1",0.0155,0.041);
-  
+  TF1 *gr1_fit2 = new TF1("gr1_fit2","pol1",0.0075,0.021);
+  TF1 *gr1_fit3 = new TF1("gr1_fit3","pol1",0.021,0.04);
+
   gr1_fit1->SetLineWidth(2);
   gr1_fit2->SetLineWidth(2);
   gr1_fit3->SetLineWidth(2);
