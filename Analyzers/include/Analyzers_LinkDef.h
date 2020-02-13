@@ -16,6 +16,6 @@
 #pragma link C++ class ChargeFlipValidation+;
 #pragma link C++ class ZMass+;
 #pragma link C++ class Practice+;
-#pragma link C++ class JetTagging+;
+#pragma link C++ class MeasureJetTaggingEfficiency+;
 
 #endif
