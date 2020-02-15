@@ -12,7 +12,6 @@
 #pragma link C++ class SKFlatValidation+;
 #pragma link C++ class SkimTree_LRSMHighPt+;
 #pragma link C++ class MeasureJetTaggingEfficiency+;
-#pragma link C++ class SkimTree_SMP+;
 #pragma link C++ class FakeRate+;
 #pragma link C++ class HNtypeI_SM_CR+;
 #pragma link C++ class HNtypeI_SR+;
