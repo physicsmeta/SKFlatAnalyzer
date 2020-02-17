@@ -16,6 +16,8 @@
 #pragma link C++ class ChargeFlipValidation+;
 #pragma link C++ class ZMass+;
 #pragma link C++ class Practice+;
+#pragma link C++ class SkimTree_Dilepton+;
+#pragma link C++ class SkimTree_HNFake+;
 #pragma link C++ class MeasureJetTaggingEfficiency+;
 
 #endif
