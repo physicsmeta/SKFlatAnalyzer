@@ -93,23 +93,15 @@ void HNtypeI_Muon_SR::initializeAnalyzer(){
 //  cout << "[HNtypeI_Muon_SR::initializeAnalyzer] IsoMuTriggerName = " << IsoMuTriggerName << endl;
 //  cout << "[HNtypeI_Muon_SR::initializeAnalyzer TriggerSafePtCut = " << TriggerSafePtCut << endl;
 
-  //==== Test btagging code
+  //==== B-Tagging
   //==== add taggers and WP that you want to use in analysis
-  std::vector<Jet::Tagger> vtaggers;
-  vtaggers.push_back(Jet::DeepCSV);
-//  vtaggers.push_back(Jet::CSVv2);  // available for 2016 only
+  std::vector<JetTagging::Parameters> jtps;
+  //==== If you want to use 1a or 2a method,
+  jtps.push_back( JetTagging::Parameters(JetTagging::DeepCSV, JetTagging::Loose, JetTagging::incl, JetTagging::comb) );
+  jtps.push_back( JetTagging::Parameters(JetTagging::DeepCSV, JetTagging::Medium, JetTagging::incl, JetTagging::comb) );
+  //==== set
+  mcCorr->SetJetTaggingParameters(jtps);
 
-  std::vector<Jet::WP> v_wps;
-  v_wps.push_back(Jet::Loose);
-  v_wps.push_back(Jet::Medium);
-
-  //=== list of taggers, WP, setup systematics, use period SFs
-  if(DataYear==2017){
-    SetupBTagger(vtaggers, v_wps, true, true);
-  }
-  else{
-    SetupBTagger(vtaggers, v_wps, true, false);
-  }
 }
 
 HNtypeI_Muon_SR::~HNtypeI_Muon_SR(){
@@ -425,20 +417,24 @@ void HNtypeI_Muon_SR::executeEventFromParameter(AnalyzerParameter param){
   std::sort(jets_nolepveto.begin(), jets_nolepveto.end(), PtComparing);
   std::sort(fatjets.begin(), fatjets.end(), PtComparing);
 
-//  int Nbjet_deepcsv_m=0;
-//  int Nbjet_deepcsv_m_noSF=0;
+  //==== B-Tagging
   int Nbjet_loose = 0, Nbjet_medium = 0;
+  JetTagging::Parameters jtp_DeepCSV_Loose = JetTagging::Parameters(JetTagging::DeepCSV,
+                                                                     JetTagging::Loose,
+                                                                     JetTagging::incl, JetTagging::comb);
+  JetTagging::Parameters jtp_DeepCSV_Medium = JetTagging::Parameters(JetTagging::DeepCSV,
+                                                                     JetTagging::Medium,
+                                                                     JetTagging::incl, JetTagging::comb);
 
+  //==== method 1a)
+  //==== multiply "btagWeight" to the event weight
+//  double btagWeight = mcCorr->GetBTaggingReweight_1a(jets, jtp_DeepCSV_Medium);
+
+  //==== method 2a)
   for(unsigned int ij=0; ij<jets_nolepveto.size(); ij++){
-//    if(IsBTagged(jets.at(ij), Jet::DeepCSV, Jet::Medium,true,0)) Nbjet_deepcsv_m++; // method for getting btag with SF applied to MC
-//    if(IsBTagged(jets.at(ij), Jet::DeepCSV, Jet::Medium,false,0)) Nbjet_deepcsv_m_noSF++; // method for getting btag with no SF applied to MC
-//    if(IsBTagged(jets.at(ij), Jet::CSVv2, Jet::Loose,false,0)) Nbjet_csvv2++;
-    if(IsBTagged(jets_nolepveto.at(ij), Jet::DeepCSV, Jet::Loose, true, 0)) Nbjet_loose++; // For b-jet veto in SM CR
-    if(IsBTagged(jets_nolepveto.at(ij), Jet::DeepCSV, Jet::Medium, true, 0)) Nbjet_medium++; // For b-jet veto in SR
+    if(mcCorr->IsBTagged_2a(jtp_DeepCSV_Loose, jets_nolepveto.at(ij))) Nbjet_loose++;
+    if(mcCorr->IsBTagged_2a(jtp_DeepCSV_Medium, jets_nolepveto.at(ij))) Nbjet_medium++;
   }
-
-//  FillHist("Nbjet_loose_"+IDsuffix, Nbjet_loose, weight, 5, 0., 5.);
-//  FillHist("Nbjet_medium_"+IDsuffix, Nbjet_medium, weight, 5, 0., 5.);
 
   //===================================
   //==== Set up pTcone, lepton vector

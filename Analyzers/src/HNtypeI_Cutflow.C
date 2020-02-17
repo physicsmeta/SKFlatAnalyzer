@@ -76,18 +76,14 @@ void HNtypeI_Cutflow::initializeAnalyzer(){
 //  cout << "[HNtypeI_Cutflow::initializeAnalyzer] IsoMuTriggerName = " << IsoMuTriggerName << endl;
 //  cout << "[HNtypeI_Cutflow::initializeAnalyzer TriggerSafePtCut = " << TriggerSafePtCut << endl;
 
-  //==== Test btagging code
+  //==== B-Tagging
   //==== add taggers and WP that you want to use in analysis
-  std::vector<Jet::Tagger> vtaggers;
-  vtaggers.push_back(Jet::DeepCSV);
-//  vtaggers.push_back(Jet::CSVv2);  // available for 2016 only
-
-  std::vector<Jet::WP> v_wps;
-  v_wps.push_back(Jet::Loose);
-  v_wps.push_back(Jet::Medium);
-
-  //=== list of taggers, WP, setup systematics, use period SFs
-  SetupBTagger(vtaggers, v_wps, true, true);
+  std::vector<JetTagging::Parameters> jtps;
+  //==== If you want to use 1a or 2a method,
+  jtps.push_back( JetTagging::Parameters(JetTagging::DeepCSV, JetTagging::Loose, JetTagging::incl, JetTagging::comb) );
+  jtps.push_back( JetTagging::Parameters(JetTagging::DeepCSV, JetTagging::Medium, JetTagging::incl, JetTagging::comb) );
+  //==== set
+  mcCorr->SetJetTaggingParameters(jtps);
 
 }
 
@@ -352,21 +348,23 @@ void HNtypeI_Cutflow::executeEventFromParameter(AnalyzerParameter param){
   std::sort(jets.begin(), jets.end(), PtComparing);
   std::sort(fatjets.begin(), fatjets.end(), PtComparing);
 
-//  int Nbjet_deepcsv_m=0;
-//  int Nbjet_deepcsv_m_noSF=0;
-  int Nbjet_nolepveto_medium = 0, Nbjet_lepveto_medium = 0;
+  //==== B-Tagging
+  int Nbjet_loose = 0, Nbjet_medium = 0;
+  JetTagging::Parameters jtp_DeepCSV_Loose = JetTagging::Parameters(JetTagging::DeepCSV,
+                                                                     JetTagging::Loose,
+                                                                     JetTagging::incl, JetTagging::comb);
+  JetTagging::Parameters jtp_DeepCSV_Medium = JetTagging::Parameters(JetTagging::DeepCSV,
+                                                                     JetTagging::Medium,
+                                                                     JetTagging::incl, JetTagging::comb);
 
-  for(unsigned int ij=0; ij<jets_lepveto.size(); ij++){
-    if(fabs(jets_lepveto.at(ij).Eta()) < 2.4){
-      if(IsBTagged(jets_lepveto.at(ij), Jet::DeepCSV, Jet::Medium, true, 0)) Nbjet_lepveto_medium++;
-    }
-  }
+  //==== method 1a)
+  //==== multiply "btagWeight" to the event weight
+//  double btagWeight = mcCorr->GetBTaggingReweight_1a(jets, jtp_DeepCSV_Medium);
+
+  //==== method 2a)
   for(unsigned int ij=0; ij<jets_nolepveto.size(); ij++){
-//    if(IsBTagged(jets.at(ij), Jet::DeepCSV, Jet::Medium,true,0)) Nbjet_deepcsv_m++; // method for getting btag with SF applied to MC
-//    if(IsBTagged(jets.at(ij), Jet::DeepCSV, Jet::Medium,false,0)) Nbjet_deepcsv_m_noSF++; // method for getting btag with no SF applied to MC
-    if(fabs(jets_nolepveto.at(ij).Eta()) < 2.4){
-      if(IsBTagged(jets_nolepveto.at(ij), Jet::DeepCSV, Jet::Medium, true, 0)) Nbjet_nolepveto_medium++; 
-    }
+    if(mcCorr->IsBTagged_2a(jtp_DeepCSV_Loose, jets_nolepveto.at(ij))) Nbjet_loose++;
+    if(mcCorr->IsBTagged_2a(jtp_DeepCSV_Medium, jets_nolepveto.at(ij))) Nbjet_medium++;
   }
 
 //  double MET = ev.GetMETVector().Pt();
