@@ -111,7 +111,8 @@ TString AnalyzerParameter::GetSystType(){
     return "ElectronEnDown";
   }
   else{
-    cout << "[AnalyzerParameter::GetSystType] Wrong Syst" << endl;
+//    cout << "[AnalyzerParameter::GetSystType] Wrong Syst" << endl;
+    cerr << "[AnalyzerParameter::GetSystType] Wrong Syst" << endl;
     exit(EXIT_FAILURE);
     return "ERROR";
   }

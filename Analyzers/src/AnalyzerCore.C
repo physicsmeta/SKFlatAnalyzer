@@ -258,7 +258,8 @@ std::vector<Lepton *> AnalyzerCore::MakeLeptonPointerVector(const std::vector<Mu
   for(unsigned int i=0; i<muons.size(); i++){
     Lepton *l = (Lepton *)(&muons.at(i));
     if( !(l->LeptonFlavour() == Lepton::MUON) ){
-      cout << "[AnalyzerCore::MakeLeptonPointerVector(std::vector<Muon>& muons)] Not muon.." << endl;
+//      cout << "[AnalyzerCore::MakeLeptonPointerVector(std::vector<Muon>& muons)] Not muon.." << endl;
+      cerr << "[AnalyzerCore::MakeLeptonPointerVector(std::vector<Muon>& muons)] Not muon.." << endl;
       exit(EXIT_FAILURE);
     }
     if(TightIso>0){
@@ -280,7 +281,8 @@ std::vector<Lepton *> AnalyzerCore::MakeLeptonPointerVector(const std::vector<El
   for(unsigned int i=0; i<electrons.size(); i++){
     Lepton *l = (Lepton *)(&electrons.at(i));
     if( !(l->LeptonFlavour() == Lepton::ELECTRON) ){
-      cout << "[AnalyzerCore::MakeLeptonPointerVector(std::vector<ELECTRON>& electrons)] Not electron.." << endl;
+//      cout << "[AnalyzerCore::MakeLeptonPointerVector(std::vector<ELECTRON>& electrons)] Not electron.." << endl;
+      cerr << "[AnalyzerCore::MakeLeptonPointerVector(std::vector<ELECTRON>& electrons)] Not electron.." << endl;
       exit(EXIT_FAILURE);
     }
     if(TightIso>0){
@@ -941,7 +943,8 @@ double AnalyzerCore::GetPrefireWeight(int sys){
 
   }
 
-  cout << "[AnalyzerCore::GetPrefireWeight] wtf" << endl;
+//  cout << "[AnalyzerCore::GetPrefireWeight] wtf" << endl;
+  cerr << "[AnalyzerCore::GetPrefireWeight] wtf" << endl;
   exit(EXIT_FAILURE);
   return 1.;
 
@@ -969,7 +972,8 @@ double AnalyzerCore::GetPileUpWeight(int N_pileup, int syst){
       return mcCorr->GetPileUpWeight(N_pileup, syst); // The same method for 2016 MC
     }
     else{
-      cout << "[AnalyzerCore::GetPileUpWeight] Wrong year : " << DataYear << endl;
+//      cout << "[AnalyzerCore::GetPileUpWeight] Wrong year : " << DataYear << endl;
+      cerr << "[AnalyzerCore::GetPileUpWeight] Wrong year : " << DataYear << endl;
       exit(EXIT_FAILURE);
       return 1.;
     }
@@ -1470,7 +1474,8 @@ Gen AnalyzerCore::GetGenMatchedLepton(const Lepton& lep, const std::vector<Gen>&
   if(lep.LeptonFlavour()==Lepton::ELECTRON) reco_PID = 11;
   else if(lep.LeptonFlavour()==Lepton::MUON) reco_PID = 13;
   else{
-    cout << "[AnalyzerCore::GetGenMatchedLepton] input lepton flavour not set" << endl;
+//    cout << "[AnalyzerCore::GetGenMatchedLepton] input lepton flavour not set" << endl;
+    cerr << "[AnalyzerCore::GetGenMatchedLepton] input lepton flavour not set" << endl;
     exit(EXIT_FAILURE);
   }
 
@@ -2239,7 +2244,8 @@ void AnalyzerCore::FillLeptonPlots(std::vector<Lepton *> leps, TString this_regi
       JSFillHist(this_region, "Lepton_"+this_itoa+"_TrkRelIso_"+this_region, mu->TrkIso()/mu->TuneP4().Pt(), weight, 100, 0., 1.);
     }
     else{
-      cout << "[AnalyzerCore::FillLeptonPlots] lepton flavour wrong.." << endl;
+//      cout << "[AnalyzerCore::FillLeptonPlots] lepton flavour wrong.." << endl;
+      cerr << "[AnalyzerCore::FillLeptonPlots] lepton flavour wrong.." << endl;
       exit(EXIT_FAILURE);
     }
 
