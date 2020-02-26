@@ -1,14 +1,14 @@
-#include "FakeRate.h"
+#include "HNtypeI_FakeRate.h"
 
-FakeRate::FakeRate(){
+HNtypeI_FakeRate::HNtypeI_FakeRate(){
 
 }
 
-void FakeRate::initializeAnalyzer(){
+void HNtypeI_FakeRate::initializeAnalyzer(){
 
   //==== if you use "--userflags RunSyst" with SKFlat.py, HasFlag("RunSyst") will return "true"
 //  RunSyst = HasFlag("RunSyst");
-//  cout << "[FakeRate::initializeAnalyzer] RunSyst = " << RunSyst << endl;
+//  cout << "[HNtypeI_FakeRate::initializeAnalyzer] RunSyst = " << RunSyst << endl;
 
   MuonTightIDs = {"HNTight", "HNTightV2", "HNTight2016"};
   MuonLooseIDs = {"HNLoose", "HNLoose", "HNLoose2016"};
@@ -22,7 +22,7 @@ void FakeRate::initializeAnalyzer(){
   //==== At this point, sample informations (e.g., IsDATA, DataStream, MCSample, or DataYear) are all set
   //==== You can define sample-dependent or year-dependent variables here
   //==== (Example) Year-dependent variables
-  //==== I defined "TString IsoMuTriggerName;" and "double TriggerSafePtCut;" in Analyzers/include/FakeRate.h 
+  //==== I defined "TString IsoMuTriggerName;" and "double TriggerSafePtCut;" in Analyzers/include/HNtypeI_FakeRate.h 
   //==== IsoMuTriggerName is a year-dependent variable, and you don't want to do "if(Dataer==~~)" for every event (let's save cpu time).
   //==== Then, do it here, which only ran once for each macro
   MuonTriggers.clear();
@@ -64,8 +64,8 @@ void FakeRate::initializeAnalyzer(){
     MuonLumi1 = 2.696*2.05535, MuonLumi2 = 8.561*1.03262, MuonLumi3 = 45.781*0.901847;
     ElectronLumi1 = 6.412*0.89131, ElectronLumi2 = 38.849*0.92211, ElectronLumi3 = 38.861*0.79613, ElectronLumi4 = 38.906*0.791474;
   }
-//  cout << "[FakeRate::initializeAnalyzer] IsoMuTriggerName = " << IsoMuTriggerName << endl;
-//  cout << "[FakeRate::initializeAnalyzer TriggerSafePtCut = " << TriggerSafePtCut << endl;
+//  cout << "[HNtypeI_FakeRate::initializeAnalyzer] IsoMuTriggerName = " << IsoMuTriggerName << endl;
+//  cout << "[HNtypeI_FakeRate::initializeAnalyzer TriggerSafePtCut = " << TriggerSafePtCut << endl;
 
   //==== B-Tagging
   //==== add taggers and WP that you want to use in analysis
@@ -77,13 +77,13 @@ void FakeRate::initializeAnalyzer(){
 
 }
 
-FakeRate::~FakeRate(){
+HNtypeI_FakeRate::~HNtypeI_FakeRate(){
 
   //==== Destructor of this Analyzer
 
 }
 
-void FakeRate::executeEvent(){
+void HNtypeI_FakeRate::executeEvent(){
 
   //================================================================
   //====  Example 1
@@ -95,7 +95,7 @@ void FakeRate::executeEvent(){
   //==== and then check ID booleans.
   //==== GetAllMuons not only loops over all MINIAOD muons, but also actually CONSTRUCT muon objects for each muons.
   //==== We are now running systematics, and you don't want to do this for every systematic sources
-  //==== So, I defined "vector<Muon> AllMuons;" in Analyzers/include/FakeRate.h,
+  //==== So, I defined "vector<Muon> AllMuons;" in Analyzers/include/HNtypeI_FakeRate.h,
   //==== and save muons objects at the very beginning of executeEvent().
   //==== Later, do "SelectMuons(AllMuons, ID, pt, eta)" to get muons with ID cuts
   AllElectrons = GetAllElectrons();
@@ -106,7 +106,7 @@ void FakeRate::executeEvent(){
   //==== If data, 1.;
   //==== If MC && DataYear > 2017, 1.;
   //==== If MC && DataYear <= 2017, we have to reweight the event with this value
-  //==== I defined "double weight_Prefire;" in Analyzers/include/FakeRate.h
+  //==== I defined "double weight_Prefire;" in Analyzers/include/HNtypeI_FakeRate.h
 //  weight_Prefire = GetPrefireWeight(0);
 
   AnalyzerParameter param;
@@ -157,14 +157,14 @@ void FakeRate::executeEvent(){
   }
 }
 
-void FakeRate::executeEventFromParameter(AnalyzerParameter param){
+void HNtypeI_FakeRate::executeEventFromParameter(AnalyzerParameter param){
  
-  // Version : V(LooseID)(TightID)
-  vector<TString> regions_mu = {"muonV11FR", "muonV11DY", "muonV11Wj"};
-  if(param.Muon_Tight_ID.Contains("V2")) regions_mu = {"muonV12FR", "muonV12DY", "muonV12Wj"};
+  // Version : Loose ID
+
+  vector<TString> regions_mu = {"muonV1FR", "muonV1DY", "muonV1Wj"};
+  if(param.Muon_Tight_ID.Contains("V2")) regions_mu = {"muonV2FR", "muonV2DY", "muonV2Wj"};
   if(param.Muon_Tight_ID.Contains("2016")) regions_mu = {"muon16FR", "muon16DY", "muon16Wj"};
 
-  // Version : Loose ID
   vector<TString> regions_el = {"eleV1FR", "eleV1DY", "eleV1Wj"};
   if(param.Electron_Loose_ID.Contains("V21")) regions_el = {"eleV21FR", "eleV21DY", "eleV21Wj"};
   if(param.Electron_Loose_ID.Contains("V22")) regions_el = {"eleV22FR", "eleV22DY", "eleV22Wj"};
@@ -175,6 +175,7 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
   }
   if(param.Electron_Tight_ID.Contains("2016")) regions_el = {"ele16FR", "ele16DY", "ele16Wj"};
   if(param.Electron_Tight_ID.Contains("ISR")) regions_el = {"isrFR", "isrDY", "isrWj"};
+
   //=============
   //==== No Cut
   //=============
@@ -249,7 +250,7 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
     //this_AllElectrons = ScaleElectrons( this_AllElectrons, -1 );
   }
   else{
-    cout << "[FakeRate::executeEventFromParameter] Wrong syst" << endl;
+    cout << "[HNtypeI_FakeRate::executeEventFromParameter] Wrong syst" << endl;
     exit(EXIT_FAILURE);
   }*/
 
@@ -312,13 +313,15 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
   double Pt_ratio = 0.;
   double jet_emfraction = 0.;
 
-  double triglumi = 1.; 
+  double trigLumi = 1.; 
   double awayjet_ptcut = 40.;
   int awayjet = 0;
   int leadingjet = 0;
 
   double ptcone_mu = 0.;
   double ptcone_el = 0.;
+  double trkiso_Pt = 0.;
+  double trkiso_miniaodPt = 0.;
 //  double ptcone_mu1 = 0.;
   TString PtConeRange = "";
   Particle ZCand;
@@ -328,18 +331,20 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
   FillHist("gen_pid", gen_test.PID(), weight, 4, -2, 2);
   FillHist("gen_status", gen_test.Status(), weight, 4, -2, 2); */
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////// Muon ///////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////
+  //===================================================================================================
+  //==== Muon Fake Rate Measurement
+  //===================================================================================================
 
   for(unsigned int it_rg=0; it_rg<regions_mu.size(); it_rg++){
     weight = 1.;
     if(param.Electron_Tight_ID.Contains("V2") || param.Electron_Tight_ID.Contains("MVA")) break; // Stack muon hists only once!!
 
     // Fake rate measurement region 
-    if(muons_loose.size()==1 && it_rg==0){
+    if(it_rg==0 && muons_loose.size()==1){
       if(jets.size() == 0) continue;
       ptcone_mu = muons_loose.at(0).CalcPtCone(muons_loose.at(0).RelIso(), mu_tight_iso);
+      trkiso_Pt = muons_loose.at(0).TrkIso()/muons_loose.at(0).Pt();
+      trkiso_miniaodPt = muons_loose.at(0).TrkIso()/muons_loose.at(0).MiniAODPt();
 //      ptcone_mu1 = muons_loose.at(0).Pt()*(1.+std::max(0., muons_loose.at(0).RelIso()-mu_tight_iso));
 //      FillHist("PtCone_ratio", ptcone_mu1/ptcone_mu, weight, 20, 0., 2.);
 
@@ -349,47 +354,59 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
         Gen truth_mu = GetGenMatchedLepton(muons_loose.at(0), gens);
         if(truth_mu.PID() == 0) continue;
 
-        // weights except trigger luminosity
+        // Weights except trigger luminosity
         weight *= weight_norm_1invpb;
         weight *= ev.MCweight();
         weight *= GetPrefireWeight(0);
         weight *= GetPileUpWeight(nPileUp,0);
       }
 
-      triglumi = 1.;
+      // For checking TrkIso and RelIso
+      if(ev.PassTrigger(MuonTrig1)){
+        FillHist(regions_mu.at(it_rg)+"/Muon_loose_TrkIso_Pt_PassMu3", trkiso_Pt, weight, 20, 0., 1.);
+        FillHist(regions_mu.at(it_rg)+"/Muon_loose_TrkIso_MiniAODPt_PassMu3", trkiso_miniaodPt, weight, 20, 0., 1.);
+        FillHist(regions_mu.at(it_rg)+"/Muon_loose_RelIso_PassMu3", muons_loose.at(0).RelIso(), weight, 20, 0., 1.);
+      }
+      if(ev.PassTrigger(MuonTrig2)){
+        FillHist(regions_mu.at(it_rg)+"/Muon_loose_TrkIso_Pt_PassMu8", trkiso_Pt, weight, 20, 0., 1.);
+        FillHist(regions_mu.at(it_rg)+"/Muon_loose_TrkIso_MiniAODPt_PassMu8", trkiso_miniaodPt, weight, 20, 0., 1.);
+        FillHist(regions_mu.at(it_rg)+"/Muon_loose_RelIso_PassMu8", muons_loose.at(0).RelIso(), weight, 20, 0., 1.);
+      }
+
+      trigLumi = 1.;
       // only 1 prescaled trigger for each PtCone range, setup lumi
       if(ptcone_mu < MuonPtconeCut1) continue;
       if(ptcone_mu >= MuonPtconeCut1 && ptcone_mu < MuonPtconeCut2){
         if(muons_loose.at(0).Pt() < MuonPtCut1) continue;
         if(!ev.PassTrigger(MuonTrig1)) continue;
-        if(!IsDATA) triglumi = MuonLumi1;
+        if(!IsDATA) trigLumi = MuonLumi1;
         awayjet_ptcut = 50.;
         PtConeRange = "range0";
       }
       if(ptcone_mu >= MuonPtconeCut2 && ptcone_mu < MuonPtconeCut3){
         if(muons_loose.at(0).Pt() < MuonPtCut2) continue;
         if(!ev.PassTrigger(MuonTrig2)) continue;
-        if(!IsDATA) triglumi = MuonLumi2; 
+        if(!IsDATA) trigLumi = MuonLumi2; 
         PtConeRange = "range1";
       }
       if(ptcone_mu >= MuonPtconeCut3){
         if(muons_loose.at(0).Pt() < MuonPtCut3) continue;
         if(!ev.PassTrigger(MuonTrig3)) continue;
-        if(!IsDATA) triglumi = MuonLumi3; 
+        if(!IsDATA) trigLumi = MuonLumi3; 
         PtConeRange = "range2";
       }
 
       awayjet = 0, leadingjet = 0;
-      weight *= triglumi;
+      weight *= trigLumi;
 
-      FillHist("Mu_loose_Eta_nodijet_"+PtConeRange+"_"+regions_mu.at(it_rg), muons_loose.at(0).Eta(), weight, 50, -2.5, 2.5);
+      FillHist(regions_mu.at(it_rg)+"/Muon_loose_Eta_nodijet_"+PtConeRange, muons_loose.at(0).Eta(), weight, 50, -2.5, 2.5);
 
       for(unsigned int ijet=0; ijet<jets.size(); ijet++){
         // define dphi between a jet and the loose lepton
 //        dphi = fabs(jets.at(ijet).Phi() - muons_loose.at(0).Phi());
 //        if(dphi > pi) dphi = 2.*pi-dphi;
         dphi = fabs(muons_loose.at(0).DeltaPhi(jets.at(ijet)));
-        FillHist("dphi_"+PtConeRange+"_"+regions_mu.at(it_rg), dphi, weight, 32, 0., 3.2);
+        FillHist(regions_mu.at(it_rg)+"/dphi_"+PtConeRange, dphi, weight, 32, 0., 3.2);
 
         if(dphi > 2.5) awayjet++; 
         if(dphi > 2.5 && awayjet == 1) leadingjet = ijet;
@@ -403,17 +420,21 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
       Pt_ratio = jets.at(leadingjet).Pt()/muons_loose.at(0).Pt();
 
       // Histograms before applying cuts
-      FillHist("MET_nocut_"+PtConeRange+"_"+regions_mu.at(it_rg), MET, weight, 200, 0., 200.);
-      FillHist("Mt_nocut_"+PtConeRange+"_"+regions_mu.at(it_rg), Mt, weight, 200, 0., 200.);
-      FillHist("Ptratio_nocut_"+PtConeRange+"_"+regions_mu.at(it_rg), Pt_ratio, weight, 50, 0., 5.);
-      FillHist("Mu_loose_PtCone_nocut_"+PtConeRange+"_"+regions_mu.at(it_rg), ptcone_mu, weight, 200, 0., 200.);
-      FillHist("Mu_loose_Eta_nocut_"+PtConeRange+"_"+regions_mu.at(it_rg), muons_loose.at(0).Eta(), weight, 50, -2.5, 2.5);
-      FillHist("Number_Events_nocut_"+PtConeRange+"_"+regions_mu.at(it_rg), 0.5, weight, 2, 0., 2.);
+      FillHist(regions_mu.at(it_rg)+"/MET_nocut_"+PtConeRange, MET, weight, 200, 0., 200.);
+      FillHist(regions_mu.at(it_rg)+"/Mt_nocut_"+PtConeRange, Mt, weight, 200, 0., 200.);
+      FillHist(regions_mu.at(it_rg)+"/Ptratio_nocut_"+PtConeRange, Pt_ratio, weight, 50, 0., 5.);
+      FillHist(regions_mu.at(it_rg)+"/Muon_loose_PtCone_nocut_"+PtConeRange, ptcone_mu, weight, 200, 0., 200.);
+      FillHist(regions_mu.at(it_rg)+"/Muon_loose_Eta_nocut_"+PtConeRange, muons_loose.at(0).Eta(), weight, 50, -2.5, 2.5);
+      FillHist(regions_mu.at(it_rg)+"/Muon_loose_TrkIso_Pt_nocut_"+PtConeRange, trkiso_Pt, weight, 20, 0., 1.);
+      FillHist(regions_mu.at(it_rg)+"/Muon_loose_TrkIso_MiniAODPt_nocut_"+PtConeRange, trkiso_miniaodPt, weight, 20, 0., 1.);
+      FillHist(regions_mu.at(it_rg)+"/Number_Events_nocut_"+PtConeRange, 0.5, weight, 2, 0., 2.);
 
       if(muons_tight.size() > 0){
-        FillHist("Mu_tight_PtCone_nocut_"+PtConeRange+"_"+regions_mu.at(it_rg), ptcone_mu, weight, 200, 0., 200.);
-        FillHist("Mu_tight_Eta_nocut_"+PtConeRange+"_"+regions_mu.at(it_rg), muons_tight.at(0).Eta(), weight, 50, -2.5, 2.5);
-        FillHist("Number_Events_nocut_"+PtConeRange+"_"+regions_mu.at(it_rg), 1.5, weight, 2, 0., 2.);
+        FillHist(regions_mu.at(it_rg)+"/Muon_tight_PtCone_nocut_"+PtConeRange, ptcone_mu, weight, 200, 0., 200.);
+        FillHist(regions_mu.at(it_rg)+"/Muon_tight_Eta_nocut_"+PtConeRange, muons_tight.at(0).Eta(), weight, 50, -2.5, 2.5);
+        FillHist(regions_mu.at(it_rg)+"/Muon_tight_TrkIso_Pt_nocut_"+PtConeRange, trkiso_Pt, weight, 20, 0., 1.);
+        FillHist(regions_mu.at(it_rg)+"/Muon_tight_TrkIso_MiniAODPt_nocut_"+PtConeRange, trkiso_miniaodPt, weight, 20, 0., 1.);
+        FillHist(regions_mu.at(it_rg)+"/Number_Events_nocut_"+PtConeRange, 1.5, weight, 2, 0., 2.);
       }
 
       // additional cuts to reduce prompt contribution
@@ -422,52 +443,56 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
       if(Pt_ratio < 1.) continue;
 
       // Histograms after applying cuts
-      FillHist("Mu_loose_PtCone_"+PtConeRange+"_"+regions_mu.at(it_rg), ptcone_mu, weight, 200, 0., 200.);
-      FillHist("Mu_loose_Eta_"+PtConeRange+"_"+regions_mu.at(it_rg), muons_loose.at(0).Eta(), weight, 50, -2.5, 2.5);
-      FillHist("Number_Events_PtCone5_"+PtConeRange+"_"+regions_mu.at(it_rg), 0.5, weight, 2, 0., 2.);
-      if(ptcone_mu > 10.) FillHist("Number_Events_"+PtConeRange+"_"+regions_mu.at(it_rg), 0.5, weight, 2, 0., 2.);
+      FillHist(regions_mu.at(it_rg)+"/Muon_loose_PtCone_"+PtConeRange, ptcone_mu, weight, 200, 0., 200.);
+      FillHist(regions_mu.at(it_rg)+"/Muon_loose_Eta_"+PtConeRange, muons_loose.at(0).Eta(), weight, 50, -2.5, 2.5);
+      FillHist(regions_mu.at(it_rg)+"/Muon_loose_TrkIso_Pt_"+PtConeRange, trkiso_Pt, weight, 20, 0., 1.);
+      FillHist(regions_mu.at(it_rg)+"/Muon_loose_TrkIso_MiniAODPt_"+PtConeRange, trkiso_miniaodPt, weight, 20, 0., 1.);
+      FillHist(regions_mu.at(it_rg)+"/Number_Events_PtCone5_"+PtConeRange, 0.5, weight, 2, 0., 2.);
+      if(ptcone_mu > 10.) FillHist(regions_mu.at(it_rg)+"/Number_Events_PtCone10_"+PtConeRange, 0.5, weight, 2, 0., 2.);
       if(muons_tight.size() > 0){
-        FillHist("Mu_tight_PtCone_"+PtConeRange+"_"+regions_mu.at(it_rg), ptcone_mu, weight, 200, 0., 200.);
-        FillHist("Mu_tight_Eta_"+PtConeRange+"_"+regions_mu.at(it_rg), muons_tight.at(0).Eta(), weight, 50, -2.5, 2.5);
-        FillHist("Number_Events_"+PtConeRange+"_"+regions_mu.at(it_rg), 1.5, weight, 2, 0., 2.);
+        FillHist(regions_mu.at(it_rg)+"/Muon_tight_PtCone_"+PtConeRange, ptcone_mu, weight, 200, 0., 200.);
+        FillHist(regions_mu.at(it_rg)+"/Muon_tight_Eta_"+PtConeRange, muons_tight.at(0).Eta(), weight, 50, -2.5, 2.5);
+        FillHist(regions_mu.at(it_rg)+"/Muon_tight_TrkIso_Pt_"+PtConeRange, trkiso_Pt, weight, 20, 0., 1.);
+        FillHist(regions_mu.at(it_rg)+"/Muon_tight_TrkIso_MiniAODPt_"+PtConeRange, trkiso_miniaodPt, weight, 20, 0., 1.);
+        FillHist(regions_mu.at(it_rg)+"/Number_Events_"+PtConeRange, 1.5, weight, 2, 0., 2.);
       }
 
       // inner barrel ( |eta| < 0.8 )
       if(fabs(muons_loose.at(0).Eta()) < 0.8){
-        FillHist("Mu_loose_PtCone_barrel1_"+PtConeRange+"_"+regions_mu.at(it_rg), ptcone_mu, weight, 200, 0., 200.);
-        FillHist("Number_Events_PtCone5_barrel1_"+PtConeRange+"_"+regions_mu.at(it_rg), 0.5, weight, 2, 0., 2.);
-        if(ptcone_mu > 10.) FillHist("Number_Events_barrel1_"+PtConeRange+"_"+regions_mu.at(it_rg), 0.5, weight, 2, 0., 2.);
+        FillHist(regions_mu.at(it_rg)+"/Muon_loose_PtCone_barrel1_"+PtConeRange, ptcone_mu, weight, 200, 0., 200.);
+        FillHist(regions_mu.at(it_rg)+"/Number_Events_PtCone5_barrel1_"+PtConeRange, 0.5, weight, 2, 0., 2.);
+        if(ptcone_mu > 10.) FillHist(regions_mu.at(it_rg)+"/Number_Events_PtCone10_barrel1_"+PtConeRange, 0.5, weight, 2, 0., 2.);
         if(muons_tight.size() > 0){
-          FillHist("Mu_tight_PtCone_barrel1_"+PtConeRange+"_"+regions_mu.at(it_rg), ptcone_mu, weight, 200, 0., 200.);
-          FillHist("Number_Events_barrel1_"+PtConeRange+"_"+regions_mu.at(it_rg), 1.5, weight, 2, 0., 2.);
+          FillHist(regions_mu.at(it_rg)+"/Muon_tight_PtCone_barrel1_"+PtConeRange, ptcone_mu, weight, 200, 0., 200.);
+          FillHist(regions_mu.at(it_rg)+"/Number_Events_PtCone5_barrel1_"+PtConeRange, 1.5, weight, 2, 0., 2.);
         }
       }
 
       // outer barrel ( 0.8 < |eta| < 1.479 )
       if(fabs(muons_loose.at(0).Eta()) >= 0.8 && fabs(muons_loose.at(0).Eta()) < 1.479){
-        FillHist("Mu_loose_PtCone_barrel2_"+PtConeRange+"_"+regions_mu.at(it_rg), ptcone_mu, weight, 200, 0., 200.);
-        FillHist("Number_Events_PtCone5_barrel2_"+PtConeRange+"_"+regions_mu.at(it_rg), 0.5, weight, 2, 0., 2.);
-        if(ptcone_mu > 10.) FillHist("Number_Events_barrel2_"+PtConeRange+"_"+regions_mu.at(it_rg), 0.5, weight, 2, 0., 2.);
+        FillHist(regions_mu.at(it_rg)+"/Muon_loose_PtCone_barrel2_"+PtConeRange, ptcone_mu, weight, 200, 0., 200.);
+        FillHist(regions_mu.at(it_rg)+"/Number_Events_PtCone5_barrel2_"+PtConeRange, 0.5, weight, 2, 0., 2.);
+        if(ptcone_mu > 10.) FillHist(regions_mu.at(it_rg)+"/Number_Events_PtCone10_barrel2_"+PtConeRange, 0.5, weight, 2, 0., 2.);
         if(muons_tight.size() > 0){
-          FillHist("Mu_tight_PtCone_barrel2_"+PtConeRange+"_"+regions_mu.at(it_rg), ptcone_mu, weight, 200, 0., 200.);
-          FillHist("Number_Events_barrel2_"+PtConeRange+"_"+regions_mu.at(it_rg), 1.5, weight, 2, 0., 2.);
+          FillHist(regions_mu.at(it_rg)+"/Muon_tight_PtCone_barrel2_"+PtConeRange, ptcone_mu, weight, 200, 0., 200.);
+          FillHist(regions_mu.at(it_rg)+"/Number_Events_PtCone5_barrel2_"+PtConeRange, 1.5, weight, 2, 0., 2.);
         }
       }
 
       // endcap ( 1.479 < |eta| < 2.5 )
       if(fabs(muons_loose.at(0).Eta()) >= 1.479 && fabs(muons_loose.at(0).Eta()) < 2.5){
-        FillHist("Mu_loose_PtCone_endcap_"+PtConeRange+"_"+regions_mu.at(it_rg), ptcone_mu, weight, 200, 0., 200.);
-        FillHist("Number_Events_PtCone5_endcap_"+PtConeRange+"_"+regions_mu.at(it_rg), 0.5, weight, 2, 0., 2.);
-        if(ptcone_mu > 10.) FillHist("Number_Events_endcap_"+PtConeRange+"_"+regions_mu.at(it_rg), 0.5, weight, 2, 0., 2.);
+        FillHist(regions_mu.at(it_rg)+"/Muon_loose_PtCone_endcap_"+PtConeRange, ptcone_mu, weight, 200, 0., 200.);
+        FillHist(regions_mu.at(it_rg)+"/Number_Events_PtCone5_endcap_"+PtConeRange, 0.5, weight, 2, 0., 2.);
+        if(ptcone_mu > 10.) FillHist(regions_mu.at(it_rg)+"/Number_Events_PtCone10_endcap_"+PtConeRange, 0.5, weight, 2, 0., 2.);
         if(muons_tight.size() > 0){
-          FillHist("Mu_tight_PtCone_endcap_"+PtConeRange+"_"+regions_mu.at(it_rg), ptcone_mu, weight, 200, 0., 200.);
-          FillHist("Number_Events_endcap_"+PtConeRange+"_"+regions_mu.at(it_rg), 1.5, weight, 2, 0., 2.);
+          FillHist(regions_mu.at(it_rg)+"/Muon_tight_PtCone_endcap_"+PtConeRange, ptcone_mu, weight, 200, 0., 200.);
+          FillHist(regions_mu.at(it_rg)+"/Number_Events_PtCone5_endcap_"+PtConeRange, 1.5, weight, 2, 0., 2.);
         }
       }
     }
 
     // DY control region
-    if(muons_tight.size()==2 && it_rg==1){
+    if(it_rg==1 && muons_tight.size()==2){
       if(!IsDATA){
         weight *= weight_norm_1invpb;
         weight *= ev.MCweight();
@@ -476,25 +501,25 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
       }
       ZCand = muons_tight.at(0) + muons_tight.at(1);
       if(ev.PassTrigger(MuonTrig1)){
-        triglumi = 1.;
-        if(!IsDATA) triglumi = MuonLumi1;
-        FillHist("Lep1_Pt_nocut_Mu3_"+regions_mu.at(it_rg), muons_tight.at(0).Pt(), weight*triglumi, 200, 0., 200.);
-        FillHist("Lep2_Pt_nocut_Mu3_"+regions_mu.at(it_rg), muons_tight.at(1).Pt(), weight*triglumi, 200, 0., 200.);
-        FillHist("ZCand_Mass_nocut_Mu3_"+regions_mu.at(it_rg), ZCand.M(), weight*triglumi, 80, 50., 130.);
+        trigLumi = 1.;
+        if(!IsDATA) trigLumi = MuonLumi1;
+        FillHist(regions_mu.at(it_rg)+"/Lep1_Pt_nocut_Mu3", muons_tight.at(0).Pt(), weight*trigLumi, 200, 0., 200.);
+        FillHist(regions_mu.at(it_rg)+"/Lep2_Pt_nocut_Mu3", muons_tight.at(1).Pt(), weight*trigLumi, 200, 0., 200.);
+        FillHist(regions_mu.at(it_rg)+"/ZCand_Mass_nocut_Mu3", ZCand.M(), weight*trigLumi, 80, 50., 130.);
       }
       if(ev.PassTrigger(MuonTrig2)){
-        triglumi = 1.;
-        if(!IsDATA) triglumi = MuonLumi2;
-        FillHist("Lep1_Pt_nocut_Mu8_"+regions_mu.at(it_rg), muons_tight.at(0).Pt(), weight*triglumi, 200, 0., 200.);
-        FillHist("Lep2_Pt_nocut_Mu8_"+regions_mu.at(it_rg), muons_tight.at(1).Pt(), weight*triglumi, 200, 0., 200.);
-        FillHist("ZCand_Mass_nocut_Mu8_"+regions_mu.at(it_rg), ZCand.M(), weight*triglumi, 80, 50., 130.);
+        trigLumi = 1.;
+        if(!IsDATA) trigLumi = MuonLumi2;
+        FillHist(regions_mu.at(it_rg)+"/Lep1_Pt_nocut_Mu8", muons_tight.at(0).Pt(), weight*trigLumi, 200, 0., 200.);
+        FillHist(regions_mu.at(it_rg)+"/Lep2_Pt_nocut_Mu8", muons_tight.at(1).Pt(), weight*trigLumi, 200, 0., 200.);
+        FillHist(regions_mu.at(it_rg)+"/ZCand_Mass_nocut_Mu8", ZCand.M(), weight*trigLumi, 80, 50., 130.);
       }
       if(ev.PassTrigger(MuonTrig3)){
-        triglumi = 1.;
-        if(!IsDATA) triglumi = MuonLumi3;
-        FillHist("Lep1_Pt_nocut_Mu17_"+regions_mu.at(it_rg), muons_tight.at(0).Pt(), weight*triglumi, 200, 0., 200.);
-        FillHist("Lep2_Pt_nocut_Mu17_"+regions_mu.at(it_rg), muons_tight.at(1).Pt(), weight*triglumi, 200, 0., 200.);
-        FillHist("ZCand_Mass_nocut_Mu17_"+regions_mu.at(it_rg), ZCand.M(), weight*triglumi, 80, 50., 130.);
+        trigLumi = 1.;
+        if(!IsDATA) trigLumi = MuonLumi3;
+        FillHist(regions_mu.at(it_rg)+"/Lep1_Pt_nocut_Mu17", muons_tight.at(0).Pt(), weight*trigLumi, 200, 0., 200.);
+        FillHist(regions_mu.at(it_rg)+"/Lep2_Pt_nocut_Mu17", muons_tight.at(1).Pt(), weight*trigLumi, 200, 0., 200.);
+        FillHist(regions_mu.at(it_rg)+"/ZCand_Mass_nocut_Mu17", ZCand.M(), weight*trigLumi, 80, 50., 130.);
       }
 
       // event selection
@@ -503,27 +528,27 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
 
       // Histograms for each trigger
       if(ev.PassTrigger(MuonTrig1)){
-        triglumi = 1.;
-        if(!IsDATA) triglumi = MuonLumi1;
-        FillHist("ZCand_Mass_Mu3_"+regions_mu.at(it_rg), ZCand.M(), weight*triglumi, 40, 70., 110.);
-        FillHist("Number_Events_Mu3_"+regions_mu.at(it_rg), 0.5, weight*triglumi, 2, 0., 2.);
+        trigLumi = 1.;
+        if(!IsDATA) trigLumi = MuonLumi1;
+        FillHist(regions_mu.at(it_rg)+"/ZCand_Mass_Mu3", ZCand.M(), weight*trigLumi, 40, 70., 110.);
+        FillHist(regions_mu.at(it_rg)+"/Number_Events_Mu3", 0.5, weight*trigLumi, 2, 0., 2.);
       }
       if(ev.PassTrigger(MuonTrig2)){
-        triglumi = 1.;
-        if(!IsDATA) triglumi = MuonLumi2;
-        FillHist("ZCand_Mass_Mu8_"+regions_mu.at(it_rg), ZCand.M(), weight*triglumi, 40, 70., 110.);
-        FillHist("Number_Events_Mu8_"+regions_mu.at(it_rg), 0.5, weight*triglumi, 2, 0., 2.);
+        trigLumi = 1.;
+        if(!IsDATA) trigLumi = MuonLumi2;
+        FillHist(regions_mu.at(it_rg)+"/ZCand_Mass_Mu8", ZCand.M(), weight*trigLumi, 40, 70., 110.);
+        FillHist(regions_mu.at(it_rg)+"/Number_Events_Mu8", 0.5, weight*trigLumi, 2, 0., 2.);
       }
       if(ev.PassTrigger(MuonTrig3)){
-        triglumi = 1.;
-        if(!IsDATA) triglumi = MuonLumi3;
-        FillHist("ZCand_Mass_Mu17_"+regions_mu.at(it_rg), ZCand.M(), weight*triglumi, 40, 70., 110.);
-        FillHist("Number_Events_Mu17_"+regions_mu.at(it_rg), 0.5, weight*triglumi, 2, 0., 2.);
+        trigLumi = 1.;
+        if(!IsDATA) trigLumi = MuonLumi3;
+        FillHist(regions_mu.at(it_rg)+"/ZCand_Mass_Mu17", ZCand.M(), weight*trigLumi, 40, 70., 110.);
+        FillHist(regions_mu.at(it_rg)+"/Number_Events_Mu17", 0.5, weight*trigLumi, 2, 0., 2.);
       }
     }
 
     // W+jets control region
-    if(muons_tight.size()==1 && it_rg==2){
+    if(it_rg==2 && muons_tight.size()==1){
       if(!IsDATA){
         weight *= weight_norm_1invpb;
         weight *= ev.MCweight();
@@ -532,25 +557,25 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
       }
       Mt = MT(muons_tight.at(0), METv);
       if(ev.PassTrigger(MuonTrig1)){
-        triglumi = 1.;
-        if(!IsDATA) triglumi = MuonLumi1;
-        FillHist("Lep_Pt_nocut_Mu3_"+regions_mu.at(it_rg), muons_tight.at(0).Pt(), weight*triglumi, 200, 0., 200.);
-        FillHist("MET_nocut_Mu3_"+regions_mu.at(it_rg), MET, weight*triglumi, 200, 0., 200.);
-        FillHist("Mt_nocut_Mu3_"+regions_mu.at(it_rg), Mt, weight*triglumi, 200, 0., 200.);
+        trigLumi = 1.;
+        if(!IsDATA) trigLumi = MuonLumi1;
+        FillHist(regions_mu.at(it_rg)+"/Lep_Pt_nocut_Mu3", muons_tight.at(0).Pt(), weight*trigLumi, 200, 0., 200.);
+        FillHist(regions_mu.at(it_rg)+"/MET_nocut_Mu3", MET, weight*trigLumi, 200, 0., 200.);
+        FillHist(regions_mu.at(it_rg)+"/Mt_nocut_Mu3", Mt, weight*trigLumi, 200, 0., 200.);
       }
       if(ev.PassTrigger(MuonTrig2)){
-        triglumi = 1.;
-        if(!IsDATA) triglumi = MuonLumi2;
-        FillHist("Lep_Pt_nocut_Mu8_"+regions_mu.at(it_rg), muons_tight.at(0).Pt(), weight*triglumi, 200, 0., 200.);
-        FillHist("MET_nocut_Mu8_"+regions_mu.at(it_rg), MET, weight*triglumi, 200, 0., 200.);
-        FillHist("Mt_nocut_Mu8_"+regions_mu.at(it_rg), Mt, weight*triglumi, 200, 0., 200.);
+        trigLumi = 1.;
+        if(!IsDATA) trigLumi = MuonLumi2;
+        FillHist(regions_mu.at(it_rg)+"/Lep_Pt_nocut_Mu8", muons_tight.at(0).Pt(), weight*trigLumi, 200, 0., 200.);
+        FillHist(regions_mu.at(it_rg)+"/MET_nocut_Mu8", MET, weight*trigLumi, 200, 0., 200.);
+        FillHist(regions_mu.at(it_rg)+"/Mt_nocut_Mu8", Mt, weight*trigLumi, 200, 0., 200.);
       }
       if(ev.PassTrigger(MuonTrig3)){
-        triglumi = 1.;
-        if(!IsDATA) triglumi = MuonLumi3;
-        FillHist("Lep_Pt_nocut_Mu17_"+regions_mu.at(it_rg), muons_tight.at(0).Pt(), weight*triglumi, 200, 0., 200.);
-        FillHist("MET_nocut_Mu17_"+regions_mu.at(it_rg), MET, weight*triglumi, 200, 0., 200.);
-        FillHist("Mt_nocut_Mu17_"+regions_mu.at(it_rg), Mt, weight*triglumi, 200, 0., 200.);
+        trigLumi = 1.;
+        if(!IsDATA) trigLumi = MuonLumi3;
+        FillHist(regions_mu.at(it_rg)+"/Lep_Pt_nocut_Mu17", muons_tight.at(0).Pt(), weight*trigLumi, 200, 0., 200.);
+        FillHist(regions_mu.at(it_rg)+"/MET_nocut_Mu17", MET, weight*trigLumi, 200, 0., 200.);
+        FillHist(regions_mu.at(it_rg)+"/Mt_nocut_Mu17", Mt, weight*trigLumi, 200, 0., 200.);
       }
 
       // event selection
@@ -560,36 +585,36 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
       
       // Histograms for each trigger
       if(ev.PassTrigger(MuonTrig1)){
-        triglumi = 1.;
-        if(!IsDATA) triglumi = MuonLumi1;
-        FillHist("Mt_Mu3_"+regions_mu.at(it_rg), Mt, weight*triglumi, 200, 0., 200.);
-        FillHist("Number_Events_Mu3_"+regions_mu.at(it_rg), 0.5, weight*triglumi, 2, 0., 2.);
+        trigLumi = 1.;
+        if(!IsDATA) trigLumi = MuonLumi1;
+        FillHist(regions_mu.at(it_rg)+"/Mt_Mu3", Mt, weight*trigLumi, 200, 0., 200.);
+        FillHist(regions_mu.at(it_rg)+"/Number_Events_Mu3", 0.5, weight*trigLumi, 2, 0., 2.);
       }
       if(ev.PassTrigger(MuonTrig2)){
-        triglumi = 1.;
-        if(!IsDATA) triglumi = MuonLumi2;
-        FillHist("Mt_Mu8_"+regions_mu.at(it_rg), Mt, weight*triglumi, 200, 0., 200.);
-        FillHist("Number_Events_Mu8_"+regions_mu.at(it_rg), 0.5, weight*triglumi, 2, 0., 2.);
+        trigLumi = 1.;
+        if(!IsDATA) trigLumi = MuonLumi2;
+        FillHist(regions_mu.at(it_rg)+"/Mt_Mu8", Mt, weight*trigLumi, 200, 0., 200.);
+        FillHist(regions_mu.at(it_rg)+"/Number_Events_Mu8", 0.5, weight*trigLumi, 2, 0., 2.);
       }
       if(ev.PassTrigger(MuonTrig3)){
-        triglumi = 1.;
-        if(!IsDATA) triglumi = MuonLumi3;
-        FillHist("Mt_Mu17_"+regions_mu.at(it_rg), Mt, weight*triglumi, 200, 0., 200.);
-        FillHist("Number_Events_Mu17_"+regions_mu.at(it_rg), 0.5, weight*triglumi, 2, 0., 2.);
+        trigLumi = 1.;
+        if(!IsDATA) trigLumi = MuonLumi3;
+        FillHist(regions_mu.at(it_rg)+"/Mt_Mu17", Mt, weight*trigLumi, 200, 0., 200.);
+        FillHist(regions_mu.at(it_rg)+"/Number_Events_Mu17", 0.5, weight*trigLumi, 2, 0., 2.);
       }
     }
   }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////// Electron ////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
+  //==================================================================================================
+  //==== Electron Fake Rate Measurement
+  //==================================================================================================
  
   for(unsigned int it_rg2=0; it_rg2<regions_el.size(); it_rg2++){
     weight = 1.;
 //    if(param.Muon_Tight_ID.Contains("V2") || param.Muon_Tight_ID.Contains("2016")) break;
 
     // Fake rate measurement region 
-    if(ele_loose.size()==1 && it_rg2==0){
+    if(it_rg2==0 && ele_loose.size()==1){
       if(jets.size() == 0) continue;
       el_tight_iso = 0.0287+0.506/ele_loose.at(0).UncorrPt();
       if(fabs(ele_loose.at(0).scEta()) > 1.479) el_tight_iso = 0.0445+0.963/ele_loose.at(0).UncorrPt();
@@ -602,6 +627,10 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
         el_tight_iso = 0.0478+0.506/ele_loose.at(0).UncorrPt();
         if(fabs(ele_loose.at(0).scEta()) > 1.479) el_tight_iso = 0.0658+0.963/ele_loose.at(0).UncorrPt();
       }
+
+      // For the same bin in 2016 analysis
+      if(param.Electron_Tight_ID.Contains("2016")) ElectronPtconeCut2 = 23.;
+      else ElectronPtconeCut2 = 25.;
 
       ptcone_el = ele_loose.at(0).CalcPtCone(ele_loose.at(0).RelIso(), el_tight_iso);
       
@@ -618,43 +647,43 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
         weight *= GetPileUpWeight(nPileUp,0);
       }
 
-      triglumi = 1.;
+      trigLumi = 1.;
       // only 1 prescaled trigger for each PtCone range, setup lumi
       if(ptcone_el < ElectronPtconeCut1) continue;
       if(ptcone_el >= ElectronPtconeCut1 && ptcone_el < ElectronPtconeCut2){
         if(ele_loose.at(0).Pt() < ElectronPtCut1) continue;
         if(!ev.PassTrigger(ElectronTrig1)) continue;
-        if(!IsDATA) triglumi = ElectronLumi1;
+        if(!IsDATA) trigLumi = ElectronLumi1;
         PtConeRange = "range0";
       }
       if(ptcone_el >= ElectronPtconeCut2 && ptcone_el < ElectronPtconeCut3){
         if(ele_loose.at(0).Pt() < ElectronPtCut2) continue;      
         if(!ev.PassTrigger(ElectronTrig2)) continue;
-        if(!IsDATA) triglumi = ElectronLumi2;
+        if(!IsDATA) trigLumi = ElectronLumi2;
         PtConeRange = "range1";
       }
       if(ptcone_el >= ElectronPtconeCut3){
         if(ele_loose.at(0).Pt() < ElectronPtCut3) continue;
         if(!ev.PassTrigger(ElectronTrig3)) continue;
-        if(!IsDATA) triglumi = ElectronLumi3;
+        if(!IsDATA) trigLumi = ElectronLumi3;
         PtConeRange = "range2";
       }
       if(ptcone_el >= ElectronPtconeCut4){
         if(ele_loose.at(0).Pt() < ElectronPtCut4) continue;
         if(!ev.PassTrigger(ElectronTrig4)) continue;
-        if(!IsDATA) triglumi = ElectronLumi4;
+        if(!IsDATA) trigLumi = ElectronLumi4;
         PtConeRange = "range3";
       }
 
       awayjet = 0, leadingjet = 0;
-      weight *= triglumi;
+      weight *= trigLumi;
 
-      FillHist("Ele_loose_Eta_nodijet_"+PtConeRange+"_"+regions_el.at(it_rg2), ele_loose.at(0).Eta(), weight, 50, -2.5, 2.5);        
+      FillHist(regions_el.at(it_rg2)+"/Electron_loose_Eta_nodijet_"+PtConeRange, ele_loose.at(0).Eta(), weight, 50, -2.5, 2.5);        
       
       for(unsigned int ijet=0; ijet<jets.size(); ijet++){
-//        dphi = fabs(jets.at(ijet).Phi() - ele_loose.at(0).Phi());
-//        if(dphi > pi) dphi = 2.*pi-dphi;
-        dphi = fabs(ele_loose.at(0).DeltaPhi(jets.at(ijet)));
+        dphi = fabs(jets.at(ijet).Phi() - ele_loose.at(0).Phi());
+        if(dphi > pi) dphi = 2.*pi-dphi;
+//        dphi = fabs(ele_loose.at(0).DeltaPhi(jets.at(ijet)));
         FillHist("dphi_"+PtConeRange+"_"+regions_el.at(it_rg2), dphi, weight, 32, 0., 3.2);
 
         if(dphi > 2.5) awayjet++;
@@ -670,18 +699,18 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
       jet_emfraction = jets.at(leadingjet).ChargedEmEnergyFraction();
 
       // Histograms before applying cuts
-      FillHist("MET_nocut_"+PtConeRange+"_"+regions_el.at(it_rg2), MET, weight, 200, 0., 200.);
-      FillHist("Mt_nocut_"+PtConeRange+"_"+regions_el.at(it_rg2), Mt, weight, 200, 0., 200.);
-      FillHist("Ptratio_nocut_"+PtConeRange+"_"+regions_el.at(it_rg2), Pt_ratio, weight, 50, 0., 5.);
-      FillHist("Ele_loose_PtCone_nocut_"+PtConeRange+"_"+regions_el.at(it_rg2), ptcone_el, weight, 200, 0., 200.);
-      FillHist("Ele_loose_Eta_nocut_"+PtConeRange+"_"+regions_el.at(it_rg2), ele_loose.at(0).Eta(), weight, 50, -2.5, 2.5);
-      FillHist("Jet_ChargedEmEnergyFraction_"+PtConeRange+"_"+regions_el.at(it_rg2), jet_emfraction, weight, 100, 0., 1.);
-      FillHist("Number_Events_nocut_"+PtConeRange+"_"+regions_el.at(it_rg2), 0.5, weight, 2, 0., 2.); 
+      FillHist(regions_el.at(it_rg2)+"/MET_nocut_"+PtConeRange, MET, weight, 200, 0., 200.);
+      FillHist(regions_el.at(it_rg2)+"/Mt_nocut_"+PtConeRange, Mt, weight, 200, 0., 200.);
+      FillHist(regions_el.at(it_rg2)+"/Ptratio_nocut_"+PtConeRange, Pt_ratio, weight, 50, 0., 5.);
+      FillHist(regions_el.at(it_rg2)+"/Electron_loose_PtCone_nocut_"+PtConeRange, ptcone_el, weight, 200, 0., 200.);
+      FillHist(regions_el.at(it_rg2)+"/Electron_loose_Eta_nocut_"+PtConeRange, ele_loose.at(0).Eta(), weight, 50, -2.5, 2.5);
+      FillHist(regions_el.at(it_rg2)+"/Jet_ChargedEmEnergyFraction_"+PtConeRange, jet_emfraction, weight, 100, 0., 1.);
+      FillHist(regions_el.at(it_rg2)+"/Number_Events_nocut_"+PtConeRange, 0.5, weight, 2, 0., 2.); 
 
       if(ele_tight.size() > 0){
-        FillHist("Ele_tight_PtCone_nocut_"+PtConeRange+"_"+regions_el.at(it_rg2), ptcone_el, weight, 200, 0., 200.);
-        FillHist("Ele_tight_Eta_nocut_"+PtConeRange+"_"+regions_el.at(it_rg2), ele_tight.at(0).Eta(), weight, 50, -2.5, 2.5);
-        FillHist("Number_Events_nocut_"+PtConeRange+"_"+regions_el.at(it_rg2), 1.5, weight, 2, 0., 2.);
+        FillHist(regions_el.at(it_rg2)+"/Electron_tight_PtCone_nocut_"+PtConeRange, ptcone_el, weight, 200, 0., 200.);
+        FillHist(regions_el.at(it_rg2)+"/Electron_tight_Eta_nocut_"+PtConeRange, ele_tight.at(0).Eta(), weight, 50, -2.5, 2.5);
+        FillHist(regions_el.at(it_rg2)+"/Number_Events_nocut_"+PtConeRange, 1.5, weight, 2, 0., 2.);
       }
 
       // additional cuts to reduce prompt contribution
@@ -691,48 +720,48 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
       if(jet_emfraction > 0.65) continue;
 
       // Histograms after applying cuts
-      FillHist("Ele_loose_PtCone_"+PtConeRange+"_"+regions_el.at(it_rg2), ptcone_el, weight, 200, 0., 200.);
-      FillHist("Ele_loose_Eta_"+PtConeRange+"_"+regions_el.at(it_rg2), ele_loose.at(0).Eta(), weight, 50, -2.5, 2.5);
-      FillHist("Number_Events_"+PtConeRange+"_"+regions_el.at(it_rg2), 0.5, weight, 2, 0., 2.);
+      FillHist(regions_el.at(it_rg2)+"/Electron_loose_PtCone_"+PtConeRange, ptcone_el, weight, 200, 0., 200.);
+      FillHist(regions_el.at(it_rg2)+"/Electron_loose_Eta_"+PtConeRange, ele_loose.at(0).Eta(), weight, 50, -2.5, 2.5);
+      FillHist(regions_el.at(it_rg2)+"/Number_Events_"+PtConeRange, 0.5, weight, 2, 0., 2.);
       if(ele_tight.size() > 0){
-        FillHist("Ele_tight_PtCone_"+PtConeRange+"_"+regions_el.at(it_rg2), ptcone_el, weight, 200, 0., 200.);
-        FillHist("Ele_tight_Eta_"+PtConeRange+"_"+regions_el.at(it_rg2), ele_tight.at(0).Eta(), weight, 50, -2.5, 2.5);
-        FillHist("Number_Events_"+PtConeRange+"_"+regions_el.at(it_rg2), 1.5, weight, 2, 0., 2.);
+        FillHist(regions_el.at(it_rg2)+"/Electron_tight_PtCone_"+PtConeRange, ptcone_el, weight, 200, 0., 200.);
+        FillHist(regions_el.at(it_rg2)+"/Electron_tight_Eta_"+PtConeRange, ele_tight.at(0).Eta(), weight, 50, -2.5, 2.5);
+        FillHist(regions_el.at(it_rg2)+"/Number_Events_"+PtConeRange, 1.5, weight, 2, 0., 2.);
       }
 
       // inner barrel ( |eta| < 0.8 )
       if(fabs(ele_loose.at(0).Eta()) < 0.8){
-        FillHist("Ele_loose_PtCone_barrel1_"+PtConeRange+"_"+regions_el.at(it_rg2), ptcone_el, weight, 200, 0., 200.);
-        FillHist("Number_Events_barrel1_"+PtConeRange+"_"+regions_el.at(it_rg2), 0.5, weight, 2, 0., 2.);
+        FillHist(regions_el.at(it_rg2)+"/Electron_loose_PtCone_barrel1_"+PtConeRange, ptcone_el, weight, 200, 0., 200.);
+        FillHist(regions_el.at(it_rg2)+"/Number_Events_barrel1_"+PtConeRange, 0.5, weight, 2, 0., 2.);
         if(ele_tight.size() > 0){
-          FillHist("Ele_tight_PtCone_barrel1_"+PtConeRange+"_"+regions_el.at(it_rg2), ptcone_el, weight, 200, 0., 200.);
-          FillHist("Number_Events_barrel1_"+PtConeRange+"_"+regions_el.at(it_rg2), 1.5, weight, 2, 0., 2.);
+          FillHist(regions_el.at(it_rg2)+"/Electron_tight_PtCone_barrel1_"+PtConeRange, ptcone_el, weight, 200, 0., 200.);
+          FillHist(regions_el.at(it_rg2)+"/Number_Events_barrel1_"+PtConeRange, 1.5, weight, 2, 0., 2.);
         }
       }
 
       // outer barrel ( 0.8 < |eta| < 1.479 )
       if(fabs(ele_loose.at(0).Eta()) >= 0.8 && fabs(ele_loose.at(0).Eta()) < 1.479){
-        FillHist("Ele_loose_PtCone_barrel2_"+PtConeRange+"_"+regions_el.at(it_rg2), ptcone_el, weight, 200, 0., 200.);
-        FillHist("Number_Events_barrel2_"+PtConeRange+"_"+regions_el.at(it_rg2), 0.5, weight, 2, 0., 2.);
+        FillHist(regions_el.at(it_rg2)+"/Electron_loose_PtCone_barrel2_"+PtConeRange, ptcone_el, weight, 200, 0., 200.);
+        FillHist(regions_el.at(it_rg2)+"/Number_Events_barrel2_"+PtConeRange, 0.5, weight, 2, 0., 2.);
         if(ele_tight.size() > 0){
-          FillHist("Ele_tight_PtCone_barrel2_"+PtConeRange+"_"+regions_el.at(it_rg2), ptcone_el, weight, 200, 0., 200.);
-          FillHist("Number_Events_barrel2_"+PtConeRange+"_"+regions_el.at(it_rg2), 1.5, weight, 2, 0., 2.);
+          FillHist(regions_el.at(it_rg2)+"/Electron_tight_PtCone_barrel2_"+PtConeRange, ptcone_el, weight, 200, 0., 200.);
+          FillHist(regions_el.at(it_rg2)+"/Number_Events_barrel2_"+PtConeRange, 1.5, weight, 2, 0., 2.);
         }
       }
 
       // endcap ( 1.479 < |eta| < 2.5 )
       if(fabs(ele_loose.at(0).Eta()) >= 1.479 && fabs(ele_loose.at(0).Eta()) < 2.5){
-        FillHist("Ele_loose_PtCone_endcap_"+PtConeRange+"_"+regions_el.at(it_rg2), ptcone_el, weight, 200, 0., 200.);
-        FillHist("Number_Events_endcap_"+PtConeRange+"_"+regions_el.at(it_rg2), 0.5, weight, 2, 0., 2.);
+        FillHist(regions_el.at(it_rg2)+"/Electron_loose_PtCone_endcap_"+PtConeRange, ptcone_el, weight, 200, 0., 200.);
+        FillHist(regions_el.at(it_rg2)+"/Number_Events_endcap_"+PtConeRange, 0.5, weight, 2, 0., 2.);
         if(ele_tight.size() > 0){
-          FillHist("Ele_tight_PtCone_endcap_"+PtConeRange+"_"+regions_el.at(it_rg2), ptcone_el, weight, 200, 0., 200.);
-          FillHist("Number_Events_endcap_"+PtConeRange+"_"+regions_el.at(it_rg2), 1.5, weight, 2, 0., 2.);
+          FillHist(regions_el.at(it_rg2)+"/Electron_tight_PtCone_endcap_"+PtConeRange, ptcone_el, weight, 200, 0., 200.);
+          FillHist(regions_el.at(it_rg2)+"/Number_Events_endcap_"+PtConeRange, 1.5, weight, 2, 0., 2.);
         }
       }
     }
 
     // DY control region
-    if(ele_tight.size()==2 && it_rg2==1){
+    if(it_rg2==1 && ele_tight.size()==2){
       if(!IsDATA){
         weight *= weight_norm_1invpb;
         weight *= ev.MCweight();
@@ -741,32 +770,32 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
       }
       ZCand = ele_tight.at(0) + ele_tight.at(1);
       if(ev.PassTrigger(ElectronTrig1)){
-        triglumi = 1.;
-        if(!IsDATA) triglumi = ElectronLumi1;
-        FillHist("Lep1_Pt_nocut_Ele8_"+regions_el.at(it_rg2), ele_tight.at(0).Pt(), weight*triglumi, 200, 0., 200.);
-        FillHist("Lep2_Pt_nocut_Ele8_"+regions_el.at(it_rg2), ele_tight.at(1).Pt(), weight*triglumi, 200, 0., 200.);
-        FillHist("ZCand_Mass_nocut_Ele8_"+regions_el.at(it_rg2), ZCand.M(), weight*triglumi, 80, 50., 130.);
+        trigLumi = 1.;
+        if(!IsDATA) trigLumi = ElectronLumi1;
+        FillHist(regions_el.at(it_rg2)+"/Lep1_Pt_nocut_Ele8", ele_tight.at(0).Pt(), weight*trigLumi, 200, 0., 200.);
+        FillHist(regions_el.at(it_rg2)+"/Lep2_Pt_nocut_Ele8", ele_tight.at(1).Pt(), weight*trigLumi, 200, 0., 200.);
+        FillHist(regions_el.at(it_rg2)+"/ZCand_Mass_nocut_Ele8", ZCand.M(), weight*trigLumi, 80, 50., 130.);
       }
       if(ev.PassTrigger(ElectronTrig2)){
-        triglumi = 1.;
-        if(!IsDATA) triglumi = ElectronLumi2;
-        FillHist("Lep1_Pt_nocut_Ele12_"+regions_el.at(it_rg2), ele_tight.at(0).Pt(), weight*triglumi, 200, 0., 200.);
-        FillHist("Lep2_Pt_nocut_Ele12_"+regions_el.at(it_rg2), ele_tight.at(1).Pt(), weight*triglumi, 200, 0., 200.);
-        FillHist("ZCand_Mass_nocut_Ele12_"+regions_el.at(it_rg2), ZCand.M(), weight*triglumi, 80, 50., 130.);
+        trigLumi = 1.;
+        if(!IsDATA) trigLumi = ElectronLumi2;
+        FillHist(regions_el.at(it_rg2)+"/Lep1_Pt_nocut_Ele12", ele_tight.at(0).Pt(), weight*trigLumi, 200, 0., 200.);
+        FillHist(regions_el.at(it_rg2)+"/Lep2_Pt_nocut_Ele12", ele_tight.at(1).Pt(), weight*trigLumi, 200, 0., 200.);
+        FillHist(regions_el.at(it_rg2)+"/ZCand_Mass_nocut_Ele12", ZCand.M(), weight*trigLumi, 80, 50., 130.);
       }
       if(ev.PassTrigger(ElectronTrig3)){
-        triglumi = 1.;
-        if(!IsDATA) triglumi = ElectronLumi3;
-        FillHist("Lep1_Pt_nocut_Ele17_"+regions_el.at(it_rg2), ele_tight.at(0).Pt(), weight*triglumi, 200, 0., 200.);
-        FillHist("Lep2_Pt_nocut_Ele17_"+regions_el.at(it_rg2), ele_tight.at(1).Pt(), weight*triglumi, 200, 0., 200.);
-        FillHist("ZCand_Mass_nocut_Ele17_"+regions_el.at(it_rg2), ZCand.M(), weight*triglumi, 80, 50., 130.);
+        trigLumi = 1.;
+        if(!IsDATA) trigLumi = ElectronLumi3;
+        FillHist(regions_el.at(it_rg2)+"/Lep1_Pt_nocut_Ele17", ele_tight.at(0).Pt(), weight*trigLumi, 200, 0., 200.);
+        FillHist(regions_el.at(it_rg2)+"/Lep2_Pt_nocut_Ele17", ele_tight.at(1).Pt(), weight*trigLumi, 200, 0., 200.);
+        FillHist(regions_el.at(it_rg2)+"/ZCand_Mass_nocut_Ele17", ZCand.M(), weight*trigLumi, 80, 50., 130.);
       }
       if(ev.PassTrigger(ElectronTrig4)){
-        triglumi = 1.;
-        if(!IsDATA) triglumi = ElectronLumi4;
-        FillHist("Lep1_Pt_nocut_Ele23_"+regions_el.at(it_rg2), ele_tight.at(0).Pt(), weight*triglumi, 200, 0., 200.);
-        FillHist("Lep2_Pt_nocut_Ele23_"+regions_el.at(it_rg2), ele_tight.at(1).Pt(), weight*triglumi, 200, 0., 200.);
-        FillHist("ZCand_Mass_nocut_Ele23_"+regions_el.at(it_rg2), ZCand.M(), weight*triglumi, 80, 50., 130.);
+        trigLumi = 1.;
+        if(!IsDATA) trigLumi = ElectronLumi4;
+        FillHist(regions_el.at(it_rg2)+"/Lep1_Pt_nocut_Ele23", ele_tight.at(0).Pt(), weight*trigLumi, 200, 0., 200.);
+        FillHist(regions_el.at(it_rg2)+"/Lep2_Pt_nocut_Ele23", ele_tight.at(1).Pt(), weight*trigLumi, 200, 0., 200.);
+        FillHist(regions_el.at(it_rg2)+"/ZCand_Mass_nocut_Ele23", ZCand.M(), weight*trigLumi, 80, 50., 130.);
       }
 
       // event selection
@@ -775,33 +804,33 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
 
       // Histograms for each trigger
       if(ev.PassTrigger(ElectronTrig1)){
-        triglumi = 1.;
-        if(!IsDATA) triglumi = ElectronLumi1;
-        FillHist("ZCand_Mass_Ele8_"+regions_el.at(it_rg2), ZCand.M(), weight*triglumi, 40, 70., 110.);
-        FillHist("Number_Events_Ele8_"+regions_el.at(it_rg2), 0.5, weight*triglumi, 2, 0., 2.);
+        trigLumi = 1.;
+        if(!IsDATA) trigLumi = ElectronLumi1;
+        FillHist(regions_el.at(it_rg2)+"/ZCand_Mass_Ele8", ZCand.M(), weight*trigLumi, 40, 70., 110.);
+        FillHist(regions_el.at(it_rg2)+"/Number_Events_Ele8", 0.5, weight*trigLumi, 2, 0., 2.);
       }
       if(ev.PassTrigger(ElectronTrig2)){
-        triglumi = 1.;
-        if(!IsDATA) triglumi = ElectronLumi2;
-        FillHist("ZCand_Mass_Ele12_"+regions_el.at(it_rg2), ZCand.M(), weight*triglumi, 40, 70., 110.);
-        FillHist("Number_Events_Ele12_"+regions_el.at(it_rg2), 0.5, weight*triglumi, 2, 0., 2.);
+        trigLumi = 1.;
+        if(!IsDATA) trigLumi = ElectronLumi2;
+        FillHist(regions_el.at(it_rg2)+"/ZCand_Mass_Ele12", ZCand.M(), weight*trigLumi, 40, 70., 110.);
+        FillHist(regions_el.at(it_rg2)+"/Number_Events_Ele12", 0.5, weight*trigLumi, 2, 0., 2.);
       }
       if(ev.PassTrigger(ElectronTrig3)){
-        triglumi = 1.;
-        if(!IsDATA) triglumi = ElectronLumi3;
-        FillHist("ZCand_Mass_Ele17_"+regions_el.at(it_rg2), ZCand.M(), weight*triglumi, 40, 70., 110.);
-        FillHist("Number_Events_Ele17_"+regions_el.at(it_rg2), 0.5, weight*triglumi, 2, 0., 2.);
+        trigLumi = 1.;
+        if(!IsDATA) trigLumi = ElectronLumi3;
+        FillHist(regions_el.at(it_rg2)+"/ZCand_Mass_Ele17", ZCand.M(), weight*trigLumi, 40, 70., 110.);
+        FillHist(regions_el.at(it_rg2)+"/Number_Events_Ele17", 0.5, weight*trigLumi, 2, 0., 2.);
       }
       if(ev.PassTrigger(ElectronTrig4)){
-        triglumi = 1.;
-        if(!IsDATA) triglumi = ElectronLumi4;
-        FillHist("ZCand_Mass_Ele23_"+regions_el.at(it_rg2), ZCand.M(), weight*triglumi, 40, 70., 110.);
-        FillHist("Number_Events_Ele23_"+regions_el.at(it_rg2), 0.5, weight*triglumi, 2, 0., 2.);
+        trigLumi = 1.;
+        if(!IsDATA) trigLumi = ElectronLumi4;
+        FillHist(regions_el.at(it_rg2)+"/ZCand_Mass_Ele23", ZCand.M(), weight*trigLumi, 40, 70., 110.);
+        FillHist(regions_el.at(it_rg2)+"/Number_Events_Ele23", 0.5, weight*trigLumi, 2, 0., 2.);
       }
     }
 
     // W+jets control region
-    if(ele_tight.size()==1 && it_rg2==2){
+    if(it_rg2==2 && ele_tight.size()==1){
       if(!IsDATA){
         weight *= weight_norm_1invpb;
         weight *= ev.MCweight();
@@ -810,32 +839,32 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
       }
       Mt = MT(ele_tight.at(0), METv);
       if(ev.PassTrigger(ElectronTrig1)){
-        triglumi = 1.;
-        if(!IsDATA) triglumi = ElectronLumi1;
-        FillHist("Lep_Pt_nocut_Ele8_"+regions_el.at(it_rg2), ele_tight.at(0).Pt(), weight*triglumi, 200, 0., 200.);
-        FillHist("MET_nocut_Ele8_"+regions_el.at(it_rg2), MET, weight*triglumi, 200, 0., 200.);
-        FillHist("Mt_nocut_Ele8_"+regions_el.at(it_rg2), Mt, weight*triglumi, 200, 0., 200.);
+        trigLumi = 1.;
+        if(!IsDATA) trigLumi = ElectronLumi1;
+        FillHist(regions_el.at(it_rg2)+"/Lep_Pt_nocut_Ele8", ele_tight.at(0).Pt(), weight*trigLumi, 200, 0., 200.);
+        FillHist(regions_el.at(it_rg2)+"/MET_nocut_Ele8", MET, weight*trigLumi, 200, 0., 200.);
+        FillHist(regions_el.at(it_rg2)+"/Mt_nocut_Ele8", Mt, weight*trigLumi, 200, 0., 200.);
       }
       if(ev.PassTrigger(ElectronTrig2)){
-        triglumi = 1.;
-        if(!IsDATA) triglumi = ElectronLumi2;
-        FillHist("Lep_Pt_nocut_Ele12_"+regions_el.at(it_rg2), ele_tight.at(0).Pt(), weight*triglumi, 200, 0., 200.);
-        FillHist("MET_nocut_Ele12_"+regions_el.at(it_rg2), MET, weight*triglumi, 200, 0., 200.);
-        FillHist("Mt_nocut_Ele12_"+regions_el.at(it_rg2), Mt, weight*triglumi, 200, 0., 200.);
+        trigLumi = 1.;
+        if(!IsDATA) trigLumi = ElectronLumi2;
+        FillHist(regions_el.at(it_rg2)+"/Lep_Pt_nocut_Ele12", ele_tight.at(0).Pt(), weight*trigLumi, 200, 0., 200.);
+        FillHist(regions_el.at(it_rg2)+"/MET_nocut_Ele12", MET, weight*trigLumi, 200, 0., 200.);
+        FillHist(regions_el.at(it_rg2)+"/Mt_nocut_Ele12", Mt, weight*trigLumi, 200, 0., 200.);
       }
       if(ev.PassTrigger(ElectronTrig3)){
-        triglumi = 1.;
-        if(!IsDATA) triglumi = ElectronLumi3;
-        FillHist("Lep_Pt_nocut_Ele17_"+regions_el.at(it_rg2), ele_tight.at(0).Pt(), weight*triglumi, 200, 0., 200.);
-        FillHist("MET_nocut_Ele17_"+regions_el.at(it_rg2), MET, weight*triglumi, 200, 0., 200.);
-        FillHist("Mt_nocut_Ele17_"+regions_el.at(it_rg2), Mt, weight*triglumi, 200, 0., 200.);
+        trigLumi = 1.;
+        if(!IsDATA) trigLumi = ElectronLumi3;
+        FillHist(regions_el.at(it_rg2)+"/Lep_Pt_nocut_Ele17", ele_tight.at(0).Pt(), weight*trigLumi, 200, 0., 200.);
+        FillHist(regions_el.at(it_rg2)+"/MET_nocut_Ele17", MET, weight*trigLumi, 200, 0., 200.);
+        FillHist(regions_el.at(it_rg2)+"/Mt_nocut_Ele17", Mt, weight*trigLumi, 200, 0., 200.);
       }
       if(ev.PassTrigger(ElectronTrig4)){
-        triglumi = 1.;
-        if(!IsDATA) triglumi = ElectronLumi4;
-        FillHist("Lep_Pt_nocut_Ele23_"+regions_el.at(it_rg2), ele_tight.at(0).Pt(), weight*triglumi, 200, 0., 200.);
-        FillHist("MET_nocut_Ele23_"+regions_el.at(it_rg2), MET, weight*triglumi, 200, 0., 200.);
-        FillHist("Mt_nocut_Ele23_"+regions_el.at(it_rg2), Mt, weight*triglumi, 200, 0., 200.);
+        trigLumi = 1.;
+        if(!IsDATA) trigLumi = ElectronLumi4;
+        FillHist(regions_el.at(it_rg2)+"/Lep_Pt_nocut_Ele23", ele_tight.at(0).Pt(), weight*trigLumi, 200, 0., 200.);
+        FillHist(regions_el.at(it_rg2)+"/MET_nocut_Ele23", MET, weight*trigLumi, 200, 0., 200.);
+        FillHist(regions_el.at(it_rg2)+"/Mt_nocut_Ele23", Mt, weight*trigLumi, 200, 0., 200.);
       }
 
       // event selection
@@ -845,28 +874,28 @@ void FakeRate::executeEventFromParameter(AnalyzerParameter param){
 
       // Histograms for each trigger
       if(ev.PassTrigger(ElectronTrig1)){
-        triglumi = 1.;
-        if(!IsDATA) triglumi = ElectronLumi1;
-        FillHist("Mt_Ele8_"+regions_el.at(it_rg2), Mt, weight*triglumi, 200, 0., 200.);
-        FillHist("Number_Events_Ele8_"+regions_el.at(it_rg2), 0.5, weight*triglumi, 2, 0., 2.);
+        trigLumi = 1.;
+        if(!IsDATA) trigLumi = ElectronLumi1;
+        FillHist(regions_el.at(it_rg2)+"/Mt_Ele8", Mt, weight*trigLumi, 200, 0., 200.);
+        FillHist(regions_el.at(it_rg2)+"/Number_Events_Ele8", 0.5, weight*trigLumi, 2, 0., 2.);
       }
       if(ev.PassTrigger(ElectronTrig2)){
-        triglumi = 1.;
-        if(!IsDATA) triglumi = ElectronLumi2;
-        FillHist("Mt_Ele12_"+regions_el.at(it_rg2), Mt, weight*triglumi, 200, 0., 200.);
-        FillHist("Number_Events_Ele12_"+regions_el.at(it_rg2), 0.5, weight*triglumi, 2, 0., 2.);
+        trigLumi = 1.;
+        if(!IsDATA) trigLumi = ElectronLumi2;
+        FillHist(regions_el.at(it_rg2)+"/Mt_Ele12", Mt, weight*trigLumi, 200, 0., 200.);
+        FillHist(regions_el.at(it_rg2)+"/Number_Events_Ele12", 0.5, weight*trigLumi, 2, 0., 2.);
       }
       if(ev.PassTrigger(ElectronTrig3)){
-        triglumi = 1.;
-        if(!IsDATA) triglumi = ElectronLumi3;
-        FillHist("Mt_Ele17_"+regions_el.at(it_rg2), Mt, weight*triglumi, 200, 0., 200.);
-        FillHist("Number_Events_Ele17_"+regions_el.at(it_rg2), 0.5, weight*triglumi, 2, 0., 2.);
+        trigLumi = 1.;
+        if(!IsDATA) trigLumi = ElectronLumi3;
+        FillHist(regions_el.at(it_rg2)+"/Mt_Ele17", Mt, weight*trigLumi, 200, 0., 200.);
+        FillHist(regions_el.at(it_rg2)+"/Number_Events_Ele17", 0.5, weight*trigLumi, 2, 0., 2.);
       }
       if(ev.PassTrigger(ElectronTrig4)){
-        triglumi = 1.;
-        if(!IsDATA) triglumi = ElectronLumi4;
-        FillHist("Mt_Ele23_"+regions_el.at(it_rg2), Mt, weight*triglumi, 200, 0., 200.);
-        FillHist("Number_Events_Ele23_"+regions_el.at(it_rg2), 0.5, weight*triglumi, 2, 0., 2.);
+        trigLumi = 1.;
+        if(!IsDATA) trigLumi = ElectronLumi4;
+        FillHist(regions_el.at(it_rg2)+"/Mt_Ele23", Mt, weight*trigLumi, 200, 0., 200.);
+        FillHist(regions_el.at(it_rg2)+"/Number_Events_Ele23", 0.5, weight*trigLumi, 2, 0., 2.);
       }
     }
   }

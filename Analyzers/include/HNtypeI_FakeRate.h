@@ -1,9 +1,9 @@
-#ifndef FakeRate_h
-#define FakeRate_h
+#ifndef HNtypeI_FakeRate_h
+#define HNtypeI_FakeRate_h
 
 #include "AnalyzerCore.h"
 
-class FakeRate : public AnalyzerCore {
+class HNtypeI_FakeRate : public AnalyzerCore {
 
 public:
 
@@ -38,8 +38,8 @@ public:
 
 //  double weight_Prefire;
 
-  FakeRate();
-  ~FakeRate();
+  HNtypeI_FakeRate();
+  ~HNtypeI_FakeRate();
 
 };
 
