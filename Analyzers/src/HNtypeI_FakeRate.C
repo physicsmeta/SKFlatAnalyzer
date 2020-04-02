@@ -304,7 +304,7 @@ void HNtypeI_FakeRate::executeEventFromParameter(AnalyzerParameter param){
   // barrel : 0.0478+0.506/pT, endcap : 0.0658+0.963/pT
   // POG cut-based Tight
   // barrel : 0.0287+0.506/pT, endcap : 0.0445+0.963/pT
-//  double pi = 3.14159265358979323846;
+  double pi = 3.14159265358979323846;
   double MZ = 91.1876;
   double MET = ev.GetMETVector().Pt(); 
   double dphi = 0.;
