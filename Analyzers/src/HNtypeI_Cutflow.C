@@ -141,29 +141,28 @@ void HNtypeI_Cutflow::executeEvent(){
 //      param.Name = MuonID+"_"+"Central";
 
       // Muon ID
-      param.Muon_Tight_ID = MuonTightID;
-      param.Muon_Loose_ID = MuonLooseID;
-      param.Muon_Veto_ID  = MuonVetoID;
-      param.Muon_FR_ID = FakeRateID;     // ID name in histmap_Muon.txt
-      param.Muon_FR_Key = "AwayJetPt40"; // histname
-      param.Muon_ID_SF_Key = "NUM_TightID_DEN_genTracks";
-      param.Muon_ISO_SF_Key = "NUM_TightRelIso_DEN_TightIDandIPCut";
+      param.Muon_Tight_ID       = MuonTightID;
+      param.Muon_Loose_ID       = MuonLooseID;
+      param.Muon_Veto_ID        = MuonVetoID;
+      param.Muon_FR_ID          = FakeRateID;     // ID name in histmap_Muon.txt
+      param.Muon_FR_Key         = "AwayJetPt40";  // histname
+      param.Muon_ID_SF_Key      = "NUM_TightID_DEN_genTracks";
+      param.Muon_ISO_SF_Key     = "NUM_TightRelIso_DEN_TightIDandIPCut";
       param.Muon_Trigger_SF_Key = "";
-      param.Muon_UsePtCone = true;
+      param.Muon_UsePtCone      = true;
 
-      // Electron Id
-      param.Electron_Tight_ID = ElectronTightID;
-      param.Electron_Loose_ID = ElectronLooseID;
-      param.Electron_Veto_ID  = ElectronVetoID;
-      param.Electron_FR_ID = FakeRateID;     // ID name in histmap_Electron.txt
-      param.Electron_FR_Key = "AwayJetPt40"; // histname
-      param.Electron_ID_SF_Key = "passTightID";
+      // Electron ID
+      param.Electron_Tight_ID       = ElectronTightID;
+      param.Electron_Loose_ID       = ElectronLooseID;
+      param.Electron_Veto_ID        = ElectronVetoID;
+      param.Electron_FR_ID          = FakeRateID;     // ID name in histmap_Electron.txt
+      param.Electron_FR_Key         = "AwayJetPt40";  // histname
+      param.Electron_ID_SF_Key      = "passTightID";
       param.Electron_Trigger_SF_Key = "";
-      
-      param.Electron_UsePtCone = true;
+      param.Electron_UsePtCone      = true;
 
       // Jet ID
-      param.Jet_ID = "tightLepVeto";
+      param.Jet_ID    = "HNTight";
       param.FatJet_ID = "HNTight";
 
       executeEventFromParameter(param);
@@ -294,33 +293,38 @@ void HNtypeI_Cutflow::executeEventFromParameter(AnalyzerParameter param){
   vector<Muon> muons_veto = SelectMuons(this_AllMuons, param.Muon_Veto_ID, 5., 2.4);
   vector<Electron> electrons = SelectElectrons(this_AllElectrons, ElectronID, 10., 2.5);
   vector<Electron> electrons_veto = SelectElectrons(this_AllElectrons, param.Electron_Veto_ID, 10., 2.5);
-  vector<Jet> jets_nolepveto = SelectJets(this_AllJets, "tight", 20., 2.7);
-  vector<Jet> jets_lepveto = SelectJets(this_AllJets, param.Jet_ID, 20., 2.7);
-  vector<FatJet> fatjets = SelectFatJets(this_AllFatJets, param.FatJet_ID, 200., 2.7);
+  vector<Jet> jets_nolepveto = SelectJets(this_AllJets, "HNTight", 20., 2.4);
 
   // Jet selection to avoid double counting due to jets matched geometrically with a lepton
   vector<Jet> jets;
+  vector<FatJet> fatjets;
   jets.clear();
-  int lepton_count2 = 0, fatjet_count = 0; 
+  fatjets.clear();
+  int lepton_count1 = 0, lepton_count2 = 0, fatjet_count = 0;
 
-/*  for(unsigned int i=0; i<this_AllFatJets.size(); i++){
+  // Fatjet selection in CATanalyzer (see the links)
+  // https://github.com/jedori0228/LQanalyzer/blob/CatAnalyzer_13TeV_v8-0-7.36_HNAnalyzer/CATConfig/SelectionConfig/user_fatjets.sel
+  // https://github.com/jedori0228/LQanalyzer/blob/CatAnalyzer_13TeV_v8-0-7.36_HNAnalyzer/LQCore/Selection/src/FatJetSelection.cc#L113-L124
+  for(unsigned int i=0; i<this_AllFatJets.size(); i++){
+    lepton_count1 = 0;
+    if(!(this_AllFatJets.at(i).PassID(param.FatJet_ID))) continue;
     if(!(this_AllFatJets.at(i).Pt() > 200.)) continue;
     if(!(fabs(this_AllFatJets.at(i).Eta()) < 2.7)) continue;
-    if(!(this_AllFatJets.at(i).PassID(param.FatJet_ID))) continue;
-    for(unsigned int j=0; j<muons.size(); j++){
-      if(this_AllFatJets.at(i).DeltaR(muons.at(j)) < 1.0) lepton_count1++;
+    for(unsigned int j=0; j<muons_veto.size(); j++){
+      if(this_AllFatJets.at(i).DeltaR(muons_veto.at(j)) < 1.0) lepton_count1++;
     }
-    for(unsigned int j=0; j<electrons.size(); j++){
-      if(this_AllFatJets.at(i).DeltaR(electrons.at(j)) < 1.0) lepton_count1++;
-    } 
+    for(unsigned int j=0; j<electrons_veto.size(); j++){
+      if(this_AllFatJets.at(i).DeltaR(electrons_veto.at(j)) < 1.0) lepton_count1++;
+    }
     if(lepton_count1 > 0) continue;
     fatjets.push_back(this_AllFatJets.at(i));
-  }*/
+  }
 
   for(unsigned int i=0; i<this_AllJets.size(); i++){
+    lepton_count2 = 0, fatjet_count = 0;
+    if(!(this_AllJets.at(i).PassID(param.Jet_ID))) continue;
     if(!(this_AllJets.at(i).Pt() > 20.)) continue;
     if(!(fabs(this_AllJets.at(i).Eta()) < 2.7)) continue;
-    if(!(this_AllJets.at(i).PassID(param.Jet_ID))) continue;
     for(unsigned int j=0; j<muons_veto.size(); j++){
       if(this_AllJets.at(i).DeltaR(muons_veto.at(j)) < 0.4) lepton_count2++;
     }
@@ -343,7 +347,6 @@ void HNtypeI_Cutflow::executeEventFromParameter(AnalyzerParameter param){
   std::sort(muons_veto.begin(), muons_veto.end(), PtComparing);
   std::sort(electrons.begin(), electrons.end(), PtComparing);
   std::sort(electrons_veto.begin(), electrons_veto.end(), PtComparing);
-  std::sort(jets_lepveto.begin(), jets_lepveto.end(), PtComparing);
   std::sort(jets_nolepveto.begin(), jets_nolepveto.end(), PtComparing);
   std::sort(jets.begin(), jets.end(), PtComparing);
   std::sort(fatjets.begin(), fatjets.end(), PtComparing);

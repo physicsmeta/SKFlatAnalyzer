@@ -105,7 +105,8 @@ bool Jet::PassID(TString ID) const {
 }
 
 bool Jet::Pass_HNTight() const {
-  if(!Pass_tightLepVetoJetID()) return false;
+//  if(!Pass_tightLepVetoJetID()) return false;
+  if(!Pass_tightJetID()) return false;
   if(!PassPileupMVA("loose")) return false;
 
   return true;
