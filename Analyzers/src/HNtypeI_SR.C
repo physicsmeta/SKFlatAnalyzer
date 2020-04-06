@@ -26,7 +26,7 @@ void HNtypeI_SR::initializeAnalyzer(){
   ElectronTightIDs = {"HNTightV2", "HNTight2016"};
   ElectronLooseIDs = {"HNLooseV23", "HNLoose2016"};
   ElectronVetoIDs  = {"passVetoID", "HNVeto2016"};
-  FakeRateIDs = {"HNtypeI_V2", "HNtypeI_16"};
+  FakeRateIDs = {"HNtypeI_V2", "HNtypeI_16"}; //JH : TODO This isn't used anywhere in this code
 
 
   //==== At this point, sample informations (e.g., IsDATA, DataStream, MCSample, or DataYear) are all set
@@ -87,7 +87,7 @@ void HNtypeI_SR::initializeAnalyzer(){
   jtps.push_back( JetTagging::Parameters(JetTagging::DeepCSV, JetTagging::Loose, JetTagging::incl, JetTagging::comb) );
   jtps.push_back( JetTagging::Parameters(JetTagging::DeepCSV, JetTagging::Medium, JetTagging::incl, JetTagging::comb) );
   //==== set
-  mcCorr->SetJetTaggingParameters(jtps);
+  mcCorr->SetJetTaggingParameters(jtps); //JH : TODO This isn't used anywhere in this code
 
 }
 
@@ -413,13 +413,13 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
 //  double btagWeight = mcCorr->GetBTaggingReweight_1a(jets, jtp_DeepCSV_Medium);
 
   //==== method 2a)
-  for(unsigned int ij=0; ij<jets_nolepveto.size(); ij++){
+  for(unsigned int ij=0; ij<jets_nolepveto.size(); ij++){ //JH : TODO jets_nolepveto makes no sense, it doesn't have any object selection applied
 //    double this_discr = jets_nolepveto.at(ij).GetTaggerResult(JetTagging::DeepCSV);
       //==== No SF
 //      if( this_discr > mcCorr->GetJetTaggingCutValue(JetTagging::DeepCSV, JetTagging::Medium) ) NBJets_NoSF++;
     if(mcCorr->IsBTagged_2a(jtp_DeepCSV_Loose, jets_nolepveto.at(ij))) Nbjet_loose++;
-    if(mcCorr->IsBTagged_2a(jtp_DeepCSV_Medium, jets_nolepveto.at(ij))) Nbjet_medium++;
-  }
+    if(mcCorr->IsBTagged_2a(jtp_DeepCSV_Medium, jets_nolepveto.at(ij))) Nbjet_medium++; 
+  } 
 
 //  FillHist("Nbjet_loose_"+IDsuffix, Nbjet_loose, weight, 5, 0., 5.);
 //  FillHist("Nbjet_medium_"+IDsuffix, Nbjet_medium, weight, 5, 0., 5.);
