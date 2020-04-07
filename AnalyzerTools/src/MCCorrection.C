@@ -1015,18 +1015,18 @@ double MCCorrection::GetJetTaggingSF(JetTagging::Parameters jtp, int JetFlavor, 
   string this_mt_H = JetTagging::MeasurmentTypeToString(jtp.j_MeasurmentType_Heavy);
 
   string key = JetTagging::TaggerToString( jtp.j_Tagger )+"_"+this_wp;
-  BTagEntry::JetFlavor jf = BTagEntry::FLAV_B;
+  BTagEntry::JetFlavor jf = BTagEntry::FLAV_B; //JH : 0
   if(abs(JetFlavor)==5){
     key += "_B_"+this_mt_H;
     jf = BTagEntry::FLAV_B;
   }
   else if(abs(JetFlavor)==4){
     key += "_C_"+this_mt_H;
-    jf = BTagEntry::FLAV_C;
+    jf = BTagEntry::FLAV_C; //JH : 1
   }
   else{
     key += "_L_"+this_mt_L;
-    jf = BTagEntry::FLAV_UDSG;
+    jf = BTagEntry::FLAV_UDSG; //JH : 2
   }
 
   std::map< std::string, BTagCalibrationReader* >::const_iterator it = map_BTagCalibrationReader.find(key);
@@ -1036,7 +1036,7 @@ double MCCorrection::GetJetTaggingSF(JetTagging::Parameters jtp, int JetFlavor, 
     exit(EXIT_FAILURE);
   }
 
-  double this_SF = it->second->eval_auto_bounds(Syst, jf, fabs(JetEta), JetPt, Jetdiscr);
+  double this_SF = it->second->eval_auto_bounds(Syst, jf, fabs(JetEta), JetPt, Jetdiscr); //JH : Get scale factor... difficult to me for now
   //cout << "[MCCorrection::GetJetTaggingSF] key = " << it->first << endl;
   //cout << "[MCCorrection::GetJetTaggingSF] Jet tagging parameter : ";jtp.Print();
   //printf("[MCCorrection::GetJetTaggingSF] (JetFlavor, JetPt, JetEta, Jetdiscr, Syst) = (%d, %f, %f, %f, %s)\n",JetFlavor,JetPt,JetEta,Jetdiscr,Syst.c_str());
@@ -1187,17 +1187,17 @@ double MCCorrection::GetBTaggingReweight_1d(const vector<Jet>& jets, JetTagging:
 
 bool MCCorrection::IsBTagged_2a(JetTagging::Parameters jtp, const Jet& jet, string Syst){
 
-  double this_discr = jet.GetTaggerResult(jtp.j_Tagger);
-  double cutValue = GetJetTaggingCutValue(jtp.j_Tagger, jtp.j_WP);
+  double this_discr = jet.GetTaggerResult(jtp.j_Tagger); //JH : Get tagger score like CSVv2, DeepCSV, ... which are built in MiniAOD
+  double cutValue = GetJetTaggingCutValue(jtp.j_Tagger, jtp.j_WP); //JH : Get cut value depending on WP like Loose, Medium, Tight
 
-  bool isBTagged = this_discr > cutValue;
+  bool isBTagged = this_discr > cutValue; //JH : B-tagging
 
   if(IsDATA) return isBTagged;
 
   //==== Set seed
   unsigned int runNum_uint  = static_cast <unsigned int> (run);
   unsigned int lumiNum_uint = static_cast <unsigned int> (lumi);
-  unsigned int evNum_uint   = static_cast <unsigned int> (event);
+  unsigned int evNum_uint   = static_cast <unsigned int> (event); //JH : run, lumi, event from MiniAOD; used statc_cast for type conversion(Int_t to unsigned int)
   unsigned int jet0eta = uint32_t(fabs(jet.Eta())/0.01);
   int m_nomVar=1;
   std::uint32_t seed = jet0eta + m_nomVar + (lumiNum_uint<<10) + (runNum_uint<<20) + evNum_uint;
@@ -1208,11 +1208,11 @@ bool MCCorrection::IsBTagged_2a(JetTagging::Parameters jtp, const Jet& jet, stri
 
   //=== Get SF
   double Btag_SF =  GetJetTaggingSF(jtp,
-                                    jet.hadronFlavour(),
+                                    jet.hadronFlavour(), //JH : hadronFlavour in MiniAOD
                                     jet.Pt(),
                                     jet.Eta(),
                                     jet.GetTaggerResult(jtp.j_Tagger),
-                                    Syst );
+                                    Syst ); //JH : TODO Get b tagging scale factor... difficult to me for now
 
 
   if(Btag_SF == 1) return newBTag; //no correction needed
@@ -1240,7 +1240,7 @@ bool MCCorrection::IsBTagged_2a(JetTagging::Parameters jtp, const Jet& jet, stri
 
   }
 
-  return newBTag;
+  return newBTag; //JH : TODO Idk, It seems applying a correction to Btag SF and then redetermine the Btag bool
 
 }
 

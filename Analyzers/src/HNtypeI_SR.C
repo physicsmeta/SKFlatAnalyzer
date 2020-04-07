@@ -116,7 +116,7 @@ void HNtypeI_SR::executeEvent(){
   AllElectrons = GetAllElectrons();
   AllJets = GetAllJets();
 //  AllFatJets = GetAllFatJets();
-  AllFatJets = puppiCorr->Correct(GetAllFatJets());
+  AllFatJets = puppiCorr->Correct(GetAllFatJets()); //JH : apply correction to fatjet.SDMass(); the total weight = gen correction * reco correction, from SKFlatAnalyzer/data/Run2Legacy_v4/DataYear/PuppiSoftdropMassCorr/puppiCorr.root
 
   //==== Get L1Prefire reweight
   //==== If data, 1.;
@@ -211,7 +211,7 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
     weight *= ev.MCweight();
     weight *= GetPrefireWeight(0);
     weight *= GetPileUpWeight(nPileUp,0);
-  }
+  } //JH : total weight calculation is done here.
 
   // Cutflow : No Cuts
   for(unsigned int it_ch=0; it_ch<channels.size(); it_ch++){
@@ -333,7 +333,7 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
   vector<Muon> muons_veto = SelectMuons(this_AllMuons, param.Muon_Veto_ID, 5., 2.4);
   vector<Electron> electrons = SelectElectrons(this_AllElectrons, ElectronID, 10., 2.5);
   vector<Electron> electrons_veto = SelectElectrons(this_AllElectrons, param.Electron_Veto_ID, 10., 2.5);
-  vector<Jet> jets_nolepveto = SelectJets(this_AllJets, "tight", 20., 2.4);
+  vector<Jet> jets_nolepveto = SelectJets(this_AllJets, "tight", 20., 2.4); //JH : to reject bjets
 //  vector<FatJet> fatjets = SelectFatJets(this_AllFatJets, param.FatJet_ID, 200., 2.7);
 
 //  FillHist("Njet_"+IDsuffix, jets_nolepveto.size(), weight, 8, 0., 8.);
@@ -354,10 +354,10 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
     if(!(this_AllFatJets.at(i).Pt() > 200.)) continue;
     if(!(fabs(this_AllFatJets.at(i).Eta()) < 2.7)) continue;
     for(unsigned int j=0; j<muons_veto.size(); j++){
-      if(this_AllFatJets.at(i).DeltaR(muons_veto.at(j)) < 1.0) lepton_count1++;
+      if(this_AllFatJets.at(i).DeltaR(muons_veto.at(j)) < 1.0) lepton_count1++; //JH : muon cleaning
     }
     for(unsigned int j=0; j<electrons_veto.size(); j++){
-      if(this_AllFatJets.at(i).DeltaR(electrons_veto.at(j)) < 1.0) lepton_count1++;
+      if(this_AllFatJets.at(i).DeltaR(electrons_veto.at(j)) < 1.0) lepton_count1++; //JH : electron cleaning
     } 
     if(lepton_count1 > 0) continue;
     fatjets.push_back(this_AllFatJets.at(i));
@@ -369,13 +369,13 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
     if(!(this_AllJets.at(i).Pt() > 20.)) continue;
     if(!(fabs(this_AllJets.at(i).Eta()) < 2.7)) continue;
     for(unsigned int j=0; j<muons_veto.size(); j++){
-      if(this_AllJets.at(i).DeltaR(muons_veto.at(j)) < 0.4) lepton_count2++;
+      if(this_AllJets.at(i).DeltaR(muons_veto.at(j)) < 0.4) lepton_count2++; //JH : muon cleaning
     }
     for(unsigned int j=0; j<electrons_veto.size(); j++){
-      if(this_AllJets.at(i).DeltaR(electrons_veto.at(j)) < 0.4) lepton_count2++;
+      if(this_AllJets.at(i).DeltaR(electrons_veto.at(j)) < 0.4) lepton_count2++; //JH : electron cleaning
     }
     for(unsigned int j=0; j<fatjets.size(); j++){
-      if(this_AllJets.at(i).DeltaR(fatjets.at(j)) < 0.8) fatjet_count++;
+      if(this_AllJets.at(i).DeltaR(fatjets.at(j)) < 0.8) fatjet_count++; //JH : fatjet cleaning
     }
     if(lepton_count2 > 0) continue;
     if(fatjet_count > 0) continue;
@@ -406,19 +406,19 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
                                                                      JetTagging::incl, JetTagging::comb);
   JetTagging::Parameters jtp_DeepCSV_Medium = JetTagging::Parameters(JetTagging::DeepCSV,
                                                                      JetTagging::Medium,
-                                                                     JetTagging::incl, JetTagging::comb);
+                                                                     JetTagging::incl, JetTagging::comb); //JH : Set b-tagging parameters
 
   //==== method 1a)
   //==== multiply "btagWeight" to the event weight
 //  double btagWeight = mcCorr->GetBTaggingReweight_1a(jets, jtp_DeepCSV_Medium);
 
   //==== method 2a)
-  for(unsigned int ij=0; ij<jets_nolepveto.size(); ij++){ //JH : TODO jets_nolepveto makes no sense, it doesn't have any object selection applied
+  for(unsigned int ij=0; ij<jets_nolepveto.size(); ij++){ 
 //    double this_discr = jets_nolepveto.at(ij).GetTaggerResult(JetTagging::DeepCSV);
       //==== No SF
 //      if( this_discr > mcCorr->GetJetTaggingCutValue(JetTagging::DeepCSV, JetTagging::Medium) ) NBJets_NoSF++;
-    if(mcCorr->IsBTagged_2a(jtp_DeepCSV_Loose, jets_nolepveto.at(ij))) Nbjet_loose++;
-    if(mcCorr->IsBTagged_2a(jtp_DeepCSV_Medium, jets_nolepveto.at(ij))) Nbjet_medium++; 
+    if(mcCorr->IsBTagged_2a(jtp_DeepCSV_Loose, jets_nolepveto.at(ij))) Nbjet_loose++; 
+    if(mcCorr->IsBTagged_2a(jtp_DeepCSV_Medium, jets_nolepveto.at(ij))) Nbjet_medium++; //JH : count Nbjet. NOTE : AN says they used CVSv2 and medium WP.
   } 
 
 //  FillHist("Nbjet_loose_"+IDsuffix, Nbjet_loose, weight, 5, 0., 5.);
@@ -456,12 +456,12 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
 
   // Set pTcone
   for(unsigned int i=0; i<muons.size(); i++){
-    this_ptcone_muon = muons.at(i).CalcPtCone(muons.at(i).RelIso(), mu_tight_iso);
+    this_ptcone_muon = muons.at(i).CalcPtCone(muons.at(i).RelIso(), mu_tight_iso); //JH : CalcPtCone() in Lepton.h; this returns (i) pt for more tightly isolated leptons than the tight_iso, or (ii) pt + pt*(RelIso-tight_iso) which is the proxy for the mother parton's pt
     muons.at(i).SetPtCone(this_ptcone_muon);
   }
    
   for(unsigned int i=0; i<electrons.size(); i++){
-    el_tight_iso = 0.0287+0.506/electrons.at(i).UncorrPt();
+    el_tight_iso = 0.0287+0.506/electrons.at(i).UncorrPt(); //JH : TODO electron uses UncorrPt() but I don't understand the meaning yet
     if(fabs(electrons.at(i).scEta()) > 1.479) el_tight_iso = 0.0445+0.963/electrons.at(i).UncorrPt();
     if(IDsuffix == "HNV2"){
       el_tight_iso = std::min(0.08, 0.0287+0.506/electrons.at(i).UncorrPt());
