@@ -658,7 +658,7 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
       FillHist(channels.at(it_ch)+"/fakeCR2/Number_Events_"+IDsuffix, 4.5, weight, cutflow_bin, 0., cutflow_max);
       FillHist(channels.at(it_ch)+"/fakeCR2/Number_Events_unweighted_"+IDsuffix, 4.5, 1., cutflow_bin, 0., cutflow_max);
 
-      if(!(ZCand.M() > 10.)) continue; //JH : TODO m(ll) > 10 GeV? is this for CR?
+      if(!(ZCand.M() > 10.)) continue; 
       if(it_ch==1 && IsOnZ(ZCand.M(), 10.)) continue; //JH : TODO
 
       // Cutflow : m(ll) > 10 GeV, |m(ll)-m(Z)| > 10 GeV for ee 
