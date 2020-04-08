@@ -44,9 +44,9 @@ void HNtypeI_SR::initializeAnalyzer(){
 
   if(DataYear==2016){                                                                   // Lumi values for trigger weight (/pb)
     MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v");                       // 27267.591112919 
-    MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_v");                     // 27267.591112919
+    MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_v");                     // 27267.591112919 //JH : NOTE these two are prescaled at 2016H -> https://its.cern.ch/jira/browse/CMSHLT-1002
     MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v");                    // 35918.219492947
-    MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_v");                  // 35918.219492947
+    MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_v");                  // 35918.219492947 //JH : TODO why we need this though we already have superset
     MuonTriggersH.push_back("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v");                   // 35918.219492947
     MuonTriggersH.push_back("HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_v");                 // 35918.219492947
     ElectronTriggers.push_back("HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v");          // 35918.219492947
@@ -56,7 +56,7 @@ void HNtypeI_SR::initializeAnalyzer(){
     EMuTriggersH.push_back("HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v");     // 8650.628380028
     MuonPtCut1 = 20., MuonPtCut2 = 10.;
     ElectronPtCut1 = 25., ElectronPtCut2 = 15.;
-    EMuPtCut1 = 25., EMuPtCut2 = 15.;
+    EMuPtCut1 = 25., EMuPtCut2 = 15.; //JH : TODO what for Ele23 leg?
   }
   else if(DataYear==2017){
     MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8_v");
@@ -207,11 +207,11 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
   //=============
 
   if(!IsDATA){
-    weight *= weight_norm_1invpb*ev.GetTriggerLumi("Full");
-    weight *= ev.MCweight();
-    weight *= GetPrefireWeight(0);
-    weight *= GetPileUpWeight(nPileUp,0);
-  } //JH : total weight calculation is done here.
+    weight *= weight_norm_1invpb*ev.GetTriggerLumi("Full"); //JH : weight_norm_1invpb = xsec/sumW; Lumi = 35.9, 41.5, 59.7(fb-1) total 137fb-1
+    weight *= ev.MCweight(); //JH : gen_weight in MiniAOD
+    weight *= GetPrefireWeight(0); //JH : No issue in 2018, otherwise returns L1PrefireReweight_Central in MiniAOD
+    weight *= GetPileUpWeight(nPileUp,0); //JH : mcCorr->GetPileUpWeight(N_pileup, syst); mcCorr->GetPileUpWeight2017(N_pileup, syst); NOTE 2018 not yet added.
+  } //JH : total weight calculation done.
 
   // Cutflow : No Cuts
   for(unsigned int it_ch=0; it_ch<channels.size(); it_ch++){
@@ -332,11 +332,12 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
   vector<Muon> muons = SelectMuons(this_AllMuons, MuonID, 10., 2.4);
   vector<Muon> muons_veto = SelectMuons(this_AllMuons, param.Muon_Veto_ID, 5., 2.4);
   vector<Electron> electrons = SelectElectrons(this_AllElectrons, ElectronID, 10., 2.5);
-  vector<Electron> electrons_veto = SelectElectrons(this_AllElectrons, param.Electron_Veto_ID, 10., 2.5);
+  vector<Electron> electrons_veto = SelectElectrons(this_AllElectrons, param.Electron_Veto_ID, 10., 2.5); //JH : lepton selection done
   vector<Jet> jets_nolepveto = SelectJets(this_AllJets, "tight", 20., 2.4); //JH : to reject bjets
 //  vector<FatJet> fatjets = SelectFatJets(this_AllFatJets, param.FatJet_ID, 200., 2.7);
 
 //  FillHist("Njet_"+IDsuffix, jets_nolepveto.size(), weight, 8, 0., 8.);
+
 
   // Jet, FatJet selection to avoid double counting due to jets matched geometrically with a lepton
   vector<Jet> jets;
@@ -381,6 +382,8 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
     if(fatjet_count > 0) continue;
     jets.push_back(this_AllJets.at(i));
   }
+
+//JH : jet, fatjet selection done.
 
 //  FillHist("Nfatjet_hn_"+IDsuffix, fatjets.size(), weight, 5, 0., 5.);
 //  FillHist("Njet_hn_"+IDsuffix, jets.size(), weight, 8, 0., 8.); 
@@ -456,7 +459,7 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
 
   // Set pTcone
   for(unsigned int i=0; i<muons.size(); i++){
-    this_ptcone_muon = muons.at(i).CalcPtCone(muons.at(i).RelIso(), mu_tight_iso); //JH : CalcPtCone() in Lepton.h; this returns (i) pt for more tightly isolated leptons than the tight_iso, or (ii) pt + pt*(RelIso-tight_iso) which is the proxy for the mother parton's pt
+    this_ptcone_muon = muons.at(i).CalcPtCone(muons.at(i).RelIso(), mu_tight_iso); //JH : CalcPtCone() in Lepton.h; this returns (i) pt for more tightly isolated leptons than the tight_iso, or (ii) pt + pt*(RelIso-tight_iso) which is the proxy for the mother parton's pt -> used for fake estimation
     muons.at(i).SetPtCone(this_ptcone_muon);
   }
    
@@ -483,7 +486,7 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
     FillHist("Pt_electron2", electrons.at(1).Pt(), weight, 1000, 0., 1000.);
     FillHist("PtCone_electron1", electrons.at(0).PtCone(), weight, 1000, 0., 1000.);
     FillHist("PtCone_electron2", electrons.at(1).PtCone(), weight, 1000, 0., 1000.);
-  }
+  } //JH : Draw lepton pt and ptcone
 
 //  if(electrons.size() > 0) cout << electrons.at(0).PtCone() << endl;
 
@@ -532,15 +535,15 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
 
   // Loop for each channel : it_ch (0,1,2) = (mumu, ee, emu)
   for(unsigned int it_ch=0; it_ch<channels.size(); it_ch++){
-    trigger_lumi = 1.;
+    trigger_lumi = 1.; //JH : FIXME this is redundant
 
     if(it_ch==0){ LeptonPtCut1 = MuonPtCut1; LeptonPtCut2 = MuonPtCut2; }
     if(it_ch==1){ LeptonPtCut1 = ElectronPtCut1; LeptonPtCut2 = ElectronPtCut2; }
     if(it_ch==2){ LeptonPtCut1 = EMuPtCut1; LeptonPtCut2 = EMuPtCut2; }
-    if(it_ch==0 && RunCF) continue;
+    if(it_ch==0 && RunCF) continue; //JH : mumu is irrelevant to CF
 
     // Triggers for each channel
-    if(it_ch==0 && !ev.PassTrigger(MuonTriggers)) continue;
+    if(it_ch==0 && !ev.PassTrigger(MuonTriggers)) continue; //JH : NOTE PassTrigger runs for loop and returns true even if a single item in triggers vector is fired;
     if(it_ch==1 && !ev.PassTrigger(ElectronTriggers)) continue;
     if(it_ch==2 && !ev.PassTrigger(EMuTriggers)) continue;
 
@@ -550,14 +553,14 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
       if(DataYear==2016){
         if(it_ch==0){
           if(ev.PassTrigger(MuonTriggers)) dimu_trig_weight += 27267.591;
-          if(ev.PassTrigger(MuonTriggersH)) dimu_trig_weight += 8650.628;
+          if(ev.PassTrigger(MuonTriggersH)) dimu_trig_weight += 8650.628; 
           trigger_lumi = dimu_trig_weight;
         }
         if(it_ch==1) trigger_lumi = ev.GetTriggerLumi("Full");
         if(it_ch==2){
           if(ev.PassTrigger(EMuTriggers)) emu_trig_weight += 27267.591;
-          if(ev.PassTrigger(EMuTriggersH)) emu_trig_weight += 27267.591;
-          trigger_lumi = emu_trig_weight;
+          if(ev.PassTrigger(EMuTriggersH)) emu_trig_weight += 27267.591; //JH : FATAL why not 8.65??????
+          trigger_lumi = emu_trig_weight; 
         }
       }
       else{
@@ -573,7 +576,7 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
         weight *= ev.MCweight();
         weight *= GetPrefireWeight(0);
         weight *= GetPileUpWeight(nPileUp,0);
-      }
+      } //JH : recalculate total weight for 2016 period dependency.
       FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_"+IDsuffix, 1.5, weight, cutflow_bin, 0., cutflow_max);
       FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_unweighted_"+IDsuffix, 1.5, 1., cutflow_bin, 0., cutflow_max);
     }
@@ -596,7 +599,7 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
         if(truth_lep1.PID() == 0) continue;
         if(truth_lep2.PID() == 0) continue;
  
-        weight *= weight_norm_1invpb*trigger_lumi;
+        weight *= weight_norm_1invpb*trigger_lumi; //JH : trigger_lumi for period dependency
         weight *= ev.MCweight();
         weight *= GetPrefireWeight(0);
         weight *= GetPileUpWeight(nPileUp,0);
@@ -604,21 +607,21 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
         for(unsigned int i=0; i<muons.size(); i++){
 //          muon_idsf = mcCorr->MuonID_SF(param.Muon_ID_SF_Key,  muons.at(i).Eta(), muons.at(i).MiniAODPt(), 0);
 //          muon_isosf = mcCorr->MuonISO_SF(param.Muon_ISO_SF_Key, muons.at(i).Eta(), muons.at(i).MiniAODPt(), 0);
-          weight *= muon_idsf*muon_isosf;
+          weight *= muon_idsf*muon_isosf; //JH : FIXME no muon id, iso SF applied
         }
         for(unsigned int j=0; j<electrons.size(); j++){
           ele_recosf = mcCorr->ElectronReco_SF(electrons.at(j).scEta(), electrons.at(j).Pt(), 0);
-//          ele_idsf = mcCorr->ElectronID_SF(param.Electron_ID_SF_Key, electrons.at(j).scEta(), electrons.at(j).Pt(), 0);
-          weight *= ele_recosf*ele_idsf;
+//          ele_idsf = mcCorr->ElectronID_SF(param.Electron_ID_SF_Key, electrons.at(j).scEta(), electrons.at(j).Pt(), 0); //JH : FIXME no electron ID SF applied
+          weight *= ele_recosf*ele_idsf; //JH : recalculate total weight applying 2016 trigger lumi dependency && lepton SF
         }
-      }
+      } //JH : Now total weight including 2016 trigger lumi and lepton SF done && lepton gen-matching (for first 2 leptons only) done
 
       // weight for fake, CF
       if(RunFake){
         weight = fakeEst->GetWeight(leptons, param);
 //        FillHist("weight_FR", weight, 1., 220, -1.1, 1.1);
       }
-      if(RunCF) weight = GetCFweight(leptons, param, true, 0);
+      if(RunCF) weight = GetCFweight(leptons, param, true, 0); //JH : TODO Must look into those GetWeight functions later
 
       /////////////////////////////////////////////////////////
       //// Preselection (triggers have been already applied.)
@@ -655,8 +658,8 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
       FillHist(channels.at(it_ch)+"/fakeCR2/Number_Events_"+IDsuffix, 4.5, weight, cutflow_bin, 0., cutflow_max);
       FillHist(channels.at(it_ch)+"/fakeCR2/Number_Events_unweighted_"+IDsuffix, 4.5, 1., cutflow_bin, 0., cutflow_max);
 
-      if(!(ZCand.M() > 10.)) continue;
-      if(it_ch==1 && IsOnZ(ZCand.M(), 10.)) continue;
+      if(!(ZCand.M() > 10.)) continue; //JH : TODO m(ll) > 10 GeV? is this for CR?
+      if(it_ch==1 && IsOnZ(ZCand.M(), 10.)) continue; //JH : TODO
 
       // Cutflow : m(ll) > 10 GeV, |m(ll)-m(Z)| > 10 GeV for ee 
       for(unsigned int it_rg=0; it_rg<regions.size(); it_rg++){
@@ -1187,11 +1190,11 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
             FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/"+LepCategory+"/Fatjet_Mass_unweighted_"+IDsuffix, fatjets.at(j5).SDMass(), 1., 1000, 0., 1000.);
             FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/"+LepCategory+"/l1J_Mass_unweighted_"+IDsuffix, l1J.M(), 1., 2000, 0., 2000.);
             FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/"+LepCategory+"/l2J_Mass_unweighted_"+IDsuffix, l2J.M(), 1., 2000, 0., 2000.);
-          }
-        }
-      }  
-    }
-  }
+          } //JH : if RunFake
+        } //JH : if highmass SR2, CR2
+      } //JH : for loop in each region
+    } //JH : if lepton size 2.
+  } //JH : for loop in ee, mm, em channel 
 
   //=====================================================================================
   //=====================================================================================
