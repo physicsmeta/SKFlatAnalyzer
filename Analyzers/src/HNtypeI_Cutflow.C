@@ -293,7 +293,7 @@ void HNtypeI_Cutflow::executeEventFromParameter(AnalyzerParameter param){
   vector<Muon> muons_veto = SelectMuons(this_AllMuons, param.Muon_Veto_ID, 5., 2.4);
   vector<Electron> electrons = SelectElectrons(this_AllElectrons, ElectronID, 10., 2.5);
   vector<Electron> electrons_veto = SelectElectrons(this_AllElectrons, param.Electron_Veto_ID, 10., 2.5);
-  vector<Jet> jets_nolepveto = SelectJets(this_AllJets, "HNTight", 20., 2.4);
+  vector<Jet> jets_nolepveto = SelectJets(this_AllJets, param.Jet_ID, 20., 2.4);
 
   // Jet selection to avoid double counting due to jets matched geometrically with a lepton
   vector<Jet> jets;
