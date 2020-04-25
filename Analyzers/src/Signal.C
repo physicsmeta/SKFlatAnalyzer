@@ -660,7 +660,7 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
       FillHist(channels.at(it_ch)+"/fakeCR2/Number_Events_unweighted_"+IDsuffix, 4.5, 1., cutflow_bin, 0., cutflow_max);
 
       if(!(ZCand.M() > 10.)) continue; 
-      //if(it_ch==1 && IsOnZ(ZCand.M(), 10.)) continue; //JH : TODO ERROR ?????
+      if(it_ch==1 && IsOnZ(ZCand.M(), 10.)) continue; //JH : see p.12 of preapproval -> https://indico.cern.ch/event/694943/contributions/2849972/attachments/1583026/2501796/180115__JaesungKim__JetsX_Meeting__HN_DiLepton_PreApproval.pdf
 
       // Cutflow : m(ll) > 10 GeV, |m(ll)-m(Z)| > 10 GeV for ee 
       for(unsigned int it_rg=0; it_rg<regions.size(); it_rg++){
