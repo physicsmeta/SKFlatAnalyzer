@@ -1,9 +1,9 @@
 #ifndef HNtypeI_Cutflow_h
 #define HNtypeI_Cutflow_h
 
-#include "AnalyzerCore.h"
+#include "HNAnalyzerCore.h"
 
-class HNtypeI_Cutflow : public AnalyzerCore {
+class HNtypeI_Cutflow : public HNAnalyzerCore {
 
 public:
 
