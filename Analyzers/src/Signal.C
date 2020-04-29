@@ -189,8 +189,8 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
   vector<TString> channels = {"dimu", "diel", "emu"};
   vector<TString> regions = {"fakeCR1", "lowSR1", "lowCR1", "highSR1", "highCR1", "lowSR2", "lowCR2", "highSR2", "highCR2"}; 
   vector<TString> regionsSM = {"DYmm", "DYee", "WZ", "ZG", "WG", "ZZ"}; 
-  vector<TString> channels3L = {"mmm", "mme", "mee", "eee"};
-  vector<TString> channels4L = {"mmmm", "mmee", "eeee"};
+  vector<TString> channels3L = {"mmm", "mme", "mee", "eee"}; //JH : iterate for the number of e
+  vector<TString> channels4L = {"mmmm", "mmee", "eeee"}; //JH : iterate for the number of e / 2
   TString IDsuffix = "HNV1";
   if(param.Electron_Tight_ID.Contains("V2")) IDsuffix = "HNV2";
   if(param.Electron_Tight_ID.Contains("2016")) IDsuffix = "HN16";
@@ -1273,7 +1273,7 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
     //=====================================
     //==== DY control region
     //=====================================
-    if(it_rg2<2 && leptons.size()==2){
+    if(it_rg2<2 && leptons.size()==2){ //JH : DYmm, DYee
       if(it_rg2==0 && muons.size()<2) continue;
       if(it_rg2==1 && electrons.size()<2) continue; 
 
@@ -1380,13 +1380,13 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
       FillHist(regionsSM.at(it_rg2)+"/MET_No3rdLep_"+IDsuffix, MET, weight, 1000, 0., 1000.);
       FillHist(regionsSM.at(it_rg2)+"/MET2ST_No3rdLep_"+IDsuffix, MET2ST, weight, 1000, 0., 1000.);
         
-    }
+    } //JH : DYmm, DYee done
 
 
     //=====================================
     //==== WZ, ZG, WG control region
     //=====================================
-    if(it_rg2>1 && it_rg2<5 && leptons.size()==3){
+    if(it_rg2>1 && it_rg2<5 && leptons.size()==3){ //JH : WZ, ZG, WG, 3 tight leptons
   
       weight = 1.; 
       // weights for MC 
@@ -1396,7 +1396,7 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
         Gen truth_lep3 = GetGenMatchedLepton(*leptons.at(2), gens);
         if(truth_lep1.PID() == 0) continue;
         if(truth_lep2.PID() == 0) continue;
-        if(truth_lep3.PID() == 0) continue;
+        if(truth_lep3.PID() == 0) continue; //JH : require all 3 lepton to be gen-matched
 
         weight *= weight_norm_1invpb*trigger_lumi;
         weight *= ev.MCweight();
@@ -1404,9 +1404,9 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
         weight *= GetPileUpWeight(nPileUp,0);
 
         for(unsigned int i=0; i<muons.size(); i++){
-          weight *= muon_idsf*muon_isosf;
 //          muon_idsf = mcCorr->MuonID_SF(param.Muon_ID_SF_Key,  muons.at(i).Eta(), muons.at(i).MiniAODPt(), 0);
 //          muon_isosf = mcCorr->MuonISO_SF(param.Muon_ISO_SF_Key, muons.at(i).Eta(), muons.at(i).MiniAODPt(), 0);
+          weight *= muon_idsf*muon_isosf;
         }
         for(unsigned int j=0; j<electrons.size(); j++){
           ele_recosf = mcCorr->ElectronReco_SF(electrons.at(j).scEta(), electrons.at(j).Pt(), 0);
@@ -1420,7 +1420,7 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
       FillHist(regionsSM.at(it_rg2)+"/Number_Events_"+IDsuffix, 2.5, weight, cutflow_bin, 0., cutflow_max);
       FillHist(regionsSM.at(it_rg2)+"/Number_Events_unweighted_"+IDsuffix, 2.5, 1., cutflow_bin, 0., cutflow_max);
 
-      if(lepton_veto_size > 0) continue;
+      if(lepton_veto_size > 0) continue; ///JH : 4th lepton veto
 
       // Cutflow : veto additional leptons using veto ID 
       FillHist(regionsSM.at(it_rg2)+"/Number_Events_"+IDsuffix, 3.5, weight, cutflow_bin, 0., cutflow_max);
@@ -1428,7 +1428,7 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
 
       int l1 = -999, l2 = -999, l3 = -999, l4 = -999, wlepWZ = -999, wlepWG = -999;
       // OSSF lepton pair, W-tagged lepton
-      if(muons.size()==2 && muons.at(0).Charge()*muons.at(1).Charge()<0){
+      if(muons.size()==2 && muons.at(0).Charge()*muons.at(1).Charge()<0){ //JH : mme
         ZCand = muons.at(0) + muons.at(1);
         WtagLep = electrons.at(0);
         ZtagLep1 = muons.at(0);
@@ -1437,7 +1437,7 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
         GammaLep1 = ZtagLep1;
         GammaLep2 = ZtagLep2;
       }
-      else if(electrons.size()==2 && electrons.at(0).Charge()*electrons.at(1).Charge()<0){
+      else if(electrons.size()==2 && electrons.at(0).Charge()*electrons.at(1).Charge()<0){ //JH : eem
         ZCand = electrons.at(0) + electrons.at(1);
         WtagLep = muons.at(0);
         ZtagLep1 = electrons.at(0);
@@ -1446,25 +1446,25 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
         GammaLep1 = ZtagLep1;
         GammaLep2 = ZtagLep2;
       }
-      else if(muons.size()==3 || electrons.size()==3){
-        if(fabs(leptons.at(0)->Charge() + leptons.at(1)->Charge() + leptons.at(2)->Charge()) == 1){
+      else if(muons.size()==3 || electrons.size()==3){ //JH : mmm / eee
+        if(fabs(leptons.at(0)->Charge() + leptons.at(1)->Charge() + leptons.at(2)->Charge()) == 1){ //JH : 1 OSSF
 
           // ZCand, GammaCand
           double tmpMassDiff = 1000000., tmpMass = 100000.; 
           for(int ilep1=0; ilep1<2; ilep1++){
-            for(int ilep2=ilep1+1; ilep2<3; ilep2++){
-              if(leptons.at(ilep1)->Charge()*leptons.at(ilep2)->Charge()>0) continue;
+            for(int ilep2=ilep1+1; ilep2<3; ilep2++){ //JH : for each pair (01, 02, 12)
+              if(leptons.at(ilep1)->Charge()*leptons.at(ilep2)->Charge()>0) continue; //JH : skip same sign
               Ztemp = *leptons.at(ilep1) + *leptons.at(ilep2);
               // For WZ, ZG
-              if(!(Ztemp.M() > 10.)) ossf_mass10++;
+              if(!(Ztemp.M() > 10.)) ossf_mass10++; //JH : count m(OSSF) < 10GeV
               if(fabs(Ztemp.M() - MZ) < tmpMassDiff){
                 tmpMassDiff = fabs(Ztemp.M() - MZ);
-                ZCand = Ztemp; l1 = ilep1; l2 = ilep2;
+                ZCand = Ztemp; l1 = ilep1; l2 = ilep2; //JH : l1, l2 are the closest to m(Z)
               }
               // For WG
               if(Ztemp.M() < tmpMass){
                 tmpMass = Ztemp.M();
-                GammaCand = Ztemp; l3 = ilep1; l4 = ilep2;
+                GammaCand = Ztemp; l3 = ilep1; l4 = ilep2; //JH : l3, l4 are the smallest mass
               }
             }
           }
@@ -1476,11 +1476,11 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
 
           // Set the lepton from W
           for(int ilep3=0; ilep3<3; ilep3++){
-            if(fabs(ilep3-l1)>0 && fabs(ilep3-l2)>0) wlepWZ = ilep3;
-            if(fabs(ilep3-l3)>0 && fabs(ilep3-l4)>0) wlepWG = ilep3;
+            if(fabs(ilep3-l1)>0 && fabs(ilep3-l2)>0) wlepWZ = ilep3; //JH : ilep3 != l1 nor l2
+            if(fabs(ilep3-l3)>0 && fabs(ilep3-l4)>0) wlepWG = ilep3; //JH : ilep3 != l3 nor l4
           }
-          if(it_rg2 < 4) WtagLep = *leptons.at(wlepWZ);
-          else WtagLep = *leptons.at(wlepWG);
+          if(it_rg2 < 4) WtagLep = *leptons.at(wlepWZ); //JH : WZ, ZG
+          else WtagLep = *leptons.at(wlepWG); //JH : WG
         }
       } 
       else continue;
@@ -1490,7 +1490,7 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
       Mt3l = MT(TriLep, METv);
 
       if(it_rg2 < 4){   // WZ, ZG control region
-        if(!(ossf_mass10 == 0)) continue;
+        if(!(ossf_mass10 == 0)) continue; //JH : m(OSSF) > 10GeV
       
         // Cutflow : m(ll) > 10 GeV
         FillHist(regionsSM.at(it_rg2)+"/Number_Events_"+IDsuffix, 4.5, weight, cutflow_bin, 0., cutflow_max);
@@ -1502,13 +1502,13 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
         FillHist(regionsSM.at(it_rg2)+"/Number_Events_"+IDsuffix, 5.5, weight, cutflow_bin, 0., cutflow_max);
         FillHist(regionsSM.at(it_rg2)+"/Number_Events_unweighted_"+IDsuffix, 5.5, 1., cutflow_bin, 0., cutflow_max);
 
-        if(it_rg2 == 2){
+        if(it_rg2 == 2){ //JH : WZ
           if(!IsOnZ(ZCand.M(), 15.)) continue;
           if(!(MET > 50.)) continue;
           if(!(Mt > 20.)) continue;
           if(!(TriLep.M() > MZ + 15.)) continue;
         }
-        if(it_rg2 == 3){
+        if(it_rg2 == 3){ //JH : ZG
           if(IsOnZ(ZCand.M(), 15.)) continue;
           if(!(MET < 50.)) continue;
           if(!IsOnZ(TriLep.M(), 15.)) continue;
@@ -1608,9 +1608,9 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
         FillHist(regionsSM.at(it_rg2)+"/Mt_NoLooseBJet_"+IDsuffix, Mt, weight, 1000, 0., 1000.);
         FillHist(regionsSM.at(it_rg2)+"/MET_NoLooseBJet_"+IDsuffix, MET, weight, 1000, 0., 1000.);
         FillHist(regionsSM.at(it_rg2)+"/MET2ST_NoLooseBJet_"+IDsuffix, MET2ST, weight, 1000, 0., 1000.);
-      }
+      } //JH : TODO meaning of NoLooseBJet?
 
-      for(unsigned int it_ch2=0; it_ch2<channels3L.size(); it_ch2++){
+      for(unsigned int it_ch2=0; it_ch2<channels3L.size(); it_ch2++){ //JH : for each lepton channels
         if(it_ch2 == electrons.size()){
           FillHist(regionsSM.at(it_rg2)+"/"+channels3L.at(it_ch2)+"/Number_Events_"+IDsuffix, 6.5, weight, cutflow_bin, 0., cutflow_max);
           FillHist(regionsSM.at(it_rg2)+"/"+channels3L.at(it_ch2)+"/Number_Events_unweighted_"+IDsuffix, 6.5, 1., cutflow_bin, 0., cutflow_max);
@@ -1716,21 +1716,21 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
       FillHist(regionsSM.at(it_rg2)+"/Number_Events_unweighted_"+IDsuffix, 3.5, 1., cutflow_bin, 0., cutflow_max);
 
       // OSSF lepton pairs
-      if(muons.size()==2 && muons.at(0).Charge()*muons.at(1).Charge()<0 && electrons.at(0).Charge()*electrons.at(1).Charge()<0){
+      if(muons.size()==2 && muons.at(0).Charge()*muons.at(1).Charge()<0 && electrons.at(0).Charge()*electrons.at(1).Charge()<0){ //JH : 2 OSSF
         ZCand1 = muons.at(0) + muons.at(1);
         ZCand2 = electrons.at(0) + electrons.at(1);
       }
       else if(muons.size()==4 || electrons.size()==4){
-        if(leptons_minus.size() == leptons_plus.size()){
+        if(leptons_minus.size() == leptons_plus.size()){ //JH : 2 OSSF
           Ztemp1 = *leptons_minus.at(0) + *leptons_plus.at(0);
           Ztemp2 = *leptons_minus.at(1) + *leptons_plus.at(1);
           Ztemp3 = *leptons_minus.at(0) + *leptons_plus.at(1);
           Ztemp4 = *leptons_minus.at(1) + *leptons_plus.at(0);
-          if(!(Ztemp1.M()>10. && Ztemp2.M()>10. && Ztemp3.M()>10. && Ztemp4.M()>10.)) ossf_mass10++;
+          if(!(Ztemp1.M()>10. && Ztemp2.M()>10. && Ztemp3.M()>10. && Ztemp4.M()>10.)) ossf_mass10++; //JH : all combination of m(OSSF) > 10GeV
           ZCand1 = Ztemp1; ZCand2 = Ztemp2;
 
-          if(!(IsOnZ(ZCand1.M(), 15.) && IsOnZ(ZCand2.M(), 15.))){
-            ZCand1 = Ztemp3; ZCand2 = Ztemp4;
+          if(!(IsOnZ(ZCand1.M(), 15.) && IsOnZ(ZCand2.M(), 15.))){ //JH : 1st OSSF combination must be IsOnZ
+            ZCand1 = Ztemp3; ZCand2 = Ztemp4; //JH : 2nd OSSF combination
           }
         }
       }
@@ -1748,7 +1748,7 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
       FillHist(regionsSM.at(it_rg2)+"/Number_Events_"+IDsuffix, 5.5, weight, cutflow_bin, 0., cutflow_max);
       FillHist(regionsSM.at(it_rg2)+"/Number_Events_unweighted_"+IDsuffix, 5.5, 1., cutflow_bin, 0., cutflow_max);
 
-      if(!(IsOnZ(ZCand1.M(), 15.) && IsOnZ(ZCand2.M(), 15.))) continue;
+      if(!(IsOnZ(ZCand1.M(), 15.) && IsOnZ(ZCand2.M(), 15.))) continue; //JH : 2nd OSSF combination also must be IsOnZ
 
       // weights for MC
 /*      if(!IsDATA){
@@ -1815,7 +1815,7 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
         FillHist(regionsSM.at(it_rg2)+"/MET2ST_NoLooseBJet_"+IDsuffix, MET2ST, weight, 1000, 0., 1000.);
       }
 
-      for(unsigned int it_ch2=0; it_ch2<channels4L.size(); it_ch2++){
+      for(unsigned int it_ch2=0; it_ch2<channels4L.size(); it_ch2++){ //JH : for each lepton channels
         if(it_ch2 == electrons.size()/2){
           FillHist(regionsSM.at(it_rg2)+"/"+channels4L.at(it_ch2)+"/Number_Events_"+IDsuffix, 6.5, weight, cutflow_bin, 0., cutflow_max);
           FillHist(regionsSM.at(it_rg2)+"/"+channels4L.at(it_ch2)+"/Number_Events_unweighted_"+IDsuffix, 6.5, 1., cutflow_bin, 0., cutflow_max);
