@@ -326,17 +326,9 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
   vector<Muon> muons = SelectMuons(this_AllMuons, MuonID, 10., 2.4);
   vector<Muon> muons_veto = SelectMuons(this_AllMuons, param.Muon_Veto_ID, 5., 2.4);
   vector<Electron> electrons = SelectElectrons(this_AllElectrons, ElectronID, 10., 2.5);
-<<<<<<< HEAD
-  vector<Electron> electrons_veto = SelectElectrons(this_AllElectrons, param.Electron_Veto_ID, 10., 2.5); //JH : lepton selection done
-  vector<Jet> jets_nolepveto = SelectJets(this_AllJets, "tight", 20., 2.4); //JH : to reject bjets
-//  vector<FatJet> fatjets = SelectFatJets(this_AllFatJets, param.FatJet_ID, 200., 2.7);
-
-//  FillHist("Njet_"+IDsuffix, jets_nolepveto.size(), weight, 8, 0., 8.);
-=======
   vector<Electron> electrons_veto = SelectElectrons(this_AllElectrons, param.Electron_Veto_ID, 10., 2.5);
   vector<Jet> jets_nolepveto = SelectJets(this_AllJets, param.Jet_ID, 20., 2.7);  // AK4jets used for b tag
   vector<FatJet> fatjets_nolepveto = SelectFatJets(this_AllFatJets, param.FatJet_ID, 200., 2.7);
->>>>>>> d51cdbcce7ede80c0bc38004ab09f3dcedc9a8a1
 
 
   // Jet, FatJet selection to avoid double counting due to jets matched geometrically with a lepton
@@ -384,16 +376,7 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
     if(lepton_count2 > 0) continue;
     if(fatjet_count > 0) continue;
     jets.push_back(this_AllJets.at(i));
-<<<<<<< HEAD
-  }
-
-//JH : jet, fatjet selection done.
-
-//  FillHist("Nfatjet_hn_"+IDsuffix, fatjets.size(), weight, 5, 0., 5.);
-//  FillHist("Njet_hn_"+IDsuffix, jets.size(), weight, 8, 0., 8.); 
-=======
   }*/
->>>>>>> d51cdbcce7ede80c0bc38004ab09f3dcedc9a8a1
 
   std::vector<Lepton*> leptons, leptons_minus, leptons_plus, leptons_veto;
 
