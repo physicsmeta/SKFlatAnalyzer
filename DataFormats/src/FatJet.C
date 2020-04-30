@@ -139,9 +139,10 @@ double FatJet::GetTaggerResult(JetTagging::Tagger tg) const{
 }
 
 bool FatJet::Pass_HNTight() const{
-  if(!Pass_tightLepVetoJetID()) return false;
+//  if(!Pass_tightLepVetoJetID()) return false;
+  if(!Pass_tightJetID()) return false;
   if(!(PuppiTau2()/PuppiTau1()<0.6)) return false;
-  if(!(SDMass()>60. && SDMass()<130.)) return false;
+  if(!(SDMass()>40. && SDMass()<130.)) return false;
 
   return true;
 }

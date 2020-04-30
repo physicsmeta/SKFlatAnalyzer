@@ -1,9 +1,9 @@
 #ifndef HNtypeI_Muon_SR_h
 #define HNtypeI_Muon_SR_h
 
-#include "AnalyzerCore.h"
+#include "HNAnalyzerCore.h"
 
-class HNtypeI_Muon_SR : public AnalyzerCore {
+class HNtypeI_Muon_SR : public HNAnalyzerCore {
 
 public:
 

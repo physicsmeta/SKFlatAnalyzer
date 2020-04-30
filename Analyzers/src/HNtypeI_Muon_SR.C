@@ -158,30 +158,29 @@ void HNtypeI_Muon_SR::executeEvent(){
 //      param.Name = MuonID+"_"+"Central";
 
       // Muon ID
-      param.Muon_Tight_ID = MuonTightID;
-      param.Muon_Loose_ID = MuonLooseID;
-      param.Muon_Veto_ID  = MuonVetoID;
-      param.Muon_FR_ID = FakeRateID;     // ID name in histmap_Muon.txt
-      param.Muon_FR_Key = "AwayJetPt40"; // histname
-      param.Muon_ID_SF_Key = "NUM_TightID_DEN_genTracks";
-      param.Muon_ISO_SF_Key = "NUM_TightRelIso_DEN_TightIDandIPCut";
+      param.Muon_Tight_ID       = MuonTightID;
+      param.Muon_Loose_ID       = MuonLooseID;
+      param.Muon_Veto_ID        = MuonVetoID;
+      param.Muon_FR_ID          = FakeRateID;     // ID name in histmap_Muon.txt
+      param.Muon_FR_Key         = "AwayJetPt40";  // histname
+      param.Muon_ID_SF_Key      = "NUM_TightID_DEN_genTracks";
+      param.Muon_ISO_SF_Key     = "NUM_TightRelIso_DEN_TightIDandIPCut";
       param.Muon_Trigger_SF_Key = "";
-      param.Muon_UsePtCone = true;
+      param.Muon_UsePtCone      = true;
 
-      // Electron Id
-      param.Electron_Tight_ID = ElectronTightID;
-      param.Electron_Loose_ID = ElectronLooseID;
-      param.Electron_Veto_ID  = ElectronVetoID;
-      param.Electron_FR_ID = FakeRateID;     // ID name in histmap_Electron.txt
-      param.Electron_FR_Key = "AwayJetPt40"; // histname
-      param.Electron_ID_SF_Key = "passTightID";
+      // Electron ID
+      param.Electron_Tight_ID       = ElectronTightID;
+      param.Electron_Loose_ID       = ElectronLooseID;
+      param.Electron_Veto_ID        = ElectronVetoID;
+      param.Electron_FR_ID          = FakeRateID;     // ID name in histmap_Electron.txt
+      param.Electron_FR_Key         = "AwayJetPt40";  // histname
+      param.Electron_ID_SF_Key      = "passTightID";
       param.Electron_Trigger_SF_Key = "";
-      
-      param.Electron_UsePtCone = true;
+      param.Electron_UsePtCone      = true;
 
       // Jet ID
 //      param.Jet_ID = "tightLepVeto";
-      param.Jet_ID = "HNTight";
+      param.Jet_ID    = "HNTight";
       param.FatJet_ID = "HNTight";
 
       executeEventFromParameter(param);
@@ -350,7 +349,7 @@ void HNtypeI_Muon_SR::executeEventFromParameter(AnalyzerParameter param){
   vector<Muon> muons_veto = SelectMuons(this_AllMuons, param.Muon_Veto_ID, 5., 2.4);
   vector<Electron> electrons = SelectElectrons(this_AllElectrons, ElectronID, 10., 2.5);
   vector<Electron> electrons_veto = SelectElectrons(this_AllElectrons, param.Electron_Veto_ID, 10., 2.5);
-  vector<Jet> jets_nolepveto = SelectJets(this_AllJets, "tight", 20., 2.4); // only used for b jet veto
+  vector<Jet> jets_nolepveto = SelectJets(this_AllJets, param.Jet_ID, 20., 2.4); // only used for b jet veto
 //  vector<FatJet> fatjets = SelectFatJets(this_AllFatJets, param.FatJet_ID, 200., 2.7);
 
 //  FillHist("Njet_"+IDsuffix, jets_nolepveto.size(), weight, 8, 0., 8.);

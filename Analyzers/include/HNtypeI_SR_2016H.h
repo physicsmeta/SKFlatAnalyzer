@@ -1,9 +1,9 @@
 #ifndef HNtypeI_SR_2016H_h
 #define HNtypeI_SR_2016H_h
 
-#include "AnalyzerCore.h"
+#include "HNAnalyzerCore.h"
 
-class HNtypeI_SR_2016H : public AnalyzerCore {
+class HNtypeI_SR_2016H : public HNAnalyzerCore {
 
 public:
 
