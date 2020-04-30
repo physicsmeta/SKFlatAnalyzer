@@ -56,7 +56,7 @@ void Signal::initializeAnalyzer(){
     EMuTriggersH.push_back("HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v");     // 8650.628380028
     MuonPtCut1 = 20., MuonPtCut2 = 10.;
     ElectronPtCut1 = 25., ElectronPtCut2 = 15.;
-    EMuPtCut1 = 25., EMuPtCut2 = 15.; //JH : TODO what for Ele23 leg?
+    EMuPtCut1 = 25., EMuPtCut2 = 15.; 
   }
   else if(DataYear==2017){
     MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8_v");
@@ -155,7 +155,7 @@ void Signal::executeEvent(){
       param.Muon_Trigger_SF_Key = "";
       param.Muon_UsePtCone = true;
 
-      // Electron Id
+      // Electron ID
       param.Electron_Tight_ID = ElectronTightID;
       param.Electron_Loose_ID = ElectronLooseID;
       param.Electron_Veto_ID  = ElectronVetoID;
@@ -351,7 +351,7 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
   // https://github.com/jedori0228/LQanalyzer/blob/CatAnalyzer_13TeV_v8-0-7.36_HNAnalyzer/LQCore/Selection/src/FatJetSelection.cc#L113-L124
   for(unsigned int i=0; i<this_AllFatJets.size(); i++){
     lepton_count1 = 0;
-    if(!(this_AllFatJets.at(i).PassID(param.FatJet_ID))) continue;
+    if(!(this_AllFatJets.at(i).PassID(param.FatJet_ID))) continue; //JH : "HNTight"
     if(!(this_AllFatJets.at(i).Pt() > 200.)) continue;
     if(!(fabs(this_AllFatJets.at(i).Eta()) < 2.7)) continue;
     for(unsigned int j=0; j<muons_veto.size(); j++){
@@ -366,7 +366,7 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
 
   for(unsigned int i=0; i<this_AllJets.size(); i++){
     lepton_count2 = 0, fatjet_count = 0;
-    if(!(this_AllJets.at(i).PassID(param.Jet_ID))) continue;
+    if(!(this_AllJets.at(i).PassID(param.Jet_ID))) continue; //JH :"HNTight"
     if(!(this_AllJets.at(i).Pt() > 20.)) continue;
     if(!(fabs(this_AllJets.at(i).Eta()) < 2.7)) continue;
     for(unsigned int j=0; j<muons_veto.size(); j++){
