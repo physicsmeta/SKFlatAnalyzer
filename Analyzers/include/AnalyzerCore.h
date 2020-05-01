@@ -182,6 +182,11 @@ public:
   std::vector<Jet> JetsAwayFromPhoton(const std::vector<Jet>& jets, const std::vector<Photon>& photons, double mindr);
   Particle AddFatJetAndLepton(const FatJet& fatjet, const Lepton& lep);
 
+  // Electron CF
+  std::vector<Electron> ShiftElectronEnergy(const std::vector<Electron>& beforeshift, AnalyzerParameter param, bool applyshift);
+  double GetCFrates(TString id, double pt, double eta);
+  double GetCFweight(vector<Lepton *> lepptrs, AnalyzerParameter param, bool applySF, int syst);
+
   //==== GenMatching
 
   void PrintGen(const std::vector<Gen>& gens);
