@@ -786,7 +786,7 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
       }
 
       //if(!(jets.size()>0 || fatjets.size()>0)) continue; //JH : at least 1 signal jet or fatjet
-      if(!(fatjets.size()>0 || (jets.size()>1 && fatjets.size()==0) || (jets.size()==1 && fatjets.size()==0 && ZCand.M()<80.)) continue; //JH : JS's preselection
+      if(!( fatjets.size()>0 || (jets.size()>1 && fatjets.size()==0) || (jets.size()==1 && fatjets.size()==0 && ZCand.M()<80.) )) continue; //JH : JS's preselection
       
       FillHist(channels.at(it_ch)+"/"+"Pre/Number_Jets_"+IDsuffix, jets.size(), weight, 10, 0., 10.);
       FillHist(channels.at(it_ch)+"/"+"Pre/Number_BJets_Loose_"+IDsuffix, Nbjet_loose, weight, 10, 0., 10.);

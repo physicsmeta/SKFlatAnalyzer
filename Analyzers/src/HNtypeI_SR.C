@@ -338,9 +338,10 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
 
   vector<FatJet> fatjets = FatJetsVetoLeptonInside(fatjets_nolepveto, electrons_veto, muons_veto);  // AK8jets used in SR, CR
   vector<Jet> jets_lepveto = JetsVetoLeptonInside(jets_nolepveto, electrons_veto, muons_veto);
-  vector<Jet> jets_insideFatjets = JetsInsideFatJet(jets_lepveto, fatjets);  // For jets inside a fatjet, remove their smearing from MET. Because FatJet smearing is already propagted to MET.
-  vector<Jet> jets_PUveto = JetsPassPileupMVA(jets_lepveto);
-  vector<Jet> jets = JetsAwayFromFatJet(jets_PUveto, fatjets);  // AK4jets used in SR, CR
+  //vector<Jet> jets_insideFatjets = JetsInsideFatJet(jets_lepveto, fatjets);  // For jets inside a fatjet, remove their smearing from MET. Because FatJet smearing is already propagted to MET. //JH : tmp comment
+  //vector<Jet> jets_PUveto = JetsPassPileupMVA(jets_lepveto); //JH : tmp comment
+  //vector<Jet> jets = JetsAwayFromFatJet(jets_PUveto, fatjets);  // AK4jets used in SR, CR //JH : tmp comment
+  vector<Jet> jets = jets_lepveto; //JH : tmp. just to avoid conflict
 
 //  int lepton_count1 = 0, lepton_count2 = 0, fatjet_count = 0; 
 
@@ -420,8 +421,8 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
 
   Particle METv = ev.GetMETVector();
 
-  METv = UpdateMETMuon(METv, this_AllMuons);
-  METv = UpdateMETElectron(METv, this_AllElectrons);
+  //METv = UpdateMETMuon(METv, this_AllMuons); //JH : tmp comment
+  //METv = UpdateMETElectron(METv, this_AllElectrons); //JH : tmp comment
 
   double MET = METv.Pt();
 
