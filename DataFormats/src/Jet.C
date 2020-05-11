@@ -140,93 +140,93 @@ bool Jet::PassPileupMVA(TString WP) const {
 
   if(WP=="tight"){
     if(fabs(this->Eta()) < 2.5){
-      if(this->Pt() < 10.){ if(!(PileupJetId() > 0.69)) pass=false; }
-      else if(this->Pt() < 20.){ if(!(PileupJetId() > 0.69)) pass=false; }
-      else if(this->Pt() < 30.){ if(!(PileupJetId() > 0.69)) pass=false; }
-      else if(this->Pt() < 50.){ if(!(PileupJetId() > 0.86)) pass=false; }
+      if(this->Pt() < 10.){ if(PileupJetId() > 0.69) pass=true; }
+      else if(this->Pt() < 20.){ if(PileupJetId() > 0.69) pass=true; }
+      else if(this->Pt() < 30.){ if(PileupJetId() > 0.69) pass=true; }
+      else if(this->Pt() < 50.){ if(PileupJetId() > 0.86) pass=true; }
       else pass=true;
     }
     else if(fabs(this->Eta()) < 2.75){
-      if(this->Pt() < 10.){ if(!(PileupJetId() > -0.35)) pass=false; }
-      else if(this->Pt() < 20.){ if(!(PileupJetId() > -0.35)) pass=false; }
-      else if(this->Pt() < 30.){ if(!(PileupJetId() > -0.35)) pass=false; }
-      else if(this->Pt() < 50.){ if(!(PileupJetId() > -0.10)) pass=false; }
+      if(this->Pt() < 10.){ if(PileupJetId() > -0.35) pass=true; }
+      else if(this->Pt() < 20.){ if(PileupJetId() > -0.35) pass=true; }
+      else if(this->Pt() < 30.){ if(PileupJetId() > -0.35) pass=true; }
+      else if(this->Pt() < 50.){ if(PileupJetId() > -0.10) pass=true; }
       else pass=true;
     }
     else if(fabs(this->Eta()) < 3.0){
-      if(this->Pt() < 10.){ if(!(PileupJetId() > -0.26)) pass=false; }
-      else if(this->Pt() < 20.){ if(!(PileupJetId() > -0.26)) pass=false; }
-      else if(this->Pt() < 30.){ if(!(PileupJetId() > -0.26)) pass=false; }
-      else if(this->Pt() < 50.){ if(!(PileupJetId() > -0.05)) pass=false; }
+      if(this->Pt() < 10.){ if(PileupJetId() > -0.26) pass=true; }
+      else if(this->Pt() < 20.){ if(PileupJetId() > -0.26) pass=true; }
+      else if(this->Pt() < 30.){ if(PileupJetId() > -0.26) pass=true; }
+      else if(this->Pt() < 50.){ if(PileupJetId() > -0.05) pass=true; }
       else pass=true;
     }
     else if(fabs(this->Eta()) < 5.0){
-      if(this->Pt() < 10.){ if(!(PileupJetId() > -0.21)) pass=false; }
-      else if(this->Pt() < 20.){ if(!(PileupJetId() > -0.21)) pass=false; }
-      else if(this->Pt() < 30.){ if(!(PileupJetId() > -0.21)) pass=false; }
-      else if(this->Pt() < 50.){ if(!(PileupJetId() > -0.01)) pass=false; }
+      if(this->Pt() < 10.){ if(PileupJetId() > -0.21) pass=true; }
+      else if(this->Pt() < 20.){ if(PileupJetId() > -0.21) pass=true; }
+      else if(this->Pt() < 30.){ if(PileupJetId() > -0.21) pass=true; }
+      else if(this->Pt() < 50.){ if(PileupJetId() > -0.01) pass=true; }
       else pass=true;
     }
     else pass=true;
   }
   else if(WP=="medium"){
     if(fabs(this->Eta()) < 2.5){
-      if(this->Pt() < 10.){ if(!(PileupJetId() > 0.18)) pass=false; }
-      else if(this->Pt() < 20.){ if(!(PileupJetId() > 0.18)) pass=false; }
-      else if(this->Pt() < 30.){ if(!(PileupJetId() > 0.18)) pass=false; }
-      else if(this->Pt() < 50.){ if(!(PileupJetId() > 0.61)) pass=false; }
+      if(this->Pt() < 10.){ if(PileupJetId() > 0.18) pass=true; }
+      else if(this->Pt() < 20.){ if(PileupJetId() > 0.18) pass=true; }
+      else if(this->Pt() < 30.){ if(PileupJetId() > 0.18) pass=true; }
+      else if(this->Pt() < 50.){ if(PileupJetId() > 0.61) pass=true; }
       else pass=true;
     }
     else if(fabs(this->Eta()) < 2.75){
-      if(this->Pt() < 10.){ if(!(PileupJetId() > -0.55)) pass=false; }
-      else if(this->Pt() < 20.){ if(!(PileupJetId() > -0.55)) pass=false; }
-      else if(this->Pt() < 30.){ if(!(PileupJetId() > -0.55)) pass=false; }
-      else if(this->Pt() < 50.){ if(!(PileupJetId() > -0.35)) pass=false; }
+      if(this->Pt() < 10.){ if(PileupJetId() > -0.55) pass=false; }
+      else if(this->Pt() < 20.){ if(PileupJetId() > -0.55) pass=true; }
+      else if(this->Pt() < 30.){ if(PileupJetId() > -0.55) pass=true; }
+      else if(this->Pt() < 50.){ if(PileupJetId() > -0.35) pass=true; }
       else pass=true;
     }
     else if(fabs(this->Eta()) < 3.0){
-      if(this->Pt() < 10.){ if(!(PileupJetId() > -0.42)) pass=false; }
-      else if(this->Pt() < 20.){ if(!(PileupJetId() > -0.42)) pass=false; }
-      else if(this->Pt() < 30.){ if(!(PileupJetId() > -0.42)) pass=false; }
-      else if(this->Pt() < 50.){ if(!(PileupJetId() > -0.23)) pass=false; }
+      if(this->Pt() < 10.){ if(PileupJetId() > -0.42) pass=true; }
+      else if(this->Pt() < 20.){ if(PileupJetId() > -0.42) pass=true; }
+      else if(this->Pt() < 30.){ if(PileupJetId() > -0.42) pass=true; }
+      else if(this->Pt() < 50.){ if(PileupJetId() > -0.23) pass=true; }
       else pass=true;
     }
     else if(fabs(this->Eta()) < 5.0){
-      if(this->Pt() < 10.){ if(!(PileupJetId() > -0.36)) pass=false; }
-      else if(this->Pt() < 20.){ if(!(PileupJetId() > -0.36)) pass=false; }
-      else if(this->Pt() < 30.){ if(!(PileupJetId() > -0.36)) pass=false; }
-      else if(this->Pt() < 50.){ if(!(PileupJetId() > -0.17)) pass=false; }
+      if(this->Pt() < 10.){ if(PileupJetId() > -0.36) pass=true; }
+      else if(this->Pt() < 20.){ if(PileupJetId() > -0.36) pass=true; }
+      else if(this->Pt() < 30.){ if(PileupJetId() > -0.36) pass=true; }
+      else if(this->Pt() < 50.){ if(PileupJetId() > -0.17) pass=true; }
       else pass=true;
     }
     else pass=true;
   }
   else if(WP=="loose"){
     if(fabs(this->Eta()) < 2.5){
-      if(this->Pt() < 10.){ if(!(PileupJetId() > -0.97)) pass=false; }
-      else if(this->Pt() < 20.){ if(!(PileupJetId() > -0.97)) pass=false; }
-      else if(this->Pt() < 30.){ if(!(PileupJetId() > -0.97)) pass=false; }
-      else if(this->Pt() < 50.){ if(!(PileupJetId() > -0.89)) pass=false; }
+      if(this->Pt() < 10.){ if(PileupJetId() > -0.97) pass=true; }
+      else if(this->Pt() < 20.){ if(PileupJetId() > -0.97) pass=true; }
+      else if(this->Pt() < 30.){ if(PileupJetId() > -0.97) pass=true; }
+      else if(this->Pt() < 50.){ if(PileupJetId() > -0.89) pass=true; }
       else pass=true;
     }
     else if(fabs(this->Eta()) < 2.75){
-      if(this->Pt() < 10.){ if(!(PileupJetId() > -0.68)) pass=false; }
-      else if(this->Pt() < 20.){ if(!(PileupJetId() > -0.68)) pass=false; }
-      else if(this->Pt() < 30.){ if(!(PileupJetId() > -0.68)) pass=false; }
-      else if(this->Pt() < 50.){ if(!(PileupJetId() > -0.52)) pass=false; }
+      if(this->Pt() < 10.){ if(PileupJetId() > -0.68) pass=true; }
+      else if(this->Pt() < 20.){ if(PileupJetId() > -0.68) pass=true; }
+      else if(this->Pt() < 30.){ if(PileupJetId() > -0.68) pass=true; }
+      else if(this->Pt() < 50.){ if(PileupJetId() > -0.52) pass=true; }
       else pass=true;
     }
     else if(fabs(this->Eta()) < 3.0){
-      if(this->Pt() < 10.){ if(!(PileupJetId() > -0.53)) pass=false; }
-      else if(this->Pt() < 20.){ if(!(PileupJetId() > -0.53)) pass=false; }
-      else if(this->Pt() < 30.){ if(!(PileupJetId() > -0.53)) pass=false; }
-      else if(this->Pt() < 50.){ if(!(PileupJetId() > -0.38)) pass=false; }
+      if(this->Pt() < 10.){ if(PileupJetId() > -0.53) pass=true; }
+      else if(this->Pt() < 20.){ if(PileupJetId() > -0.53) pass=true; }
+      else if(this->Pt() < 30.){ if(PileupJetId() > -0.53) pass=true; }
+      else if(this->Pt() < 50.){ if(PileupJetId() > -0.38) pass=true; }
       else pass=true;
     }
     else if(fabs(this->Eta()) < 5.0){
-      if(this->Pt() < 10.){ if(!(PileupJetId() > -0.47)) pass=false; }
-      else if(this->Pt() < 20.){ if(!(PileupJetId() > -0.47)) pass=false; }
-      else if(this->Pt() < 30.){ if(!(PileupJetId() > -0.47)) pass=false; }
-      else if(this->Pt() < 50.){ if(!(PileupJetId() > -0.38)) pass=false; }
+      if(this->Pt() < 10.){ if(PileupJetId() > -0.47) pass=true; }
+      else if(this->Pt() < 20.){ if(PileupJetId() > -0.47) pass=true; }
+      else if(this->Pt() < 30.){ if(PileupJetId() > -0.47) pass=true; }
+      else if(this->Pt() < 50.){ if(PileupJetId() > -0.38) pass=true; }
       else pass=true;
     }
     else pass=true;

@@ -42,8 +42,8 @@ void HNtypeI_Cutflow::initializeAnalyzer(){
   ElectronTriggers.clear();
 
   if(DataYear==2016){
-    MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v");
-    MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_v");
+//    MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v");
+//    MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_v");
     MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v");
     MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_v");
     ElectronTriggers.push_back("HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v");
@@ -160,7 +160,8 @@ void HNtypeI_Cutflow::executeEvent(){
     param.Electron_UsePtCone      = true;
 
     // Jet ID
-    param.Jet_ID    = "HNTight";
+//    param.Jet_ID    = "HNTight";
+    param.Jet_ID    = "tight";
     param.FatJet_ID = "HNTight";
 
     executeEventFromParameter(param);
@@ -197,8 +198,8 @@ void HNtypeI_Cutflow::executeEventFromParameter(AnalyzerParameter param){
     weight *= GetPileUpWeight(nPileUp,0);
   }
 
-//  FillHist("Number_Events_"+IDsuffix, -0.5, weight, cutflow_bin, 0., cutflow_max);
-//  FillHist("Number_Events_unweighted_"+IDsuffix, -0.5, 1., cutflow_bin, 0., cutflow_max);
+  FillHist("Number_Events_"+IDsuffix, -0.5, weight, cutflow_bin, 0., cutflow_max);
+  FillHist("Number_Events_unweighted_"+IDsuffix, -0.5, 1., cutflow_bin, 0., cutflow_max);
 
   //================================================================
   //==== MET Filter
@@ -301,9 +302,13 @@ void HNtypeI_Cutflow::executeEventFromParameter(AnalyzerParameter param){
 
   vector<FatJet> fatjets = FatJetsVetoLeptonInside(fatjets_nolepveto, electrons_veto, muons_veto);  // AK8jets used in SR, CR
   vector<Jet> jets_lepveto = JetsVetoLeptonInside(jets_nolepveto, electrons_veto, muons_veto);
-  vector<Jet> jets_insideFatjets = JetsInsideFatJet(jets_lepveto, fatjets);  // For jets inside a fatjet, remove their smearing from MET. Because FatJet smearing is already propagted to MET.
-  vector<Jet> jets = JetsPassPileupMVA(jets_lepveto); // We use only AK4jets here
-//  vector<Jet> jets_PUveto = JetsPassPileupMVA(jets_lepveto);
+//  vector<Jet> jets_insideFatjets = JetsInsideFatJet(jets_lepveto, fatjets);  // For jets inside a fatjet, remove their smearing from MET. Because FatJet smearing is already propagted to MET.
+//  vector<Jet> jets = JetsPassPileupMVA(jets_lepveto); // We use only AK4jets here
+  //==== For test jet selection
+//  vector<Jet> jets = jets_nolepveto;
+//  vector<Jet> jets = GetJets("tight", 20., 2.7);
+//  vector<Jet> jets = jets_lepveto;
+  vector<Jet> jets = JetsPassPileupMVA(jets_lepveto);
 //  vector<Jet> jets = JetsAwayFromFatJet(jets_PUveto, fatjets);  // AK4jets used in SR, CR
 
   //================================================================
@@ -323,26 +328,27 @@ void HNtypeI_Cutflow::executeEventFromParameter(AnalyzerParameter param){
   //================================================================
 
   int Nbjet_loose = 0, Nbjet_medium = 0, Nbjet_lepveto_medium = 0;
-  JetTagging::Parameters jtp_DeepCSV_Loose = JetTagging::Parameters(JetTagging::DeepCSV,
-                                                                     JetTagging::Loose,
-                                                                     JetTagging::incl, JetTagging::comb);
-  JetTagging::Parameters jtp_DeepCSV_Medium = JetTagging::Parameters(JetTagging::DeepCSV,
-                                                                     JetTagging::Medium,
-                                                                     JetTagging::incl, JetTagging::comb);
+  JetTagging::Parameters jtp_DeepCSV_Loose  = JetTagging::Parameters(JetTagging::DeepCSV, JetTagging::Loose, JetTagging::incl, JetTagging::comb);
+  JetTagging::Parameters jtp_DeepCSV_Medium = JetTagging::Parameters(JetTagging::DeepCSV, JetTagging::Medium, JetTagging::incl, JetTagging::comb);
 
   //==== method 1a)
   //==== multiply "btagWeight" to the event weight
 //  double btagWeight = mcCorr->GetBTaggingReweight_1a(jets, jtp_DeepCSV_Medium);
 
   //==== method 2a)
-  for(unsigned int ij=0; ij<jets_nolepveto.size(); ij++){
-    if(mcCorr->IsBTagged_2a(jtp_DeepCSV_Loose, jets_nolepveto.at(ij))) Nbjet_loose++;
-    if(mcCorr->IsBTagged_2a(jtp_DeepCSV_Medium, jets_nolepveto.at(ij))) Nbjet_medium++;
+  for(unsigned int i=0; i<jets_nolepveto.size(); i++){
+    if(mcCorr->IsBTagged_2a(jtp_DeepCSV_Loose, jets_nolepveto.at(i))) Nbjet_loose++;
+    if(mcCorr->IsBTagged_2a(jtp_DeepCSV_Medium, jets_nolepveto.at(i))) Nbjet_medium++;
   }
 
-  for(unsigned int ij=0; ij<jets.size(); ij++){
-    if(mcCorr->IsBTagged_2a(jtp_DeepCSV_Medium, jets.at(ij))) Nbjet_lepveto_medium++;
+  for(unsigned int i=0; i<jets.size(); i++){
+    if(mcCorr->IsBTagged_2a(jtp_DeepCSV_Medium, jets.at(i))) Nbjet_lepveto_medium++;
   }
+
+  FillHist("Number_Jets_nolepveto_Nocut_"+IDsuffix, jets_nolepveto.size(), weight, 10, 0., 10.); 
+  FillHist("Number_Jets_lepveto_Nocut_"+IDsuffix, jets.size(), weight, 10, 0., 10.);
+  FillHist("Number_BJets_nolepveto_Nocut_"+IDsuffix, Nbjet_medium, weight, 10, 0., 10.);
+  FillHist("Number_BJets_lepveto_Nocut_"+IDsuffix, Nbjet_lepveto_medium, weight, 10, 0., 10.);
 
   //================================================================
   //==== Set up MET
@@ -403,6 +409,8 @@ void HNtypeI_Cutflow::executeEventFromParameter(AnalyzerParameter param){
     FillHist("Number_Events_"+IDsuffix, 4.5, weight, cutflow_bin, 0., cutflow_max);
     FillHist("Number_Events_unweighted_"+IDsuffix, 4.5, 1., cutflow_bin, 0., cutflow_max);
 
+    FillHist("Njet_"+IDsuffix, jets.size(), 1., 10, 0., 10.);
+
     if(!(jets.size() >= 2)) return;
     FillHist("Number_Events_"+IDsuffix, 5.5, weight, cutflow_bin, 0., cutflow_max);
     FillHist("Number_Events_unweighted_"+IDsuffix, 5.5, 1., cutflow_bin, 0., cutflow_max);
@@ -434,10 +442,15 @@ void HNtypeI_Cutflow::executeEventFromParameter(AnalyzerParameter param){
         }
       }
     }
+
     WCand = jets.at(j1) + jets.at(j2);
+
     if(!(WCand.M() < 200.)) return;
     FillHist("Number_Events_"+IDsuffix, 7.5, weight, cutflow_bin, 0., cutflow_max);
     FillHist("Number_Events_unweighted_"+IDsuffix, 7.5, 1., cutflow_bin, 0., cutflow_max);
+
+    FillHist("Number_BJets_nolepveto_"+IDsuffix, Nbjet_medium, weight, 10, 0., 10.);
+    FillHist("Number_BJets_lepveto_"+IDsuffix, Nbjet_lepveto_medium, weight, 10, 0., 10.);
 
     if(!(Nbjet_lepveto_medium == 0)) return;
     FillHist("Number_Events_"+IDsuffix, 8.5, weight, cutflow_bin, 0., cutflow_max);
