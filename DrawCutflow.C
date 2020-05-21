@@ -31,7 +31,7 @@ void DrawCutflow(TString channel, TString region, TString ID, int weight = 0, TS
   h2->GetXaxis()->ChangeLabel(6,15,0.02,12,-1,-1,"3rd lepton veto");
   h2->GetXaxis()->ChangeLabel(7,15,0.02,12,-1,-1,"m(ll) > 10GeV");
   h2->GetXaxis()->ChangeLabel(8,15,0.02,12,-1,-1,"jet preselection");
-  h2->GetXaxis()->ChangeLabel(9,15,0.02,12,-1,-1,"jet SR selection");
+  h2->GetXaxis()->ChangeLabel(9,15,0.02,12,-1,-1,"Signal selection");
   h2->GetXaxis()->ChangeLabel(10,-1,0,-1,-1,-1,"");
   h2->GetXaxis()->ChangeLabel(11,-1,0,-1,-1,-1,"");
   h2->GetYaxis()->SetLabelSize(0.03);
