@@ -107,14 +107,6 @@ public:
   void SetTrackerLayers(int n);
   inline int TrackerLayers() const { return j_trackerLayers; }
 
-  bool Pass_HNVeto2016() const;
-  bool Pass_HNLoose2016() const;
-  bool Pass_HNTight2016() const;
-
-  bool Pass_HNLoose() const;
-  bool Pass_HNTight() const;
-  bool Pass_HNTightV2() const;
-
 private:
 
   unsigned int j_TypeBit, j_IDBit;

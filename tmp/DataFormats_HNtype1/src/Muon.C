@@ -106,17 +106,11 @@ bool Muon::PassID(TString ID) const {
   if(ID=="POGHighPtWithLooseTrkIso") return Pass_POGHighPtWithLooseTrkIso();
   //==== Customized
   if(ID=="TEST") return Pass_TESTID();
-  if(ID=="HNVeto2016") return Pass_HNVeto2016();
-  if(ID=="HNLoose2016") return Pass_HNLoose2016();
-  if(ID=="HNTight2016") return Pass_HNTight2016();
-  if(ID=="HNLoose") return Pass_HNLoose();
-  if(ID=="HNTight") return Pass_HNTight();
-  if(ID=="HNTightV2") return Pass_HNTightV2();
 
   //==== No cut
   if(ID=="NOCUT") return true;
 
-  cout << "[Muon::PassID] No id : " << ID << endl;
+  cout << "[Electron::PassID] No id : " << ID << endl;
   exit(EXIT_FAILURE);
 
   return false;
@@ -132,50 +126,6 @@ bool Muon::Pass_POGHighPtWithLooseTrkIso() const {
   if(!( TrkIso()/TuneP4().Pt()<0.1 )) return false;
   return true;
 }
-
-bool Muon::Pass_HNVeto2016() const{
-  if(!( isPOGLoose() )) return false;
-  if(!( fabs(dXY())<0.2 && fabs(dZ())<0.5) ) return false;
-  if(!( RelIso()<0.6 ))  return false;
-  if(!( Chi2()<50. )) return false;
-  return true;
-}
-
-bool Muon::Pass_HNLoose2016() const{
-  if(!( isPOGLoose() )) return false;
-  if(!( fabs(dXY())<0.2 && fabs(dZ())<0.1 && fabs(IP3D()/IP3Derr())<3.) ) return false;
-  if(!( RelIso()<0.4 ))  return false;
-  if(!( Chi2()<50. )) return false;
-  return true;
-}
-
-bool Muon::Pass_HNTight2016() const{
-  if(!( isPOGTight() )) return false;
-  if(!( fabs(dXY())<0.005 && fabs(dZ())<0.04 && fabs(IP3D()/IP3Derr())<3.) ) return false;
-  if(!( RelIso()<0.07 ))  return false;
-  if(!( Chi2()<10. )) return false;
-  return true;
-}
-
-bool Muon::Pass_HNLoose() const{
-  if(!( isPOGTight() )) return false;
-  if(!( RelIso()<0.4 )) return false;
-  return true;
-}
-
-bool Muon::Pass_HNTight() const{
-  if(!( isPOGTight() )) return false;
-  if(!( RelIso()<0.15 )) return false;
-  return true;
-}
-
-bool Muon::Pass_HNTightV2() const{
-  if(!( isPOGTight() )) return false;
-  if(!( RelIso()<0.1 )) return false;
-  if(!( fabs(dXY())<0.01 && fabs(dZ())<0.04) ) return false;
-  return true;
-}
-
 
 //==== TEST ID
 

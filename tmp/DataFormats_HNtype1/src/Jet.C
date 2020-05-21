@@ -1,8 +1,8 @@
-#include "FatJet.h"
+#include "Jet.h"
 
-ClassImp(FatJet)
+ClassImp(Jet)
 
-FatJet::FatJet() : Particle() {
+Jet::Jet() : Particle() {
   j_area=-999.;
   j_partonFlavour=-999;
   j_hadronFlavour=-999;
@@ -25,33 +25,27 @@ FatJet::FatJet() : Particle() {
   j_muonEnergyFraction=-999.;
   j_chargedMultiplicity=-999;
   j_neutralMultiplicity=-999;
-  j_lsf=-999.;
-  j_lsf_pid=-999;
+  j_PileupJetId=-999.;
   j_En_up=1.;
   j_En_down=1.;;
   j_Res_up = 1.;
   j_Res_down = 1.;
   j_tightJetID=false;
   j_tightLepVetoJetID=false;
-  j_puppi_tau1 = -999.;
-  j_puppi_tau2 = -999.;
-  j_puppi_tau3 = -999.;
-  j_puppi_tau4 = -999.;
-  j_SDMass = -999.;
 }
 
-FatJet::~FatJet(){
+Jet::~Jet(){
 
 }
 
-void FatJet::SetArea(double area){
+void Jet::SetArea(double area){
   j_area = area;
 }
-void FatJet::SetGenFlavours(double pf, double hf){
+void Jet::SetGenFlavours(double pf, double hf){
   j_partonFlavour = pf;
   j_hadronFlavour = hf;
 }
-void FatJet::SetTaggerResults(std::vector<double> ds){
+void Jet::SetTaggerResults(std::vector<double> ds){
   j_CSVv2             = ds.at(0);
   j_DeepCSV           = ds.at(1);
   j_DeepCvsL          = ds.at(2);
@@ -65,60 +59,52 @@ void FatJet::SetTaggerResults(std::vector<double> ds){
   j_CvsL              = ds.at(10);
   j_CvsB              = ds.at(11);
 }
-void FatJet::SetEnergyFractions(double cH, double nH, double nEM, double cEM, double muE){
+void Jet::SetEnergyFractions(double cH, double nH, double nEM, double cEM, double muE){
   j_chargedHadronEnergyFraction = cH;
   j_neutralHadronEnergyFraction = nH;
   j_neutralEmEnergyFraction = nEM;
   j_chargedEmEnergyFraction = cEM;
   j_muonEnergyFraction = muE;
 }
-void FatJet::SetMultiplicities(double cM, double nM){
+void Jet::SetMultiplicities(double cM, double nM){
   j_chargedMultiplicity = cM;
   j_neutralMultiplicity = nM;
 }
-
-void FatJet::SetLSF(double lsf, int lsf_PID){
-  j_lsf = lsf;
-  j_lsf_pid = lsf_PID;
-}
-double FatJet::LSF() const{
-  return j_lsf;
-}
-double FatJet::LSF_PID() const{
-  return j_lsf_pid;
+void Jet::SetPileupJetId(double v){
+  j_PileupJetId = v;
 }
 
-void FatJet::SetEnShift(double en_up, double en_down){
+void Jet::SetEnShift(double en_up, double en_down){
   j_En_up = en_up;
   j_En_down = en_down;
 }
 
-void FatJet::SetResShift(double res_up, double res_down){
+void Jet::SetResShift(double res_up, double res_down){
   j_Res_up = res_up;
   j_Res_down = res_down;
 }
 
-void FatJet::SetTightJetID(double b){
+void Jet::SetTightJetID(double b){
   j_tightJetID = b;
 }
-void FatJet::SetTightLepVetoJetID(double b){
+void Jet::SetTightLepVetoJetID(double b){
   j_tightLepVetoJetID = b;
 }
 
-bool FatJet::PassID(TString ID) const {
+bool Jet::PassID(TString ID) const {
 
   if(ID=="tight") return Pass_tightJetID();
   if(ID=="tightLepVeto") return Pass_tightLepVetoJetID();
-  if(ID=="HNTight") return Pass_HNTight();
 
-  cout << "[FatJet::PassID] No id : " << ID << endl;
+  cout << "[Jet::PassID] No id : " << ID << endl;
   exit(EXIT_FAILURE);
 
   return false;
 
 }
 
-double FatJet::GetTaggerResult(JetTagging::Tagger tg) const{
+double Jet::GetTaggerResult(JetTagging::Tagger tg) const {
+
   if(tg==JetTagging::CSVv2) return j_CSVv2;
   else if(tg==JetTagging::DeepCSV) return j_DeepCSV;
   else if(tg==JetTagging::DeepJet) return j_DeepFlavour_b+j_DeepFlavour_bb+j_DeepFlavour_lepb;
@@ -133,28 +119,8 @@ double FatJet::GetTaggerResult(JetTagging::Tagger tg) const{
   else if(tg==JetTagging::DeepCvsL) return j_DeepCvsL;
   else if(tg==JetTagging::DeepCvsB) return j_DeepCvsB;
   else{
-    cout << "[FatJet::GetTaggerResult] ERROR; Wrong tagger" << endl;
+    cout << "[Jet::GetTaggerResult] ERROR; Wrong tagger : " << tg << endl;
     return -999;
   }
-}
-
-bool FatJet::Pass_HNTight() const{
-//  if(!Pass_tightLepVetoJetID()) return false;
-  if(!Pass_tightJetID()) return false;
-  if(!(PuppiTau2()/PuppiTau1()<0.6)) return false;
-  if(!(SDMass()>60. && SDMass()<130.)) return false;
-
-  return true;
-}
-
-void FatJet::SetPuppiTaus(double t1, double t2, double t3, double t4){
-  j_puppi_tau1 = t1;
-  j_puppi_tau2 = t2;
-  j_puppi_tau3 = t3;
-  j_puppi_tau4 = t4;
-}
-
-void FatJet::SetSDMass(double m){
-  j_SDMass = m;
 }
 
