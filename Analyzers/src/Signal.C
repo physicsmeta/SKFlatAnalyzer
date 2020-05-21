@@ -88,7 +88,6 @@ void Signal::initializeAnalyzer(){
   jtps.push_back( JetTagging::Parameters(JetTagging::DeepCSV, JetTagging::Medium, JetTagging::incl, JetTagging::comb) );
   //==== set
   mcCorr->SetJetTaggingParameters(jtps); //JH : NOTE This is used in mcCorr->SetupJetTagging() in m.initializeAnalyzerTools();
-
 }
 
 Signal::~Signal(){
