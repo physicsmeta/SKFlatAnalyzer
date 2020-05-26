@@ -58,7 +58,7 @@ void DrawCutflow(TString channel, TString region, TString ID, TString period, in
   }
   pt->Draw();
   
-  signal_eff << title << " : " << 100*h2->GetBinContent(9) << "\n"; //to check signal eff
+  signal_eff << title << " : " << 100*h2->GetBinContent(9) << " (%)" << "\n"; //to check signal eff
 
   if(SaveAs == "y"){
     c1->SaveAs("Cutflow/2016/"+ID+"/"+title+".png");
