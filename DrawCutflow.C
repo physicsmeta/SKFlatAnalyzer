@@ -1,18 +1,23 @@
-void DrawCutflow(TString channel, TString region, TString ID, TString Period, int doWeight = 0, TString SaveAs = "n"){ //ex : dimu, highSR1, HNV2, B_ver2
+vector<TString> channels = {"dimu", "diel", "emu"};
+vector<TString> regions = {"lowSR1", "lowSR2", "highSR1", "highSR2"};
+vector<TString> IDs = {"HN16", "HNV2"};
+vector<TString> periods = {"B_ver2", "C", "D", "E", "F", "G", "H"};
+vector<TString> weights = {"Number_Events", "Number_Events_unweighted"};
 
-  TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/Signal/2016/DATA/Signal_DoubleMuon_"+Period+".root";
+ofstream signal_eff("Cutflow/2016/signal_eff.txt");
+
+void DrawCutflow(TString channel, TString region, TString ID, TString period, int doWeight = 0, TString SaveAs = "n"){ //ex : dimu, highSR1, HNV2, B_ver2
+
+  TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/Signal/2016/DATA/Signal_DoubleMuon_"+period+".root";
   TFile* f1 = new TFile(filename);
   
-  gSystem->Exec("mkdir Cutflow");
-  
-  vector<TString> channels = {"dimu", "diel", "emu"};
-  vector<TString> regions = {"lowSR1", "lowSR2", "highSR1", "highSR2"};
-  vector<TString> weights = {"Number_Events", "Number_Events_unweighted"};
-  vector<TString> IDs = {"HN16", "HNV2"};
+  for(int i=0; i<IDs.size(); i++){
+    gSystem->Exec("mkdir -p Cutflow/2016/"+IDs.at(i));
+  }
   
   TString title;
-  if(doWeight==0) title = channel+"_"+region+"_"+ID+"_"+Period+"_Cutflow";
-  else if(doWeight==1) title = channel+"_"+region+"_"+ID+"_"+Period+"_Cutflow (weighted)";
+  if(doWeight==0) title = channel+"_"+region+"_"+ID+"_"+period+"_Cutflow";
+  else if(doWeight==1) title = channel+"_"+region+"_"+ID+"_"+period+"_Cutflow (weighted)";
 
   TH1D *h1 = (TH1D*)f1->Get(channel+"/"+region+"/"+weights.at(doWeight)+"_"+ID);
   TH1D *h2 = new TH1D("h2",title,10,0,10);
@@ -52,21 +57,36 @@ void DrawCutflow(TString channel, TString region, TString ID, TString Period, in
     pt->AddText(i_t+"th eff. : "+item_t+"%");
   }
   pt->Draw();
+  
+  signal_eff << title << " : " << 100*h2->GetBinContent(9) << "\n"; //to check signal eff
 
   if(SaveAs == "y"){
-    //c1->SaveAs("Cutflow/"+title+".pdf");
-    c1->SaveAs("Cutflow/"+title+".png");
+    c1->SaveAs("Cutflow/2016/"+ID+"/"+title+".png");
   }
 
 }
 
-void SaveAllPeriod(){
+void SaveAll(){
 
-  DrawCutflow("dimu", "highSR1", "HNV2", "B_ver2", 0, "y");
-  DrawCutflow("dimu", "highSR1", "HNV2", "C", 0, "y");
-  DrawCutflow("dimu", "highSR1", "HNV2", "D", 0, "y");
-  DrawCutflow("dimu", "highSR1", "HNV2", "E", 0, "y");
-  DrawCutflow("dimu", "highSR1", "HNV2", "F", 0, "y");
-  DrawCutflow("dimu", "highSR1", "HNV2", "G", 0, "y");
+  for(int j=0; j<regions.size(); j++){
+    for(int k=0; k<IDs.size(); k++){
+      for(int l=0; l<periods.size()-1; l++){
+        DrawCutflow("dimu", regions.at(j), IDs.at(k), periods.at(l), 0, "y");
+      }
+    }
+  }
 
 }
+
+void NoSaveAll(){ //to get calculation results only; Use this with root -l -b options
+
+  for(int j=0; j<regions.size(); j++){
+    for(int k=0; k<IDs.size(); k++){
+      for(int l=0; l<periods.size()-1; l++){
+        DrawCutflow("dimu", regions.at(j), IDs.at(k), periods.at(l), 0, "n");
+      }
+    }
+  }
+
+}
+
