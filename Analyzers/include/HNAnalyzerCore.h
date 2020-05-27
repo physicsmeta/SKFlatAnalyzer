@@ -184,8 +184,11 @@ public:
   std::vector<Jet> JetsAwayFromLepton(const std::vector<Jet>& jets, const Muon& muon, double mindphi=2.5);
   std::vector<Jet> JetsAwayFromLepton(const std::vector<Jet>& jets, const Electron& electron, double mindphi=2.5);
   std::vector<Jet> JetsPassPileupMVA(const std::vector<Jet>& jets);
+  std::vector<Jet> JetsWCandLowMass(const Lepton& lepton1, const Lepton& lepton2, const std::vector<Jet>& jets, double MW);
+  std::vector<Jet> JetsWCandHighMass(const std::vector<Jet>& jets, double MW);
+  FatJet FatJetWCand(const std::vector<FatJet>& fatjets, double MW);
 
-  // Correct MET
+  //==== Correct MET
   Particle UpdateMETMuon(const Particle& METv, const std::vector<Muon>& muons);
   Particle UpdateMETElectron(const Particle& METv, const std::vector<Electron>& electrons);
   Particle UpdateMETFake(const Particle& METv, const std::vector<Muon>& muons);

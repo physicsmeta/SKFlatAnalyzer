@@ -295,6 +295,9 @@ void HNtypeI_Cutflow::executeEventFromParameter(AnalyzerParameter param){
   vector<Muon> muons_prompt;
   muons_prompt.clear();
 
+  vector<Jet> jets_WCand;
+  jets_WCand.clear();
+
   // Jet selection to avoid double counting due to jets matched geometrically with a lepton
   // Fatjet selection in CATanalyzer (see the links)
   // https://github.com/jedori0228/LQanalyzer/blob/CatAnalyzer_13TeV_v8-0-7.36_HNAnalyzer/CATConfig/SelectionConfig/user_fatjets.sel
@@ -373,7 +376,7 @@ void HNtypeI_Cutflow::executeEventFromParameter(AnalyzerParameter param){
   //================================================================
   //==== Event selections
   //================================================================
-  //TODO : Add twiki here!!
+  //See https://twiki.cern.ch/twiki/bin/view/CMS/HeavyMajoranaNeutrino13TeVSchannelDiLepton
 
   if(muons.size() == 2){
     if(!(muons.at(0).Pt()>MuonPtCut1 && muons.at(1).Pt()>MuonPtCut2)) return;
@@ -431,7 +434,7 @@ void HNtypeI_Cutflow::executeEventFromParameter(AnalyzerParameter param){
     FillHist("Number_Events_"+IDsuffix, 9.5, weight, cutflow_bin, 0., cutflow_max);
     FillHist("Number_Events_unweighted_"+IDsuffix, 8.5, 1., cutflow_bin, 0., cutflow_max);*/
 
-    double tmpMassDiff = 10000.;
+/*    double tmpMassDiff = 10000.;
     int j1 = 0, j2 = 0;
     for(unsigned int k=0; k<jets.size(); k++){
       for(unsigned int l=k+1; l<jets.size(); l++){
@@ -441,9 +444,10 @@ void HNtypeI_Cutflow::executeEventFromParameter(AnalyzerParameter param){
           j1 = k; j2 = l;
         }
       }
-    }
+    }*/
 
-    WCand = jets.at(j1) + jets.at(j2);
+    jets_WCand = JetsWCandHighMass(jets, MW);
+    WCand = jets_WCand.at(0) + jets_WCand.at(1);
 
     if(!(WCand.M() < 200.)) return;
     FillHist("Number_Events_"+IDsuffix, 7.5, weight, cutflow_bin, 0., cutflow_max);

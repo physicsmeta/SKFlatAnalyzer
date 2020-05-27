@@ -52,18 +52,23 @@ void HNtypeI_SR::initializeAnalyzer(){
     ElectronTriggers.push_back("HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v");          // 35918.219492947
     EMuTriggers.push_back("HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_v");          // 27267.591112919
     EMuTriggers.push_back("HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_v");         // 27267.591112919
+//    EMuTriggers.push_back("HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_v");         // 27267.591112919
     EMuTriggersH.push_back("HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ_v");      // 8650.628380028
     EMuTriggersH.push_back("HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v");     // 8650.628380028
+//    EMuTriggersH.push_back("HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_DZ_v");     // 8650.628380028
 
     // These are needed for applying lepton pT cuts 
     Mu8Ele23Triggers.push_back("HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_v");
     Mu8Ele23Triggers.push_back("HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ_v");
     Mu23Ele12Triggers.push_back("HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_v");
     Mu23Ele12Triggers.push_back("HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v");
+//    Mu23Ele12Triggers.push_back("HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_v");
+//    Mu23Ele12Triggers.push_back("HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_DZ_v");
 
     MuonPtCut1 = 20., MuonPtCut2 = 10.;
     ElectronPtCut1 = 25., ElectronPtCut2 = 15.;
     EMuPtCut1 = 25., EMuPtCut2 = 15.;
+//    EMuPtCut1 = 25., EMuPtCut2 = 10.;
   }
   else if(DataYear==2017){
     MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8_v");
@@ -391,6 +396,12 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
   vector<Jet> jets_PUveto = JetsPassPileupMVA(jets_lepveto);
   vector<Jet> jets = JetsAwayFromFatJet(jets_PUveto, fatjets);  // AK4jets used in SR, CR
 
+  vector<Jet> jets_WCandLowMass;
+  vector<Jet> jets_WCandHighMass;
+  FatJet fatjets_WCand;
+  jets_WCandLowMass.clear();
+  jets_WCandHighMass.clear();
+
 //  int lepton_count1 = 0, lepton_count2 = 0, fatjet_count = 0; 
 
 /*  for(unsigned int i=0; i<this_AllFatJets.size(); i++){
@@ -488,7 +499,7 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
   int lepton_veto_size = 0;
 
   bool passPtCut = false;
-  Particle ZCand, Wtemp1, Wtemp2, WCand1, WCand2;
+  Particle ZCand, WCand1, WCand2;
   Particle llj, l1j, l2j,  lljj, l1jj, l2jj, l1J, l2J;
   Particle WtagLep, TriLep, ZtagLep1, ZtagLep2, Ztemp, Ztemp1, Ztemp2, Ztemp3, Ztemp4, ZCand1, ZCand2, GammaCand, GammaLep1, GammaLep2;
   
@@ -559,6 +570,8 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
   for(unsigned int i=0; i<muons.size(); i++) leptons.push_back(&muons.at(i));
   for(unsigned int i=0; i<electrons.size(); i++) leptons.push_back(&electrons.at(i));
 
+  std::sort(leptons.begin(), leptons.end(), PtComparingPtr);
+
   // Define leptons passing veto IDs
   for(unsigned int i=0; i<muons_veto.size(); i++) leptons_veto.push_back(&muons_veto.at(i));
   for(unsigned int i=0; i<electrons_veto.size(); i++) leptons_veto.push_back(&electrons_veto.at(i));
@@ -569,6 +582,7 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
   for(unsigned int i=0; i<jets.size(); i++) ST += jets.at(i).Pt();
   for(unsigned int i=0; i<fatjets.size(); i++) ST += fatjets.at(i).Pt();
   for(unsigned int i=0; i<leptons.size(); i++) ST += leptons.at(i)->Pt();
+
   ST += MET;
   MET2ST = MET*MET/ST;
 
@@ -608,6 +622,9 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
     }
 
     for(unsigned int it_rg=0; it_rg<regions.size(); it_rg++){
+      jets_WCandLowMass.clear();
+      jets_WCandHighMass.clear();
+
       weight = 1.;
       if(!IsDATA){
         weight *= weight_norm_1invpb*trigger_lumi;
@@ -623,7 +640,9 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
 
     if((muons.size()==2 && electrons.size()==0) || (muons.size()==0 && electrons.size()==2) || (muons.size()==1 && electrons.size()==1)){ 
 
-      // Truth-matched leptons
+      // Truth matching
+      muons_prompt.clear();
+      electrons_prompt.clear();
       muons_prompt = MuonPromptOnlyHNtypeI(muons, gens);
       electrons_prompt = ElectronPromptOnlyHNtypeI(electrons, gens);
 
@@ -689,6 +708,9 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
           if(muons.at(0).Pt()>EMuPtCut1 && electrons.at(0).Pt()>EMuPtCut2) passPtCut = true;;
         }
       }
+/*      if(it_ch==2){
+        if(leptons.at(0)->Pt()>EMuPtCut1 && leptons.at(1)->Pt()>EMuPtCut2) passPtCut = true;
+      }*/
       
       if(!passPtCut) continue;
 
@@ -950,12 +972,12 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
           }*/
         }
       
-        // Low mass SR1, CR1 && High mass SR1, CR1
+        // Low mass SR1, CR1 & High mass SR1, CR1
         if(it_rg>=1 && it_rg<5){
           if(!(jets.size()>=2 && fatjets.size()==0)) continue;
 
           // Select two jets that makes m(lljj), m(jj) closest to m(W)
-          double tmpMassDiff1 = 10000., tmpMassDiff2 = 10000.;
+/*          double tmpMassDiff1 = 10000., tmpMassDiff2 = 10000.;
           int j1 = 0, j2 = 0, j3 = 0, j4 = 0;
           for(unsigned int k=0; k<jets.size(); k++){
             for(unsigned int l=k+1; l<jets.size(); l++){
@@ -970,12 +992,16 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
                 j3 = k; j4 = l;
               }
             }
-          }
-          WCand1 = *leptons.at(0) + *leptons.at(1) + jets.at(j1) + jets.at(j2);
-          WCand2 = jets.at(j3) + jets.at(j4);
-          lljj = *leptons.at(0) + *leptons.at(1) + jets.at(j3) + jets.at(j4);
-          l1jj = *leptons.at(0) + jets.at(j3) + jets.at(j4);
-          l2jj = *leptons.at(1) + jets.at(j3) + jets.at(j4);
+          }*/
+
+          jets_WCandLowMass = JetsWCandLowMass(*leptons.at(0), *leptons.at(1), jets, MW);
+          jets_WCandHighMass = JetsWCandHighMass(jets, MW);
+
+          WCand1 = *leptons.at(0) + *leptons.at(1) + jets_WCandLowMass.at(0) + jets_WCandLowMass.at(1);
+          WCand2 = jets_WCandHighMass.at(0) + jets_WCandHighMass.at(1);
+          lljj = *leptons.at(0) + *leptons.at(1) + jets_WCandLowMass.at(0) + jets_WCandLowMass.at(1);
+          l1jj = *leptons.at(0) + jets_WCandHighMass.at(0) + jets_WCandHighMass.at(1);
+          l2jj = *leptons.at(1) + jets_WCandHighMass.at(0) + jets_WCandHighMass.at(1);
 
           FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_nocut_"+IDsuffix, 7.5, weight, cutflow_bin, 0., cutflow_max);
           FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_unweighted_nocut_"+IDsuffix, 7.5, 1., cutflow_bin, 0., cutflow_max); 
@@ -1204,17 +1230,19 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
         // High mass SR2, CR2
         if(it_rg >= 7){
           if(!(fatjets.size() > 0)) continue;
-          double tmpMassDiff3 = 10000.;
+/*          double tmpMassDiff3 = 10000.;
           int j5 = 0;
           for(unsigned int k=0; k<fatjets.size(); k++){
             if(fabs(fatjets.at(k).M() - MW) < tmpMassDiff3){
               tmpMassDiff3 = fabs(fatjets.at(k).SDMass() - MW);
               j5 = k;
             }
-          }
-//          WCand3 = fatjets.at(j5);
-          l1J = *leptons.at(0) + fatjets.at(j5);
-          l2J = *leptons.at(1) + fatjets.at(j5);
+          }*/
+
+          fatjets_WCand = FatJetWCand(fatjets, MW);
+
+          l1J = *leptons.at(0) + fatjets_WCand;
+          l2J = *leptons.at(1) + fatjets_WCand;
 
           FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_nocut_"+IDsuffix, 7.5, weight, cutflow_bin, 0., cutflow_max);
           FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_unweighted_nocut_"+IDsuffix, 7.5, 1., cutflow_bin, 0., cutflow_max);
@@ -1230,7 +1258,7 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
           FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Lep2_Eta_nocut_"+IDsuffix, leptons.at(1)->Eta(), weight, 50, -2.5, 2.5);
           FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/MET_nocut_"+IDsuffix, MET, weight, 1000, 0., 1000.);
           FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/MET2ST_nocut_"+IDsuffix, MET2ST, weight, 1000, 0., 1000.);
-          FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Fatjet_Mass_nocut_"+IDsuffix, fatjets.at(j5).SDMass(), weight, 1000, 0., 1000.);
+          FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Fatjet_Mass_nocut_"+IDsuffix, fatjets_WCand.SDMass(), weight, 1000, 0., 1000.);
           FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/l1J_Mass_nocut_"+IDsuffix, l1J.M(), weight, 2000, 0., 2000.);
           FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/l2J_Mass_nocut_"+IDsuffix, l2J.M(), weight, 2000, 0., 2000.);
 
@@ -1247,13 +1275,13 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
           // High mass SR2
           if(it_rg == 7){
             if(!(Nbjet_medium == 0)) continue;
-            if(!(fatjets.at(j5).SDMass() < 150.)) continue;
+            if(!(fatjets_WCand.SDMass() < 150.)) continue;
             if(!(MET2ST < 15.)) continue;
           }
 
           // High mass CR2
           if(it_rg == 8){
-            if(!(fatjets.at(j5).SDMass() < 150.)) continue;
+            if(!(fatjets_WCand.SDMass() < 150.)) continue;
             if(!(Nbjet_medium>0 || MET2ST>20.)) continue;
           }
 
@@ -1271,7 +1299,7 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
           FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Lep2_Eta_"+IDsuffix, leptons.at(1)->Eta(), weight, 50, -2.5, 2.5);
           FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/MET_"+IDsuffix, MET, weight, 1000, 0., 1000.);
           FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/MET2ST_"+IDsuffix, MET2ST, weight, 1000, 0., 1000.);
-          FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Fatjet_Mass_"+IDsuffix, fatjets.at(j5).SDMass(), weight, 1000, 0., 1000.);
+          FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Fatjet_Mass_"+IDsuffix, fatjets_WCand.SDMass(), weight, 1000, 0., 1000.);
           FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/l1J_Mass_"+IDsuffix, l1J.M(), weight, 2000, 0., 2000.);
           FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/l2J_Mass_"+IDsuffix, l2J.M(), weight, 2000, 0., 2000.);
 

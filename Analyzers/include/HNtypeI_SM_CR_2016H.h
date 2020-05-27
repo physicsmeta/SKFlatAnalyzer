@@ -1,9 +1,9 @@
-#ifndef HNtypeI_SM_CR_h
-#define HNtypeI_SM_CR_h
+#ifndef HNtypeI_SM_CR_2016H_h
+#define HNtypeI_SM_CR_2016H_h
 
 #include "HNAnalyzerCore.h"
 
-class HNtypeI_SM_CR : public HNAnalyzerCore {
+class HNtypeI_SM_CR_2016H : public HNAnalyzerCore {
 
 public:
 
@@ -52,8 +52,8 @@ public:
 
 //  double weight_Prefire;
 
-  HNtypeI_SM_CR();
-  ~HNtypeI_SM_CR();
+  HNtypeI_SM_CR_2016H();
+  ~HNtypeI_SM_CR_2016H();
 
 };
 

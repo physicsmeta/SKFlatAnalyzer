@@ -1387,6 +1387,76 @@ std::vector<Jet> HNAnalyzerCore::JetsPassPileupMVA(const std::vector<Jet>& jets)
 
 }
 
+std::vector<Jet> HNAnalyzerCore::JetsWCandLowMass(const Lepton& lepton1, const Lepton& lepton2, const std::vector<Jet>& jets, double MW){
+
+  std::vector<Jet> out;
+
+  double tmpMassDiff = 10000.;
+  int j1 = 0, j2 = 0;
+  Particle Wtemp;
+
+  for(unsigned int k=0; k<jets.size(); k++){
+    for(unsigned int l=k+1; l<jets.size(); l++){
+      Wtemp = lepton1 + lepton2 + jets.at(k) + jets.at(l);
+      if(fabs(Wtemp.M() - MW) < tmpMassDiff){
+        tmpMassDiff = fabs(Wtemp.M() - MW);
+        j1 = k; j2 = l;
+      }
+    }
+  }
+
+  out.push_back( jets.at(j1) );
+  out.push_back( jets.at(j2) );
+
+  return out;
+
+}
+
+std::vector<Jet> HNAnalyzerCore::JetsWCandHighMass(const std::vector<Jet>& jets, double MW){
+
+  std::vector<Jet> out;
+
+  double tmpMassDiff = 10000.;
+  int j1 = 0, j2 = 0;
+  Particle Wtemp;
+
+  for(unsigned int k=0; k<jets.size(); k++){
+    for(unsigned int l=k+1; l<jets.size(); l++){
+      Wtemp = jets.at(k) + jets.at(l);
+      if(fabs(Wtemp.M() - MW) < tmpMassDiff){
+        tmpMassDiff = fabs(Wtemp.M() - MW);
+        j1 = k; j2 = l;
+      }
+    }
+  }
+
+  out.push_back( jets.at(j1) );
+  out.push_back( jets.at(j2) );
+
+  return out;
+
+}
+
+FatJet HNAnalyzerCore::FatJetWCand(const std::vector<FatJet>& fatjets, double MW){
+
+  FatJet out;
+
+  double tmpMassDiff = 10000.;
+  int j1 = 0;
+  Particle Wtemp;
+
+  for(unsigned int k=0; k<fatjets.size(); k++){
+    if(fabs(fatjets.at(k).SDMass() - MW) < tmpMassDiff){
+      tmpMassDiff = fabs(fatjets.at(k).SDMass() - MW);
+      j1 = k;
+    }
+  }
+
+  out = fatjets.at(j1);
+
+  return out;
+
+}
 
 //=========================================================
 //==== Correct MET
@@ -1442,7 +1512,7 @@ Particle HNAnalyzerCore::UpdateMETElectron(const Particle& METv, const std::vect
 
 }
 
-Particle UpdateMETFake(const Particle& METv, const std::vector<Muon>& muons){
+Particle HNAnalyzerCore::UpdateMETFake(const Particle& METv, const std::vector<Muon>& muons){
 
   double met_x = METv.Px();
   double met_y = METv.Py();
@@ -1466,7 +1536,7 @@ Particle UpdateMETFake(const Particle& METv, const std::vector<Muon>& muons){
   return METout;
 }
 
-Particle UpdateMETFake(const Particle& METv, const std::vector<Electron>& electrons){
+Particle HNAnalyzerCore::UpdateMETFake(const Particle& METv, const std::vector<Electron>& electrons){
 
   double met_x = METv.Px();
   double met_y = METv.Py();
@@ -1490,7 +1560,7 @@ Particle UpdateMETFake(const Particle& METv, const std::vector<Electron>& electr
   return METout;
 }
 
-Particle UpdateMETFake(const Particle& METv, const std::vector<Electron>& electrons, const std::vector<Muon>& muons){
+Particle HNAnalyzerCore::UpdateMETFake(const Particle& METv, const std::vector<Electron>& electrons, const std::vector<Muon>& muons){
 
   double met_x = METv.Px();
   double met_y = METv.Py();

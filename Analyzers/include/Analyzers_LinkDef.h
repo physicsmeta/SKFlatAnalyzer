@@ -17,6 +17,7 @@
 #pragma link C++ class HNAnalyzerCore+;
 #pragma link C++ class HNtypeI_FakeRate+;
 #pragma link C++ class HNtypeI_SM_CR+;
+#pragma link C++ class HNtypeI_SM_CR_2016H+;
 #pragma link C++ class HNtypeI_SR+;
 #pragma link C++ class HNtypeI_SR_2016H+;
 #pragma link C++ class HNtypeI_Cutflow+;

@@ -1,14 +1,14 @@
-#include "HNtypeI_SM_CR.h"
+#include "HNtypeI_SM_CR_2016H.h"
 
-HNtypeI_SM_CR::HNtypeI_SM_CR(){
+HNtypeI_SM_CR_2016H::HNtypeI_SM_CR_2016H(){
 
 }
 
-void HNtypeI_SM_CR::initializeAnalyzer(){
+void HNtypeI_SM_CR_2016H::initializeAnalyzer(){
 
   //==== if you use "--userflags RunSyst" with SKFlat.py, HasFlag("RunSyst") will return "true"
 //  RunSyst = HasFlag("RunSyst");
-//  cout << "[HNtypeI_SM_CR::initializeAnalyzer] RunSyst = " << RunSyst << endl;
+//  cout << "[HNtypeI_SM_CR_2016H::initializeAnalyzer] RunSyst = " << RunSyst << endl;
   RunFake = HasFlag("RunFake");
   RunCF = HasFlag("RunCF");
 
@@ -32,7 +32,7 @@ void HNtypeI_SM_CR::initializeAnalyzer(){
   //==== At this point, sample informations (e.g., IsDATA, DataStream, MCSample, or DataYear) are all set
   //==== You can define sample-dependent or year-dependent variables here
   //==== (Example) Year-dependent variables
-  //==== I defined "TString IsoMuTriggerName;" and "double TriggerSafePtCut;" in Analyzers/include/HNtypeI_SM_CR.h 
+  //==== I defined "TString IsoMuTriggerName;" and "double TriggerSafePtCut;" in Analyzers/include/HNtypeI_SM_CR_2016H.h 
   //==== IsoMuTriggerName is a year-dependent variable, and you don't want to do "if(Dataer==~~)" for every event (let's save cpu time).
   //==== Then, do it here, which only ran once for each macro
 
@@ -43,8 +43,8 @@ void HNtypeI_SM_CR::initializeAnalyzer(){
 //  EMuTriggersH.clear();
 
   if(DataYear==2016){                                                                   // Lumi values for trigger weight (/pb)
-    MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v");                       // 27267.591112919
-    MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_v");                     // 27267.591112919
+//    MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v");                       // 27267.591112919   // NOTE : Change for 2016H
+//    MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_v");                     // 27267.591112919   // NOTE : Change for 2016H
     MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v");                    // 35918.219492947
     MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_v");                  // 35918.219492947
     MuonTriggersH.push_back("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v");                   // 35918.219492947
@@ -94,8 +94,8 @@ void HNtypeI_SM_CR::initializeAnalyzer(){
 //    EMuPtCut1 = 25., EMuPtCut2 = 15.;
   }
 
-//  cout << "[HNtypeI_SM_CR::initializeAnalyzer] IsoMuTriggerName = " << IsoMuTriggerName << endl;
-//  cout << "[HNtypeI_SM_CR::initializeAnalyzer TriggerSafePtCut = " << TriggerSafePtCut << endl;
+//  cout << "[HNtypeI_SM_CR_2016H::initializeAnalyzer] IsoMuTriggerName = " << IsoMuTriggerName << endl;
+//  cout << "[HNtypeI_SM_CR_2016H::initializeAnalyzer TriggerSafePtCut = " << TriggerSafePtCut << endl;
 
   //==== B-Tagging
   //==== add taggers and WP that you want to use in analysis
@@ -108,13 +108,13 @@ void HNtypeI_SM_CR::initializeAnalyzer(){
 
 }
 
-HNtypeI_SM_CR::~HNtypeI_SM_CR(){
+HNtypeI_SM_CR_2016H::~HNtypeI_SM_CR_2016H(){
 
   //==== Destructor of this Analyzer
 
 }
 
-void HNtypeI_SM_CR::executeEvent(){
+void HNtypeI_SM_CR_2016H::executeEvent(){
 
   //================================================================
   //====  Example 1
@@ -126,7 +126,7 @@ void HNtypeI_SM_CR::executeEvent(){
   //==== and then check ID booleans.
   //==== GetAllMuons not only loops over all MINIAOD muons, but also actually CONSTRUCT muon objects for each muons.
   //==== We are now running systematics, and you don't want to do this for every systematic sources
-  //==== So, I defined "vector<Muon> AllMuons;" in Analyzers/include/HNtypeI_SM_CR.h,
+  //==== So, I defined "vector<Muon> AllMuons;" in Analyzers/include/HNtypeI_SM_CR_2016H.h,
   //==== and save muons objects at the very beginning of executeEvent().
   //==== Later, do "SelectMuons(AllMuons, ID, pt, eta)" to get muons with ID cuts
   AllMuons = GetAllMuons();
@@ -138,7 +138,7 @@ void HNtypeI_SM_CR::executeEvent(){
   //==== If data, 1.;
   //==== If MC && DataYear > 2017, 1.;
   //==== If MC && DataYear <= 2017, we have to reweight the event with this value
-  //==== I defined "double weight_Prefire;" in Analyzers/include/HNtypeI_SM_CR.h
+  //==== I defined "double weight_Prefire;" in Analyzers/include/HNtypeI_SM_CR_2016H.h
 //  weight_Prefire = GetPrefireWeight(0);
 
   AnalyzerParameter param;
@@ -196,7 +196,7 @@ void HNtypeI_SM_CR::executeEvent(){
   }
 }
 
-void HNtypeI_SM_CR::executeEventFromParameter(AnalyzerParameter param){
+void HNtypeI_SM_CR_2016H::executeEventFromParameter(AnalyzerParameter param){
 
   vector<TString> regions = {"DYmm", "DYee", "WZ", "ZG", "WG", "ZZ"}; 
   vector<TString> channels3L = {"mmm", "mme", "mee", "eee"};
@@ -301,7 +301,7 @@ void HNtypeI_SM_CR::executeEventFromParameter(AnalyzerParameter param){
     //this_AllElectrons = ScaleElectrons( this_AllElectrons, -1 );
   }
   else{
-    cout << "[HNtypeI_SM_CR::executeEventFromParameter] Wrong syst" << endl;
+    cout << "[HNtypeI_SM_CR_2016H::executeEventFromParameter] Wrong syst" << endl;
     exit(EXIT_FAILURE);
   }*/
 
