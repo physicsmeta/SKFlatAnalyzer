@@ -1,9 +1,9 @@
-#ifndef HNtypeI_SR_h
-#define HNtypeI_SR_h
+#ifndef HNtypeI_SM_CR_2016H_h
+#define HNtypeI_SM_CR_2016H_h
 
 #include "HNAnalyzerCore.h"
 
-class HNtypeI_SR : public HNAnalyzerCore {
+class HNtypeI_SM_CR_2016H : public HNAnalyzerCore {
 
 public:
 
@@ -20,8 +20,8 @@ public:
   vector<TString> MuonTriggers;
   vector<TString> MuonTriggersH;
   vector<TString> ElectronTriggers;
-  vector<TString> EMuTriggers;
-  vector<TString> EMuTriggersH;
+//  vector<TString> EMuTriggers;
+//  vector<TString> EMuTriggersH;
   vector<TString> Mu8Ele23Triggers;
   vector<TString> Mu23Ele12Triggers;
 
@@ -41,8 +41,8 @@ public:
   double MuonPtCut2;
   double ElectronPtCut1;
   double ElectronPtCut2;
-  double EMuPtCut1;
-  double EMuPtCut2;
+//  double EMuPtCut1;
+//  double EMuPtCut2;
 
 //  vector<TString> EleIDs, EleIDSFKeys, MuonIDs, MuonIDSFKeys;
   vector<Electron> AllElectrons;
@@ -52,8 +52,8 @@ public:
 
 //  double weight_Prefire;
 
-  HNtypeI_SR();
-  ~HNtypeI_SR();
+  HNtypeI_SM_CR_2016H();
+  ~HNtypeI_SM_CR_2016H();
 
 };
 

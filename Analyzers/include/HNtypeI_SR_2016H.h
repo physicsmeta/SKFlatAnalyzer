@@ -22,6 +22,8 @@ public:
   vector<TString> ElectronTriggers;
   vector<TString> EMuTriggers;
   vector<TString> EMuTriggersH;
+  vector<TString> Mu8Ele23Triggers;
+  vector<TString> Mu23Ele12Triggers;
 
   // Lepton ID
   vector<TString> MuonVetoIDs;

@@ -1,14 +1,14 @@
-#include "HNtypeI_SR.h"
+#include "HNtypeI_SR_2016H.h"
 
-HNtypeI_SR::HNtypeI_SR(){
+HNtypeI_SR_2016H::HNtypeI_SR_2016H(){
 
 }
 
-void HNtypeI_SR::initializeAnalyzer(){
+void HNtypeI_SR_2016H::initializeAnalyzer(){
 
   //==== if you use "--userflags RunSyst" with SKFlat.py, HasFlag("RunSyst") will return "true"
 //  RunSyst = HasFlag("RunSyst");
-//  cout << "[HNtypeI_SR::initializeAnalyzer] RunSyst = " << RunSyst << endl;
+//  cout << "[HNtypeI_SR_2016H::initializeAnalyzer] RunSyst = " << RunSyst << endl;
   RunFake = HasFlag("RunFake");
   RunCF = HasFlag("RunCF");
 
@@ -26,13 +26,13 @@ void HNtypeI_SR::initializeAnalyzer(){
   ElectronTightIDs = {"HNTightV2", "HNTight2016"};
   ElectronLooseIDs = {"HNLooseV23", "HNLoose2016"};
   ElectronVetoIDs  = {"passVetoID", "HNVeto2016"};
-  FakeRateIDs = {"HNtypeI_V2", "HNtypeI_16"}; //JH : TODO This isn't used anywhere in this code
+  FakeRateIDs = {"HNtypeI_V2", "HNtypeI_16"};
 
 
   //==== At this point, sample informations (e.g., IsDATA, DataStream, MCSample, or DataYear) are all set
   //==== You can define sample-dependent or year-dependent variables here
   //==== (Example) Year-dependent variables
-  //==== I defined "TString IsoMuTriggerName;" and "double TriggerSafePtCut;" in Analyzers/include/HNtypeI_SR.h 
+  //==== I defined "TString IsoMuTriggerName;" and "double TriggerSafePtCut;" in Analyzers/include/HNtypeI_SR_2016H.h 
   //==== IsoMuTriggerName is a year-dependent variable, and you don't want to do "if(Dataer==~~)" for every event (let's save cpu time).
   //==== Then, do it here, which only ran once for each macro
 
@@ -43,10 +43,10 @@ void HNtypeI_SR::initializeAnalyzer(){
   EMuTriggersH.clear();
 
   if(DataYear==2016){                                                                   // Lumi values for trigger weight (/pb)
-    MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v");                       // 27267.591112919 
-    MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_v");                     // 27267.591112919 //JH : NOTE these two are prescaled at 2016H -> https://its.cern.ch/jira/browse/CMSHLT-1002
+//    MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v");                       // 27267.591112919   // NOTE : Change for 2016H
+//    MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_v");                     // 27267.591112919   // NOTE : Change for 2016H
     MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v");                    // 35918.219492947
-    MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_v");                  // 35918.219492947 //JH : TODO why we need this though we already have superset
+    MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_v");                  // 35918.219492947
     MuonTriggersH.push_back("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v");                   // 35918.219492947
     MuonTriggersH.push_back("HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_v");                 // 35918.219492947
     ElectronTriggers.push_back("HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v");          // 35918.219492947
@@ -99,8 +99,8 @@ void HNtypeI_SR::initializeAnalyzer(){
     EMuPtCut1 = 25., EMuPtCut2 = 15.;
   }
 
-//  cout << "[HNtypeI_SR::initializeAnalyzer] IsoMuTriggerName = " << IsoMuTriggerName << endl;
-//  cout << "[HNtypeI_SR::initializeAnalyzer TriggerSafePtCut = " << TriggerSafePtCut << endl;
+//  cout << "[HNtypeI_SR_2016H::initializeAnalyzer] IsoMuTriggerName = " << IsoMuTriggerName << endl;
+//  cout << "[HNtypeI_SR_2016H::initializeAnalyzer TriggerSafePtCut = " << TriggerSafePtCut << endl;
 
   //==== B-Tagging
   //==== add taggers and WP that you want to use in analysis
@@ -109,17 +109,17 @@ void HNtypeI_SR::initializeAnalyzer(){
   jtps.push_back( JetTagging::Parameters(JetTagging::DeepCSV, JetTagging::Loose, JetTagging::incl, JetTagging::comb) );
   jtps.push_back( JetTagging::Parameters(JetTagging::DeepCSV, JetTagging::Medium, JetTagging::incl, JetTagging::comb) );
   //==== set
-  mcCorr->SetJetTaggingParameters(jtps); //JH : TODO This isn't used anywhere in this code
+  mcCorr->SetJetTaggingParameters(jtps);
 
 }
 
-HNtypeI_SR::~HNtypeI_SR(){
+HNtypeI_SR_2016H::~HNtypeI_SR_2016H(){
 
   //==== Destructor of this Analyzer
 
 }
 
-void HNtypeI_SR::executeEvent(){
+void HNtypeI_SR_2016H::executeEvent(){
 
   //================================================================
   //====  Example 1
@@ -131,20 +131,20 @@ void HNtypeI_SR::executeEvent(){
   //==== and then check ID booleans.
   //==== GetAllMuons not only loops over all MINIAOD muons, but also actually CONSTRUCT muon objects for each muons.
   //==== We are now running systematics, and you don't want to do this for every systematic sources
-  //==== So, I defined "vector<Muon> AllMuons;" in Analyzers/include/HNtypeI_SR.h,
+  //==== So, I defined "vector<Muon> AllMuons;" in Analyzers/include/HNtypeI_SR_2016H.h,
   //==== and save muons objects at the very beginning of executeEvent().
   //==== Later, do "SelectMuons(AllMuons, ID, pt, eta)" to get muons with ID cuts
   AllMuons = GetAllMuons();
   AllElectrons = GetAllElectrons();
   AllJets = GetAllJets();
 //  AllFatJets = GetAllFatJets();
-  AllFatJets = puppiCorr->Correct(GetAllFatJets()); //JH : apply correction to fatjet.SDMass(); the total weight = gen correction * reco correction, from SKFlatAnalyzer/data/Run2Legacy_v4/DataYear/PuppiSoftdropMassCorr/puppiCorr.root
+  AllFatJets = puppiCorr->Correct(GetAllFatJets());
 
   //==== Get L1Prefire reweight
   //==== If data, 1.;
   //==== If MC && DataYear > 2017, 1.;
   //==== If MC && DataYear <= 2017, we have to reweight the event with this value
-  //==== I defined "double weight_Prefire;" in Analyzers/include/HNtypeI_SR.h
+  //==== I defined "double weight_Prefire;" in Analyzers/include/HNtypeI_SR_2016H.h
 //  weight_Prefire = GetPrefireWeight(0);
 
   AnalyzerParameter param;
@@ -202,7 +202,7 @@ void HNtypeI_SR::executeEvent(){
   }
 }
 
-void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
+void HNtypeI_SR_2016H::executeEventFromParameter(AnalyzerParameter param){
 
   vector<TString> channels = {"dimu", "diel", "emu"};
   vector<TString> regions = {"fakeCR1", "lowSR1", "lowCR1", "highSR1", "highCR1", "lowSR2", "lowCR2", "highSR2", "highCR2"};
@@ -222,11 +222,11 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
   //========================================================
 
   if(!IsDATA){
-    weight *= weight_norm_1invpb*ev.GetTriggerLumi("Full"); //JH : weight_norm_1invpb = xsec/sumW; Lumi = 35.9, 41.5, 59.7(fb-1) total 137fb-1
-    weight *= ev.MCweight(); //JH : gen_weight in MiniAOD
-    weight *= GetPrefireWeight(0); //JH : No issue in 2018, otherwise returns L1PrefireReweight_Central in MiniAOD
-    weight *= GetPileUpWeight(nPileUp,0); //JH : mcCorr->GetPileUpWeight(N_pileup, syst); mcCorr->GetPileUpWeight2017(N_pileup, syst); NOTE 2018 not yet added.
-  } //JH : total weight calculation done.
+    weight *= weight_norm_1invpb*ev.GetTriggerLumi("Full");
+    weight *= ev.MCweight();
+    weight *= GetPrefireWeight(0);
+    weight *= GetPileUpWeight(nPileUp,0);
+  }
 
   // Cutflow : No Cuts
   for(unsigned int it_ch=0; it_ch<channels.size(); it_ch++){
@@ -319,7 +319,7 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
     //this_AllElectrons = ScaleElectrons( this_AllElectrons, -1 );
   }
   else{
-    cout << "[HNtypeI_SR::executeEventFromParameter] Wrong syst" << endl;
+    cout << "[HNtypeI_SR_2016H::executeEventFromParameter] Wrong syst" << endl;
     exit(EXIT_FAILURE);
   }*/
 
@@ -356,7 +356,6 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
   vector<Jet> jets_nolepveto = SelectJets(this_AllJets, param.Jet_ID, 20., 2.7);  // AK4jets used for b tag
   vector<FatJet> fatjets_nolepveto = SelectFatJets(this_AllFatJets, param.FatJet_ID, 200., 2.7);
 
-
   // Jet, FatJet selection to avoid double counting due to jets matched geometrically with a lepton
   // Fatjet selection in CATanalyzer (see the links)
   // https://github.com/jedori0228/LQanalyzer/blob/CatAnalyzer_13TeV_v8-0-7.36_HNAnalyzer/CATConfig/SelectionConfig/user_fatjets.sel
@@ -364,10 +363,9 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
 
   vector<FatJet> fatjets = FatJetsVetoLeptonInside(fatjets_nolepveto, electrons_veto, muons_veto);  // AK8jets used in SR, CR
   vector<Jet> jets_lepveto = JetsVetoLeptonInside(jets_nolepveto, electrons_veto, muons_veto);
-  //vector<Jet> jets_insideFatjets = JetsInsideFatJet(jets_lepveto, fatjets);  // For jets inside a fatjet, remove their smearing from MET. Because FatJet smearing is already propagted to MET. //JH : tmp comment
-  //vector<Jet> jets_PUveto = JetsPassPileupMVA(jets_lepveto); //JH : tmp comment
-  //vector<Jet> jets = JetsAwayFromFatJet(jets_PUveto, fatjets);  // AK4jets used in SR, CR //JH : tmp comment
-  vector<Jet> jets = jets_lepveto; //JH : tmp. just to avoid conflict
+  vector<Jet> jets_insideFatjets = JetsInsideFatJet(jets_lepveto, fatjets);  // For jets inside a fatjet, remove their smearing from MET. Because FatJet smearing is already propagted to MET.
+  vector<Jet> jets_PUveto = JetsPassPileupMVA(jets_lepveto);
+  vector<Jet> jets = JetsAwayFromFatJet(jets_PUveto, fatjets);  // AK4jets used in SR, CR
 
   vector<Jet> jets_WCandLowMass;
   vector<Jet> jets_WCandHighMass;
@@ -402,13 +400,13 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
 //  double btagWeight = mcCorr->GetBTaggingReweight_1a(jets, jtp_DeepCSV_Medium);
 
   //==== method 2a)
-  for(unsigned int ij=0; ij<jets_nolepveto.size(); ij++){ 
+  for(unsigned int ij=0; ij<jets_nolepveto.size(); ij++){
 //    double this_discr = jets_nolepveto.at(ij).GetTaggerResult(JetTagging::DeepCSV);
       //==== No SF
 //      if( this_discr > mcCorr->GetJetTaggingCutValue(JetTagging::DeepCSV, JetTagging::Medium) ) NBJets_NoSF++;
-    if(mcCorr->IsBTagged_2a(jtp_DeepCSV_Loose, jets_nolepveto.at(ij))) Nbjet_loose++; 
-    if(mcCorr->IsBTagged_2a(jtp_DeepCSV_Medium, jets_nolepveto.at(ij))) Nbjet_medium++; //JH : count Nbjet. NOTE : AN says they used CVSv2 and medium WP.
-  } 
+    if(mcCorr->IsBTagged_2a(jtp_DeepCSV_Loose, jets_nolepveto.at(ij))) Nbjet_loose++;
+    if(mcCorr->IsBTagged_2a(jtp_DeepCSV_Medium, jets_nolepveto.at(ij))) Nbjet_medium++;
+  }
 
   //========================================================
   //==== Set up MET
@@ -416,8 +414,8 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
 
   Particle METv = ev.GetMETVector();
 
-  //METv = UpdateMETMuon(METv, this_AllMuons); //JH : tmp comment
-  //METv = UpdateMETElectron(METv, this_AllElectrons); //JH : tmp comment
+  METv = UpdateMETMuon(METv, this_AllMuons);
+  METv = UpdateMETElectron(METv, this_AllElectrons);
 
   double MET = METv.Pt();
 
@@ -449,7 +447,7 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
     FillHist("Pt_electron2", electrons.at(1).Pt(), weight, 1000, 0., 1000.);
     FillHist("PtCone_electron1", electrons.at(0).PtCone(), weight, 1000, 0., 1000.);
     FillHist("PtCone_electron2", electrons.at(1).PtCone(), weight, 1000, 0., 1000.);
-  } //JH : Draw lepton pt and ptcone
+  }
 
   if(electrons.size() > 0) cout << electrons.at(0).PtCone() << endl;*/
 
@@ -529,21 +527,21 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
 
   // Loop for each channel : it_ch (0,1,2) = (mumu, ee, emu)
   for(unsigned int it_ch=0; it_ch<channels.size(); it_ch++){
-    trigger_lumi = 1.; //JH : FIXME this is redundant
+    trigger_lumi = 1.;
 
     if(it_ch==0 || it_ch==2){ if(RunCF) continue; }
 
     // Cutflow : passing dilepton triggers
     if(it_ch==0){ if(!ev.PassTrigger(MuonTriggers)) continue; }
     if(it_ch==1){ if(!ev.PassTrigger(ElectronTriggers)) continue; }
-    if(it_ch==2){ if(!ev.PassTrigger(EMuTriggers)) continue; }
+    if(it_ch==2){ if(!ev.PassTrigger(EMuTriggersH)) continue; }   // NOTE : Change for 2016H
 
     trigger_lumi = 1., dimu_trig_weight = 0., emu_trig_weight = 0.;
     if(!IsDATA){
       if(DataYear==2016){
         if(it_ch==0){
           if(ev.PassTrigger(MuonTriggers)) dimu_trig_weight += 27267.591;
-          if(ev.PassTrigger(MuonTriggersH)) dimu_trig_weight += 8650.628; 
+          if(ev.PassTrigger(MuonTriggersH)) dimu_trig_weight += 8650.628;
           trigger_lumi = dimu_trig_weight;
         }
         if(it_ch==1) trigger_lumi = ev.GetTriggerLumi("Full");
