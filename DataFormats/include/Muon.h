@@ -107,6 +107,25 @@ public:
   void SetTrackerLayers(int n);
   inline int TrackerLayers() const { return j_trackerLayers; }
 
+  bool Pass_HNVeto2016() const;
+  bool Pass_HNLoose2016(double relisoCut, double dxyCut, double dzCut, double sipCut) const;
+  bool Pass_HNTight2016() const;
+
+  bool Pass_HNLoose(double relisoCut) const;
+  bool Pass_HNTight() const;
+  bool Pass_HNTightV2() const;
+
+  //==== Test ID for checking RelIso
+  bool Pass_POGTightRelIso25() const;
+  bool Pass_POGTightRelIso20() const;
+  bool Pass_POGTightRelIso15() const;
+  bool Pass_POGTightRelIso10() const;
+
+  bool Pass_POGTightPFIsoLoose() const;
+  bool Pass_POGTightPFIsoMedium() const;
+  bool Pass_POGTightPFIsoTight() const;
+  bool Pass_POGTightPFIsoVeryTight() const;
+
 private:
 
   unsigned int j_TypeBit, j_IDBit;

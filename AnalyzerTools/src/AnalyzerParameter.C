@@ -10,6 +10,7 @@ void AnalyzerParameter::Clear(){
   Electron_Loose_ID = "";
   Electron_Veto_ID = "";
   Electron_ID_SF_Key = "";
+  Electron_Trigger_SF_Key = "";
   Electron_FR_ID = "";
   Electron_FR_Key = "";
   Electron_CF_ID = "";
@@ -110,7 +111,8 @@ TString AnalyzerParameter::GetSystType(){
     return "ElectronEnDown";
   }
   else{
-    cout << "[AnalyzerParameter::GetSystType] Wrong Syst" << endl;
+//    cout << "[AnalyzerParameter::GetSystType] Wrong Syst" << endl;
+    cerr << "[AnalyzerParameter::GetSystType] Wrong Syst" << endl;
     exit(EXIT_FAILURE);
     return "ERROR";
   }

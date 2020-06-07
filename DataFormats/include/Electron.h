@@ -122,6 +122,25 @@ public:
   bool Pass_SUSYTight() const;
   bool Pass_SUSYLoose() const;
 
+  bool Pass_CutBasedTightWithIPcut() const;
+  bool Pass_HNVeto2016() const;
+  bool Pass_HNLoose2016(double relisoCut, double dxyCut, double dzCut, double sipCut) const;
+  bool Pass_HNTight2016() const;
+
+  bool Pass_HNLoose() const;
+  bool Pass_HNLooseV21() const;
+  bool Pass_HNLooseV22(double relisoCut, double dxyCut, double dzCut) const;
+  bool Pass_HNLooseV23(double relisoCut) const;
+  bool Pass_HNTight() const;
+  bool Pass_HNTightV2() const;
+  bool Pass_HNMVALoose() const;
+  bool Pass_HNMVALooseV2() const;
+  bool Pass_HNMVATight() const;
+  bool Pass_HNMVATightV2() const;
+
+  bool Pass_ISRLoose() const;
+  bool Pass_ISRTight() const;
+
   void SetRelPFIso_Rho(double r);
   double EA();
 

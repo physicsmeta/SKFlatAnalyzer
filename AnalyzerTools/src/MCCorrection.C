@@ -135,9 +135,14 @@ void MCCorrection::ReadHistograms(){
     if(DataYear == 2017 && a!=MCSample) continue;
     
     TFile *file = new TFile(PUReweightPath+c);
-    if( (TH1D *)file->Get(a+"_"+b) ){
+/*    if( (TH1D *)file->Get(a+"_"+b) ){
       histDir->cd();
       map_hist_pileup[a+"_"+b+"_pileup"] = (TH1D *)file->Get(a+"_"+b)->Clone();
+    }*/
+    if( (TH1D *)file->Get(a+"_"+b) || (TH1D *)file->Get(b) ){
+      histDir->cd();
+      if( (TH1D *)file->Get(a+"_"+b) ) map_hist_pileup[a+"_"+b+"_pileup"] = (TH1D *)file->Get(a+"_"+b)->Clone(); // wrongPU in 2017, b = central/sig_up/sig_down, c = Pileup_reweight_69p2_mb.root  ||  PU in 2016, 2018
+      if( (TH1D *)file->Get(b) ) map_hist_pileup[a+"_"+b+"_pileup"] = (TH1D *)file->Get(b)->Clone();             // correctPU in 2017, b = PUReweight_2017(+Up/Down), c = PUReweight_2017.root
     }
     else{
       cout << "[MCCorrection::ReadHistograms] No : " << a + "_" + b << endl;
@@ -773,24 +778,60 @@ double MCCorrection::GetPileUpWeight(int N_pileup, int syst){
   int this_bin = N_pileup+1;
   if(N_pileup >= 100) this_bin=100;
 
-  TString this_histname = "MC_" + TString::Itoa(DataYear,10);
+//  TString this_histname = "MC_" + TString::Itoa(DataYear,10);
+  TString this_histname = "PUReweight_";
   if(syst == 0){
-    this_histname += "_central_pileup";
+//    this_histname += "_central_pileup";
+    this_histname += TString::Itoa(DataYear,10)+"_pileup";
   }
   else if(syst == -1){
-    this_histname += "_sig_down_pileup";
+//    this_histname += "_sig_down_pileup";
+    this_histname += TString::Itoa(DataYear,10)+"_Down_pileup";
   }
   else if(syst == 1){
-    this_histname += "_sig_up_pileup";
+//    this_histname += "_sig_up_pileup";
+    this_histname += TString::Itoa(DataYear,10)+"_Up_pileup";
   }
   else{
-    cerr << "[MCCorrection::GetPileUpWeightBySampleName] syst should be 0, -1, or +1" << endl;
+//    cerr << "[MCCorrection::GetPileUpWeightBySampleName] syst should be 0, -1, or +1" << endl;
+    cerr << "[MCCorrection::GetPileUpWeight] syst should be 0, -1, or +1" << endl;
     exit(EXIT_FAILURE);
   }
 
   TH1D *this_hist = map_hist_pileup[this_histname];
   if(!this_hist){
-    cerr << "[MCCorrection::GetPileUpWeightBySampleName] No " << this_histname << endl;
+//    cerr << "[MCCorrection::GetPileUpWeightBySampleName] No " << this_histname << endl;
+    cerr << "[MCCorrection::GetPileUpWeight] No " << this_histname << endl;
+    exit(EXIT_FAILURE);
+  }
+
+  return this_hist->GetBinContent(this_bin);
+
+}
+
+double MCCorrection::GetPileUpWeight2017(int N_pileup, int syst){
+
+  int this_bin = N_pileup+1;
+  if(N_pileup >= 100) this_bin=100;
+
+  TString this_histname = MCSample;
+  if(syst == 0){
+    this_histname += "_PUReweight_2017_pileup";
+  }
+  else if(syst == -1){
+    this_histname += "_PUReweight_2017_Down_pileup";
+  }
+  else if(syst == 1){
+    this_histname += "_PUReweight_2017_Up_pileup";
+  }
+  else{
+    cerr << "[MCCorrection::GetPileUpWeight2017] syst should be 0, -1, or +1" << endl;
+    exit(EXIT_FAILURE);
+  }
+
+  TH1D *this_hist = map_hist_pileup[this_histname]; 
+  if(!this_hist){
+    cerr << "[MCCorrection::GetPileUpWeight2017] No " << this_histname << endl;
     exit(EXIT_FAILURE);
   }
 
@@ -974,18 +1015,18 @@ double MCCorrection::GetJetTaggingSF(JetTagging::Parameters jtp, int JetFlavor, 
   string this_mt_H = JetTagging::MeasurmentTypeToString(jtp.j_MeasurmentType_Heavy);
 
   string key = JetTagging::TaggerToString( jtp.j_Tagger )+"_"+this_wp;
-  BTagEntry::JetFlavor jf = BTagEntry::FLAV_B;
+  BTagEntry::JetFlavor jf = BTagEntry::FLAV_B; //JH : 0
   if(abs(JetFlavor)==5){
     key += "_B_"+this_mt_H;
     jf = BTagEntry::FLAV_B;
   }
   else if(abs(JetFlavor)==4){
     key += "_C_"+this_mt_H;
-    jf = BTagEntry::FLAV_C;
+    jf = BTagEntry::FLAV_C; //JH : 1
   }
   else{
     key += "_L_"+this_mt_L;
-    jf = BTagEntry::FLAV_UDSG;
+    jf = BTagEntry::FLAV_UDSG; //JH : 2
   }
 
   std::map< std::string, BTagCalibrationReader* >::const_iterator it = map_BTagCalibrationReader.find(key);
@@ -995,7 +1036,7 @@ double MCCorrection::GetJetTaggingSF(JetTagging::Parameters jtp, int JetFlavor, 
     exit(EXIT_FAILURE);
   }
 
-  double this_SF = it->second->eval_auto_bounds(Syst, jf, fabs(JetEta), JetPt, Jetdiscr);
+  double this_SF = it->second->eval_auto_bounds(Syst, jf, fabs(JetEta), JetPt, Jetdiscr); //JH : Get scale factor... difficult to me for now
   //cout << "[MCCorrection::GetJetTaggingSF] key = " << it->first << endl;
   //cout << "[MCCorrection::GetJetTaggingSF] Jet tagging parameter : ";jtp.Print();
   //printf("[MCCorrection::GetJetTaggingSF] (JetFlavor, JetPt, JetEta, Jetdiscr, Syst) = (%d, %f, %f, %f, %s)\n",JetFlavor,JetPt,JetEta,Jetdiscr,Syst.c_str());
@@ -1146,17 +1187,17 @@ double MCCorrection::GetBTaggingReweight_1d(const vector<Jet>& jets, JetTagging:
 
 bool MCCorrection::IsBTagged_2a(JetTagging::Parameters jtp, const Jet& jet, string Syst){
 
-  double this_discr = jet.GetTaggerResult(jtp.j_Tagger);
-  double cutValue = GetJetTaggingCutValue(jtp.j_Tagger, jtp.j_WP);
+  double this_discr = jet.GetTaggerResult(jtp.j_Tagger); //JH : Get tagger score like CSVv2, DeepCSV, ... which are built in MiniAOD
+  double cutValue = GetJetTaggingCutValue(jtp.j_Tagger, jtp.j_WP); //JH : Get cut value depending on WP like Loose, Medium, Tight
 
-  bool isBTagged = this_discr > cutValue;
+  bool isBTagged = this_discr > cutValue; //JH : B-tagging
 
   if(IsDATA) return isBTagged;
 
   //==== Set seed
   unsigned int runNum_uint  = static_cast <unsigned int> (run);
   unsigned int lumiNum_uint = static_cast <unsigned int> (lumi);
-  unsigned int evNum_uint   = static_cast <unsigned int> (event);
+  unsigned int evNum_uint   = static_cast <unsigned int> (event); //JH : run, lumi, event from MiniAOD; used statc_cast for type conversion(Int_t to unsigned int)
   unsigned int jet0eta = uint32_t(fabs(jet.Eta())/0.01);
   int m_nomVar=1;
   std::uint32_t seed = jet0eta + m_nomVar + (lumiNum_uint<<10) + (runNum_uint<<20) + evNum_uint;
@@ -1167,11 +1208,11 @@ bool MCCorrection::IsBTagged_2a(JetTagging::Parameters jtp, const Jet& jet, stri
 
   //=== Get SF
   double Btag_SF =  GetJetTaggingSF(jtp,
-                                    jet.hadronFlavour(),
+                                    jet.hadronFlavour(), //JH : hadronFlavour in MiniAOD
                                     jet.Pt(),
                                     jet.Eta(),
                                     jet.GetTaggerResult(jtp.j_Tagger),
-                                    Syst );
+                                    Syst ); //JH : TODO Get b tagging scale factor... difficult to me for now
 
 
   if(Btag_SF == 1) return newBTag; //no correction needed
@@ -1199,7 +1240,7 @@ bool MCCorrection::IsBTagged_2a(JetTagging::Parameters jtp, const Jet& jet, stri
 
   }
 
-  return newBTag;
+  return newBTag; //JH : TODO Idk, It seems applying a correction to Btag SF and then redetermine the Btag bool
 
 }
 

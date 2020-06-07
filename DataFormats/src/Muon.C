@@ -55,8 +55,8 @@ void Muon::CalcPFRelIso(){
   //cout << "[Muon::CalcPFRelIso] j_PFPH04 = " << j_PFPH04 << endl;
   //cout << "[Muon::CalcPFRelIso] j_PU04 = " << j_PU04 << endl;
   //cout << "[Muon::CalcPFRelIso] --> absiso = " << absiso << endl;
-  this->SetRelIso(absiso/this->Pt());
-  //this->SetRelIso(absiso/this->MiniAODPt()); //TODO This is same as IDBit
+  //this->SetRelIso(absiso/this->Pt());
+  this->SetRelIso(absiso/this->MiniAODPt()); //TODO This is same as IDBit
 }
 
 double Muon::EA(){
@@ -106,11 +106,19 @@ bool Muon::PassID(TString ID) const {
   if(ID=="POGHighPtWithLooseTrkIso") return Pass_POGHighPtWithLooseTrkIso();
   //==== Customized
   if(ID=="TEST") return Pass_TESTID();
+  if(ID=="HNVeto2016") return Pass_HNVeto2016();
+  if(ID=="HNLoose2016") return Pass_HNLoose2016(0.4, 0.2, 0.1, 3.);
+  
+  if(ID=="HNTight2016") return Pass_HNTight2016();
+  if(ID=="HNLoose") return Pass_HNLoose(0.4);
+  if(ID=="HNTight") return Pass_HNTight();
+  if(ID=="HNTightV2") return Pass_HNTightV2();
+
 
   //==== No cut
   if(ID=="NOCUT") return true;
 
-  cout << "[Electron::PassID] No id : " << ID << endl;
+  cout << "[Muon::PassID] No id : " << ID << endl;
   exit(EXIT_FAILURE);
 
   return false;
@@ -126,6 +134,50 @@ bool Muon::Pass_POGHighPtWithLooseTrkIso() const {
   if(!( TrkIso()/TuneP4().Pt()<0.1 )) return false;
   return true;
 }
+
+bool Muon::Pass_HNVeto2016() const{
+  if(!( isPOGLoose() )) return false;
+  if(!( fabs(dXY())<0.2 && fabs(dZ())<0.5) ) return false;
+  if(!( RelIso()<0.6 ))  return false;
+  if(!( Chi2()<50. )) return false;
+  return true;
+}
+
+bool Muon::Pass_HNLoose2016(double relisoCut, double dxyCut, double dzCut, double sipCut) const{
+  if(!( isPOGLoose() )) return false;
+  if(!( fabs(dXY())<dxyCut && fabs(dZ())<dzCut && fabs(IP3D()/IP3Derr())<sipCut) ) return false;
+  if(!( RelIso()<relisoCut ))  return false;
+  if(!( Chi2()<50. )) return false;
+  return true;
+}
+
+bool Muon::Pass_HNTight2016() const{
+  if(!( isPOGTight() )) return false;
+  if(!( fabs(dXY())<0.005 && fabs(dZ())<0.04 && fabs(IP3D()/IP3Derr())<3.) ) return false;
+  if(!( RelIso()<0.07 ))  return false;
+  if(!( Chi2()<10. )) return false;
+  return true;
+}
+
+bool Muon::Pass_HNLoose(double relisoCut) const{
+  if(!( isPOGTight() )) return false;
+  if(!( RelIso()<relisoCut )) return false;
+  return true;
+}
+
+bool Muon::Pass_HNTight() const{
+  if(!( isPOGTight() )) return false;
+  if(!( RelIso()<0.15 )) return false;
+  return true;
+}
+
+bool Muon::Pass_HNTightV2() const{
+  if(!( isPOGTight() )) return false;
+  if(!( RelIso()<0.1 )) return false;
+  if(!( fabs(dXY())<0.01 && fabs(dZ())<0.04) ) return false;
+  return true;
+}
+
 
 //==== TEST ID
 

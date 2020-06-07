@@ -273,7 +273,7 @@ std::string BTagEntry::trimStr(std::string str) {
 
 
 BTagCalibration::BTagCalibration(const std::string &taggr):
-  tagger_(taggr)
+  tagger_(taggr) //JH : initializer list
 {}
 
 BTagCalibration::BTagCalibration(const std::string &taggr,

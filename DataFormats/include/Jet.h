@@ -16,8 +16,10 @@ public:
   inline int hadronFlavour() const { return j_hadronFlavour; }
   void SetTaggerResults(std::vector<double> ds);
   void SetEnergyFractions(double cH, double nH, double nEM, double cEM, double muE);
+  inline double ChargedEmEnergyFraction() const { return j_neutralEmEnergyFraction; }
   void SetMultiplicities(double cM, double nM);
   void SetPileupJetId(double v);
+  inline double PileupJetId() const { return j_PileupJetId; }
 
   void SetEnShift(double en_up, double en_down);
   inline double EnShift(int s) const {
@@ -36,8 +38,10 @@ public:
   void SetTightLepVetoJetID(double b);
   inline bool Pass_tightJetID() const { return j_tightJetID; }
   inline bool Pass_tightLepVetoJetID() const { return j_tightLepVetoJetID; }
+  bool Pass_HNTight() const;
 
   bool PassID(TString ID) const;
+  bool PassPileupMVA(TString WP) const;
 
   double GetTaggerResult(JetTagging::Tagger tg) const;
 
