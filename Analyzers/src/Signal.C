@@ -557,7 +557,6 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
         if(it_ch==1) trigger_lumi = ev.GetTriggerLumi("Full");
         if(it_ch==2){
           if(ev.PassTrigger(EMuTriggers)) emu_trig_weight += 27267.591;
-          //if(ev.PassTrigger(EMuTriggersH)) emu_trig_weight += 27267.591; //JH : FATAL why not 8.65??????
           if(ev.PassTrigger(EMuTriggersH)) emu_trig_weight += 8650.628; //JH
           trigger_lumi = emu_trig_weight; 
         }
