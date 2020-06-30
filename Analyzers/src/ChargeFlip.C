@@ -7,9 +7,9 @@ ChargeFlip::ChargeFlip(){
 void ChargeFlip::initializeAnalyzer(){
 
   if(DataYear==2016){
-    EleIDs = {
-      "HNTight2016",
-      "HEID",
+    EleIDs = { 
+      "HNTightV2",
+      "HNLooseV23",
     }; // PassID() in Electron.C
     EleIDSFKeys = {
       "",
@@ -20,8 +20,8 @@ void ChargeFlip::initializeAnalyzer(){
   }
   else if(DataYear==2017){
     EleIDs = {
-      "HNTight2016",
-      "HEID",
+      "HNTightV2",
+      "HNLooseV23",
     };
     EleIDSFKeys = {
       "",
@@ -32,8 +32,8 @@ void ChargeFlip::initializeAnalyzer(){
   }
   else if(DataYear==2018){
     EleIDs = {
-      "HNTight2016",
-      "HEID",
+      "HNTightV2",
+      "HNLooseV23",
     };
     EleIDSFKeys = {
       "",
@@ -147,7 +147,7 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
 
       for(unsigned int i=0; i<eles.size(); i++){
         Gen truth_lep = GetGenMatchedLepton(eles.at(i), gens);
-        if(truth_lep.PID() == 0) return; 
+        if(truth_lep.PID() == 0) continue; 
     
         int truth_lep_Charge;
         if(truth_lep.PID() == 11) truth_lep_Charge = -1;
@@ -231,32 +231,17 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
   		
       vector<Electron> eles_prmt = ElectronPromptOnly(eles, gens); // Get prompt electrons only
   
-      if(eles.size() == 0) FillHist(param.Name+"/etc/eles_size", eles.size(), 1, 5, 0, 5);
-      else if(eles.size() == 1) FillHist(param.Name+"/etc/eles_size", eles.size(), 1, 5, 0, 5);
-      else if(eles.size() == 2) FillHist(param.Name+"/etc/eles_size", eles.size(), 1, 5, 0, 5);
-      else if(eles.size() == 3) FillHist(param.Name+"/etc/eles_size", eles.size(), 1, 5, 0, 5);
-      else if(eles.size() == 4) FillHist(param.Name+"/etc/eles_size", eles.size(), 1, 5, 0, 5); // To check the number of electrons
-      
-      if((eles.size() >= 2)&&(eles.size() == eles_prmt.size())){
-        FillHist(param.Name+"/etc/IsCut", 0, 1, 2, 0, 2);
-      }
-      else if((eles.size() >= 2)&&(eles.size() != eles_prmt.size())){
-        FillHist(param.Name+"/etc/IsCut", 1, 1, 2, 0, 2);
-        cout << "[Loop " << Nentry << "]" << endl;
-        cout << "electrons pt:" << endl;
-        for(unsigned int i=0; i<eles.size(); i++){
-          cout << eles.at(i).Pt() << endl;
-        }
-        cout << "prompt electrons pt:" << endl;
-        for(unsigned int i=0; i<eles_prmt.size(); i++){
-          cout << eles_prmt.at(i).Pt() << endl;
-        }
-      } // To see how many electrons are cut off 
-  		
       if(eles_prmt.size() == 2){
+
+        double weight_prmt = GetCFweight(eles_prmt, param.Electron_User_ID);
+
         Particle ZCand_prmt = eles_prmt.at(0)+eles_prmt.at(1);
+
         if(70.<=ZCand_prmt.M()&&ZCand_prmt.M()<110.){
-          if(eles_prmt.at(0).Charge()*eles_prmt.at(1).Charge()>0){
+          if(eles_prmt.at(0).Charge()*eles_prmt.at(1).Charge()<0){
+            FillHist(param.Name+"/ClosureTest/ZMass_prmt_OS_CFweighted", ZCand_prmt.M(), weight_prmt, 40, 70., 110.);
+          }
+          else{
             FillHist(param.Name+"/ClosureTest/ZMass_prmt_SS", ZCand_prmt.M(), 1., 40, 70., 110.);
             FillHist(param.Name+"/ClosureTest/pt1_prmt_SS", eles_prmt.at(0).Pt(), 1., 70, 20., 90.);
             FillHist(param.Name+"/ClosureTest/pt2_prmt_SS", eles_prmt.at(1).Pt(), 1., 70, 20., 90.);
@@ -297,6 +282,7 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
           FillHist(param.Name+"/ClosureTest/MET_OS_CFweighted_shifted_"+TString::Itoa(i+1,10), METv_tmp.Pt(), weight_tmp, 100, 0., 100.);
         }
       }
+
     }
 
     if(HasFlag("HalfSampleTest")){
@@ -428,16 +414,7 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
     if(HasFlag("ScaleFactor")){
 
       if(!PassMETFilter()) return;
-
-      if(HasFlag("TriggerOn")){
-        if(! (ev.PassTrigger(EleTriggerName) )) return;
-      }
-      else if(HasFlag("TriggerOff")){
-      }
-      else{
-      cout << "[ChargeFlip::executeEventFromParameter] Specify trigger on/off" << endl;
-      exit(EXIT_FAILURE);
-      }
+      if(! (ev.PassTrigger(EleTriggerName) )) return;
       
       Particle METv = ev.GetMETVector();
   
@@ -446,14 +423,6 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
       eles = SelectElectrons(AllEles, param.Electron_User_ID, MinPt, 2.5);
 
       std::sort(eles.begin(), eles.end(), PtComparing);
-  
-      //
-  		
-      if(eles.size() == 0) FillHist(param.Name+"/etc/eles_size", eles.size(), 1, 5, 0, 5);
-      else if(eles.size() == 1) FillHist(param.Name+"/etc/eles_size", eles.size(), 1, 5, 0, 5);
-      else if(eles.size() == 2) FillHist(param.Name+"/etc/eles_size", eles.size(), 1, 5, 0, 5);
-      else if(eles.size() == 3) FillHist(param.Name+"/etc/eles_size", eles.size(), 1, 5, 0, 5);
-      else if(eles.size() == 4) FillHist(param.Name+"/etc/eles_size", eles.size(), 1, 5, 0, 5); // To check the number of electrons
   
       if(eles.size() != 2) return;
       //if(eles.at(0).Pt()<lep0ptcut||eles.at(1).Pt()<lep1ptcut) return; //No need already pt min = 25
@@ -466,9 +435,6 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
   
         if(eles.at(0).Charge()*eles.at(1).Charge()>0){
           FillHist(param.Name+"/ScaleFactor/BB_ZMass_SS", ZCand.M(), 1., NBin, MllLeft, MllRight);
-          FillHist(param.Name+"/ScaleFactor/BB_pt1_SS", eles.at(0).Pt(), 1., 70, 20., 90.);
-          FillHist(param.Name+"/ScaleFactor/BB_pt2_SS", eles.at(1).Pt(), 1., 70, 20., 90.);
-          FillHist(param.Name+"/ScaleFactor/BB_MET_SS", METv.Pt(), 1., 100, 0., 100.);
         }
   
       }
@@ -478,9 +444,6 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
   
         if(eles.at(0).Charge()*eles.at(1).Charge()>0){
           FillHist(param.Name+"/ScaleFactor/BE_ZMass_SS", ZCand.M(), 1., NBin, MllLeft, MllRight);
-          FillHist(param.Name+"/ScaleFactor/BE_pt1_SS", eles.at(0).Pt(), 1., 70, 20., 90.);
-          FillHist(param.Name+"/ScaleFactor/BE_pt2_SS", eles.at(1).Pt(), 1., 70, 20., 90.);
-          FillHist(param.Name+"/ScaleFactor/BE_MET_SS", METv.Pt(), 1., 100, 0., 100.);
         }
   
       }
@@ -490,9 +453,6 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
   
         if(eles.at(0).Charge()*eles.at(1).Charge()>0){
           FillHist(param.Name+"/ScaleFactor/EE_ZMass_SS", ZCand.M(), 1., NBin, MllLeft, MllRight);
-          FillHist(param.Name+"/ScaleFactor/EE_pt1_SS", eles.at(0).Pt(), 1., 70, 20., 90.);
-          FillHist(param.Name+"/ScaleFactor/EE_pt2_SS", eles.at(1).Pt(), 1., 70, 20., 90.);
-          FillHist(param.Name+"/ScaleFactor/EE_MET_SS", METv.Pt(), 1., 100, 0., 100.);
         }
   
       }
@@ -502,10 +462,9 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
       vector<Electron> eles_shifted = eles; // copy the vector
       double X;
       if(DataYear==2016){
-        if(param.Electron_User_ID=="HEID") X = 1.3;
-        if(param.Electron_User_ID=="HNTight2016") X = 1.2; // get from the ClosureTest stage
+        if(param.Electron_User_ID=="HNTightV2") X = 1.0;
       }
-      TString X_string = Form("%f",X); // convert X to TString format (to treat string easily)
+      TString X_string = Form("%f",X);
       X_string = X_string(0,3)+"%";
   		
       for(int j=0;j<2;j++){
@@ -515,7 +474,7 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
   
   		Particle ZCand_shifted = eles_shifted.at(0) + eles_shifted.at(1);
       double weight_shifted = GetCFweight(eles_shifted, param.Electron_User_ID);
-      double weight_shifted_SF = GetCFweight_SF(eles_shifted, param.Electron_User_ID);
+      //double weight_shifted_SF = GetCFweight_SF(eles_shifted, param.Electron_User_ID);
   
       Particle METv_shifted;
       METv_shifted.SetPxPyPzE(METv.Px()+ZCand.Px()-ZCand_shifted.Px(),METv.Py()+ZCand.Py()-ZCand_shifted.Py(),0,METv.E()+ZCand.E()-ZCand_shifted.E());
@@ -526,28 +485,19 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
           // BB
           if(abs(eles_shifted.at(0).scEta())<1.4442&&abs(eles_shifted.at(1).scEta())<1.4442){
             FillHist(param.Name+"/ScaleFactor/BB_ZMass_OS_CFweighted_shifted_"+X_string, ZCand_shifted.M(), weight_shifted, NBin, MllLeft, MllRight);
-            FillHist(param.Name+"/ScaleFactor/BB_ZMass_OS_CFSFweighted_shifted_"+X_string, ZCand_shifted.M(), weight_shifted_SF, NBin, MllLeft, MllRight);
-            FillHist(param.Name+"/ScaleFactor/BB_pt1_OS_CFSFweighted_shifted_"+X_string, eles_shifted.at(0).Pt(), weight_shifted_SF, 70, 20., 90.);
-            FillHist(param.Name+"/ScaleFactor/BB_pt2_OS_CFSFweighted_shifted_"+X_string, eles_shifted.at(1).Pt(), weight_shifted_SF, 70, 20., 90.);
-            FillHist(param.Name+"/ScaleFactor/BB_MET_OS_CFSFweighted_shifted_"+X_string, METv_shifted.Pt(), weight_shifted_SF, 100, 0., 100.);
+            //FillHist(param.Name+"/ScaleFactor/BB_ZMass_OS_CFSFweighted_shifted_"+X_string, ZCand_shifted.M(), weight_shifted_SF, NBin, MllLeft, MllRight);
           }
       
           // BE
           if((abs(eles_shifted.at(0).scEta())<1.4442&&abs(eles_shifted.at(1).scEta())>=1.556)||(abs(eles_shifted.at(0).scEta())>=1.556&&abs(eles_shifted.at(1).scEta())<1.4442)){
             FillHist(param.Name+"/ScaleFactor/BE_ZMass_OS_CFweighted_shifted_"+X_string, ZCand_shifted.M(), weight_shifted, NBin, MllLeft, MllRight);
-            FillHist(param.Name+"/ScaleFactor/BE_ZMass_OS_CFSFweighted_shifted_"+X_string, ZCand_shifted.M(), weight_shifted_SF, NBin, MllLeft, MllRight);
-            FillHist(param.Name+"/ScaleFactor/BE_pt1_OS_CFSFweighted_shifted_"+X_string, eles.at(0).Pt(), weight_shifted_SF, 70, 20., 90.);
-            FillHist(param.Name+"/ScaleFactor/BE_pt2_OS_CFSFweighted_shifted_"+X_string, eles.at(1).Pt(), weight_shifted_SF, 70, 20., 90.);
-            FillHist(param.Name+"/ScaleFactor/BE_MET_OS_CFSFweighted_shifted_"+X_string, METv.Pt(), weight_shifted_SF, 100, 0., 100.);
+            //FillHist(param.Name+"/ScaleFactor/BE_ZMass_OS_CFSFweighted_shifted_"+X_string, ZCand_shifted.M(), weight_shifted_SF, NBin, MllLeft, MllRight);
           }
       
           // EE
           if(abs(eles_shifted.at(0).scEta())>=1.556&&abs(eles_shifted.at(1).scEta())>=1.556){
             FillHist(param.Name+"/ScaleFactor/EE_ZMass_OS_CFweighted_shifted_"+X_string, ZCand_shifted.M(), weight_shifted, NBin, MllLeft, MllRight);
-            FillHist(param.Name+"/ScaleFactor/EE_ZMass_OS_CFSFweighted_shifted_"+X_string, ZCand_shifted.M(), weight_shifted_SF, NBin, MllLeft, MllRight);
-            FillHist(param.Name+"/ScaleFactor/EE_pt1_OS_CFSFweighted_shifted_"+X_string, eles.at(0).Pt(), weight_shifted_SF, 70, 20., 90.);
-            FillHist(param.Name+"/ScaleFactor/EE_pt2_OS_CFSFweighted_shifted_"+X_string, eles.at(1).Pt(), weight_shifted_SF, 70, 20., 90.);
-            FillHist(param.Name+"/ScaleFactor/EE_MET_OS_CFSFweighted_shifted_"+X_string, METv.Pt(), weight_shifted_SF, 100, 0., 100.);
+            //FillHist(param.Name+"/ScaleFactor/EE_ZMass_OS_CFSFweighted_shifted_"+X_string, ZCand_shifted.M(), weight_shifted_SF, NBin, MllLeft, MllRight);
           }
   				
         }
@@ -582,6 +532,36 @@ double ChargeFlip::GetCFweight(std::vector<Electron> eles, TString id){
         if(1/eles.at(i).Pt()<0.0105) prob[i] = 1.23549e-02-6.80049e-01/eles.at(i).Pt();
         else if(0.0105<=1/eles.at(i).Pt()&&1/eles.at(i).Pt()<0.0205) prob[i] = 7.27935e-03-1.88277e-01/eles.at(i).Pt();
         else prob[i] = 4.06341e-03-3.22562e-02/eles.at(i).Pt();
+      }
+
+    }
+
+    //
+  
+    return prob[0]/(1.-prob[0])+prob[1]/(1.-prob[1]);
+
+  }
+
+  else if(id == "HNTightV2"){
+
+    //DY+TTLL CF
+
+    for(int i=0;i<2;i++){ 
+
+      if(abs(eles.at(i).scEta())<0.8){
+        if(1/eles.at(i).Pt()<0.0075) prob[i] = 2.91353e-04-2.96481e-02/eles.at(i).Pt();
+        else if(0.0075<=1/eles.at(i).Pt()&&1/eles.at(i).Pt()<0.0155) prob[i] = 1.25648e-04-6.16739e-03/eles.at(i).Pt();
+        else prob[i] = 3.75795e-05-7.16920e-04/eles.at(i).Pt();
+      }
+      else if(0.8<=abs(eles.at(i).scEta())&&abs(eles.at(i).scEta())<1.4442){
+        if(1/eles.at(i).Pt()<0.0055) prob[i] = 2.93283e-03-3.85095e-01/eles.at(i).Pt();
+        else if(0.0055<=1/eles.at(i).Pt()&&1/eles.at(i).Pt()<0.0155) prob[i] = 1.01466e-03-4.96765e-02/eles.at(i).Pt();
+        else prob[i] = 3.43620e-04-8.40559e-03/eles.at(i).Pt();
+      }
+      else if(1.556<=abs(eles.at(i).scEta())&&abs(eles.at(i).scEta())<2.5){
+        if(1/eles.at(i).Pt()<0.0105) prob[i] = 9.20799e-03-6.60680e-01/eles.at(i).Pt();
+        else if(0.0105<=1/eles.at(i).Pt()&&1/eles.at(i).Pt()<0.0205) prob[i] = 4.09673e-03-1.64067e-01/eles.at(i).Pt();
+        else prob[i] = 1.35968e-03-2.70099e-02/eles.at(i).Pt();
       }
 
     }
