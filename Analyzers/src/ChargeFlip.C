@@ -10,6 +10,8 @@ void ChargeFlip::initializeAnalyzer(){
     EleIDs = { 
       "HNTightV2",
       "HNLooseV23",
+      "HNTight2016",
+      "HNLoose2016",
     }; // PassID() in Electron.C
     EleIDSFKeys = {
       "",
@@ -22,6 +24,7 @@ void ChargeFlip::initializeAnalyzer(){
     EleIDs = {
       "HNTightV2",
       "HNLooseV23",
+      "HNTight2016",
     };
     EleIDSFKeys = {
       "",
@@ -34,6 +37,7 @@ void ChargeFlip::initializeAnalyzer(){
     EleIDs = {
       "HNTightV2",
       "HNLooseV23",
+      "HNTight2016",
     };
     EleIDSFKeys = {
       "",
@@ -92,23 +96,23 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
 
   Event ev = GetEvent();
 
-  MllLeft = 70;
-  MllRight = 110;
+  MllLeft = 75;
+  MllRight = 105;
   MinPt = 25;
-  NBin = 40; //initialize syst. parameters
+  NBin = 30; //initialize syst. parameters
 
   if(param.CFsyst_ == AnalyzerParameter::CF_Central){
   
   }
   else if(param.CFsyst_ == AnalyzerParameter::MllRangeUp){
-    MllLeft = 65;
-    MllRight = 115;
-    //NBin = 50;
+    MllLeft = 70;
+    MllRight = 110;
+    //NBin = 40;
   }
   else if(param.CFsyst_ == AnalyzerParameter::MllRangeDown){
-    MllLeft = 75;
-    MllRight = 105;
-    //NBin = 30;
+    MllLeft = 80;
+    MllRight = 100;
+    //NBin = 20;
   }
   else if(param.CFsyst_ == AnalyzerParameter::MinPtUp){
     MinPt = 28;
@@ -117,10 +121,10 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
     MinPt = 22;
   }
   else if(param.CFsyst_ == AnalyzerParameter::NBinUp){
-    NBin = 45;
+    NBin = 35;
   }
   else if(param.CFsyst_ == AnalyzerParameter::NBinDown){
-    NBin = 35;
+    NBin = 25;
   }
   else{
     cout << "[ExampleRun::executeEventFromParameter] Wrong syst" << endl;
@@ -136,10 +140,10 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
     /* CF ID selection */
 
     eles = SelectElectrons(AllEles, param.Electron_User_ID, 25., 2.5);
-
     std::sort(eles.begin(), eles.end(), PtComparing);
 
     vector<Gen> gens = GetGens();
+    vector<Electron> eles_prmt = ElectronPromptOnlyChargeFlip(eles, gens); // Get prompt electrons except conversions
   	
     if(HasFlag("CFrate")){
 
@@ -147,6 +151,7 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
 
       for(unsigned int i=0; i<eles.size(); i++){
         Gen truth_lep = GetGenMatchedLepton(eles.at(i), gens);
+        if(GetLeptonType(eles.at(i), gens)<=0 || GetLeptonType(eles.at(i), gens)>=4) continue; // conversion veto
         if(truth_lep.PID() == 0) continue; 
     
         int truth_lep_Charge;
@@ -214,12 +219,12 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
   
         Particle ZCand = eles.at(0)+eles.at(1);
   
-        if(70.<=ZCand.M()&&ZCand.M()<110.){
+        if(75.<=ZCand.M()&&ZCand.M()<105.){
           if(eles.at(0).Charge()*eles.at(1).Charge()<0){
-            FillHist(param.Name+"/ClosureTest/ZMass_OS_CFweighted", ZCand.M(), weight, 40, 70., 110.);
+            FillHist(param.Name+"/ClosureTest/ZMass_OS_CFweighted", ZCand.M(), weight, 40, 75., 105.);
           }
           else{
-            FillHist(param.Name+"/ClosureTest/ZMass_SS", ZCand.M(), 1., 40, 70., 110.);
+            FillHist(param.Name+"/ClosureTest/ZMass_SS", ZCand.M(), 1., 40, 75., 105.);
             FillHist(param.Name+"/ClosureTest/pt1_SS", eles.at(0).Pt(), 1., 70, 20., 90.);
             FillHist(param.Name+"/ClosureTest/pt2_SS", eles.at(1).Pt(), 1., 70, 20., 90.);
             FillHist(param.Name+"/ClosureTest/MET_SS", METv.Pt(), 1., 100, 0., 100.);
@@ -227,28 +232,26 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
         }
       }
   
-      /* Now see what is changed when requiring only prompt electrons in SS events */
-  		
-      vector<Electron> eles_prmt = ElectronPromptOnly(eles, gens); // Get prompt electrons only
-  
-      if(eles_prmt.size() == 2){
-
-        double weight_prmt = GetCFweight(eles_prmt, param.Electron_User_ID);
-
-        Particle ZCand_prmt = eles_prmt.at(0)+eles_prmt.at(1);
-
-        if(70.<=ZCand_prmt.M()&&ZCand_prmt.M()<110.){
-          if(eles_prmt.at(0).Charge()*eles_prmt.at(1).Charge()<0){
-            FillHist(param.Name+"/ClosureTest/ZMass_prmt_OS_CFweighted", ZCand_prmt.M(), weight_prmt, 40, 70., 110.);
-          }
-          else{
-            FillHist(param.Name+"/ClosureTest/ZMass_prmt_SS", ZCand_prmt.M(), 1., 40, 70., 110.);
-            FillHist(param.Name+"/ClosureTest/pt1_prmt_SS", eles_prmt.at(0).Pt(), 1., 70, 20., 90.);
-            FillHist(param.Name+"/ClosureTest/pt2_prmt_SS", eles_prmt.at(1).Pt(), 1., 70, 20., 90.);
-            FillHist(param.Name+"/ClosureTest/MET_prmt_SS", METv.Pt(), 1., 100, 0., 100.);
-          }
-        }
-      }
+//      /* Now see what is changed when requiring only prompt electrons in SS events */
+//
+//      if(eles_prmt.size() == 2){
+//
+//        double weight_prmt = GetCFweight(eles_prmt, param.Electron_User_ID);
+//
+//        Particle ZCand_prmt = eles_prmt.at(0)+eles_prmt.at(1);
+//
+//        if(70.<=ZCand_prmt.M()&&ZCand_prmt.M()<110.){
+//          if(eles_prmt.at(0).Charge()*eles_prmt.at(1).Charge()<0){
+//            FillHist(param.Name+"/ClosureTest/ZMass_prmt_OS_CFweighted", ZCand_prmt.M(), weight_prmt, 40, 70., 110.);
+//          }
+//          else{
+//            FillHist(param.Name+"/ClosureTest/ZMass_prmt_SS", ZCand_prmt.M(), 1., 40, 70., 110.);
+//            FillHist(param.Name+"/ClosureTest/pt1_prmt_SS", eles_prmt.at(0).Pt(), 1., 70, 20., 90.);
+//            FillHist(param.Name+"/ClosureTest/pt2_prmt_SS", eles_prmt.at(1).Pt(), 1., 70, 20., 90.);
+//            FillHist(param.Name+"/ClosureTest/MET_prmt_SS", METv.Pt(), 1., 100, 0., 100.);
+//          }
+//        }
+//      }
   
       //
   
@@ -273,10 +276,10 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
         METv_tmp.SetPxPyPzE(METv.Px()+ZCand.Px()-ZCand_tmp.Px(),METv.Py()+ZCand.Py()-ZCand_tmp.Py(),0,METv.E()+ZCand.E()-ZCand_tmp.E());
         weight_tmp = GetCFweight(eles_tmp, param.Electron_User_ID);
   
-        if(! (70.<=ZCand_tmp.M()&&ZCand_tmp.M()<110.) ) continue;
+        if(! (75.<=ZCand_tmp.M()&&ZCand_tmp.M()<105.) ) continue;
   
         if(eles.at(0).Charge()*eles.at(1).Charge()<0){
-          FillHist(param.Name+"/ClosureTest/ZMass_OS_CFweighted_shifted_"+TString::Itoa(i+1,10), ZCand_tmp.M(), weight_tmp, 40, 70., 110.);
+          FillHist(param.Name+"/ClosureTest/ZMass_OS_CFweighted_shifted_"+TString::Itoa(i+1,10), ZCand_tmp.M(), weight_tmp, 40, 75., 105.);
           FillHist(param.Name+"/ClosureTest/pt1_OS_CFweighted_shifted_"+TString::Itoa(i+1,10), eles_tmp.at(0).Pt(), weight_tmp, 70, 20., 90.);
           FillHist(param.Name+"/ClosureTest/pt2_OS_CFweighted_shifted_"+TString::Itoa(i+1,10), eles_tmp.at(1).Pt(), weight_tmp, 70, 20., 90.);
           FillHist(param.Name+"/ClosureTest/MET_OS_CFweighted_shifted_"+TString::Itoa(i+1,10), METv_tmp.Pt(), weight_tmp, 100, 0., 100.);

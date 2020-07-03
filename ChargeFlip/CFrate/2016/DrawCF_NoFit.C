@@ -2,13 +2,13 @@
 //TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip/2016/CFrate__/ChargeFlip_DYJets_TTLL.root";
 //TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip/2016/CFrate__/ChargeFlip_DYJets_TTLL_DYJetsPt100ToInf.root";
 //TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip_IDv2/2016/CFrate__/ChargeFlip_IDv2_DYJets_TTLL.root";
-TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/ChargeFlip_IDv2/2016/CFrate__/ChargeFlip_IDv2_DYJets_TTLL.root";
+TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/ChargeFlip/2016/CFrate__/ChargeFlip_SkimTree_Dilepton_DYJets_TTLL.root";
 TFile* f1 = new TFile(filename);
 
 TString samplename = filename(filename.Last('/')+12,filename.Length());
 samplename.ReplaceAll(".root","");
 
-gSystem->Exec("mkdir "+samplename);
+//gSystem->Exec("mkdir "+samplename);
 
 vector<TString> User_ID;
 //User_ID.push_back("HNTight2016");

@@ -1,9 +1,9 @@
 #ifndef HNtypeI_FakeRate_h
 #define HNtypeI_FakeRate_h
 
-#include "HNAnalyzerCore.h"
+#include "AnalyzerCore.h"
 
-class HNtypeI_FakeRate : public HNAnalyzerCore {
+class HNtypeI_FakeRate : public AnalyzerCore {
 
 public:
 

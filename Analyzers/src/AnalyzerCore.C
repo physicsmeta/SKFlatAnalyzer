@@ -1267,6 +1267,21 @@ std::vector<Electron> AnalyzerCore::ElectronPromptOnly(const std::vector<Electro
 
 }
 
+std::vector<Electron> AnalyzerCore::ElectronPromptOnlyChargeFlip(const std::vector<Electron>& electrons, const std::vector<Gen>& gens){
+
+  if(IsDATA) return electrons;
+
+  std::vector<Electron> out;
+
+  for(unsigned int i=0; i<electrons.size(); i++){
+    if(GetLeptonType(electrons.at(i), gens)<=0 || GetLeptonType(electrons.at(i), gens)>=4) continue;
+    out.push_back( electrons.at(i) );
+  }
+
+  return out;
+
+}
+
 std::vector<Electron> AnalyzerCore::ElectronUsePtCone(const std::vector<Electron>& electrons){
 
   std::vector<Electron> out;
@@ -1948,7 +1963,6 @@ int AnalyzerCore::GetLeptonType(const Lepton& lep, const std::vector<Gen>& gens)
     }
 
   }
-
 
 }
 
