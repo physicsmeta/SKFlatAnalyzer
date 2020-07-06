@@ -183,6 +183,14 @@ public:
   std::vector<Jet> JetsAwayFromPhoton(const std::vector<Jet>& jets, const std::vector<Photon>& photons, double mindr);
   Particle AddFatJetAndLepton(const FatJet& fatjet, const Lepton& lep);
 
+  // MET Correction
+  Particle UpdateMETMuon(const Particle& METv, const std::vector<Muon>& muons);
+  Particle UpdateMETElectron(const Particle& METv, const std::vector<Electron>& electrons);
+  Particle UpdateMETFake(const Particle& METv, const std::vector<Muon>& muons);
+  Particle UpdateMETFake(const Particle& METv, const std::vector<Electron>& electrons);
+  Particle UpdateMETFake(const Particle& METv, const std::vector<Electron>& electrons, const std::vector<Muon>& muons);
+  Particle UpdateMETElectronCF(const Particle& METv, const std::vector<Electron>& electrons1, const std::vector<Electron>& electrons2);
+
   // Electron CF
   std::vector<Electron> ShiftElectronEnergy(const std::vector<Electron>& beforeshift, AnalyzerParameter param, bool applyshift);
   double GetCFrates(TString id, double pt, double eta);

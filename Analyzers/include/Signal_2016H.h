@@ -1,9 +1,9 @@
-#ifndef Signal_h
-#define Signal_h
+#ifndef Signal_2016H_h
+#define Signal_2016H_h
 
 #include "AnalyzerCore.h"
 
-class Signal : public AnalyzerCore {
+class Signal_2016H : public AnalyzerCore {
 
 public:
 
@@ -52,8 +52,8 @@ public:
 
 //  double weight_Prefire;
 
-  Signal();
-  ~Signal();
+  Signal_2016H();
+  ~Signal_2016H();
 
 };
 

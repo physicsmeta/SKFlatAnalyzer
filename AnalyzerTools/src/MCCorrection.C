@@ -768,29 +768,65 @@ double MCCorrection::GetPileUpWeightBySampleName(int N_pileup, int syst){
 
 }
 
+//double MCCorrection::GetPileUpWeight(int N_pileup, int syst){
+//
+//  int this_bin = N_pileup+1;
+//  if(N_pileup >= 100) this_bin=100;
+//
+//  TString this_histname = "MC_" + TString::Itoa(DataYear,10);
+//  if(syst == 0){
+//    this_histname += "_central_pileup";
+//  }
+//  else if(syst == -1){
+//    this_histname += "_sig_down_pileup";
+//  }
+//  else if(syst == 1){
+//    this_histname += "_sig_up_pileup";
+//  }
+//  else{
+//    cerr << "[MCCorrection::GetPileUpWeightBySampleName] syst should be 0, -1, or +1" << endl;
+//    exit(EXIT_FAILURE);
+//  }
+//
+//  TH1D *this_hist = map_hist_pileup[this_histname];
+//  if(!this_hist){
+//    cerr << "[MCCorrection::GetPileUpWeightBySampleName] No " << this_histname << endl;
+//    exit(EXIT_FAILURE);
+//  }
+//
+//  return this_hist->GetBinContent(this_bin);
+//
+//} //JH : this was the original one.
+
 double MCCorrection::GetPileUpWeight(int N_pileup, int syst){
 
   int this_bin = N_pileup+1;
   if(N_pileup >= 100) this_bin=100;
 
-  TString this_histname = "MC_" + TString::Itoa(DataYear,10);
+//  TString this_histname = "MC_" + TString::Itoa(DataYear,10);
+  TString this_histname = "PUReweight_";
   if(syst == 0){
-    this_histname += "_central_pileup";
+//    this_histname += "_central_pileup";
+    this_histname += TString::Itoa(DataYear,10)+"_pileup";
   }
   else if(syst == -1){
-    this_histname += "_sig_down_pileup";
+//    this_histname += "_sig_down_pileup";
+    this_histname += TString::Itoa(DataYear,10)+"_Down_pileup";
   }
   else if(syst == 1){
-    this_histname += "_sig_up_pileup";
+//    this_histname += "_sig_up_pileup";
+    this_histname += TString::Itoa(DataYear,10)+"_Up_pileup";
   }
   else{
-    cerr << "[MCCorrection::GetPileUpWeightBySampleName] syst should be 0, -1, or +1" << endl;
+//    cerr << "[MCCorrection::GetPileUpWeightBySampleName] syst should be 0, -1, or +1" << endl;
+    cerr << "[MCCorrection::GetPileUpWeight] syst should be 0, -1, or +1" << endl;
     exit(EXIT_FAILURE);
   }
 
   TH1D *this_hist = map_hist_pileup[this_histname];
   if(!this_hist){
-    cerr << "[MCCorrection::GetPileUpWeightBySampleName] No " << this_histname << endl;
+//    cerr << "[MCCorrection::GetPileUpWeightBySampleName] No " << this_histname << endl;
+    cerr << "[MCCorrection::GetPileUpWeight] No " << this_histname << endl;
     exit(EXIT_FAILURE);
   }
 

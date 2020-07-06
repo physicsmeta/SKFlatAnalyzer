@@ -163,6 +163,8 @@ bool Electron::PassID(TString ID) const{
   if(ID=="NOCUT") return true;
   if(ID=="TEST") return Pass_TESTID();
   if(ID=="TightWithIPcut") return Pass_CutBasedTightWithIPcut();
+  if(ID=="HEEP_dZ") return Pass_HEEP_dZ();
+  if(ID=="CutBasedLooseNoIso") return Pass_CutBasedLooseNoIso();
   if(ID=="HNVeto2016") return Pass_HNVeto2016();
   if(ID=="HNLoose2016") return Pass_HNLoose2016();
   if(ID=="HNTight2016") return Pass_HNTight2016();
@@ -240,6 +242,23 @@ bool Electron::Pass_CutBasedTightWithIPcut() const{
   else{
     if(! (fabs(dXY())<0.1 && fabs(dZ())<0.2) ) return false;
   }
+  return true;
+}
+
+//===============================================
+//==== LRSM ID
+//===============================================
+
+bool Electron::Pass_HEEP_dZ() const{
+  if(!Pass_CutBasedLooseNoIso() && !passHEEPID() ) return false;
+
+  if( fabs(scEta()) <= 1.479 ){
+    if(!( fabs(dZ()) <0.10 )) return false;
+  }
+  else{
+    if(!( fabs(dZ()) <0.20 )) return false;
+  }
+
   return true;
 }
 
