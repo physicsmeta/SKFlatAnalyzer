@@ -44,13 +44,13 @@ public:
   double EMuPtCut1;
   double EMuPtCut2;
 
-//  vector<TString> EleIDs, EleIDSFKeys, MuonIDs, MuonIDSFKeys;
+  //vector<TString> EleIDs, EleIDSFKeys, MuonIDs, MuonIDSFKeys;
   vector<Electron> AllElectrons;
   vector<Muon> AllMuons;
   vector<Jet> AllJets;
   vector<FatJet> AllFatJets;
 
-//  double weight_Prefire;
+  //double weight_Prefire;
 
   HNtypeI_SR();
   ~HNtypeI_SR();
