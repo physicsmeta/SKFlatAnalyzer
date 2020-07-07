@@ -117,29 +117,33 @@ public:
   inline bool passMVAID_iso_WP80() const {return PassSelector(POG_MVA_ISO_WP80); }
   inline bool passMVAID_iso_WP90() const {return PassSelector(POG_MVA_ISO_WP90); }
   inline bool passHEEPID() const {return PassSelector(POG_HEEP); }
+  bool passHEEP2018Prompt() const; // HEEP
+  bool Pass_HEEP_dZ() const; //HEEP
 
   bool Pass_SUSYMVAWP(TString wp) const;
   bool Pass_SUSYTight() const;
   bool Pass_SUSYLoose() const;
 
   bool Pass_CutBasedTightWithIPcut() const;
+
+  //==== HN ID
+  bool Pass_TriggerEmulation() const;
+
   bool Pass_HNVeto2016() const;
   bool Pass_HNLoose2016(double relisoCut, double dxyCut, double dzCut, double sipCut) const;
   bool Pass_HNTight2016() const;
 
-  bool Pass_HNLoose() const;
-  bool Pass_HNLooseV21() const;
-  bool Pass_HNLooseV22(double relisoCut, double dxyCut, double dzCut) const;
-  bool Pass_HNLooseV23(double relisoCut) const;
-  bool Pass_HNTight() const;
-  bool Pass_HNTightV2() const;
-  bool Pass_HNMVALoose() const;
-  bool Pass_HNMVALooseV2() const;
-  bool Pass_HNMVATight() const;
-  bool Pass_HNMVATightV2() const;
+  bool Pass_HNLoose(double relisoCut, double dxyCut, double dzCut) const;
+  bool Pass_HNTight(double relisoCut, double dxyCut, double dzCut) const;
 
-  bool Pass_ISRLoose() const;
+  bool Pass_ISRLoose(double relisoCut) const;
   bool Pass_ISRTight() const;
+
+  bool Pass_HNMVALoose() const;
+  bool Pass_HNMVATight() const;
+
+  bool Pass_HNMVALooseV2() const;
+  bool Pass_HNMVATightV2() const;
 
   void SetRelPFIso_Rho(double r);
   double EA();
@@ -157,7 +161,7 @@ public:
 
   void SetIsGsfCtfScPixChargeConsistent(bool b);
   inline bool IsGsfCtfScPixChargeConsistent() const { return j_isGsfCtfScPixChargeConsistent; }
-    
+
 private:
 
   double j_En_up;

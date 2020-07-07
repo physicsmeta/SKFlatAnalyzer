@@ -103,17 +103,29 @@ public:
   bool Pass_POGTightWithTightIso() const;
   bool Pass_POGHighPtWithLooseTrkIso() const;
   bool Pass_TESTID() const;
-  
+
+  void SetValidMuonHits(int n);
+  inline int ValidMuonHits() const { return j_validmuonhits; }
+
+  void SetMatchedStations(int n);
+  inline int MatchedStations() const { return j_matchedstations; }
+
+  void SetPixelHits(int n);
+  inline int PixelHits() const { return j_pixelHits; }
+ 
   void SetTrackerLayers(int n);
   inline int TrackerLayers() const { return j_trackerLayers; }
 
+  //==== HN ID
   bool Pass_HNVeto2016() const;
   bool Pass_HNLoose2016(double relisoCut, double dxyCut, double dzCut, double sipCut) const;
   bool Pass_HNTight2016() const;
 
-  bool Pass_HNLoose(double relisoCut) const;
-  bool Pass_HNTight() const;
-  bool Pass_HNTightV2() const;
+  bool Pass_HNLoose(double relisoCut, double dxyCut, double dzCut) const;
+  bool Pass_HNTight(double relisoCut, double dxyCut, double dzCut) const;
+
+  bool Pass_ISRLoose(double relisoCut) const;
+  bool Pass_ISRTight() const;
 
   //==== Test ID for checking RelIso
   bool Pass_POGTightRelIso25() const;
@@ -126,6 +138,11 @@ public:
   bool Pass_POGTightPFIsoTight() const;
   bool Pass_POGTightPFIsoVeryTight() const;
 
+  bool Pass_POGTightCutsWithTightIso() const;
+
+  //==== N-1 POG TIght
+  bool Pass_CutBasedTightNoIP() const;
+
 private:
 
   unsigned int j_TypeBit, j_IDBit;
@@ -136,7 +153,7 @@ private:
   Particle j_TuneP4;
   double j_TunePPtError;
   double j_MVA, j_lowptMVA, j_softMVA;
-  int j_trackerLayers;
+  int j_validmuonhits, j_matchedstations, j_pixelHits, j_trackerLayers;
 
   ClassDef(Muon,1);
 };
