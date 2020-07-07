@@ -20,12 +20,15 @@ void HNtypeI_Cutflow::initializeAnalyzer(){
   ElectronLooseIDs = {"HNLoose", "HNLooseV23", "HNLoose2016"};
   ElectronVetoIDs  = {"passVetoID", "passVetoID", "HNVeto2016"};
   FakeRateIDs = {"HNtypeI_V1", "HNtypeI_V2", "HNtypeI_16"};*/
-  MuonTightIDs = {"HNTight2016"};
-  MuonLooseIDs = {"HNLoose2016"};
-  MuonVetoIDs  = {"HNVeto2016"};
-  ElectronTightIDs = {"HNTight2016"};
-  ElectronLooseIDs = {"HNLoose2016"};
-  ElectronVetoIDs  = {"HNVeto2016"};
+
+  //MuonTightIDs = {"HNTight2016"};
+  //MuonTightIDs = {"POGTightRelIso25", "POGTightRelIso20", "POGTightRelIso15","POGTightRelIso10", "POGTightPFIsoLoose", "POGTightPFIsoMedium", "POGTightPFIsoTight", "POGTightPFIsoVeryTight"};
+  MuonTightIDs = {"CutBasedTightNoIP"};
+  MuonLooseIDs = {"ISRLoose"};
+  MuonVetoIDs  = {"POGLoose"};
+  ElectronTightIDs = {"CutBasedLooseNoIso"};
+  ElectronLooseIDs = {"ISRLoose"};
+  ElectronVetoIDs  = {"CutBasedVetoNoIso"};
   FakeRateIDs = {"HNtypeI_16"};
 
 
@@ -123,14 +126,14 @@ void HNtypeI_Cutflow::executeEvent(){
 
   AnalyzerParameter param;
 
-  for(unsigned int it_EleID=0; it_EleID<ElectronTightIDs.size(); it_EleID++){
-    TString MuonTightID     = MuonTightIDs.at(it_EleID);
-    TString MuonLooseID     = MuonLooseIDs.at(it_EleID); 
-    TString MuonVetoID      = MuonVetoIDs.at(it_EleID);
-    TString ElectronTightID = ElectronTightIDs.at(it_EleID);
-    TString ElectronLooseID = ElectronLooseIDs.at(it_EleID);
-    TString ElectronVetoID  = ElectronVetoIDs.at(it_EleID);
-    TString FakeRateID      = FakeRateIDs.at(it_EleID);
+  for(unsigned int it_id=0; it_id<MuonTightIDs.size(); it_id++){
+    TString MuonTightID     = MuonTightIDs.at(it_id);
+    TString MuonLooseID     = MuonLooseIDs.at(0); 
+    TString MuonVetoID      = MuonVetoIDs.at(0);
+    TString ElectronTightID = ElectronTightIDs.at(0);
+    TString ElectronLooseID = ElectronLooseIDs.at(0);
+    TString ElectronVetoID  = ElectronVetoIDs.at(0);
+    TString FakeRateID      = FakeRateIDs.at(0);
 
     param.Clear();
 
@@ -179,8 +182,16 @@ void HNtypeI_Cutflow::executeEvent(){
 void HNtypeI_Cutflow::executeEventFromParameter(AnalyzerParameter param){
 
   TString IDsuffix = "HN16";
-//  if(param.Electron_Tight_ID.Contains("V2")) IDsuffix = "HNV2";
-//  if(param.Electron_Tight_ID.Contains("2016")) IDsuffix = "HN16";
+  if(param.Muon_Tight_ID.Contains("RelIso20")) IDsuffix = "RelIso20";
+  if(param.Muon_Tight_ID.Contains("RelIso15")) IDsuffix = "RelIso15";
+  if(param.Muon_Tight_ID.Contains("RelIso10")) IDsuffix = "RelIso10";
+  if(param.Muon_Tight_ID.Contains("PFIsoLoose")) IDsuffix = "PFIsoLoose";
+  if(param.Muon_Tight_ID.Contains("PFIsoMedium")) IDsuffix = "PFIsoMedium";
+  if(param.Muon_Tight_ID.Contains("PFIsoTight")) IDsuffix = "PFIsoTight";
+  if(param.Muon_Tight_ID.Contains("PFIsoVeryTight")) IDsuffix = "PFIsoVeryTight";
+  if(param.Muon_Tight_ID.Contains("POGTightWithTightIso")) IDsuffix = "POGIDBit";
+  if(param.Muon_Tight_ID.Contains("POGTightCutsWithTightIso")) IDsuffix = "POGIDCuts";
+
   double cutflow_max = 10.;
   int cutflow_bin = 10;
   double weight = 1.;
@@ -198,25 +209,25 @@ void HNtypeI_Cutflow::executeEventFromParameter(AnalyzerParameter param){
     weight *= GetPileUpWeight(nPileUp,0);
   }
 
-  FillHist("Number_Events_"+IDsuffix, -0.5, weight, cutflow_bin, 0., cutflow_max);
-  FillHist("Number_Events_unweighted_"+IDsuffix, -0.5, 1., cutflow_bin, 0., cutflow_max);
+  //FillHist("Number_Events_"+IDsuffix, -0.5, weight, cutflow_bin, 0., cutflow_max);
+  //FillHist("Number_Events_unweighted_"+IDsuffix, -0.5, 1., cutflow_bin, 0., cutflow_max);
 
   //================================================================
   //==== MET Filter
   //================================================================
 
   if(!PassMETFilter()) return;
-//  FillHist("Number_Events_"+IDsuffix, 0.5, weight, cutflow_bin, 0., cutflow_max);
-//  FillHist("Number_Events_unweighted_"+IDsuffix, 0.5, 1., cutflow_bin, 0., cutflow_max);
+  //FillHist("Number_Events_"+IDsuffix, 0.5, weight, cutflow_bin, 0., cutflow_max);
+  //FillHist("Number_Events_unweighted_"+IDsuffix, 0.5, 1., cutflow_bin, 0., cutflow_max);
 
   //================================================================
   //==== Trigger
   //================================================================
 
-  if(!(ev.PassTrigger(MuonTriggers))) return;
+  //if(!(ev.PassTrigger(MuonTriggers))) return;
 
-  FillHist("Number_Events_"+IDsuffix, 0.5, weight, cutflow_bin, 0., cutflow_max);
-  FillHist("Number_Events_unweighted_"+IDsuffix, 0.5, 1., cutflow_bin, 0., cutflow_max);
+  //FillHist("Number_Events_"+IDsuffix, 0.5, weight, cutflow_bin, 0., cutflow_max);
+  //FillHist("Number_Events_unweighted_"+IDsuffix, 0.5, 1., cutflow_bin, 0., cutflow_max);
 
   //================================================================
   //==== Copy AllObjects
@@ -305,14 +316,14 @@ void HNtypeI_Cutflow::executeEventFromParameter(AnalyzerParameter param){
 
   vector<FatJet> fatjets = FatJetsVetoLeptonInside(fatjets_nolepveto, electrons_veto, muons_veto);  // AK8jets used in SR, CR
   vector<Jet> jets_lepveto = JetsVetoLeptonInside(jets_nolepveto, electrons_veto, muons_veto);
-//  vector<Jet> jets_insideFatjets = JetsInsideFatJet(jets_lepveto, fatjets);  // For jets inside a fatjet, remove their smearing from MET. Because FatJet smearing is already propagted to MET.
-//  vector<Jet> jets = JetsPassPileupMVA(jets_lepveto); // We use only AK4jets here
+  vector<Jet> jets_insideFatjets = JetsInsideFatJet(jets_lepveto, fatjets);  // For jets inside a fatjet, remove their smearing from MET. Because FatJet smearing is already propagted to MET.
+  vector<Jet> jets_PUveto = JetsPassPileupMVA(jets_lepveto); // We use only AK4jets here
   //==== For test jet selection
-//  vector<Jet> jets = jets_nolepveto;
-//  vector<Jet> jets = GetJets("tight", 20., 2.7);
-//  vector<Jet> jets = jets_lepveto;
-  vector<Jet> jets = JetsPassPileupMVA(jets_lepveto);
-//  vector<Jet> jets = JetsAwayFromFatJet(jets_PUveto, fatjets);  // AK4jets used in SR, CR
+  //vector<Jet> jets = jets_nolepveto;
+  //vector<Jet> jets = GetJets("tight", 20., 2.7);
+  //vector<Jet> jets = jets_lepveto;
+  //vector<Jet> jets = JetsPassPileupMVA(jets_lepveto);
+  vector<Jet> jets = JetsAwayFromFatJet(jets_PUveto, fatjets);  // AK4jets used in SR, CR
 
   //================================================================
   //==== Sort in pT-order
@@ -336,7 +347,7 @@ void HNtypeI_Cutflow::executeEventFromParameter(AnalyzerParameter param){
 
   //==== method 1a)
   //==== multiply "btagWeight" to the event weight
-//  double btagWeight = mcCorr->GetBTaggingReweight_1a(jets, jtp_DeepCSV_Medium);
+  //double btagWeight = mcCorr->GetBTaggingReweight_1a(jets, jtp_DeepCSV_Medium);
 
   //==== method 2a)
   for(unsigned int i=0; i<jets_nolepveto.size(); i++){
@@ -348,10 +359,22 @@ void HNtypeI_Cutflow::executeEventFromParameter(AnalyzerParameter param){
     if(mcCorr->IsBTagged_2a(jtp_DeepCSV_Medium, jets.at(i))) Nbjet_lepveto_medium++;
   }
 
-  FillHist("Number_Jets_nolepveto_Nocut_"+IDsuffix, jets_nolepveto.size(), weight, 10, 0., 10.); 
+  /*FillHist("Number_Jets_nolepveto_Nocut_"+IDsuffix, jets_nolepveto.size(), weight, 10, 0., 10.); 
   FillHist("Number_Jets_lepveto_Nocut_"+IDsuffix, jets.size(), weight, 10, 0., 10.);
   FillHist("Number_BJets_nolepveto_Nocut_"+IDsuffix, Nbjet_medium, weight, 10, 0., 10.);
-  FillHist("Number_BJets_lepveto_Nocut_"+IDsuffix, Nbjet_lepveto_medium, weight, 10, 0., 10.);
+  FillHist("Number_BJets_lepveto_Nocut_"+IDsuffix, Nbjet_lepveto_medium, weight, 10, 0., 10.);*/
+
+  /*FillHist("Number_Muons_"+IDsuffix, muons.size(), weight, 10, 0., 10.);
+  for(unsigned int i=0; i<muons.size(); i++){
+    FillHist("Muons_Chi2_"+IDsuffix, muons.at(i).Chi2(), weight, 60, 0., 12.);
+    FillHist("Muons_ValidMuonHits_"+IDsuffix, muons.at(i).ValidMuonHits(), weight, 10, 0., 10.);
+    FillHist("Muons_MatchedStations_"+IDsuffix, muons.at(i).MatchedStations(), weight, 10, 0., 10.);
+    FillHist("Muons_dXY_"+IDsuffix, muons.at(i).dXY(), weight, 30, 0., 0.3);
+    FillHist("Muons_dZ_"+IDsuffix, muons.at(i).dZ(), weight, 60, 0., 0.6);
+    FillHist("Muons_PixelHits_"+IDsuffix, muons.at(i).PixelHits(), weight, 10, 0., 10.);
+    FillHist("Muons_TrackerLayers_"+IDsuffix, muons.at(i).TrackerLayers(), weight, 15, 0., 15.);
+  }*/
+
 
   //================================================================
   //==== Set up MET
@@ -360,8 +383,10 @@ void HNtypeI_Cutflow::executeEventFromParameter(AnalyzerParameter param){
   Particle METv = ev.GetMETVector();
 
   // MET correction
-  METv = UpdateMETMuon(METv, this_AllMuons);           // Rochester momentum correction
-  METv = UpdateMETElectron(METv, this_AllElectrons);   // electron pT in miniAOD = UncorrPt
+  if(muons.size() == 2){
+    METv = UpdateMETMuon(METv, muons);           // Rochester momentum correction
+    METv = UpdateMETElectron(METv, electrons);   // electron pT in miniAOD = UncorrPt
+  }
 
   double MET = METv.Pt();
 
@@ -369,7 +394,7 @@ void HNtypeI_Cutflow::executeEventFromParameter(AnalyzerParameter param){
   //==== Set up particles, variables
   //================================================================
 
-//  double MZ = 91.1876;
+  //double MZ = 91.1876;
   double MW = 80.379;
   Particle ZCand, WCand, Wtemp;
 
@@ -385,19 +410,20 @@ void HNtypeI_Cutflow::executeEventFromParameter(AnalyzerParameter param){
     muons_prompt = MuonPromptOnlyHNtypeI(muons, gens); 
     if(muons_prompt.size() < 2) return;
 
-/*    if(!IsDATA){
-      Gen truth_lep1 = GetGenMatchedLepton(muons.at(0), gens);
-      Gen truth_lep2 = GetGenMatchedLepton(muons.at(1), gens);
-      if(truth_lep1.PID() == 0) return;
-      if(truth_lep2.PID() == 0) return;
-    }*/
+    if(!(muons_veto.size()==2 && electrons_veto.size()==0)) return;
 
-    FillHist("Number_Events_"+IDsuffix, 1.5, weight, cutflow_bin, 0., cutflow_max); 
+    ZCand = muons.at(0) + muons.at(1);
+
+    //FillHist("Zcand_Mass_Incl", ZCand.M(), weight, 50, 0., 20.);
+    //if(muons.at(0).Charge()*muons.at(1).Charge() > 0) FillHist("Zcand_Mass_SS", ZCand.M(), weight, 50, 0., 20.);
+
+    if(!(ev.PassTrigger(MuonTriggers))) return;
+
+    //FillHist("Zcand_Mass_Incl_pass", ZCand.M(), weight, 50, 0., 20.);
+    //if(muons.at(0).Charge()*muons.at(1).Charge() > 0) FillHist("Zcand_Mass_SS_pass", ZCand.M(), weight, 50, 0., 20.);
+
+    /*FillHist("Number_Events_"+IDsuffix, 1.5, weight, cutflow_bin, 0., cutflow_max); 
     FillHist("Number_Events_unweighted_"+IDsuffix, 1.5, 1., cutflow_bin, 0., cutflow_max);
-
-/*    if(!(muons.at(0).Charge() == muons.at(1).Charge())) return;
-    FillHist("Number_Events_"+IDsuffix, 2.5, weight, cutflow_bin, 0., cutflow_max); 
-    FillHist("Number_Events_unweighted_"+IDsuffix, 2.5, 1., cutflow_bin, 0., cutflow_max);*/
 
     if(!(muons_veto.size() == 2)) return;
     FillHist("Number_Events_"+IDsuffix, 2.5, weight, cutflow_bin, 0., cutflow_max);
@@ -422,30 +448,6 @@ void HNtypeI_Cutflow::executeEventFromParameter(AnalyzerParameter param){
     FillHist("Number_Events_"+IDsuffix, 6.5, weight, cutflow_bin, 0., cutflow_max);
     FillHist("Number_Events_unweighted_"+IDsuffix, 6.5, 1., cutflow_bin, 0., cutflow_max);
 
-/*    if(!(fatjets.size()>0) && !(jets.size()>1 && fatjets.size()==0) && !(jets.size()==1 && fatjets.size()==0 && ZCand.M()<80.)) return;
-    FillHist("Number_Events_"+IDsuffix, 7.5, weight, cutflow_bin, 0., cutflow_max);
-    FillHist("Number_Events_unweighted_"+IDsuffix, 6.5, 1., cutflow_bin, 0., cutflow_max);
-
-    if(!(Nbjet_lepveto_medium == 0)) return;
-    FillHist("Number_Events_"+IDsuffix, 8.5, weight, cutflow_bin, 0., cutflow_max);
-    FillHist("Number_Events_unweighted_"+IDsuffix, 7.5, 1., cutflow_bin, 0., cutflow_max);
-
-    if(!(Nbjet_medium == 0)) return;
-    FillHist("Number_Events_"+IDsuffix, 9.5, weight, cutflow_bin, 0., cutflow_max);
-    FillHist("Number_Events_unweighted_"+IDsuffix, 8.5, 1., cutflow_bin, 0., cutflow_max);*/
-
-/*    double tmpMassDiff = 10000.;
-    int j1 = 0, j2 = 0;
-    for(unsigned int k=0; k<jets.size(); k++){
-      for(unsigned int l=k+1; l<jets.size(); l++){
-        Wtemp = jets.at(k) + jets.at(l);
-        if(fabs(Wtemp.M() - MW) < tmpMassDiff){
-          tmpMassDiff = fabs(Wtemp.M() - MW);
-          j1 = k; j2 = l;
-        }
-      }
-    }*/
-
     jets_WCand = JetsWCandHighMass(jets, MW);
     WCand = jets_WCand.at(0) + jets_WCand.at(1);
 
@@ -463,5 +465,8 @@ void HNtypeI_Cutflow::executeEventFromParameter(AnalyzerParameter param){
     if(!(Nbjet_medium == 0)) return;
     FillHist("Number_Events_"+IDsuffix, 9.5, weight, cutflow_bin, 0., cutflow_max);
     FillHist("Number_Events_unweighted_"+IDsuffix, 9.5, 1., cutflow_bin, 0., cutflow_max);
+
+    FillHist("Lep1_Pt_"+IDsuffix, muons.at(0).Pt(), weight, 200, 0., 200.);
+    FillHist("Lep2_Pt_"+IDsuffix, muons.at(1).Pt(), weight, 200, 0., 200.);*/
   }
 }
