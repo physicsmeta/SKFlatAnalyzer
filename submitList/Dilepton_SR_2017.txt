@@ -1,0 +1,8 @@
+WZTo3LNu_powheg
+ZZTo4L_powheg
+WGToLNuG_01J
+ZGToLLG_01J
+TTG
+ttHToNonbb
+ttWToLNu
+ttZToLLNuNu
