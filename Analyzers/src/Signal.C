@@ -20,13 +20,13 @@ void Signal::initializeAnalyzer(){
   ElectronLooseIDs = {"HNLoose", "HNLooseV23", "HNLoose2016"};
   ElectronVetoIDs  = {"passVetoID", "passVetoID", "HNVeto2016"};
   FakeRateIDs = {"HNtypeI_V1", "HNtypeI_V2", "HNtypeI_16"};*/
-  MuonTightIDs = {"HNTightV2", "HNTight2016", "POGHighPtWithLooseTrkIso"};
-  MuonLooseIDs = {"HNLoose", "HNLoose2016", "HNLoose"};
-  MuonVetoIDs  = {"POGLoose", "HNVeto2016", "POGLoose"};
-  ElectronTightIDs = {"HNTightV2", "HNTight2016", "HEEP_dZ"};
-  ElectronLooseIDs = {"HNLooseV23", "HNLoose2016", "HNLooseV23"};
-  ElectronVetoIDs  = {"passVetoID", "HNVeto2016", "passVetoID"};
-  FakeRateIDs = {"HNtypeI_V2", "HNtypeI_16", "HNtypeI_V2"}; //JH : NOTE This is used in fakeEst->ReadHistograms() in m.initializeAnalyzerTools() 
+  MuonTightIDs = {"HNTight2016", "POGHighPtWithLooseTrkIso"};
+  MuonLooseIDs = {"HNLoose2016", "HNLoose"};
+  MuonVetoIDs  = {"HNVeto2016", "POGLoose"};
+  ElectronTightIDs = {"HNTight2016", "HEEP_dZ"};
+  ElectronLooseIDs = {"HNLoose2016", "HNLooseV23"};
+  ElectronVetoIDs  = {"HNVeto2016", "passVetoID"};
+  FakeRateIDs = {"HNtypeI_16", "HNtypeI_V2"}; //JH : NOTE This is used in fakeEst->ReadHistograms() in m.initializeAnalyzerTools() 
 
   //==== At this point, sample informations (e.g., IsDATA, DataStream, MCSample, or DataYear) are all set
   //==== You can define sample-dependent or year-dependent variables here
@@ -568,13 +568,13 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
     if(!IsDATA){
       if(DataYear==2016){
         if(it_ch==0){
-          if(ev.PassTrigger(MuonTriggersBtoG)) dimu_trig_weight += 27267.591;
+          if(ev.PassTrigger(MuonTriggers)) dimu_trig_weight += 27267.591;
           if(ev.PassTrigger(MuonTriggersH)) dimu_trig_weight += 8650.628; 
           trigger_lumi = dimu_trig_weight;
         }
         if(it_ch==1) trigger_lumi = ev.GetTriggerLumi("Full");
         if(it_ch==2){
-          if(ev.PassTrigger(EMuTriggersBtoG)) emu_trig_weight += 27267.591;
+          if(ev.PassTrigger(EMuTriggers)) emu_trig_weight += 27267.591;
           if(ev.PassTrigger(EMuTriggersH)) emu_trig_weight += 8650.628; //JH
           trigger_lumi = emu_trig_weight; 
         }
@@ -1320,7 +1320,7 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
   trigger_lumi = 1., dimu_trig_weight = 0., emu_trig_weight = 0.;
   if(!IsDATA){
     if(DataYear==2016){
-      if(ev.PassTrigger(MuonTriggers)){
+      if(ev.PassTrigger(MuonTriggers)){ 
         dimu_trig_weight += 27267.591;
         trigger_lumi = dimu_trig_weight;
       }
@@ -1332,12 +1332,12 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
         trigger_lumi = ev.GetTriggerLumi("Full"); 
       }
       if(!ev.PassTrigger(MuonTriggers)&&!ev.PassTrigger(ElectronTriggers)&&ev.PassTrigger(EMuTriggers)){
-         emu_trig_weight += 27267.591;
-         trigger_lumi = emu_trig_weight;
+        emu_trig_weight += 27267.591;
+        trigger_lumi = emu_trig_weight;
       }
       if(!ev.PassTrigger(MuonTriggers)&&!ev.PassTrigger(ElectronTriggers)&&ev.PassTrigger(EMuTriggersH)){
-         emu_trig_weight += 8650.628;
-         trigger_lumi = emu_trig_weight;
+        emu_trig_weight += 8650.628;
+        trigger_lumi = emu_trig_weight;
       } //JH : Need to check this is alright
     }
     else{
@@ -1378,7 +1378,7 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
     else if(ev.PassTrigger(EMuTriggers)){
       if(muons.size()*electrons.size() == 0) continue;
       if(muons.size()*electrons.size()>0 && !(leptons.at(0)->Pt()>EMuPtCut1 && leptons.at(1)->Pt()>EMuPtCut2)) continue;
-    } // JH : Note that (IsData) should veto periodH, but MC and general should include periodH.
+    } // JH : Note that 2016BtoG trigger is already a superset of 2016H trigger, so no need to set BtoG
 
     //=====================================
     //==== DY control region

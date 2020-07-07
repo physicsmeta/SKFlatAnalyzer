@@ -768,6 +768,36 @@ double MCCorrection::GetPileUpWeightBySampleName(int N_pileup, int syst){
 
 }
 
+double MCCorrection::GetPileUpWeight2017(int N_pileup, int syst){
+
+  int this_bin = N_pileup+1;
+  if(N_pileup >= 100) this_bin=100;
+
+  TString this_histname = MCSample;
+  if(syst == 0){
+    this_histname += "_PUReweight_2017_pileup";
+  }
+  else if(syst == -1){
+    this_histname += "_PUReweight_2017_Down_pileup";
+  }
+  else if(syst == 1){
+    this_histname += "_PUReweight_2017_Up_pileup";
+  }
+  else{
+    cerr << "[MCCorrection::GetPileUpWeight2017] syst should be 0, -1, or +1" << endl;
+    exit(EXIT_FAILURE);
+  }
+
+  TH1D *this_hist = map_hist_pileup[this_histname]; 
+  if(!this_hist){
+    cerr << "[MCCorrection::GetPileUpWeight2017] No " << this_histname << endl;
+    exit(EXIT_FAILURE);
+  }
+
+  return this_hist->GetBinContent(this_bin);
+
+}
+
 //double MCCorrection::GetPileUpWeight(int N_pileup, int syst){
 //
 //  int this_bin = N_pileup+1;

@@ -1073,8 +1073,7 @@ double AnalyzerCore::GetPileUpWeight(int N_pileup, int syst){
       return mcCorr->GetPileUpWeightBySampleName(N_pileup, syst);
     }
     else if(DataYear==2018){
-      //==== TODO 2018 not yet added
-      return 1.;
+      return mcCorr->GetPileUpWeight(N_pileup, syst);
     }
     else{
       cout << "[AnalyzerCore::GetPileUpWeight] Wrong year : " << DataYear << endl;

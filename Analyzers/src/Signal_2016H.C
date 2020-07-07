@@ -20,13 +20,13 @@ void Signal_2016H::initializeAnalyzer(){
   ElectronLooseIDs = {"HNLoose", "HNLooseV23", "HNLoose2016"};
   ElectronVetoIDs  = {"passVetoID", "passVetoID", "HNVeto2016"};
   FakeRateIDs = {"HNtypeI_V1", "HNtypeI_V2", "HNtypeI_16"};*/
-  MuonTightIDs = {"HNTightV2", "HNTight2016", "POGHighPtWithLooseTrkIso"};
-  MuonLooseIDs = {"HNLoose", "HNLoose2016", "HNLoose"};
-  MuonVetoIDs  = {"POGLoose", "HNVeto2016", "POGLoose"};
-  ElectronTightIDs = {"HNTightV2", "HNTight2016", "HEEP_dZ"};
-  ElectronLooseIDs = {"HNLooseV23", "HNLoose2016", "HNLooseV23"};
-  ElectronVetoIDs  = {"passVetoID", "HNVeto2016", "passVetoID"};
-  FakeRateIDs = {"HNtypeI_V2", "HNtypeI_16", "HNtypeI_V2"}; //JH : NOTE This is used in fakeEst->ReadHistograms() in m.initializeAnalyzerTools()
+  MuonTightIDs = {"HNTight2016", "POGHighPtWithLooseTrkIso"};
+  MuonLooseIDs = {"HNLoose2016", "HNLoose"};
+  MuonVetoIDs  = {"HNVeto2016", "POGLoose"};
+  ElectronTightIDs = {"HNTight2016", "HEEP_dZ"};
+  ElectronLooseIDs = {"HNLoose2016", "HNLooseV23"};
+  ElectronVetoIDs  = {"HNVeto2016", "passVetoID"};
+  FakeRateIDs = {"HNtypeI_16", "HNtypeI_V2"}; //JH : NOTE This is used in fakeEst->ReadHistograms() in m.initializeAnalyzerTools()
 
   //==== At this point, sample informations (e.g., IsDATA, DataStream, MCSample, or DataYear) are all set
   //==== You can define sample-dependent or year-dependent variables here
@@ -263,7 +263,7 @@ void Signal_2016H::executeEventFromParameter(AnalyzerParameter param){
   //==============
 
   if(DataYear==2016){
-    if(!(ev.PassTrigger(MuonTriggers) || ev.PassTrigger(ElectronTriggers) || ev.PassTrigger(EMuTriggers))) return;
+    if(!(ev.PassTrigger(MuonTriggersH) || ev.PassTrigger(ElectronTriggers) || ev.PassTrigger(EMuTriggersH))) return;
   }
   else{
     if(!(ev.PassTrigger(MuonTriggers) || ev.PassTrigger(ElectronTriggers) || ev.PassTrigger(EMuTriggers))) return; 
@@ -567,9 +567,9 @@ void Signal_2016H::executeEventFromParameter(AnalyzerParameter param){
     if((it_ch==0||it_ch==2) && RunCF) continue; //JH : mumu, emu are irrelevant to CF
 
     // Triggers for each channel
-    if(it_ch==0 && !ev.PassTrigger(MuonTriggers)) continue; //JH : NOTE PassTrigger runs for loop and returns true even if a single item in triggers vector is fired;
+    if(it_ch==0 && !ev.PassTrigger(MuonTriggersH)) continue; //JH : NOTE PassTrigger runs for loop and returns true even if a single item in triggers vector is fired;
     if(it_ch==1 && !ev.PassTrigger(ElectronTriggers)) continue;
-    if(it_ch==2 && !ev.PassTrigger(EMuTriggers)) continue;
+    if(it_ch==2 && !ev.PassTrigger(EMuTriggersH)) continue;
 
     // Period-dependent trigger weight (only for 2016 MC)
     trigger_lumi = 1., dimu_trig_weight = 0., emu_trig_weight = 0.;
@@ -1342,7 +1342,7 @@ void Signal_2016H::executeEventFromParameter(AnalyzerParameter param){
       if(!ev.PassTrigger(MuonTriggers)&&!ev.PassTrigger(ElectronTriggers)&&ev.PassTrigger(EMuTriggersH)){
          emu_trig_weight += 8650.628;
          trigger_lumi = emu_trig_weight;
-      } //JH : Need to check this is alright
+      } //JH : I will not run this with MC so whatever.
     }
     else{
       trigger_lumi = ev.GetTriggerLumi("Full");
@@ -1371,7 +1371,7 @@ void Signal_2016H::executeEventFromParameter(AnalyzerParameter param){
     }
 
     // Requirements after passing triggers
-    if(ev.PassTrigger(MuonTriggers)){
+    if(ev.PassTrigger(MuonTriggersH)){
       if(muons.size() < 2) continue;
       if(muons.size()>=2 && !(muons.at(0).Pt()>MuonPtCut1 && muons.at(1).Pt()>MuonPtCut2)) continue;
     }
@@ -1379,7 +1379,7 @@ void Signal_2016H::executeEventFromParameter(AnalyzerParameter param){
       if(electrons.size() < 2) continue;
       if(electrons.size()>=2 && !(electrons.at(0).Pt()>ElectronPtCut1 && electrons.at(1).Pt()>ElectronPtCut2)) continue;
     }
-    else if(ev.PassTrigger(EMuTriggers)){
+    else if(ev.PassTrigger(EMuTriggersH)){
       if(muons.size()*electrons.size() == 0) continue;
       if(muons.size()*electrons.size()>0 && !(leptons.at(0)->Pt()>EMuPtCut1 && leptons.at(1)->Pt()>EMuPtCut2)) continue;
     } // JH : Note that (IsData) should veto periodH, but MC and general should include periodH.
