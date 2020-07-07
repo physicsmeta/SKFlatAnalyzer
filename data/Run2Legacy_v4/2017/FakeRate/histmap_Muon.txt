@@ -1,0 +1,6 @@
+HNPair	Muon_HNPair_FakeRates.root
+HNPair_PtCut	Muon_HNPair_PtCut_FakeRates.root
+HNWR	Muon_HNWR_FakeRates.root
+HNtypeI_V1    Muon_HNtypeI_FakeRates_muonV1FR_2017.root
+HNtypeI_V2    Muon_HNtypeI_FakeRates_muonV2FR_2017.root
+HNtypeI_16    Muon_HNtypeI_FakeRates_muon16FR_2017.root
