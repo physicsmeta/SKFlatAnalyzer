@@ -117,14 +117,15 @@ public:
   inline bool passMVAID_iso_WP80() const {return PassSelector(POG_MVA_ISO_WP80); }
   inline bool passMVAID_iso_WP90() const {return PassSelector(POG_MVA_ISO_WP90); }
   inline bool passHEEPID() const {return PassSelector(POG_HEEP); }
+  bool passHEEP2018Prompt() const;
+  bool Pass_HEEP_dZ() const;
+  bool Pass_HEEP2018_dZ() const;
 
   bool Pass_SUSYMVAWP(TString wp) const;
   bool Pass_SUSYTight() const;
   bool Pass_SUSYLoose() const;
 
   bool Pass_CutBasedTightWithIPcut() const;
-
-  bool Pass_HEEP_dZ() const;
 
   bool Pass_HNVeto2016() const;
   bool Pass_HNLoose2016() const;

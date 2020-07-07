@@ -20,14 +20,13 @@ void Signal_2016H::initializeAnalyzer(){
   ElectronLooseIDs = {"HNLoose", "HNLooseV23", "HNLoose2016"};
   ElectronVetoIDs  = {"passVetoID", "passVetoID", "HNVeto2016"};
   FakeRateIDs = {"HNtypeI_V1", "HNtypeI_V2", "HNtypeI_16"};*/
-  MuonTightIDs = {"HNTightV2", "POGHighPtWithLooseTrkIso"};
-  MuonLooseIDs = {"HNLoose", "HNLoose"};
-  MuonVetoIDs  = {"POGLoose", "POGLoose"};
-  ElectronTightIDs = {"HNTightV2", "HEEP_dZ"};
-  ElectronLooseIDs = {"HNLooseV23", "HNLooseV23"};
-  ElectronVetoIDs  = {"passVetoID", "passVetoID"};
-  FakeRateIDs = {"HNtypeI_V2", "HNtypeI_V2"}; //JH : NOTE This is used in fakeEst->ReadHistograms() in m.initializeAnalyzerTools() 
-
+  MuonTightIDs = {"HNTightV2", "HNTight2016", "POGHighPtWithLooseTrkIso"};
+  MuonLooseIDs = {"HNLoose", "HNLoose2016", "HNLoose"};
+  MuonVetoIDs  = {"POGLoose", "HNVeto2016", "POGLoose"};
+  ElectronTightIDs = {"HNTightV2", "HNTight2016", "HEEP_dZ"};
+  ElectronLooseIDs = {"HNLooseV23", "HNLoose2016", "HNLooseV23"};
+  ElectronVetoIDs  = {"passVetoID", "HNVeto2016", "passVetoID"};
+  FakeRateIDs = {"HNtypeI_V2", "HNtypeI_16", "HNtypeI_V2"}; //JH : NOTE This is used in fakeEst->ReadHistograms() in m.initializeAnalyzerTools()
 
   //==== At this point, sample informations (e.g., IsDATA, DataStream, MCSample, or DataYear) are all set
   //==== You can define sample-dependent or year-dependent variables here
@@ -90,7 +89,7 @@ void Signal_2016H::initializeAnalyzer(){
     ElectronPtCut1 = 25., ElectronPtCut2 = 15.;
     EMuPtCut1 = 25., EMuPtCut2 = 15.;
 
-    //ElectronTightIDs.pop_back(); ElectronTightIDs.push_back("Heep2018_dZ"); //JH ??
+    ElectronTightIDs.pop_back(); ElectronTightIDs.push_back("HEEP2018_dZ"); //JH 
   }
 
 //  cout << "[Signal_2016H::initializeAnalyzer] IsoMuTriggerName = " << IsoMuTriggerName << endl;

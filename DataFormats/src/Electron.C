@@ -164,6 +164,7 @@ bool Electron::PassID(TString ID) const{
   if(ID=="TEST") return Pass_TESTID();
   if(ID=="TightWithIPcut") return Pass_CutBasedTightWithIPcut();
   if(ID=="HEEP_dZ") return Pass_HEEP_dZ();
+  if(ID=="HEEP2018_dZ") return Pass_HEEP2018_dZ();
   if(ID=="CutBasedLooseNoIso") return Pass_CutBasedLooseNoIso();
   if(ID=="HNVeto2016") return Pass_HNVeto2016();
   if(ID=="HNLoose2016") return Pass_HNLoose2016();
@@ -246,11 +247,11 @@ bool Electron::Pass_CutBasedTightWithIPcut() const{
 }
 
 //===============================================
-//==== LRSM ID
+//==== HEEP ID
 //===============================================
 
 bool Electron::Pass_HEEP_dZ() const{
-  if(!Pass_CutBasedLooseNoIso() && !passHEEPID() ) return false;
+  if(!passHEEPID() ) return false;
 
   if( fabs(scEta()) <= 1.479 ){
     if(!( fabs(dZ()) <0.10 )) return false;
@@ -258,6 +259,47 @@ bool Electron::Pass_HEEP_dZ() const{
   else{
     if(!( fabs(dZ()) <0.20 )) return false;
   }
+
+  return true;
+}
+
+bool Electron::Pass_HEEP2018_dZ() const{
+  if(!passHEEP2018Prompt() ) return false;
+
+  if( fabs(scEta()) <= 1.479 ){
+    if(!( fabs(dZ()) <0.10 )) return false;
+  }
+  else{
+    if(!( fabs(dZ()) <0.20 )) return false;
+  }
+
+  return true;
+}
+
+bool Electron::passHEEP2018Prompt() const {
+
+  //==== If not endcap, use original function
+  if( fabs(scEta()) < 1.566 ) return passHEEPID();
+
+  //==== https://github.com/CMSSNU/SKFlatMaker/blob/Run2Legacy_v4/SKFlatMaker/python/SKFlatMaker_cfi.py#L37-L50
+  int HEEPcutbit = IDCutBit().at(11);
+
+  //==== https://twiki.cern.ch/twiki/bin/view/CMS/CutBasedElectronIdentificationRun2#Applying_Individual_Cuts_of_a_Se
+  //==== We will modify H/E (bit nr=6) and EM+Had_depth1 (bit nr=8) isolation cut for EndCap for 2018
+  //==== Decimal without H/E and EM+Had_depth1 = (4096-1) - (1<<6) - (1<<8) = 3775
+  if(! ( (HEEPcutbit&3775)==3775 ) ) return false;
+
+  //==== new cutd : https://indico.cern.ch/event/831669/contributions/3485543/attachments/1871797/3084930/ApprovalSlides_EE_v3.pdf, page 9
+
+  //==== new H/E cut
+//double cutValue_HoverE =                                      5 / scE() + 0.05; // original cut
+  double cutValue_HoverE = ( -0.4 + 0.4 * fabs(scEta()) ) * Rho() / scE() + 0.05;
+  if(! (HoverE()<cutValue_HoverE) ) return false;
+
+  //==== new EM+Had_depth1 cut
+//double cutValue_emhaddep1 = UncorrPt() > 50. ? 2.5 + 0.03 * (UncorrPt()-50.) +                        0.28 * Rho() : 2.5 +                        0.28 * Rho(); // original cut
+  double cutValue_emhaddep1 = UncorrPt() > 50. ? 2.5 + 0.03 * (UncorrPt()-50.) + (0.15 + 0.07*fabs(scEta())) * Rho() : 2.5 + (0.15 + 0.07*fabs(scEta())) * Rho();
+  if(! ( dr03EcalRecHitSumEt() + dr03HcalDepth1TowerSumEt() < cutValue_emhaddep1 ) ) return false;
 
   return true;
 }

@@ -20,14 +20,13 @@ void Signal::initializeAnalyzer(){
   ElectronLooseIDs = {"HNLoose", "HNLooseV23", "HNLoose2016"};
   ElectronVetoIDs  = {"passVetoID", "passVetoID", "HNVeto2016"};
   FakeRateIDs = {"HNtypeI_V1", "HNtypeI_V2", "HNtypeI_16"};*/
-  MuonTightIDs = {"HNTightV2", "POGHighPtWithLooseTrkIso"};
-  MuonLooseIDs = {"HNLoose", "HNLoose"};
-  MuonVetoIDs  = {"POGLoose", "POGLoose"};
-  ElectronTightIDs = {"HNTightV2", "HEEP_dZ"};
-  ElectronLooseIDs = {"HNLooseV23", "HNLooseV23"};
-  ElectronVetoIDs  = {"passVetoID", "passVetoID"};
-  FakeRateIDs = {"HNtypeI_V2", "HNtypeI_V2"}; //JH : NOTE This is used in fakeEst->ReadHistograms() in m.initializeAnalyzerTools() 
-
+  MuonTightIDs = {"HNTightV2", "HNTight2016", "POGHighPtWithLooseTrkIso"};
+  MuonLooseIDs = {"HNLoose", "HNLoose2016", "HNLoose"};
+  MuonVetoIDs  = {"POGLoose", "HNVeto2016", "POGLoose"};
+  ElectronTightIDs = {"HNTightV2", "HNTight2016", "HEEP_dZ"};
+  ElectronLooseIDs = {"HNLooseV23", "HNLoose2016", "HNLooseV23"};
+  ElectronVetoIDs  = {"passVetoID", "HNVeto2016", "passVetoID"};
+  FakeRateIDs = {"HNtypeI_V2", "HNtypeI_16", "HNtypeI_V2"}; //JH : NOTE This is used in fakeEst->ReadHistograms() in m.initializeAnalyzerTools() 
 
   //==== At this point, sample informations (e.g., IsDATA, DataStream, MCSample, or DataYear) are all set
   //==== You can define sample-dependent or year-dependent variables here
@@ -63,14 +62,6 @@ void Signal::initializeAnalyzer(){
     MuonPtCut1 = 20., MuonPtCut2 = 10.;
     ElectronPtCut1 = 25., ElectronPtCut2 = 15.;
     EMuPtCut1 = 25., EMuPtCut2 = 15.; 
-
-    MuonTightIDs.push_back("HNTight2016"); 
-    MuonLooseIDs.push_back("HNLoose2016");
-    MuonVetoIDs.push_back("HNVeto2016");
-    ElectronTightIDs.push_back("HNTight2016");
-    ElectronLooseIDs.push_back("HNLoose2016");
-    ElectronVetoIDs.push_back("HNVeto2016");
-    FakeRateIDs.push_back("HNtypeI_16");
   }
   else if(DataYear==2017){
     MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8_v");
@@ -90,7 +81,7 @@ void Signal::initializeAnalyzer(){
     ElectronPtCut1 = 25., ElectronPtCut2 = 15.;
     EMuPtCut1 = 25., EMuPtCut2 = 15.;
 
-    //ElectronTightIDs.pop_back(); ElectronTightIDs.push_back("Heep2018_dZ"); //JH ??
+    ElectronTightIDs.pop_back(); ElectronTightIDs.push_back("HEEP2018_dZ"); //JH 
   }
 
 //  cout << "[Signal::initializeAnalyzer] IsoMuTriggerName = " << IsoMuTriggerName << endl;
