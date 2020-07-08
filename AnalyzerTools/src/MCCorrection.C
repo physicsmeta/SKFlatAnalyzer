@@ -135,9 +135,14 @@ void MCCorrection::ReadHistograms(){
     if(DataYear == 2017 && a!=MCSample) continue;
     
     TFile *file = new TFile(PUReweightPath+c);
-    if( (TH1D *)file->Get(a+"_"+b) ){
+    //if( (TH1D *)file->Get(a+"_"+b) ){
+    //  histDir->cd();
+    //  map_hist_pileup[a+"_"+b+"_pileup"] = (TH1D *)file->Get(a+"_"+b)->Clone();
+    //}
+    if( (TH1D *)file->Get(a+"_"+b) || (TH1D *)file->Get(b) ){
       histDir->cd();
-      map_hist_pileup[a+"_"+b+"_pileup"] = (TH1D *)file->Get(a+"_"+b)->Clone();
+      if( (TH1D *)file->Get(a+"_"+b) ) map_hist_pileup[a+"_"+b+"_pileup"] = (TH1D *)file->Get(a+"_"+b)->Clone(); // wrongPU in 2017, b = central/sig_up/sig_down, c = Pileup_reweight_69p2_mb.root  ||  PU in 2016, 2018
+      if( (TH1D *)file->Get(b) ) map_hist_pileup[a+"_"+b+"_pileup"] = (TH1D *)file->Get(b)->Clone();             // correctPU in 2017, b = PUReweight_2017(+Up/Down), c = PUReweight_2017.root
     }
     else{
       cout << "[MCCorrection::ReadHistograms] No : " << a + "_" + b << endl;

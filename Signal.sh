@@ -34,7 +34,7 @@
 #python python/SKFlat.py -a Signal -y 2016 -l submitList/2016_DoubleMuon_BtoG.txt -n 80 --skim SkimTree_Dilepton &
 #python python/SKFlat.py -a Signal -y 2016 -l submitList/2016_DoubleEG_BtoH.txt -n 80 --skim SkimTree_Dilepton &
 #python python/SKFlat.py -a Signal -y 2016 -l submitList/2016_MuonEG_BtoG.txt -n 80 --skim SkimTree_Dilepton &
-python python/SKFlat.py -a Signal_2016H -y 2016 -l submitList/2016_periodH.txt -n 80 --skim SkimTree_Dilepton &
+#python python/SKFlat.py -a Signal_2016H -y 2016 -l submitList/2016_periodH.txt -n 80 --skim SkimTree_Dilepton &
 
 ### Checking signal-like events for using CMSShow
 #python python/SKFlat.py -a Signal -y 2016 -l submitList/2016_cmsshow.txt -n 80 --skim SkimTree_Dilepton &
@@ -56,7 +56,7 @@ python python/SKFlat.py -a Signal_2016H -y 2016 -l submitList/2016_periodH.txt -
 #python python/SKFlat.py -a Signal -y 2017 -l submitList/Dilepton_SM_CR_2017.txt -n 80 --skim SkimTree_Dilepton &
 #python python/SKFlat.py -a Signal -y 2017 -l submitList/NoSkim_SM_CR.txt -n 80 &
 
-python python/SKFlat.py -a Signal -y 2017 -l submitList/JH_Dilepton_2017.txt -n 80 --skim SkimTree_Dilepton &
+#python python/SKFlat.py -a Signal -y 2017 -l submitList/JH_Dilepton_2017.txt -n 80 --skim SkimTree_Dilepton &
 python python/SKFlat.py -a Signal -y 2017 -l submitList/JH_NoSkim.txt -n 80 &
 
 ### CF ###

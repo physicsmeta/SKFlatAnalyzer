@@ -1070,7 +1070,13 @@ double AnalyzerCore::GetPileUpWeight(int N_pileup, int syst){
       return mcCorr->GetPileUpWeight(N_pileup, syst);
     }
     else if(DataYear==2017){
-      return mcCorr->GetPileUpWeightBySampleName(N_pileup, syst);
+      //return mcCorr->GetPileUpWeightBySampleName(N_pileup, syst);
+      if(MCSample.Contains("WZZ")){   // wrongPU
+        return mcCorr->GetPileUpWeightBySampleName(N_pileup, syst);
+      }
+      else{   // correctPU
+        return mcCorr->GetPileUpWeight2017(N_pileup, syst);
+      }
     }
     else if(DataYear==2018){
       return mcCorr->GetPileUpWeight(N_pileup, syst);
