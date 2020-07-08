@@ -334,7 +334,7 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
   vector<Muon> muons_veto = SelectMuons(this_AllMuons, param.Muon_Veto_ID, 5., 2.4);
   vector<Electron> electrons = SelectElectrons(this_AllElectrons, ElectronID, 10., 2.5);
   vector<Electron> electrons_veto = SelectElectrons(this_AllElectrons, param.Electron_Veto_ID, 10., 2.5); //JH : lepton selection done
-  vector<Jet> jets_nolepveto = SelectJets(this_AllJets, "tight", 20., 2.4); //JH : to reject bjets
+  vector<Jet> jets_nolepveto = SelectJets(this_AllJets, "tight", 20., 2.7); //JH : to reject bjets
 //  vector<FatJet> fatjets = SelectFatJets(this_AllFatJets, param.FatJet_ID, 200., 2.7);
 
 //  FillHist("Njet_"+IDsuffix, jets_nolepveto.size(), weight, 8, 0., 8.);
@@ -457,7 +457,7 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
   
   // Set tight_iso cut & calculate pTcone
   double mu_tight_iso = 0.15;
-  if(IDsuffix == "HNV2") mu_tight_iso = 0.1;
+  //if(IDsuffix == "HNV2") mu_tight_iso = 0.1;
   if(IDsuffix == "HN16") mu_tight_iso = 0.07;
 
   double el_tight_iso = 0.;
