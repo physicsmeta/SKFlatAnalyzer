@@ -202,7 +202,7 @@ void Signal_2016H::executeEventFromParameter(AnalyzerParameter param){
   vector<TString> channels3L = {"mmm", "mme", "mee", "eee"}; //JH : iterate for the number of e
   vector<TString> channels4L = {"mmmm", "mmee", "eeee"}; //JH : iterate for the number of e / 2
   TString IDsuffix = "LRSM";
-  if(param.Electron_Tight_ID.Contains("V2")) IDsuffix = "HNV2";
+  //if(param.Electron_Tight_ID.Contains("V2")) IDsuffix = "HNV2";
   if(param.Electron_Tight_ID.Contains("2016")) IDsuffix = "HN16";
   TString LepCategory = "TT";
   double cutflow_max = 10.;
@@ -342,7 +342,7 @@ void Signal_2016H::executeEventFromParameter(AnalyzerParameter param){
   vector<Muon> muons_veto = SelectMuons(this_AllMuons, param.Muon_Veto_ID, 5., 2.4);
   vector<Electron> electrons = SelectElectrons(this_AllElectrons, ElectronID, 10., 2.5);
   vector<Electron> electrons_veto = SelectElectrons(this_AllElectrons, param.Electron_Veto_ID, 10., 2.5); //JH : lepton selection done
-  vector<Jet> jets_nolepveto = SelectJets(this_AllJets, "tight", 20., 2.4); //JH : to reject bjets
+  vector<Jet> jets_nolepveto = SelectJets(this_AllJets, "tight", 20., 2.7); //JH : to reject bjets
 //  vector<FatJet> fatjets = SelectFatJets(this_AllFatJets, param.FatJet_ID, 200., 2.7);
 
 //  FillHist("Njet_"+IDsuffix, jets_nolepveto.size(), weight, 8, 0., 8.);
@@ -465,7 +465,7 @@ void Signal_2016H::executeEventFromParameter(AnalyzerParameter param){
   
   // Set tight_iso cut & calculate pTcone
   double mu_tight_iso = 0.15;
-  if(IDsuffix == "HNV2") mu_tight_iso = 0.1;
+  //if(IDsuffix == "HNV2") mu_tight_iso = 0.1;
   if(IDsuffix == "HN16") mu_tight_iso = 0.07;
 
   double el_tight_iso = 0.;
@@ -478,12 +478,12 @@ void Signal_2016H::executeEventFromParameter(AnalyzerParameter param){
   }
    
   for(unsigned int i=0; i<electrons.size(); i++){
-    el_tight_iso = 0.0287+0.506/electrons.at(i).UncorrPt(); //JH : TODO electron uses UncorrPt() but I don't understand the meaning yet
-    if(fabs(electrons.at(i).scEta()) > 1.479) el_tight_iso = 0.0445+0.963/electrons.at(i).UncorrPt();
-    if(IDsuffix == "HNV2"){
-      el_tight_iso = std::min(0.08, 0.0287+0.506/electrons.at(i).UncorrPt());
-      if(fabs(electrons.at(i).scEta()) > 1.479) el_tight_iso = std::min(0.08, 0.0445+0.963/electrons.at(i).UncorrPt());
-    } 
+    //el_tight_iso = 0.0287+0.506/electrons.at(i).UncorrPt(); //JH : TODO electron uses UncorrPt() but I don't understand the meaning yet
+    //if(fabs(electrons.at(i).scEta()) > 1.479) el_tight_iso = 0.0445+0.963/electrons.at(i).UncorrPt();
+    //if(IDsuffix == "HNV2"){
+    //  el_tight_iso = std::min(0.08, 0.0287+0.506/electrons.at(i).UncorrPt());
+    //  if(fabs(electrons.at(i).scEta()) > 1.479) el_tight_iso = std::min(0.08, 0.0445+0.963/electrons.at(i).UncorrPt());
+    //} 
     if(IDsuffix == "HN16") el_tight_iso = 0.08;
     this_ptcone_electron = electrons.at(i).CalcPtCone(electrons.at(i).RelIso(), el_tight_iso);
     electrons.at(i).SetPtCone(this_ptcone_electron);
