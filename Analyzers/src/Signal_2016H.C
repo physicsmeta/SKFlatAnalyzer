@@ -62,14 +62,6 @@ void Signal_2016H::initializeAnalyzer(){
     MuonPtCut1 = 20., MuonPtCut2 = 10.;
     ElectronPtCut1 = 25., ElectronPtCut2 = 15.;
     EMuPtCut1 = 25., EMuPtCut2 = 15.; 
-
-    MuonTightIDs.push_back("HNTight2016"); 
-    MuonLooseIDs.push_back("HNLoose2016");
-    MuonVetoIDs.push_back("HNVeto2016");
-    ElectronTightIDs.push_back("HNTight2016");
-    ElectronLooseIDs.push_back("HNLoose2016");
-    ElectronVetoIDs.push_back("HNVeto2016");
-    FakeRateIDs.push_back("HNtypeI_16");
   }
   else if(DataYear==2017){
     MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8_v");
