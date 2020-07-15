@@ -155,6 +155,7 @@ bool Electron::PassID(TString ID) const{
   if(ID=="passHEEPID") return passHEEPID();
   if(ID=="passHEEPID2018Prompt") return passHEEP2018Prompt(); // HEEP
   if(ID=="HEEP_dZ") return Pass_HEEP_dZ(); // HEEP
+  if(ID=="HEEP2018_dZ") return Pass_HEEP2018_dZ(); // HEEP
   if(ID=="passMVAID_noIso_WP80") return passMVAID_noIso_WP80();
   if(ID=="passMVAID_noIso_WP90") return passMVAID_noIso_WP90();
   if(ID=="passMVAID_iso_WP80") return passMVAID_iso_WP80();
@@ -172,21 +173,24 @@ bool Electron::PassID(TString ID) const{
   if(ID=="HNLoose2016IsoUp") return Pass_HNLoose2016(0.5, 0.2, 0.1, 10.);
   if(ID=="HNTight2016") return Pass_HNTight2016();
 
-  if(ID=="HNLoose") return Pass_HNLoose(0.6, 0.2, 0.2);
-  if(ID=="HNLooseIsoUp") return Pass_HNLoose(0.7, 0.2, 0.2);
-  if(ID=="HNLooseIsoDown") return Pass_HNLoose(0.5, 0.2, 0.2);
-  if(ID=="HNTightV1") return Pass_HNTight(0.1, 0.05, 0.1);
-  if(ID=="HNTightV2") return Pass_HNTight(0.1, 0.01, 0.04);
+  if(ID=="HNVeto") return Pass_HNVeto(0.6);
+  if(ID=="HNLooseV1") return Pass_HNLoose(0.6, 0.2, 0.2);
+  if(ID=="HNLooseV1IsoUp") return Pass_HNLoose(0.7, 0.2, 0.2);
+  if(ID=="HNLooseV1IsoDown") return Pass_HNLoose(0.5, 0.2, 0.2);
+  if(ID=="HNLooseV2") return Pass_HNLoose(0.6, 0.05, 0.1);
+  if(ID=="HNLooseV2IsoUp") return Pass_HNLoose(0.7, 0.05, 0.1);
+  if(ID=="HNLooseV2IsoDown") return Pass_HNLoose(0.5, 0.05, 0.1);
+  
+  if(ID=="HNTightV1") return Pass_HNTight(0.08, 0.05, 0.1);
+  if(ID=="HNTightV2") return Pass_HNTight(0.08, 0.01, 0.04);
 
   if(ID=="ISRLoose") return Pass_ISRLoose(0.6);
   if(ID=="ISRLooseIsoUp") return Pass_ISRLoose(0.7);
   if(ID=="ISRLooseIsoDown") return Pass_ISRLoose(0.5);
   if(ID=="ISRTight") return Pass_ISRTight();
 
-  if(ID=="HNMVALoose") return Pass_HNMVALoose();
-  if(ID=="HNMVALooseV2") return Pass_HNMVALooseV2();
-  if(ID=="HNMVATight") return Pass_HNMVATight();
-  if(ID=="HNMVATightV2") return Pass_HNMVATightV2();
+  if(ID=="HNMVALoose") return Pass_HNMVALoose(0.6, 0.05, 0.1);
+  if(ID=="HNMVATight") return Pass_HNMVATight(0.08, 0.05, 0.1);
 
   if(ID=="CutBasedLooseNoIso") return Pass_CutBasedLooseNoIso();
   if(ID=="CutBasedVetoNoIso") return Pass_CutBasedVetoNoIso();
@@ -217,6 +221,21 @@ bool Electron::passHEEP2018Prompt() const { // HEEP
 bool Electron::Pass_HEEP_dZ() const { // HEEP
 
   if( !passHEEPID() ) return false;
+
+  if( fabs(scEta()) <= 1.479 ){
+    if(!( fabs(dZ()) < 0.10 )) return false;
+  }
+  else{
+    if(!( fabs(dZ()) < 0.20 )) return false;
+  }
+
+  return true;
+
+}
+
+bool Electron::Pass_HEEP2018_dZ() const { // HEEP
+
+  if( !passHEEP2018Prompt() ) return false;
 
   if( fabs(scEta()) <= 1.479 ){
     if(!( fabs(dZ()) < 0.10 )) return false;
@@ -379,6 +398,12 @@ bool Electron::Pass_HNTight2016() const{
 //==== Run2 ID
 //===============================================
 
+bool Electron::Pass_HNVeto(double relisoCut) const{
+  if(! (Pass_CutBasedVetoNoIso()) ) return false;
+  if(! (RelIso()<relisoCut) ) return false;
+  return true;
+}
+
 bool Electron::Pass_HNLoose(double relisoCut, double dxyCut, double dzCut) const{
   if(! (Pass_CutBasedLooseNoIso()) ) return false;
   if(! (RelIso()<relisoCut) ) return false; 
@@ -410,114 +435,19 @@ bool Electron::Pass_ISRTight() const{
   return true;
 }
 
-bool Electron::Pass_HNMVALoose() const{
+bool Electron::Pass_HNMVALoose(double relisoCut, double dxyCut, double dzCut) const{
   if(!( passMVAID_noIso_WP90() )) return false;
-  if(! (ecalPFClusterIso()/UncorrPt() < 0.45) ) return false;    // < 0.5
-  if(! (hcalPFClusterIso()/UncorrPt() < 0.25) ) return false;    // < 0.3
-  if(! (dr03TkSumPt()/UncorrPt() < 0.2) ) return false;          // < 0.2
-  if( fabs(scEta()) <= 1.479 ){
-    if(! (RelIso() < 0.112+0.506/UncorrPt()) ) return false;
-    if(! (fabs(dXY())<0.05 && fabs(dZ())<0.1) ) return false;
-    if(! (Full5x5_sigmaIetaIeta() < 0.011) ) return false;       // < 0.013, 0.011
-    if(! (fabs(dEtaSeed()) < 0.005) ) return false;              // < 0.01 , 0.006
-    if(! (fabs(dPhiIn()) < 0.04) ) return false;                 // < 0.07 , 0.15
-    if(! (HoverE() < 0.08) ) return false;                       // < 0.13 , 0.12 
-    if(! (fabs(InvEminusInvP()) < 0.01) ) return false;          // < 9999., 0.05
-  }
-  else{
-    if(! (RelIso() < 0.108+0.963/UncorrPt()) ) return false;
-    if(! (fabs(dXY())<0.1 && fabs(dZ())<0.2) ) return false;
-    if(! (Full5x5_sigmaIetaIeta() < 0.031) ) return false;       // < 0.035, 0.031
-    if(! (fabs(dEtaSeed()) < 0.007) ) return false;              // < 0.015, 0.0085
-    if(! (fabs(dPhiIn()) < 0.08) ) return false;                 // < 0.1  , 0.1
-    if(! (HoverE() < 0.08) ) return false;                       // < 0.13 , 0.1
-    if(! (fabs(InvEminusInvP()) < 0.01) ) return false;          // < 9999., 0.05
-  }
+  if(! (RelIso()<relisoCut) ) return false;
+  if(! (fabs(dXY())<dxyCut && fabs(dZ())<dzCut) ) return false;
   if(! (PassConversionVeto()) ) return false;
   if(! (IsGsfCtfScPixChargeConsistent()) ) return false;
   return true;
 }
 
-bool Electron::Pass_HNMVALooseV2() const{
+bool Electron::Pass_HNMVATight(double relisoCut, double dxyCut, double dzCut) const{
   if(!( passMVAID_noIso_WP90() )) return false;
-  if(! (RelIso()<0.6) ) return false;
-  if(! (ecalPFClusterIso()/UncorrPt() < 0.45) ) return false;    // < 0.5
-  if(! (hcalPFClusterIso()/UncorrPt() < 0.25) ) return false;    // < 0.3
-  if(! (dr03TkSumPt()/UncorrPt() < 0.2) ) return false;          // < 0.2
-  if( fabs(scEta()) <= 1.479 ){
-//    if(! (RelIso() < 0.112+0.506/UncorrPt()) ) return false;
-//    if(! (fabs(dXY())<0.05 && fabs(dZ())<0.1) ) return false;
-    if(! (Full5x5_sigmaIetaIeta() < 0.011) ) return false;       // < 0.013, 0.011
-    if(! (fabs(dEtaSeed()) < 0.005) ) return false;              // < 0.01 , 0.006
-    if(! (fabs(dPhiIn()) < 0.04) ) return false;                 // < 0.07 , 0.15
-    if(! (HoverE() < 0.08) ) return false;                       // < 0.13 , 0.12 
-    if(! (fabs(InvEminusInvP()) < 0.01) ) return false;          // < 9999., 0.05
-  }
-  else{
-//    if(! (RelIso() < 0.108+0.963/UncorrPt()) ) return false;
-//    if(! (fabs(dXY())<0.1 && fabs(dZ())<0.2) ) return false;
-    if(! (Full5x5_sigmaIetaIeta() < 0.031) ) return false;       // < 0.035, 0.031
-    if(! (fabs(dEtaSeed()) < 0.007) ) return false;              // < 0.015, 0.0085
-    if(! (fabs(dPhiIn()) < 0.08) ) return false;                 // < 0.1  , 0.1
-    if(! (HoverE() < 0.08) ) return false;                       // < 0.13 , 0.1
-    if(! (fabs(InvEminusInvP()) < 0.01) ) return false;          // < 9999., 0.05
-  }
-  if(! (PassConversionVeto()) ) return false;
-  if(! (IsGsfCtfScPixChargeConsistent()) ) return false;
-  return true;
-}
-
-bool Electron::Pass_HNMVATight() const{
-  if(!( passMVAID_noIso_WP80() )) return false;
-  if(! (ecalPFClusterIso()/UncorrPt() < 0.45) ) return false;    // < 0.5
-  if(! (hcalPFClusterIso()/UncorrPt() < 0.25) ) return false;    // < 0.3
-  if(! (dr03TkSumPt()/UncorrPt() < 0.2) ) return false;          // < 0.2
-  if( fabs(scEta()) <= 1.479 ){
-    if(! (RelIso() < 0.0287+0.506/UncorrPt()) ) return false;
-    if(! (fabs(dXY())<0.05 && fabs(dZ())<0.1) ) return false;
-    if(! (Full5x5_sigmaIetaIeta() < 0.011) ) return false;       // < 0.013, 0.011
-    if(! (fabs(dEtaSeed()) < 0.005) ) return false;              // < 0.01 , 0.006
-    if(! (fabs(dPhiIn()) < 0.04) ) return false;                 // < 0.07 , 0.15
-    if(! (HoverE() < 0.08) ) return false;                       // < 0.13 , 0.12 
-    if(! (fabs(InvEminusInvP()) < 0.01) ) return false;          // < 9999., 0.05
-  }
-  else{
-    if(! (RelIso() < 0.0445+0.963/UncorrPt()) ) return false;
-    if(! (fabs(dXY())<0.1 && fabs(dZ())<0.2) ) return false;
-    if(! (Full5x5_sigmaIetaIeta() < 0.031) ) return false;       // < 0.035, 0.031
-    if(! (fabs(dEtaSeed()) < 0.007) ) return false;              // < 0.015, 0.0085
-    if(! (fabs(dPhiIn()) < 0.08) ) return false;                 // < 0.1  , 0.1
-    if(! (HoverE() < 0.08) ) return false;                       // < 0.13 , 0.1
-    if(! (fabs(InvEminusInvP()) < 0.01) ) return false;          // < 9999., 0.05
-  }
-  if(! (PassConversionVeto()) ) return false;
-  if(! (IsGsfCtfScPixChargeConsistent()) ) return false;
-  return true;
-}
-
-bool Electron::Pass_HNMVATightV2() const{
-  if(!( passMVAID_noIso_WP80() )) return false;
-  if(! (RelIso()<0.08) ) return false;
-  if(! (fabs(dXY())<0.01 && fabs(dZ())<0.04) ) return false;
-  if(! (ecalPFClusterIso()/UncorrPt() < 0.45) ) return false;    // < 0.5
-  if(! (hcalPFClusterIso()/UncorrPt() < 0.25) ) return false;    // < 0.3
-  if(! (dr03TkSumPt()/UncorrPt() < 0.2) ) return false;          // < 0.2
-  if( fabs(scEta()) <= 1.479 ){
-    if(! (RelIso() < 0.0287+0.506/UncorrPt()) ) return false;
-    if(! (Full5x5_sigmaIetaIeta() < 0.011) ) return false;       // < 0.013, 0.011
-    if(! (fabs(dEtaSeed()) < 0.005) ) return false;              // < 0.01 , 0.006
-    if(! (fabs(dPhiIn()) < 0.04) ) return false;                 // < 0.07 , 0.15
-    if(! (HoverE() < 0.08) ) return false;                       // < 0.13 , 0.12 
-    if(! (fabs(InvEminusInvP()) < 0.01) ) return false;          // < 9999., 0.05
-  }
-  else{
-    if(! (RelIso() < 0.0445+0.963/UncorrPt()) ) return false;
-    if(! (Full5x5_sigmaIetaIeta() < 0.031) ) return false;       // < 0.035, 0.031
-    if(! (fabs(dEtaSeed()) < 0.007) ) return false;              // < 0.015, 0.0085
-    if(! (fabs(dPhiIn()) < 0.08) ) return false;                 // < 0.1  , 0.1
-    if(! (HoverE() < 0.08) ) return false;                       // < 0.13 , 0.1
-    if(! (fabs(InvEminusInvP()) < 0.01) ) return false;          // < 9999., 0.05
-  }
+  if(! (RelIso()<relisoCut) ) return false;
+  if(! (fabs(dXY())<dxyCut && fabs(dZ())<dzCut) ) return false;
   if(! (PassConversionVeto()) ) return false;
   if(! (IsGsfCtfScPixChargeConsistent()) ) return false;
   return true;

@@ -181,6 +181,7 @@ void HNtypeI_SR_2016H::executeEvent(){
 
     //==== Electron ID
     param.Electron_Tight_ID       = ElectronTightID;
+    if(DataYear==2018 && it_id==1) param.Electron_Tight_ID = "HEEP2018_dZ";
     param.Electron_Loose_ID       = ElectronLooseID;
     param.Electron_Veto_ID        = ElectronVetoID;
     param.Electron_FR_ID          = FakeRateID;     // ID name in histmap_Electron.txt
