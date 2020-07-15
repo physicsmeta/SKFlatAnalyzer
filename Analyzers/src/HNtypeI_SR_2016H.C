@@ -20,13 +20,13 @@ void HNtypeI_SR_2016H::initializeAnalyzer(){
   ElectronLooseIDs = {"HNLoose", "HNLooseV23", "HNLoose2016"};
   ElectronVetoIDs  = {"passVetoID", "passVetoID", "HNVeto2016"};
   FakeRateIDs = {"HNtypeI_V1", "HNtypeI_V2", "HNtypeI_16"};*/
-  MuonTightIDs     = {"HNTight2016", "POGHighPtWithLooseTrkIso", "HNTightV1", "HNTightV2"};
-  MuonLooseIDs     = {"HNLoose2016", "POGMedium", "HNLoose", "HNLoose"};
-  MuonVetoIDs      = {"HNVeto2016", "POGLoose", "POGLoose", "POGLoose"};
-  ElectronTightIDs = {"HNTight2016", "HEEP_dZ", "HNTightV1", "HNTightV2"};
-  ElectronLooseIDs = {"HNLoose2016", "passLooseID", "HNLoose", "HNLoose"};
-  ElectronVetoIDs  = {"HNVeto2016", "passVetoID", "passVetoID", "passVetoID"};
-  FakeRateIDs      = {"HNtypeI_16", "HNtypeI_16", "HNtypeI_16", "HNtypeI_16"};
+  MuonTightIDs     = {"HNTight2016", "POGHighPtWithLooseTrkIso", "HNTightV1", "HNTightV2", "HNTightV1"};
+  MuonLooseIDs     = {"HNLoose2016", "POGMedium", "HNLooseV1", "HNLooseV1", "HNLooseV2"};
+  MuonVetoIDs      = {"HNVeto2016", "POGLoose", "POGLoose", "POGLoose", "POGLoose"};
+  ElectronTightIDs = {"HNTight2016", "HEEP_dZ", "HNTightV1", "HNTightV2", "HNMVATight"};
+  ElectronLooseIDs = {"HNLoose2016", "passLooseID", "HNLooseV1", "HNLooseV1", "HNMVALoose"};
+  ElectronVetoIDs  = {"HNVeto2016", "passVetoID", "HNVeto", "HNVeto", "HNMVALoose"};
+  FakeRateIDs      = {"HNtypeI_16", "HNtypeI_16", "HNtypeI_16", "HNtypeI_16", "HNtypeI_16"};
 
 
   //==== At this point, sample informations (e.g., IsDATA, DataStream, MCSample, or DataYear) are all set
@@ -220,6 +220,7 @@ void HNtypeI_SR_2016H::executeEventFromParameter(AnalyzerParameter param){
   if(param.Electron_Tight_ID.Contains("HEEP")) IDsuffix = "LRSM";
   if(param.Electron_Tight_ID.Contains("V1")) IDsuffix = "HNV1";
   if(param.Electron_Tight_ID.Contains("V2")) IDsuffix = "HNV2";
+  if(param.Electron_Tight_ID.Contains("MVA")) IDsuffix = "MVA";
   //TString LepCategory = "TT";
   double cutflow_max = 10.;
   int cutflow_bin = 10;
@@ -281,7 +282,9 @@ void HNtypeI_SR_2016H::executeEventFromParameter(AnalyzerParameter param){
   //==== Copy AllObjects
   //========================================================
 
-  vector<Muon> this_AllMuons = AllMuons;
+  vector<Muon> this_AllMuons;
+  if(param.Muon_Tight_ID.Contains("HighPt")) this_AllMuons = UseTunePMuon(AllMuons);
+  else this_AllMuons = AllMuons;
   vector<Electron> this_AllElectrons = AllElectrons;
   vector<Jet> this_AllJets = AllJets;
   vector<FatJet> this_AllFatJets = AllFatJets;
