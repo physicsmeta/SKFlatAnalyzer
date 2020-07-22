@@ -22,10 +22,10 @@ void HNtypeI_SR::initializeAnalyzer(){
   FakeRateIDs = {"HNtypeI_V1", "HNtypeI_V2", "HNtypeI_16"};*/
   MuonTightIDs     = {"HNTight2016", "POGHighPtWithLooseTrkIso", "HNTightV1", "HNTightV2", "HNTightV1"};
   MuonLooseIDs     = {"HNLoose2016", "POGMedium", "HNLooseV1", "HNLooseV1", "HNLooseV2"};
-  MuonVetoIDs      = {"HNVeto2016", "POGLoose", "POGLoose", "POGLoose", "POGLoose"};
+  MuonVetoIDs      = {"HNVeto2016", "POGLoose", "HNVeto", "HNVeto", "HNVeto"};
   ElectronTightIDs = {"HNTight2016", "HEEP_dZ", "HNTightV1", "HNTightV2", "HNMVATight"};
   ElectronLooseIDs = {"HNLoose2016", "passLooseID", "HNLooseV1", "HNLooseV1", "HNMVALoose"};
-  ElectronVetoIDs  = {"HNVeto2016", "passVetoID", "HNVeto", "HNVeto", "HNMVALoose"};
+  ElectronVetoIDs  = {"HNVeto2016", "passVetoID", "HNVeto", "HNVeto", "HNMVAVeto"};
   FakeRateIDs      = {"HNtypeI_16", "HNtypeI_16", "HNtypeI_16", "HNtypeI_16", "HNtypeI_16"};
 
 
