@@ -114,6 +114,7 @@ public:
   inline bool passTightID()  const {return PassSelector(POG_CB_TIGHT); }
   inline bool passMVAID_noIso_WP80() const {return PassSelector(POG_MVA_NOISO_WP80); }
   inline bool passMVAID_noIso_WP90() const {return PassSelector(POG_MVA_NOISO_WP90); }
+  inline bool passMVAID_noIso_WPLoose() const {return PassSelector(POG_MVA_ISO_WPLOOSE); }
   inline bool passMVAID_iso_WP80() const {return PassSelector(POG_MVA_ISO_WP80); }
   inline bool passMVAID_iso_WP90() const {return PassSelector(POG_MVA_ISO_WP90); }
   inline bool passHEEPID() const {return PassSelector(POG_HEEP); }
@@ -134,13 +135,15 @@ public:
   bool Pass_HNLoose2016(double relisoCut, double dxyCut, double dzCut, double sipCut) const;
   bool Pass_HNTight2016() const;
 
-  bool Pass_HNVeto(double relisoCut) const;
+  bool Pass_HNVeto(double relisoCut, double dxyCut, double dzCut) const;
   bool Pass_HNLoose(double relisoCut, double dxyCut, double dzCut) const;
   bool Pass_HNTight(double relisoCut, double dxyCut, double dzCut) const;
 
+  bool Pass_ISRVeto(double relisoCut) const;
   bool Pass_ISRLoose(double relisoCut) const;
   bool Pass_ISRTight() const;
 
+  bool Pass_HNMVAVeto(double relisoCut, double dxyCut, double dzCut) const;
   bool Pass_HNMVALoose(double relisoCut, double dxyCut, double dzCut) const;
   bool Pass_HNMVATight(double relisoCut, double dxyCut, double dzCut) const;
 

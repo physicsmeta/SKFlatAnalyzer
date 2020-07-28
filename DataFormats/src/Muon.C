@@ -123,6 +123,7 @@ bool Muon::PassID(TString ID) const {
   if(ID=="HNLoose2016SIPVar1") return Pass_HNLoose2016(0.4, 0.2, 0.1, 4.5);
   if(ID=="HNTight2016") return Pass_HNTight2016();
 
+  if(ID=="HNVeto") return Pass_HNVeto(0.6, 0.2, 0.5);
   if(ID=="HNLooseV1") return Pass_HNLoose(0.4, 0.2, 0.5);
   if(ID=="HNLooseV1IsoUp") return Pass_HNLoose(0.5, 0.2, 0.5);
   if(ID=="HNLooseV1IsoDown") return Pass_HNLoose(0.3, 0.2, 0.5);
@@ -132,6 +133,7 @@ bool Muon::PassID(TString ID) const {
   if(ID=="HNTightV1") return Pass_HNTight(0.1, 0.05, 0.1);
   if(ID=="HNTightV2") return Pass_HNTight(0.1, 0.01, 0.04);
 
+  if(ID=="ISRVeto") return Pass_ISRVeto(0.6);
   if(ID=="ISRLoose") return Pass_ISRLoose(0.4);
   if(ID=="ISRLooseIsoUp") return Pass_ISRLoose(0.5);
   if(ID=="ISRLooseIsoDown") return Pass_ISRLoose(0.3);
@@ -194,6 +196,13 @@ bool Muon::Pass_HNTight2016() const {
   return true;
 }
 
+bool Muon::Pass_HNVeto(double relisoCut, double dxyCut, double dzCut) const {
+  if(!( isPOGLoose() )) return false;
+  if(!( RelIso()<relisoCut )) return false;
+  if(!( fabs(dXY())<dxyCut && fabs(dZ())<dzCut) ) return false;
+  return true;
+}
+
 bool Muon::Pass_HNLoose(double relisoCut, double dxyCut, double dzCut) const {
   // Individual cuts of the POG cut-based ID
   if(!( isPOGLoose() )) return false;
@@ -213,6 +222,12 @@ bool Muon::Pass_HNTight(double relisoCut, double dxyCut, double dzCut) const {
   if(!( isPOGTight() )) return false;
   if(!( RelIso()<relisoCut )) return false;
   if(!( fabs(dXY())<dxyCut && fabs(dZ())<dzCut) ) return false;
+  return true;
+}
+
+bool Muon::Pass_ISRVeto(double relisoCut) const {
+  if(!( isPOGLoose() )) return false;
+  if(!( RelIso()<relisoCut )) return false;
   return true;
 }
 
