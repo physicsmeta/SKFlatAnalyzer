@@ -14,17 +14,17 @@
 #python python/SKFlat.py -a Signal -y 2016 -l submitList/Dilepton_SM_CR_2016.txt -n 80 --skim SkimTree_Dilepton &
 #python python/SKFlat.py -a Signal -y 2016 -l submitList/NoSkim_SM_CR.txt -n 80 &
 
-python python/SKFlat.py -a Signal -y 2016 -l submitList/JH_Dilepton_2016.txt -n 80 --skim SkimTree_Dilepton &
-python python/SKFlat.py -a Signal -y 2016 -l submitList/JH_NoSkim.txt -n 80 &
+#python python/SKFlat.py -a Signal -y 2016 -l submitList/JH_Dilepton_2016.txt -n 80 --skim SkimTree_Dilepton &
+#python python/SKFlat.py -a Signal -y 2016 -l submitList/JH_NoSkim.txt -n 80 &
 
 ### CF ###
 #python python/SKFlat.py -a Signal -y 2016 -l submitList/2016_DoubleEG_BtoH.txt -n 80 --skim SkimTree_Dilepton --userflags RunCF &
 
 ### Fake ###
-#python python/SKFlat.py -a Signal -y 2016 -l submitList/2016_DoubleMuon_BtoG.txt -n 80 --skim SkimTree_Dilepton --userflags RunFake &
-#python python/SKFlat.py -a Signal -y 2016 -l submitList/2016_DoubleEG_BtoH.txt -n 80 --skim SkimTree_Dilepton --userflags RunFake &
-#python python/SKFlat.py -a Signal -y 2016 -l submitList/2016_MuonEG_BtoG.txt -n 80 --skim SkimTree_Dilepton --userflags RunFake &
-#python python/SKFlat.py -a Signal_2016H -y 2016 -l submitList/2016_periodH.txt -n 80 --skim SkimTree_Dilepton --userflags RunFake &
+python python/SKFlat.py -a Signal -y 2016 -l submitList/2016_DoubleMuon_BtoG.txt -n 80 --skim SkimTree_Dilepton --userflags RunFake &
+python python/SKFlat.py -a Signal -y 2016 -l submitList/2016_DoubleEG_BtoH.txt -n 80 --skim SkimTree_Dilepton --userflags RunFake &
+python python/SKFlat.py -a Signal -y 2016 -l submitList/2016_MuonEG_BtoG.txt -n 80 --skim SkimTree_Dilepton --userflags RunFake &
+python python/SKFlat.py -a Signal_2016H -y 2016 -l submitList/2016_periodH.txt -n 80 --skim SkimTree_Dilepton --userflags RunFake &
 
 ### Overlap (Fake & prompt)
 #python python/SKFlat.py -a Signal -y 2016 -l submitList/Dilepton_SR_2016.txt -n 80 --skim SkimTree_Dilepton --userflags RunFake &
@@ -60,16 +60,16 @@ python python/SKFlat.py -a Signal -y 2016 -l submitList/JH_NoSkim.txt -n 80 &
 #python python/SKFlat.py -a Signal -y 2017 -l submitList/Dilepton_SM_CR_2017.txt -n 80 --skim SkimTree_Dilepton &
 #python python/SKFlat.py -a Signal -y 2017 -l submitList/NoSkim_SM_CR.txt -n 80 &
 
-python python/SKFlat.py -a Signal -y 2017 -l submitList/JH_Dilepton_2017.txt -n 80 --skim SkimTree_Dilepton &
-python python/SKFlat.py -a Signal -y 2017 -l submitList/JH_NoSkim.txt -n 80 &
+#python python/SKFlat.py -a Signal -y 2017 -l submitList/JH_Dilepton_2017.txt -n 80 --skim SkimTree_Dilepton &
+#python python/SKFlat.py -a Signal -y 2017 -l submitList/JH_NoSkim.txt -n 80 &
 
 ### CF ###
 #python python/SKFlat.py -a Signal -y 2017 -l submitList/2017_DoubleEG.txt -n 80 --skim SkimTree_Dilepton --userflags RunCF &
 
 ### Fake ###
-#python python/SKFlat.py -a Signal -y 2017 -l submitList/2017_DoubleMuon.txt -n 80 --skim SkimTree_Dilepton --userflags RunFake &
-#python python/SKFlat.py -a Signal -y 2017 -l submitList/2017_DoubleEG.txt -n 80 --skim SkimTree_Dilepton --userflags RunFake &
-#python python/SKFlat.py -a Signal -y 2017 -l submitList/2017_MuonEG.txt -n 80 --skim SkimTree_Dilepton --userflags RunFake &
+python python/SKFlat.py -a Signal -y 2017 -l submitList/2017_DoubleMuon.txt -n 80 --skim SkimTree_Dilepton --userflags RunFake &
+python python/SKFlat.py -a Signal -y 2017 -l submitList/2017_DoubleEG.txt -n 80 --skim SkimTree_Dilepton --userflags RunFake &
+python python/SKFlat.py -a Signal -y 2017 -l submitList/2017_MuonEG.txt -n 80 --skim SkimTree_Dilepton --userflags RunFake &
 
 ### DATA ###
 #python python/SKFlat.py -a Signal -y 2017 -l submitList/2017_DoubleMuon.txt -n 80 --skim SkimTree_Dilepton &
@@ -84,16 +84,16 @@ python python/SKFlat.py -a Signal -y 2017 -l submitList/JH_NoSkim.txt -n 80 &
 #python python/SKFlat.py -a Signal -y 2018 -l submitList/Dilepton_SM_CR_2017.txt -n 80 --skim SkimTree_Dilepton &
 #python python/SKFlat.py -a Signal -y 2018 -l submitList/NoSkim_SM_CR.txt -n 80 &
 
-python python/SKFlat.py -a Signal -y 2018 -l submitList/JH_Dilepton_2017.txt -n 80 --skim SkimTree_Dilepton &
-python python/SKFlat.py -a Signal -y 2018 -l submitList/JH_NoSkim.txt -n 80 &
+#python python/SKFlat.py -a Signal -y 2018 -l submitList/JH_Dilepton_2017.txt -n 80 --skim SkimTree_Dilepton &
+#python python/SKFlat.py -a Signal -y 2018 -l submitList/JH_NoSkim.txt -n 80 &
 
 ### CF ###
 #python python/SKFlat.py -a Signal -y 2018 -l submitList/2018_EGamma.txt -n 80 --skim SkimTree_Dilepton --userflags RunCF &
 
 ### Fake ###
-#python python/SKFlat.py -a Signal -y 2018 -l submitList/2018_DoubleMuon.txt -n 80 --skim SkimTree_Dilepton --userflags RunFake &
-#python python/SKFlat.py -a Signal -y 2018 -l submitList/2018_EGamma.txt -n 80 --skim SkimTree_Dilepton --userflags RunFake &
-#python python/SKFlat.py -a Signal -y 2018 -l submitList/2018_MuonEG.txt -n 80 --skim SkimTree_Dilepton --userflags RunFake &
+python python/SKFlat.py -a Signal -y 2018 -l submitList/2018_DoubleMuon.txt -n 80 --skim SkimTree_Dilepton --userflags RunFake &
+python python/SKFlat.py -a Signal -y 2018 -l submitList/2018_EGamma.txt -n 80 --skim SkimTree_Dilepton --userflags RunFake &
+python python/SKFlat.py -a Signal -y 2018 -l submitList/2018_MuonEG.txt -n 80 --skim SkimTree_Dilepton --userflags RunFake &
 
 ### DATA ###
 #python python/SKFlat.py -a Signal -y 2018 -l submitList/2018_DoubleMuon.txt -n 80 --skim SkimTree_Dilepton &

@@ -1289,6 +1289,27 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
 
   if(RunCF) return;
 
+  if(IsDATA){
+    //if(DataStream.Contains("DoubleMuon") && !ev.PassTrigger(MuonTriggersH)) return;
+    if(DataStream.Contains("DoubleMuon") && !ev.PassTrigger(MuonTriggers)) return;
+    if(DataYear==2016 || DataYear==2017){
+      if(DataStream.Contains("DoubleEG")){
+        //if(!ev.PassTrigger(ElectronTriggers)) return;
+        if(!ev.PassTrigger(ElectronTriggers)) return;
+      }
+    }
+    if(DataYear==2018){
+      if(DataStream.Contains("EGamma")){
+        //if(!ev.PassTrigger(ElectronTriggers)) return;
+        if(!ev.PassTrigger(ElectronTriggers)) return;
+      }
+    }
+    if(DataStream.Contains("MuonEG")){
+      //if(!ev.PassTrigger(EMuTriggersH)) return;
+      if(!ev.PassTrigger(EMuTriggers)) return;
+    }
+  } //JH : I'm not sure DataStream info is necessary.. any possible bias?
+
   // Period-dependent trigger weight (only for 2016 MC)
   trigger_lumi = 1., dimu_trig_weight = 0., emu_trig_weight = 0.;
   if(!IsDATA){
