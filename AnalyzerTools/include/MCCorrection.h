@@ -78,6 +78,12 @@ public:
   double GetPileUpWeight(int N_pileup, int syst);
   double GetPileUpWeight2017(int N_pileup, int syst);
 
+  std::map< TString, TH1D* > map_hist_vertex;
+  double GetVertexWeight(int Nvtx);
+
+  std::map< TString, TH1D* > map_hist_rho;
+  double GetRhoWeight(double rho);
+
   double GetTopPtReweight(const std::vector<Gen>& gens);
 
   TH2D *hist_DYPtReweight_2D;
