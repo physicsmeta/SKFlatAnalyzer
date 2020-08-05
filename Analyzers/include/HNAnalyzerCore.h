@@ -141,6 +141,9 @@ public:
   //==== PU Reweight
   double GetPileUpWeight(int N_pileup, int syst);
 
+  double GetVertexWeight(int Nvtx, TString channel);
+  double GetRhoWeight(double rho, TString channel);
+
   //==== Muon GeneralizedEngpoint momentum scaling
   GeneralizedEndpoint *muonGE;
   GEScaleSyst *muonGEScaleSyst;

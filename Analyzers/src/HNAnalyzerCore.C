@@ -987,6 +987,24 @@ double HNAnalyzerCore::GetPileUpWeight(int N_pileup, int syst){
 
 }
 
+double HNAnalyzerCore::GetVertexWeight(int Nvtx, TString channel){
+
+  if(IsDATA) return 1.;
+  else{
+    return mcCorr->GetVertexWeight(Nvtx, channel);
+  }
+
+}
+
+double HNAnalyzerCore::GetRhoWeight(double rho, TString channel){
+
+  if(IsDATA) return 1.;
+  else{
+    return mcCorr->GetRhoWeight(rho, channel);
+  }
+
+}
+
 double HNAnalyzerCore::GetPDFWeight(LHAPDF::PDF* pdf_){
 
   double pdf_1 = pdf_->xfxQ(genWeight_id1, genWeight_X1, genWeight_Q);

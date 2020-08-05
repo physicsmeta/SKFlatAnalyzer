@@ -120,7 +120,7 @@ void MCCorrection::ReadHistograms(){
   TString PUReweightPath = datapath+"/"+TString::Itoa(DataYear,10)+"/PileUp/";
 
   string elline4;
-  ifstream  in4(PUReweightPath+"/histmap.txt");
+  ifstream in4(PUReweightPath+"/histmap.txt");
   while(getline(in4,elline4)){
     std::istringstream is( elline4 );
 
@@ -135,7 +135,7 @@ void MCCorrection::ReadHistograms(){
     if(DataYear == 2017 && a!=MCSample) continue;
     
     TFile *file = new TFile(PUReweightPath+c);
-/*    if( (TH1D *)file->Get(a+"_"+b) ){
+    /*if( (TH1D *)file->Get(a+"_"+b) ){
       histDir->cd();
       map_hist_pileup[a+"_"+b+"_pileup"] = (TH1D *)file->Get(a+"_"+b)->Clone();
     }*/
@@ -151,13 +151,67 @@ void MCCorrection::ReadHistograms(){
     delete file;
     origDir->cd();
   }
-/*
-  cout << "[MCCorrection::MCCorrection] map_hist_pileup :" << endl;
+
+  /*cout << "[MCCorrection::MCCorrection] map_hist_pileup :" << endl;
   for(std::map< TString, TH1D* >::iterator it=map_hist_pileup.begin(); it!=map_hist_pileup.end(); it++){
     cout << it->first << endl;
+  }*/
+
+  // == Get Vertex Reweight maps
+  string elline5;
+  ifstream in5(PUReweightPath+"/histmap_vertex.txt");
+  while(getline(in5,elline5)){
+    std::istringstream is( elline5 );
+
+    TString tstring_elline = elline4;
+    if(tstring_elline.Contains("#")) continue;
+
+    TString a,b,c;
+    is >> a; // histname
+    is >> b; // channel
+    is >> c; // filename
+
+    TFile *file = new TFile(PUReweightPath+c);
+    if( (TH1D *)file->Get(a+"_"+b) ){
+      histDir->cd();
+      map_hist_vertex[a+"_"+b+"_vertex"] = (TH1D *)file->Get(a+"_"+b)->Clone();
+    }
+    else{
+      cout << "[MCCorrection::ReadHistograms] No : " << a + "_" + b << endl;
+    }
+    file->Close();
+    delete file;
+    origDir->cd();
   }
-*/
-  
+
+  // == Get Rho Reweight maps
+  string elline6;
+  ifstream in6(PUReweightPath+"/histmap_rho.txt");
+  while(getline(in6,elline6)){
+    std::istringstream is( elline6 );
+
+    TString tstring_elline = elline4;
+    if(tstring_elline.Contains("#")) continue;
+
+    TString a,b,c;
+    is >> a; // histname
+    is >> b; // channel
+    is >> c; // filename
+
+    TFile *file = new TFile(PUReweightPath+c);
+    if( (TH1D *)file->Get(a+"_"+b) ){
+      histDir->cd();
+      map_hist_rho[a+"_"+b+"_rho"] = (TH1D *)file->Get(a+"_"+b)->Clone();
+    }
+    else{
+      cout << "[MCCorrection::ReadHistograms] No : " << a + "_" + b << endl;
+    }
+    file->Close();
+    delete file;
+    origDir->cd();
+  }
+
+
   // == Get Official DY Pt reweight maps
   TString DYPtReweightPath = datapath+"/"+TString::Itoa(DataYear,10)+"/DYPtReweight/Zpt_weights_"+TString::Itoa(DataYear,10)+".root";
   TFile *file_DYPtReweightPath = new TFile(DYPtReweightPath);
@@ -779,29 +833,29 @@ double MCCorrection::GetPileUpWeight(int N_pileup, int syst){
   int this_bin = N_pileup+1;
   if(N_pileup >= 100) this_bin=100;
 
-//  TString this_histname = "MC_" + TString::Itoa(DataYear,10);
+  //TString this_histname = "MC_" + TString::Itoa(DataYear,10);
   TString this_histname = "PUReweight_";
   if(syst == 0){
-//    this_histname += "_central_pileup";
+    //this_histname += "_central_pileup";
     this_histname += TString::Itoa(DataYear,10)+"_pileup";
   }
   else if(syst == -1){
-//    this_histname += "_sig_down_pileup";
+    //this_histname += "_sig_down_pileup";
     this_histname += TString::Itoa(DataYear,10)+"_Down_pileup";
   }
   else if(syst == 1){
-//    this_histname += "_sig_up_pileup";
+    //this_histname += "_sig_up_pileup";
     this_histname += TString::Itoa(DataYear,10)+"_Up_pileup";
   }
   else{
-//    cerr << "[MCCorrection::GetPileUpWeightBySampleName] syst should be 0, -1, or +1" << endl;
+    //cerr << "[MCCorrection::GetPileUpWeightBySampleName] syst should be 0, -1, or +1" << endl;
     cerr << "[MCCorrection::GetPileUpWeight] syst should be 0, -1, or +1" << endl;
     exit(EXIT_FAILURE);
   }
 
   TH1D *this_hist = map_hist_pileup[this_histname];
   if(!this_hist){
-//    cerr << "[MCCorrection::GetPileUpWeightBySampleName] No " << this_histname << endl;
+    //cerr << "[MCCorrection::GetPileUpWeightBySampleName] No " << this_histname << endl;
     cerr << "[MCCorrection::GetPileUpWeight] No " << this_histname << endl;
     exit(EXIT_FAILURE);
   }
@@ -834,6 +888,70 @@ double MCCorrection::GetPileUpWeight2017(int N_pileup, int syst){
   if(!this_hist){
     cerr << "[MCCorrection::GetPileUpWeight2017] No " << this_histname << endl;
     exit(EXIT_FAILURE);
+  }
+
+  return this_hist->GetBinContent(this_bin);
+
+}
+
+double MCCorrection::GetVertexWeight(int Nvtx, TString channel){
+
+  TString this_histname = "VertexReweight";
+  if(channel == "DYmm"){
+    this_histname += "_DYmm_vertex";
+  }
+  else if(channel == "DYee"){
+    this_histname += "_DYee_vertex";
+  }
+  else{
+    cerr << "[MCCorrection::GetVertexWeight] channel should be DYmm or DYee" << endl;
+    exit(EXIT_FAILURE);
+  }
+
+  TH1D *this_hist = map_hist_vertex[this_histname];
+  if(!this_hist){
+    cerr << "[MCCorrection::GetVertexWeight] No " << this_histname << endl;
+    exit(EXIT_FAILURE);
+  }
+
+  int this_bin = this_hist->FindBin(Nvtx);
+  if(DataYear==2016){
+    if(Nvtx >= 50) this_bin=11; // rebin = 5
+  }
+  else{
+    if(Nvtx >= 70) this_bin=15; // rebin = 5
+  }
+
+  return this_hist->GetBinContent(this_bin);
+
+}
+
+double MCCorrection::GetRhoWeight(double rho, TString channel){
+
+  TString this_histname = "RhoReweight";
+  if(channel == "DYmm"){
+    this_histname += "_DYmm_rho";
+  }
+  else if(channel == "DYee"){
+    this_histname += "_DYee_rho";
+  }
+  else{
+    cerr << "[MCCorrection::GetRhoWeight] channel should be DYmm or DYee" << endl;
+    exit(EXIT_FAILURE);
+  }
+
+  TH1D *this_hist = map_hist_rho[this_histname];
+  if(!this_hist){
+    cerr << "[MCCorrection::GetRhoWeight] No " << this_histname << endl;
+    exit(EXIT_FAILURE);
+  }
+
+  int this_bin = this_hist->FindBin(rho);
+  if(DataYear==2016){
+    if(rho > 40.) this_bin=41; // rebin = 4
+  }
+  else{
+    if(rho > 50.) this_bin=51; // rebin = 4
   }
 
   return this_hist->GetBinContent(this_bin);
