@@ -134,7 +134,7 @@ private:
   Particle j_TuneP4;
   double j_TunePPtError;
   double j_MVA, j_lowptMVA, j_softMVA;
-  int j_trackerLayers;
+  int j_validmuonhits, j_matchedstations, j_pixelHits, j_trackerLayers;
 
   ClassDef(Muon,1);
 };

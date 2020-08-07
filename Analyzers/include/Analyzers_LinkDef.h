@@ -19,6 +19,7 @@
 #pragma link C++ class MeasureJetTaggingEfficiency+;
 #pragma link C++ class Signal+;
 #pragma link C++ class Signal_2016H+;
+#pragma link C++ class Control+;
 #pragma link C++ class Signal_ee+;
 
 #endif
