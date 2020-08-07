@@ -10,6 +10,7 @@
 #pragma link C++ class GetEffLumi+;
 #pragma link C++ class ExampleRun+;
 #pragma link C++ class SKFlatValidation+;
+#pragma link C++ class SkimTree_SS2lOR3l+;
 #pragma link C++ class SkimTree_LRSMHighPt+;
 #pragma link C++ class ChargeFlip+;
 #pragma link C++ class ZMass+;
