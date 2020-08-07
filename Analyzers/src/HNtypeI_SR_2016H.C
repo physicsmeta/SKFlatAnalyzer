@@ -7,26 +7,26 @@ HNtypeI_SR_2016H::HNtypeI_SR_2016H(){
 void HNtypeI_SR_2016H::initializeAnalyzer(){
 
   //==== if you use "--userflags RunSyst" with SKFlat.py, HasFlag("RunSyst") will return "true"
-//  RunSyst = HasFlag("RunSyst");
-//  cout << "[HNtypeI_SR_2016H::initializeAnalyzer] RunSyst = " << RunSyst << endl;
+  RunSyst = HasFlag("RunSyst");
+  cout << "[HNtypeI_SR_2016H::initializeAnalyzer] RunSyst = " << RunSyst << endl;
   RunFake = HasFlag("RunFake");
   RunCF = HasFlag("RunCF");
 
-/*  MuonTightIDs = {"HNTight", "HNTightV2", "HNTight2016"};
+  /*MuonTightIDs = {"HNTight", "HNTightV2", "HNTight2016"};
   MuonLooseIDs = {"HNLoose", "HNLoose", "HNLoose2016"};
   MuonVetoIDs  = {"POGLoose", "POGLoose", "HNVeto2016"};
-//  MuonIDSFKeys = { "NUM_TightID_DEN_genTracks" };
+  //MuonIDSFKeys = { "NUM_TightID_DEN_genTracks" };
   ElectronTightIDs = {"HNTight", "HNTightV2", "HNTight2016"};
   ElectronLooseIDs = {"HNLoose", "HNLooseV23", "HNLoose2016"};
   ElectronVetoIDs  = {"passVetoID", "passVetoID", "HNVeto2016"};
   FakeRateIDs = {"HNtypeI_V1", "HNtypeI_V2", "HNtypeI_16"};*/
-  MuonTightIDs = {"HNTightV2", "HNTight2016"};
-  MuonLooseIDs = {"HNLoose", "HNLoose2016"};
-  MuonVetoIDs  = {"POGLoose", "HNVeto2016"};
-  ElectronTightIDs = {"HNTightV2", "HNTight2016"};
-  ElectronLooseIDs = {"HNLooseV23", "HNLoose2016"};
-  ElectronVetoIDs  = {"passVetoID", "HNVeto2016"};
-  FakeRateIDs = {"HNtypeI_V2", "HNtypeI_16"};
+  MuonTightIDs     = {"HNTight2016", "POGHighPtWithLooseTrkIso", "HNTightV1", "HNTightV2", "HNTightV1"};
+  MuonLooseIDs     = {"HNLoose2016", "POGMedium", "HNLooseV1", "HNLooseV1", "HNLooseV2"};
+  MuonVetoIDs      = {"HNVeto2016", "POGLoose", "HNVeto", "HNVeto", "HNVeto"};
+  ElectronTightIDs = {"HNTight2016", "HEEP_dZ", "HNTightV1", "HNTightV2", "HNMVATight"};
+  ElectronLooseIDs = {"HNLoose2016", "passLooseID", "HNLooseV1", "HNLooseV1", "HNMVALoose"};
+  ElectronVetoIDs  = {"HNVeto2016", "passVetoID", "HNVeto", "HNVeto", "HNMVAVeto"};
+  FakeRateIDs      = {"HNtypeI_16", "HNtypeI_16", "HNtypeI_16", "HNtypeI_16", "HNtypeI_16"};
 
 
   //==== At this point, sample informations (e.g., IsDATA, DataStream, MCSample, or DataYear) are all set
@@ -43,32 +43,34 @@ void HNtypeI_SR_2016H::initializeAnalyzer(){
   EMuTriggersH.clear();
 
   if(DataYear==2016){                                                                   // Lumi values for trigger weight (/pb)
-//    MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v");                       // 27267.591112919   // NOTE : Change for 2016H
-//    MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_v");                     // 27267.591112919   // NOTE : Change for 2016H
+    //MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v");                       // 27267.591112919   // NOTE : Change for 2016H
+    //MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_v");                     // 27267.591112919   // NOTE : Change for 2016H
     MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v");                    // 35918.219492947
     MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_v");                  // 35918.219492947
     MuonTriggersH.push_back("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v");                   // 35918.219492947
     MuonTriggersH.push_back("HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_v");                 // 35918.219492947
+    //MuonTriggers.push_back("HLT_Mu17_Mu8_SameSign_DZ_v");
+    //MuonTriggersH.push_back("HLT_Mu17_Mu8_SameSign_DZ_v");
     ElectronTriggers.push_back("HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v");          // 35918.219492947
     EMuTriggers.push_back("HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_v");          // 27267.591112919
     EMuTriggers.push_back("HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_v");         // 27267.591112919
-//    EMuTriggers.push_back("HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_v");         // 27267.591112919
+    //EMuTriggers.push_back("HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_v");          // 27267.591112919
     EMuTriggersH.push_back("HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ_v");      // 8650.628380028
     EMuTriggersH.push_back("HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v");     // 8650.628380028
-//    EMuTriggersH.push_back("HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_DZ_v");     // 8650.628380028
+    //EMuTriggersH.push_back("HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_DZ_v");      // 8650.628380028
 
     // These are needed for applying lepton pT cuts 
     Mu8Ele23Triggers.push_back("HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_v");
     Mu8Ele23Triggers.push_back("HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ_v");
     Mu23Ele12Triggers.push_back("HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_v");
     Mu23Ele12Triggers.push_back("HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ_v");
-//    Mu23Ele12Triggers.push_back("HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_v");
-//    Mu23Ele12Triggers.push_back("HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_DZ_v");
+    //Mu23Ele12Triggers.push_back("HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_v");
+    //Mu23Ele12Triggers.push_back("HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_DZ_v");
 
     MuonPtCut1 = 20., MuonPtCut2 = 10.;
     ElectronPtCut1 = 25., ElectronPtCut2 = 15.;
     EMuPtCut1 = 25., EMuPtCut2 = 15.;
-//    EMuPtCut1 = 25., EMuPtCut2 = 10.;
+    //EMuPtCut1 = 25., EMuPtCut2 = 10.;
   }
   else if(DataYear==2017){
     MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8_v");
@@ -99,8 +101,8 @@ void HNtypeI_SR_2016H::initializeAnalyzer(){
     EMuPtCut1 = 25., EMuPtCut2 = 15.;
   }
 
-//  cout << "[HNtypeI_SR_2016H::initializeAnalyzer] IsoMuTriggerName = " << IsoMuTriggerName << endl;
-//  cout << "[HNtypeI_SR_2016H::initializeAnalyzer TriggerSafePtCut = " << TriggerSafePtCut << endl;
+  //cout << "[HNtypeI_SR_2016H::initializeAnalyzer] IsoMuTriggerName = " << IsoMuTriggerName << endl;
+  //cout << "[HNtypeI_SR_2016H::initializeAnalyzer TriggerSafePtCut = " << TriggerSafePtCut << endl;
 
   //==== B-Tagging
   //==== add taggers and WP that you want to use in analysis
@@ -137,7 +139,7 @@ void HNtypeI_SR_2016H::executeEvent(){
   AllMuons = GetAllMuons();
   AllElectrons = GetAllElectrons();
   AllJets = GetAllJets();
-//  AllFatJets = GetAllFatJets();
+  //AllFatJets = GetAllFatJets();
   AllFatJets = puppiCorr->Correct(GetAllFatJets());
 
   //==== Get L1Prefire reweight
@@ -145,11 +147,11 @@ void HNtypeI_SR_2016H::executeEvent(){
   //==== If MC && DataYear > 2017, 1.;
   //==== If MC && DataYear <= 2017, we have to reweight the event with this value
   //==== I defined "double weight_Prefire;" in Analyzers/include/HNtypeI_SR_2016H.h
-//  weight_Prefire = GetPrefireWeight(0);
+  //weight_Prefire = GetPrefireWeight(0);
 
   AnalyzerParameter param;
 
-  for(unsigned int it_id=0; it_id<ElectronTightIDs.size(); it_id++){
+  for(unsigned int it_id=0; it_id<MuonTightIDs.size(); it_id++){
     TString MuonTightID = MuonTightIDs.at(it_id);
     TString MuonLooseID = MuonLooseIDs.at(it_id); 
     TString MuonVetoID  = MuonVetoIDs.at(it_id);
@@ -162,37 +164,45 @@ void HNtypeI_SR_2016H::executeEvent(){
 
     param.syst_ = AnalyzerParameter::Central;
 
-//  param.Name = MuonID+"_"+"Central";
+    //param.Name = MuonID+"_"+"Central";
 
-    // Muon ID
+    //==== Muon ID
     param.Muon_Tight_ID       = MuonTightID;
     param.Muon_Loose_ID       = MuonLooseID;
     param.Muon_Veto_ID        = MuonVetoID;
     param.Muon_FR_ID          = FakeRateID;     // ID name in histmap_Muon.txt
     param.Muon_FR_Key         = "AwayJetPt40";  // histname
-    param.Muon_ID_SF_Key      = "NUM_TightID_DEN_genTracks";
-    param.Muon_ISO_SF_Key     = "NUM_TightRelIso_DEN_TightIDandIPCut";
+    //param.Muon_ID_SF_Key      = "NUM_TightID_DEN_genTracks";
+    //param.Muon_ISO_SF_Key     = "NUM_TightRelIso_DEN_TightIDandIPCut";
+    param.Muon_ID_SF_Key      = "";
+    param.Muon_ISO_SF_Key     = "";
     param.Muon_Trigger_SF_Key = "";
     param.Muon_UsePtCone      = true;
 
-    // Electron ID
+    //==== Electron ID
     param.Electron_Tight_ID       = ElectronTightID;
+    if(DataYear==2018 && it_id==1) param.Electron_Tight_ID = "HEEP2018_dZ";
     param.Electron_Loose_ID       = ElectronLooseID;
     param.Electron_Veto_ID        = ElectronVetoID;
     param.Electron_FR_ID          = FakeRateID;     // ID name in histmap_Electron.txt
     param.Electron_FR_Key         = "AwayJetPt40";  // histname
-    param.Electron_ID_SF_Key      = "passTightID";
+    //param.Electron_ID_SF_Key      = "passTightID";
+    param.Electron_ID_SF_Key      = "";
     param.Electron_Trigger_SF_Key = "";
     param.Electron_UsePtCone      = true;
 
-    // Jet ID
-//    param.Jet_ID = "tightLepVeto";
+    //==== Jet ID
+    //param.Jet_ID = "tightLepVeto";
     param.Jet_ID    = "HNTight";
     param.FatJet_ID = "HNTight";
 
+    if(RunFake || RunCF){
+      if(it_id > 0) continue;
+    }
+
     executeEventFromParameter(param);
 
-/*    if(RunSyst){
+    /*if(RunSyst){
       for(int it_syst=1; it_syst<AnalyzerParameter::NSyst; it_syst++){
         param.syst_ = AnalyzerParameter::Syst(it_syst);
         param.Name = MuonID+"_"+"Syst_"+param.GetSystType();
@@ -206,14 +216,17 @@ void HNtypeI_SR_2016H::executeEventFromParameter(AnalyzerParameter param){
 
   vector<TString> channels = {"dimu", "diel", "emu"};
   vector<TString> regions = {"fakeCR1", "lowSR1", "lowCR1", "highSR1", "highCR1", "lowSR2", "lowCR2", "highSR2", "highCR2"};
-  TString IDsuffix = "HNV1";
+  TString IDsuffix = "HN16";
+  if(param.Electron_Tight_ID.Contains("HEEP")) IDsuffix = "LRSM";
+  if(param.Electron_Tight_ID.Contains("V1")) IDsuffix = "HNV1";
   if(param.Electron_Tight_ID.Contains("V2")) IDsuffix = "HNV2";
-  if(param.Electron_Tight_ID.Contains("2016")) IDsuffix = "HN16";
-//  TString LepCategory = "TT";
+  if(param.Electron_Tight_ID.Contains("MVA")) IDsuffix = "MVA";
+  //TString LepCategory = "TT";
   double cutflow_max = 10.;
   int cutflow_bin = 10;
   double weight = 1.;
   double trigger_lumi = 1., dimu_trig_weight = 0., emu_trig_weight = 0.;
+  double muon_miniaodP = 0.;
  
   Event ev = GetEvent();
 
@@ -269,7 +282,9 @@ void HNtypeI_SR_2016H::executeEventFromParameter(AnalyzerParameter param){
   //==== Copy AllObjects
   //========================================================
 
-  vector<Muon> this_AllMuons = AllMuons;
+  vector<Muon> this_AllMuons;
+  if(param.Muon_Tight_ID.Contains("HighPt")) this_AllMuons = UseTunePMuon(AllMuons);
+  else this_AllMuons = AllMuons;
   vector<Electron> this_AllElectrons = AllElectrons;
   vector<Jet> this_AllJets = AllJets;
   vector<FatJet> this_AllFatJets = AllFatJets;
@@ -281,7 +296,7 @@ void HNtypeI_SR_2016H::executeEventFromParameter(AnalyzerParameter param){
   //==== This order should be explicitly followed
   //==== Below are all variables for available systematic sources
 
-/*  if(param.syst_ == AnalyzerParameter::Central){
+  /*if(param.syst_ == AnalyzerParameter::Central){
 
   }
   else if(param.syst_ == AnalyzerParameter::JetResUp){
@@ -397,13 +412,13 @@ void HNtypeI_SR_2016H::executeEventFromParameter(AnalyzerParameter param){
 
   //==== method 1a)
   //==== multiply "btagWeight" to the event weight
-//  double btagWeight = mcCorr->GetBTaggingReweight_1a(jets, jtp_DeepCSV_Medium);
+  //double btagWeight = mcCorr->GetBTaggingReweight_1a(jets, jtp_DeepCSV_Medium);
 
   //==== method 2a)
   for(unsigned int ij=0; ij<jets_nolepveto.size(); ij++){
-//    double this_discr = jets_nolepveto.at(ij).GetTaggerResult(JetTagging::DeepCSV);
-      //==== No SF
-//      if( this_discr > mcCorr->GetJetTaggingCutValue(JetTagging::DeepCSV, JetTagging::Medium) ) NBJets_NoSF++;
+    //double this_discr = jets_nolepveto.at(ij).GetTaggerResult(JetTagging::DeepCSV);
+    //==== No SF
+    //if( this_discr > mcCorr->GetJetTaggingCutValue(JetTagging::DeepCSV, JetTagging::Medium) ) NBJets_NoSF++;
     if(mcCorr->IsBTagged_2a(jtp_DeepCSV_Loose, jets_nolepveto.at(ij))) Nbjet_loose++;
     if(mcCorr->IsBTagged_2a(jtp_DeepCSV_Medium, jets_nolepveto.at(ij))) Nbjet_medium++;
   }
@@ -414,8 +429,10 @@ void HNtypeI_SR_2016H::executeEventFromParameter(AnalyzerParameter param){
 
   Particle METv = ev.GetMETVector();
 
-  METv = UpdateMETMuon(METv, this_AllMuons);
-  METv = UpdateMETElectron(METv, this_AllElectrons);
+  if(muons.size()+electrons.size() == 2){
+    METv = UpdateMETMuon(METv, muons);
+    METv = UpdateMETElectron(METv, electrons);
+  }
 
   double MET = METv.Pt();
 
@@ -425,18 +442,18 @@ void HNtypeI_SR_2016H::executeEventFromParameter(AnalyzerParameter param){
 
   double ST = 0., MET2ST = 0.;
   double dRll = 0., dRl2WCand = 0.;
-//  double MZ = 91.1876;
+  //double MZ = 91.1876;
   double MW = 80.379;
-  double muon_idsf = 1., muon_isosf = 1., ele_idsf = 1., ele_recosf = 1.;
+  double muon_recosf = 1., muon_idsf = 1., muon_isosf = 1., ele_recosf = 1., ele_idsf = 1.;
   int lepton_veto_size = 0;
 
   bool passPtCut = false;
-  Particle ZCand;
+  Particle ZCand, Ztemp;
   Particle WCand, lljjLow, l1jjLow, l2jjLow, lljjHigh, l1jjHigh, l2jjHigh;  // Low Mass SR1, High Mass SR1
   Particle llj, l1j, l2j;                                                   // Low Mass SR2
   Particle l1J, l2J;                                                        // High Mass SR2
   
-/*  if(muons.size()==2 && electrons.size()==0){
+  /*if(muons.size()==2 && electrons.size()==0){
     FillHist("Pt_muon1", muons.at(0).Pt(), weight, 1000, 0., 1000.);
     FillHist("Pt_muon2", muons.at(1).Pt(), weight, 1000, 0., 1000.);
     FillHist("PtCone_muon1", muons.at(0).PtCone(), weight, 1000, 0., 1000.);
@@ -456,7 +473,7 @@ void HNtypeI_SR_2016H::executeEventFromParameter(AnalyzerParameter param){
   double this_ptcone_muon = 0., this_ptcone_electron = 0.;
 
   if(RunFake){
-    if(IDsuffix == "HNV2") mu_tight_iso = 0.1;
+    //if(IDsuffix == "HNV2") mu_tight_iso = 0.1;
     if(IDsuffix == "HN16") mu_tight_iso = 0.07;
 
     for(unsigned int i=0; i<muons.size(); i++){
@@ -465,19 +482,19 @@ void HNtypeI_SR_2016H::executeEventFromParameter(AnalyzerParameter param){
     }
 
     for(unsigned int i=0; i<electrons.size(); i++){
-      el_tight_iso = 0.0287+0.506/electrons.at(i).UncorrPt();
+      /*el_tight_iso = 0.0287+0.506/electrons.at(i).UncorrPt();
       if(fabs(electrons.at(i).scEta()) > 1.479) el_tight_iso = 0.0445+0.963/electrons.at(i).UncorrPt();
       if(IDsuffix == "HNV2"){
         el_tight_iso = std::min(0.08, 0.0287+0.506/electrons.at(i).UncorrPt());
         if(fabs(electrons.at(i).scEta()) > 1.479) el_tight_iso = std::min(0.08, 0.0445+0.963/electrons.at(i).UncorrPt());
-      }
+      }*/
       if(IDsuffix == "HN16") el_tight_iso = 0.08;
       this_ptcone_electron = electrons.at(i).CalcPtCone(electrons.at(i).RelIso(), el_tight_iso);
       electrons.at(i).SetPtCone(this_ptcone_electron);
     }
 
     // Correct MET when RunFake=true, because pT was replaced by pTcone
-    if((muons.size()==2 && electrons.size()==0) || (muons.size()==0 && electrons.size()==2) || (muons.size()==1 && electrons.size()==1)){
+    if(muons.size()+electrons.size() == 2){
       METv = UpdateMETFake(METv, electrons, muons);
     }
 
@@ -575,7 +592,7 @@ void HNtypeI_SR_2016H::executeEventFromParameter(AnalyzerParameter param){
     //==== Preselection
     //========================================================
 
-    if((muons.size()==2 && electrons.size()==0) || (muons.size()==0 && electrons.size()==2) || (muons.size()==1 && electrons.size()==1)){ 
+    if(leptons.size() == 2){ 
 
       // Cutflow : 2 tight leptons (truth-matched, pT > trigger thresholds)
 
@@ -619,7 +636,7 @@ void HNtypeI_SR_2016H::executeEventFromParameter(AnalyzerParameter param){
       }
 
       // weights for MC
-      weight = 1., muon_idsf = 1., muon_isosf = 1., ele_idsf = 1., ele_recosf = 1.;
+      weight = 1., muon_recosf = 1., muon_idsf = 1., muon_isosf = 1., ele_recosf = 1., ele_idsf = 1.;
 
       if(!IsDATA){
 
@@ -629,21 +646,34 @@ void HNtypeI_SR_2016H::executeEventFromParameter(AnalyzerParameter param){
         weight *= GetPileUpWeight(nPileUp,0);
 
         for(unsigned int i=0; i<muons.size(); i++){
-        //  muon_idsf = mcCorr->MuonID_SF(param.Muon_ID_SF_Key,  muons.at(i).Eta(), muons.at(i).MiniAODPt(), 0);
-        //  muon_isosf = mcCorr->MuonISO_SF(param.Muon_ISO_SF_Key, muons.at(i).Eta(), muons.at(i).MiniAODPt(), 0);
-          weight *= muon_idsf*muon_isosf;
+          if(param.Muon_Tight_ID.Contains("HighPt")){
+            muon_miniaodP = sqrt( muons.at(i).MiniAODPt()*muons.at(i).MiniAODPt() + muons.at(i).Pz()*muons.at(i).Pz() );
+            muon_recosf   = mcCorr->MuonReco_SF("HighPtMuonRecoSF", muons.at(i).Eta(), muon_miniaodP, 0);
+            muon_idsf     = mcCorr->MuonID_SF("NUM_HighPtID_DEN_genTracks",  muons.at(i).Eta(), muons.at(i).MiniAODPt(), 0);
+            muon_isosf    = mcCorr->MuonISO_SF("NUM_LooseRelTkIso_DEN_HighPtIDandIPCut", muons.at(i).Eta(), muons.at(i).MiniAODPt(), 0);
+          }
+          else{
+            muon_recosf = 1.;
+            muon_idsf   = 1.;
+            muon_isosf  = 1.;
+          }
+          weight *= muon_recosf*muon_idsf*muon_isosf;
         }
-        for(unsigned int j=0; j<electrons.size(); j++){
-          ele_recosf = mcCorr->ElectronReco_SF(electrons.at(j).scEta(), electrons.at(j).Pt(), 0);
-        //  ele_idsf = mcCorr->ElectronID_SF(param.Electron_ID_SF_Key, electrons.at(j).scEta(), electrons.at(j).Pt(), 0);
+ 
+        for(unsigned int i=0; i<electrons.size(); i++){
+          ele_recosf = mcCorr->ElectronReco_SF(electrons.at(i).scEta(), electrons.at(i).UncorrPt(), 0);
+          if(param.Electron_Tight_ID.Contains("HEEP")){
+            ele_idsf   = mcCorr->ElectronID_SF("HEEP", electrons.at(i).scEta(), electrons.at(i).UncorrPt(), 0);
+          }
+          else ele_idsf = 1.;
           weight *= ele_recosf*ele_idsf;
         }
 
       }
 
       // weights for fake, CF
-      if(RunFake) weight = fakeEst->GetWeight(leptons, param);
-      if(RunCF) weight = GetCFweight(leptons, param, true, 0);
+      if(RunFake) weight *= fakeEst->GetWeight(leptons, param);
+      if(RunCF) weight *= GetCFweight(leptons, param, true, 0);
 
       for(unsigned int it_rg=0; it_rg<regions.size(); it_rg++){
         FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_"+IDsuffix, 2.5, weight, cutflow_bin, 0., cutflow_max);
@@ -870,6 +900,18 @@ void HNtypeI_SR_2016H::executeEventFromParameter(AnalyzerParameter param){
           FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/l2jjHigh_Mass_"+IDsuffix, l2jjHigh.M(), weight, 2000, 0., 2000.);
           FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/l2WCand_DeltaR_"+IDsuffix, dRl2WCand, weight, 60, 0., 6.);
 
+          /*if(it_rg==1) cout << "In LowSR1, RunNumber:Lumi:EventNumber = " << run << ":" << lumi << ":" << event << endl;
+          if(it_rg==3) cout << "In HighSR1, RunNumber:Lumi:EventNumber = " << run << ":" << lumi << ":" << event << endl;
+          if(it_ch==0 && it_rg==3){
+            if(run==276283 && event==1252562683){
+              cout << "Muon1 : (" << muons.at(0).Pt() << ", " << muons.at(0).Eta() << ", " << muons.at(0).Phi() << ", " << muons.at(0).E() << ")" << endl;
+              cout << "Muon2 : (" << muons.at(1).Pt() << ", " << muons.at(1).Eta() << ", " << muons.at(1).Phi() << ", " << muons.at(1).E() << ")" << endl;
+              for(unsigned int i=0; i<jets.size(); i++){
+                cout << TString::Itoa(i, 10)+"th Jets : (" << jets.at(i).Pt() << ", " << jets.at(i).Eta() << ", " << jets.at(i).Phi() << ", " << jets.at(i).E() << ")" << endl;
+              }
+            }
+          }*/
+
         }
 
         // Low mass SR2, CR2
@@ -931,6 +973,8 @@ void HNtypeI_SR_2016H::executeEventFromParameter(AnalyzerParameter param){
           FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/llj_Mass_"+IDsuffix, llj.M(), weight, 2000, 0., 2000.);
           FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/l1j_Mass_"+IDsuffix, l1j.M(), weight, 2000, 0., 2000.);
           FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/l2j_Mass_"+IDsuffix, l2j.M(), weight, 2000, 0., 2000.);
+
+          //if(it_rg==5) cout << "In LowSR2, RunNumber:Lumi:EventNumber = " << run << ":" << lumi << ":" << event << endl;
 
         }
 
@@ -994,6 +1038,8 @@ void HNtypeI_SR_2016H::executeEventFromParameter(AnalyzerParameter param){
           FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Fatjet_Mass_"+IDsuffix, fatjets_WCand.SDMass(), weight, 2000, 0., 2000.);
           FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/l1J_Mass_"+IDsuffix, l1J.M(), weight, 2000, 0., 2000.);
           FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/l2J_Mass_"+IDsuffix, l2J.M(), weight, 2000, 0., 2000.);
+
+          //if(it_rg==7) cout << "In HighSR2, RunNumber:Lumi:EventNumber = " << run << ":" << lumi << ":" << event << endl;
 
         }
 

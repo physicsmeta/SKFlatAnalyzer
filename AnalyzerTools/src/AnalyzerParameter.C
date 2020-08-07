@@ -46,6 +46,7 @@ void AnalyzerParameter::Clear(){
   FatJet_ID = "";
 
   syst_ = Central;
+  fakesyst_ = FakeCentral;
 
 }
 
@@ -72,6 +73,7 @@ AnalyzerParameter::AnalyzerParameter(){
   FatJet_ID = "HN";
 
   syst_ = Central;
+  fakesyst_ = FakeCentral;
 
 }
 
@@ -113,6 +115,73 @@ TString AnalyzerParameter::GetSystType(){
   else{
 //    cout << "[AnalyzerParameter::GetSystType] Wrong Syst" << endl;
     cerr << "[AnalyzerParameter::GetSystType] Wrong Syst" << endl;
+    exit(EXIT_FAILURE);
+    return "ERROR";
+  }
+
+}
+
+TString AnalyzerParameter::GetFakeSystType(){
+
+  if(fakesyst_==FakeSyst::FakeCentral){
+    return "FakeCentral";
+  }
+  else if(fakesyst_==FakeSyst::IsoUp){
+    return "IsoUp";
+  }
+  else if(fakesyst_==FakeSyst::IsoDown){
+    return "IsoDown";
+  }
+  else if(fakesyst_==FakeSyst::dphiVar1){
+    return "dphiVar1";
+  }
+  else if(fakesyst_==FakeSyst::dphiVar2){
+    return "dphiVar2";
+  }
+  else if(fakesyst_==FakeSyst::dphiVar3){
+    return "dphiVar3";
+  }
+  else if(fakesyst_==FakeSyst::PtVar1){
+    return "PtVar1";
+  }
+  else if(fakesyst_==FakeSyst::PtVar2){
+    return "PtVar2";
+  }
+  else if(fakesyst_==FakeSyst::PtVar3){
+    return "PtVar3";
+  }
+  else if(fakesyst_==FakeSyst::PtRatioUp){
+    return "PtRatioUp";
+  } 
+  else if(fakesyst_==FakeSyst::PtRatioDown){
+    return "PtRatioDown";
+  }
+  /*else if(fakesyst_==FakeSyst::dxyVar1){
+    return "dxyVar1";
+  }
+  else if(fakesyst_==FakeSyst::dxyVar2){
+    return "dxyVar2";
+  }
+  else if(fakesyst_==FakeSyst::dxyVar3){
+    return "dxyVar3";
+  } 
+  else if(fakesyst_==FakeSyst::dzUp){
+    return "dzUp";
+  }
+  else if(fakesyst_==FakeSyst::dzDown){
+    return "dzDown";
+  }
+  else if(fakesyst_==FakeSyst::SIPVar1){
+    return "SIPVar1";
+  }
+  else if(fakesyst_==FakeSyst::SIPVar2){
+    return "SIPVar2";
+  } 
+  else if(fakesyst_==FakeSyst::SIPVar3){
+    return "SIPVar3";
+  }*/
+  else{
+    cerr << "[AnalyzerParameter::GetFakeSystType] Wrong Syst" << endl;
     exit(EXIT_FAILURE);
     return "ERROR";
   }

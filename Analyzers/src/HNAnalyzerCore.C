@@ -119,6 +119,9 @@ std::vector<Muon> HNAnalyzerCore::GetAllMuons(){
     mu.SetisPOGHighPt(muon_ishighpt->at(i));
     mu.SetChi2(muon_normchi->at(i));
     mu.SetIso(muon_PfChargedHadronIsoR04->at(i),muon_PfNeutralHadronIsoR04->at(i),muon_PfGammaIsoR04->at(i),muon_PFSumPUIsoR04->at(i),muon_trkiso->at(i));
+    mu.SetValidMuonHits(muon_validmuonhits->at(i));
+    mu.SetMatchedStations(muon_matchedstations->at(i));
+    mu.SetPixelHits(muon_pixelHits->at(i));
     mu.SetTrackerLayers(muon_trackerLayers->at(i));
 
     //==== Should be set after Eta is set
@@ -980,6 +983,24 @@ double HNAnalyzerCore::GetPileUpWeight(int N_pileup, int syst){
       return 1.;
     }
 
+  }
+
+}
+
+double HNAnalyzerCore::GetVertexWeight(int Nvtx, TString channel){
+
+  if(IsDATA) return 1.;
+  else{
+    return mcCorr->GetVertexWeight(Nvtx, channel);
+  }
+
+}
+
+double HNAnalyzerCore::GetRhoWeight(double rho, TString channel){
+
+  if(IsDATA) return 1.;
+  else{
+    return mcCorr->GetRhoWeight(rho, channel);
   }
 
 }

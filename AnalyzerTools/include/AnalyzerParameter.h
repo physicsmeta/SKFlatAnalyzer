@@ -44,6 +44,16 @@ public:
   Syst syst_;
   TString GetSystType();
 
+  enum FakeSyst{
+    FakeCentral,
+    IsoUp, IsoDown,
+    dphiVar1, dphiVar2, dphiVar3, PtVar1, PtVar2, PtVar3, PtRatioUp, PtRatioDown,
+    //dxyVar1, dxyVar2, dxyVar3, dzUp, dzDown, SIPVar1, SIPVar2, SIPVar3,
+    NFakeSyst
+  };
+  FakeSyst fakesyst_;
+  TString GetFakeSystType();
+
   void Clear();
 
   AnalyzerParameter();
