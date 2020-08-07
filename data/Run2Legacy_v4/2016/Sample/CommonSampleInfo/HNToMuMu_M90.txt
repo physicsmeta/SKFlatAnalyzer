@@ -1,0 +1,2 @@
+# alias PD xsec nmc sumw
+HNToMuMu_M90	HeavyMajoranaNeutrinoToDiLepton_Schannel_NLO_MuMu_M90	0.003286666338	99678	89180
