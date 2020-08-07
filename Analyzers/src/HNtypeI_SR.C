@@ -20,13 +20,20 @@ void HNtypeI_SR::initializeAnalyzer(){
   ElectronLooseIDs = {"HNLoose", "HNLooseV23", "HNLoose2016"};
   ElectronVetoIDs  = {"passVetoID", "passVetoID", "HNVeto2016"};
   FakeRateIDs = {"HNtypeI_V1", "HNtypeI_V2", "HNtypeI_16"};*/
-  MuonTightIDs     = {"HNTight2016", "POGHighPtWithLooseTrkIso", "HNTightV1", "HNTightV2", "HNTightV1"};
-  MuonLooseIDs     = {"HNLoose2016", "POGMedium", "HNLooseV1", "HNLooseV1", "HNLooseV2"};
-  MuonVetoIDs      = {"HNVeto2016", "POGLoose", "HNVeto", "HNVeto", "HNVeto"};
-  ElectronTightIDs = {"HNTight2016", "HEEP_dZ", "HNTightV1", "HNTightV2", "HNMVATight"};
-  ElectronLooseIDs = {"HNLoose2016", "passLooseID", "HNLooseV1", "HNLooseV1", "HNMVALoose"};
-  ElectronVetoIDs  = {"HNVeto2016", "passVetoID", "HNVeto", "HNVeto", "HNMVAVeto"};
-  FakeRateIDs      = {"HNtypeI_16", "HNtypeI_16", "HNtypeI_16", "HNtypeI_16", "HNtypeI_16"};
+  ///MuonTightIDs     = {"HNTight2016", "POGHighPtWithLooseTrkIso", "HNTightV1", "HNTightV2", "HNTightV1"};
+  ///MuonLooseIDs     = {"HNLoose2016", "POGMedium", "HNLooseV1", "HNLooseV1", "HNLooseV2"};
+  ///MuonVetoIDs      = {"HNVeto2016", "POGLoose", "HNVeto", "HNVeto", "HNVeto"};
+  ///ElectronTightIDs = {"HNTight2016", "HEEP_dZ", "HNTightV1", "HNTightV2", "HNMVATight"};
+  ///ElectronLooseIDs = {"HNLoose2016", "passLooseID", "HNLooseV1", "HNLooseV1", "HNMVALoose"};
+  ///ElectronVetoIDs  = {"HNVeto2016", "passVetoID", "HNVeto", "HNVeto", "HNMVAVeto"};
+  ///FakeRateIDs      = {"HNtypeI_16", "HNtypeI_16", "HNtypeI_16", "HNtypeI_16", "HNtypeI_16"};
+  MuonTightIDs = {"HNTight2016", "POGHighPtWithLooseTrkIso", "POGTightWithTightIso"};
+  MuonLooseIDs = {"HNLoose2016", "POGMedium", "POGMedium"};
+  MuonVetoIDs  = {"HNVeto2016", "POGLoose", "POGLoose"};
+  ElectronTightIDs = {"HNTight2016", "HEEP_dZ", "HNTightV2"};
+  ElectronLooseIDs = {"HNLoose2016", "HNLooseV23", "HNLooseV23"};
+  ElectronVetoIDs  = {"HNVeto2016", "passVetoID", "passVetoID"};
+  FakeRateIDs = {"HNtypeI_16", "HNtypeI_16", "HNtypeI_16"}; //JH : to see high pt efficiency
 
 
   //==== At this point, sample informations (e.g., IsDATA, DataStream, MCSample, or DataYear) are all set
