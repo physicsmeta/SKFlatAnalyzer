@@ -18,7 +18,7 @@ inline TDirectory* GetTempDirectory(std::string dirName){
   while (!histDir) {
     //==== First, let's find a directory name that doesn't exist yet
     std::stringstream dirname;
-    dirname << dirName << counter;
+    dirname << dirName << counter; //JH: << means put this into the stream
     if (gROOT->GetDirectory((dirname.str()).c_str())) {
       ++counter;
       continue;
