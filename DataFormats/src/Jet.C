@@ -136,6 +136,8 @@ double Jet::GetTaggerResult(JetTagging::Tagger tg) const {
 bool Jet::PassPileupMVA(TString WP) const {
 // https://twiki.cern.ch/twiki/bin/viewauth/CMS/PileupJetID
 
+  bool pass=false;
+	
   if(WP=="tight"){
     if(fabs(this->Eta()) < 2.5){
       if(this->Pt() < 10.){ if(PileupJetId() > 0.69) pass=true; }
