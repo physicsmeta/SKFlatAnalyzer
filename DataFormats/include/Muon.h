@@ -103,7 +103,16 @@ public:
   bool Pass_POGTightWithTightIso() const;
   bool Pass_POGHighPtWithLooseTrkIso() const;
   bool Pass_TESTID() const;
-  
+ 
+  void SetValidMuonHits(int n);
+  inline int ValidMuonHits() const { return j_validmuonhits; }
+
+  void SetMatchedStations(int n);
+  inline int MatchedStations() const { return j_matchedstations; }
+
+  void SetPixelHits(int n);
+  inline int PixelHits() const { return j_pixelHits; }
+
   void SetTrackerLayers(int n);
   inline int TrackerLayers() const { return j_trackerLayers; }
 

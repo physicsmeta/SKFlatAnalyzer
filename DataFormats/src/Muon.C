@@ -17,6 +17,9 @@ Muon::Muon() : Lepton() {
   j_MVA = -999.;
   j_lowptMVA = -999.;
   j_softMVA = -999.;
+  j_validmuonhits = 0;
+  j_matchedstations = 0;
+  j_pixelHits = 0;
   j_trackerLayers = 0;
 }
 
@@ -55,8 +58,8 @@ void Muon::CalcPFRelIso(){
   //cout << "[Muon::CalcPFRelIso] j_PFPH04 = " << j_PFPH04 << endl;
   //cout << "[Muon::CalcPFRelIso] j_PU04 = " << j_PU04 << endl;
   //cout << "[Muon::CalcPFRelIso] --> absiso = " << absiso << endl;
-  this->SetRelIso(absiso/this->Pt());
-  //this->SetRelIso(absiso/this->MiniAODPt()); //TODO This is same as IDBit
+  //this->SetRelIso(absiso/this->Pt()); //JH
+  this->SetRelIso(absiso/this->MiniAODPt()); //TODO This is same as IDBit
 }
 
 double Muon::EA(){
@@ -181,6 +184,18 @@ bool Muon::Pass_HNTightV2() const{
 
 bool Muon::Pass_TESTID() const {
   return true;
+}
+
+void Muon::SetValidMuonHits(int n){
+          j_validmuonhits = n;
+}
+
+void Muon::SetMatchedStations(int n){
+          j_matchedstations = n;
+}
+
+void Muon::SetPixelHits(int n){
+          j_pixelHits = n;
 }
 
 void Muon::SetTrackerLayers(int n){
