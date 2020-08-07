@@ -111,7 +111,7 @@ void HNtypeI_SR::initializeAnalyzer(){
   jtps.push_back( JetTagging::Parameters(JetTagging::DeepCSV, JetTagging::Loose, JetTagging::incl, JetTagging::comb) );
   jtps.push_back( JetTagging::Parameters(JetTagging::DeepCSV, JetTagging::Medium, JetTagging::incl, JetTagging::comb) );
   //==== set
-  mcCorr->SetJetTaggingParameters(jtps); //JH : TODO This isn't used anywhere in this code
+  mcCorr->SetJetTaggingParameters(jtps);
 
 }
 
@@ -379,10 +379,9 @@ void HNtypeI_SR::executeEventFromParameter(AnalyzerParameter param){
 
   vector<FatJet> fatjets = FatJetsVetoLeptonInside(fatjets_nolepveto, electrons_veto, muons_veto);  // AK8jets used in SR, CR
   vector<Jet> jets_lepveto = JetsVetoLeptonInside(jets_nolepveto, electrons_veto, muons_veto);
-  //vector<Jet> jets_insideFatjets = JetsInsideFatJet(jets_lepveto, fatjets);  // For jets inside a fatjet, remove their smearing from MET. Because FatJet smearing is already propagted to MET. //JH : tmp comment
-  //vector<Jet> jets_PUveto = JetsPassPileupMVA(jets_lepveto); //JH : tmp comment
-  //vector<Jet> jets = JetsAwayFromFatJet(jets_PUveto, fatjets);  // AK4jets used in SR, CR //JH : tmp comment
-  vector<Jet> jets = jets_lepveto; //JH : tmp. just to avoid conflict
+  vector<Jet> jets_insideFatjets = JetsInsideFatJet(jets_lepveto, fatjets);  // For jets inside a fatjet, remove their smearing from MET. Because FatJet smearing is already propagted to MET.
+  vector<Jet> jets_PUveto = JetsPassPileupMVA(jets_lepveto);
+  vector<Jet> jets = JetsAwayFromFatJet(jets_PUveto, fatjets);  // AK4jets used in SR, CR
 
   vector<Jet> jets_WCandLowMass;
   vector<Jet> jets_WCandHighMass;
