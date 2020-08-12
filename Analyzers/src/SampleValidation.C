@@ -275,22 +275,42 @@ void SampleValidation::executeEventFromParameter(AnalyzerParameter param){
     FillHist("Pt_HN_mu", HN_mu.Pt(), weight, 1000, 0., 1000.);
     FillHist("Eta_HN_mu", HN_mu.Eta(), weight, 100, -5., 5.);
     FillHist("Phi_HN_mu", HN_mu.Phi(), weight, 63, -3.15, 3.15);
+		if(fabs(HN_mu.Eta())<2.4){
+      FillHist("fid_Pt_HN_mu", HN_mu.Pt(), weight, 1000, 0., 1000.);
+      FillHist("fid_Eta_HN_mu", HN_mu.Eta(), weight, 100, -5., 5.);
+      FillHist("fid_Phi_HN_mu", HN_mu.Phi(), weight, 63, -3.15, 3.15);
+		}
   }
   if(hard_mu.Chi2()!=999.){
     FillHist("Pt_hard_mu", hard_mu.Pt(), weight, 1000, 0., 1000.);
     FillHist("Eta_hard_mu", hard_mu.Eta(), weight, 100, -5., 5.);
     FillHist("Phi_hard_mu", hard_mu.Phi(), weight, 63, -3.15, 3.15);
+		if(fabs(hard_mu.Eta())<2.4){
+      FillHist("fid_Pt_hard_mu", hard_mu.Pt(), weight, 1000, 0., 1000.);
+      FillHist("fid_Eta_hard_mu", hard_mu.Eta(), weight, 100, -5., 5.);
+      FillHist("fid_Phi_hard_mu", hard_mu.Phi(), weight, 63, -3.15, 3.15);
+		}
   }
 
   if(muons.size()>0){
     FillHist("Pt_mu1", muons.at(0).Pt(), weight, 1000, 0., 1000.);
     FillHist("Eta_mu1", muons.at(0).Eta(), weight, 100, -5., 5.);
     FillHist("Phi_mu1", muons.at(0).Phi(), weight, 63, -3.15, 3.15);
+		if(fabs(muons[0].Eta())<2.4){
+      FillHist("fid_Pt_mu1", muons.at(0).Pt(), weight, 1000, 0., 1000.);
+      FillHist("fid_Eta_mu1", muons.at(0).Eta(), weight, 100, -5., 5.);
+      FillHist("fid_Phi_mu1", muons.at(0).Phi(), weight, 63, -3.15, 3.15);
+		}
   }
   if(muons.size()>1){
     FillHist("Pt_mu2", muons.at(1).Pt(), weight, 1000, 0., 1000.);
     FillHist("Eta_mu2", muons.at(1).Eta(), weight, 100, -5., 5.);
     FillHist("Phi_mu2", muons.at(1).Phi(), weight, 63, -3.15, 3.15);
+		if(fabs(muons[1].Eta())<2.4){
+      FillHist("fid_Pt_mu2", muons.at(1).Pt(), weight, 1000, 0., 1000.);
+      FillHist("fid_Eta_mu2", muons.at(1).Eta(), weight, 100, -5., 5.);
+      FillHist("fid_Phi_mu2", muons.at(1).Phi(), weight, 63, -3.15, 3.15);
+		}
   }
   if(electrons.size()>0){
     FillHist("Pt_e1", electrons.at(0).Pt(), weight, 1000, 0., 1000.);
@@ -400,18 +420,38 @@ void SampleValidation::executeEventFromParameter(AnalyzerParameter param){
   FillHist("Gen_Pt_HN_mu", gen_HN_mu.Pt(), weight, 1000, 0., 1000.);
   FillHist("Gen_Eta_HN_mu", gen_HN_mu.Eta(), weight, 100, -5., 5.);
   FillHist("Gen_Phi_HN_mu", gen_HN_mu.Phi(), weight, 63, -3.15, 3.15);
+	if(fabs(gen_HN_mu.Eta())<2.4){
+    FillHist("fid_Gen_Pt_HN_mu", gen_HN_mu.Pt(), weight, 1000, 0., 1000.);
+    FillHist("fid_Gen_Eta_HN_mu", gen_HN_mu.Eta(), weight, 100, -5., 5.);
+    FillHist("fid_Gen_Phi_HN_mu", gen_HN_mu.Phi(), weight, 63, -3.15, 3.15);
+	}
   FillHist("Gen_Pt_hard_mu", gen_hard_mu.Pt(), weight, 1000, 0., 1000.);
   FillHist("Gen_Eta_hard_mu", gen_hard_mu.Eta(), weight, 100, -5., 5.);
   FillHist("Gen_Phi_hard_mu", gen_hard_mu.Phi(), weight, 63, -3.15, 3.15);
+	if(fabs(gen_hard_mu.Eta())<2.4){
+    FillHist("fid_Gen_Pt_hard_mu", gen_hard_mu.Pt(), weight, 1000, 0., 1000.);
+    FillHist("fid_Gen_Eta_hard_mu", gen_hard_mu.Eta(), weight, 100, -5., 5.);
+    FillHist("fid_Gen_Phi_hard_mu", gen_hard_mu.Phi(), weight, 63, -3.15, 3.15);
+	}
   
   std::sort(gen_muons.begin(), gen_muons.end(), PtComparing);
   std::sort(gen_N_partons.begin(), gen_N_partons.end(), PtComparing);
   FillHist("Gen_Pt_mu1", gen_muons.at(0).Pt(), weight, 1000, 0., 1000.);
   FillHist("Gen_Eta_mu1", gen_muons.at(0).Eta(), weight, 100, -5., 5.);
   FillHist("Gen_Phi_mu1", gen_muons.at(0).Phi(), weight, 63, -3.15, 3.15);
+	if(fabs(gen_muons.at(0).Eta())<2.4){
+    FillHist("fid_Gen_Pt_mu1", gen_muons.at(0).Pt(), weight, 1000, 0., 1000.);
+    FillHist("fid_Gen_Eta_mu1", gen_muons.at(0).Eta(), weight, 100, -5., 5.);
+    FillHist("fid_Gen_Phi_mu1", gen_muons.at(0).Phi(), weight, 63, -3.15, 3.15);
+	}
   FillHist("Gen_Pt_mu2", gen_muons.at(1).Pt(), weight, 1000, 0., 1000.);
   FillHist("Gen_Eta_mu2", gen_muons.at(1).Eta(), weight, 100, -5., 5.);
   FillHist("Gen_Phi_mu2", gen_muons.at(1).Phi(), weight, 63, -3.15, 3.15);
+	if(fabs(gen_muons.at(1).Eta())<2.4){
+    FillHist("fid_Gen_Pt_mu2", gen_muons.at(1).Pt(), weight, 1000, 0., 1000.);
+    FillHist("fid_Gen_Eta_mu2", gen_muons.at(1).Eta(), weight, 100, -5., 5.);
+    FillHist("fid_Gen_Phi_mu2", gen_muons.at(1).Phi(), weight, 63, -3.15, 3.15);
+	}
   FillHist("Gen_Pt_j1", gen_N_partons.at(0).Pt(), weight, 1000, 0., 1000.);
   FillHist("Gen_Eta_j1", gen_N_partons.at(0).Eta(), weight, 100, -5., 5.);
   FillHist("Gen_Phi_j1", gen_N_partons.at(0).Phi(), weight, 63, -3.15, 3.15);
