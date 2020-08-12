@@ -202,6 +202,7 @@ public:
   Gen GetGenMatchedLepton(const Lepton& lep, const std::vector<Gen>& gens);
   Gen GetGenMatchedPhoton(const Lepton& lep, const std::vector<Gen>& gens);
   vector<int> TrackGenSelfHistory(const Gen& me, const std::vector<Gen>& gens);
+  Gen* FindLastCopy(Gen *me, std::vector<Gen> gens);
   bool IsFromHadron(const Gen& me, const std::vector<Gen>& gens);
   int GetLeptonType(const Lepton& lep, const std::vector<Gen>& gens);
   int GetGenPhotonType(const Gen& genph, const std::vector<Gen>& gens);

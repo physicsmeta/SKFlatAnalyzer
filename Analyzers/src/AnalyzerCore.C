@@ -1850,6 +1850,19 @@ vector<int> AnalyzerCore::TrackGenSelfHistory(const Gen& me, const std::vector<G
 
 }
 
+Gen* AnalyzerCore::FindLastCopy(Gen *me, std::vector<Gen> gens){
+
+  Gen* last = me;
+
+	for(unsigned int i=0; i<gens.size(); i++){
+    if(gens[i].MotherIndex()==last->Index()&&gens[i].PID()==me->PID()){
+      last = &gens[i];
+		}
+	}
+
+	return last;
+}
+
 bool AnalyzerCore::IsFromHadron(const Gen& me, const std::vector<Gen>& gens){
 
   bool out = false;
