@@ -4,6 +4,7 @@ vector<TString> IDs = {"HN16", "HNV2"};
 vector<TString> periods = {"B_ver2", "C", "D", "E", "F", "G", "H"};
 vector<TString> weights = {"Number_Events", "Number_Events_unweighted"};
 
+vector<TString> indices = {"SingleTrigger_pt_50_50","dimuTrigger_pt20_10","dimuTrigger_pt50_50"};
 vector<TString> samples = {"HNToMuMu_Sch_M70","HNToMuMu_Sch_M90","HNToMuMu_Sch_M100","HNToMuMu_Sch_M200"};
 vector<TString> Signal_IDs = {"LRSM", "HNV2"};
 
@@ -70,29 +71,29 @@ void DrawCutflow(TString channel, TString region, TString ID, TString period, in
 
 }
 
-void DrawSignalCutflow(TString sample, TString ID, TString channel = "dimu", TString region = "lowSR1", TString SaveAs = "n"){
+void DrawSignalCutflow(TString index, TString sample, TString ID, TString channel = "dimu", TString region = "lowSR1", TString SaveAs = "n"){
 
-  TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/HNtypeI_SR/2016/SingleTrigger_pt_50_50/HNtypeI_SR_"+sample+".root";
+  TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/HNtypeI_SR/2016/"+index+"/HNtypeI_SR_"+sample+".root";
   TFile* f1 = new TFile(filename);
   
   //for(int i=0; i<IDs.size(); i++){
   //  gSystem->Exec("mkdir -p Cutflow/2016/"+IDs.at(i));
   //}
   for(int i=0; i<Signal_IDs.size(); i++){
-    gSystem->Exec("mkdir -p Cutflow/Signal/2016/"+Signal_IDs.at(i));
+    gSystem->Exec("mkdir -p Cutflow/Signal/2016/"+index+"/"+Signal_IDs.at(i));
 	}
 
   TString title;
-  title = sample+"_"+channel+"_Preselection_"+ID+"_Cutflow";
+  title = index+"_"+sample+"_"+channel+"_Preselection_"+ID+"_Cutflow";
 
   TH1D *h1 = (TH1D*)f1->Get(channel+"/"+region+"/Number_Events_"+ID);
   TH1D *h2 = new TH1D("h2",title,10,0,10);
   for(int i=0; i<8; i++) h2->SetBinContent(i+1,h1->GetBinContent(i)/h1->GetBinContent(0));
 
-  TCanvas *c1 = new TCanvas("c1",title,200,200,900,800);
+  TCanvas *c1 = new TCanvas("c1","c1",200,200,900,800);
   c1->SetLogy();
 
-  //h2->SetTitle(title);
+  h2->SetTitle(sample+"_"+channel+"_Preselection_Cutflow");
   h2->SetStats(0);
   h2->GetXaxis()->ChangeLabel(1,15,0.02,12,-1,-1,"Nocut");
   h2->GetXaxis()->ChangeLabel(2,15,0.02,12,-1,-1,"MET filter");
@@ -109,7 +110,7 @@ void DrawSignalCutflow(TString sample, TString ID, TString channel = "dimu", TSt
   h2->GetYaxis()->SetLabelSize(0.03);
   h2->GetYaxis()->SetTitleOffset(1);
   h2->GetYaxis()->SetTitle("Efficiency");
-  h2->GetYaxis()->SetRangeUser(5e-07,5);
+  h2->GetYaxis()->SetRangeUser(1.e-04,5);
   h2->Draw();
 
   //long int Nevent = h1->GetBinContent(0);
@@ -135,9 +136,11 @@ void DrawSignalCutflow(TString sample, TString ID, TString channel = "dimu", TSt
 
 void SaveAll_Signal(){
 
-  for(int j=0; j<samples.size(); j++){
-    for(int k=0; k<Signal_IDs.size(); k++){
-      DrawSignalCutflow(samples.at(j), Signal_IDs.at(k), "dimu", "lowSR1", "y");
+  for(int i=0; i<indices.size(); i++){
+    for(int j=0; j<samples.size(); j++){
+      for(int k=0; k<Signal_IDs.size(); k++){
+        DrawSignalCutflow(indices.at(i), samples.at(j), Signal_IDs.at(k), "dimu", "lowSR1", "y");
+      }
     }
   }
 

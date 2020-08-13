@@ -322,15 +322,19 @@ void SampleValidation::executeEventFromParameter(AnalyzerParameter param){
     FillHist("Eta_e2", electrons.at(1).Eta(), weight, 100, -5., 5.);
     FillHist("Phi_e2", electrons.at(1).Phi(), weight, 63, -3.15, 3.15);
   }
-  if(jets.size()>1){
-    FillHist("Pt_j1", jets.at(0).Pt(), weight, 1000, 0., 1000.);
-    FillHist("Eta_j1", jets.at(0).Eta(), weight, 100, -5., 5.);
-    FillHist("Phi_j1", jets.at(0).Phi(), weight, 63, -3.15, 3.15);
+  if(jets.size()>0){
+    if(jets.at(0).Pt()>20.&&fabs(jets.at(0).Eta())<2.7){
+      FillHist("Pt_j1", jets.at(0).Pt(), weight, 1000, 0., 1000.);
+      FillHist("Eta_j1", jets.at(0).Eta(), weight, 100, -5., 5.);
+      FillHist("Phi_j1", jets.at(0).Phi(), weight, 63, -3.15, 3.15);
+    }
   }
   if(jets.size()>1){
-    FillHist("Pt_j2", jets.at(1).Pt(), weight, 1000, 0., 1000.);
-    FillHist("Eta_j2", jets.at(1).Eta(), weight, 100, -5., 5.);
-    FillHist("Phi_j2", jets.at(1).Phi(), weight, 63, -3.15, 3.15);
+    if(jets.at(1).Pt()>20.&&fabs(jets.at(1).Eta())<2.7){
+      FillHist("Pt_j2", jets.at(1).Pt(), weight, 1000, 0., 1000.);
+      FillHist("Eta_j2", jets.at(1).Eta(), weight, 100, -5., 5.);
+      FillHist("Phi_j2", jets.at(1).Phi(), weight, 63, -3.15, 3.15);
+    }
   }
   if(fatjets.size()>0){
     FillHist("Pt_fatjet", fatjets.at(0).Pt(), weight, 1000, 0., 1000.);
@@ -452,12 +456,16 @@ void SampleValidation::executeEventFromParameter(AnalyzerParameter param){
     FillHist("fid_Gen_Eta_mu2", gen_muons.at(1).Eta(), weight, 100, -5., 5.);
     FillHist("fid_Gen_Phi_mu2", gen_muons.at(1).Phi(), weight, 63, -3.15, 3.15);
 	}
-  FillHist("Gen_Pt_j1", gen_N_partons.at(0).Pt(), weight, 1000, 0., 1000.);
-  FillHist("Gen_Eta_j1", gen_N_partons.at(0).Eta(), weight, 100, -5., 5.);
-  FillHist("Gen_Phi_j1", gen_N_partons.at(0).Phi(), weight, 63, -3.15, 3.15);
-  FillHist("Gen_Pt_j2", gen_N_partons.at(1).Pt(), weight, 1000, 0., 1000.);
-  FillHist("Gen_Eta_j2", gen_N_partons.at(1).Eta(), weight, 100, -5., 5.);
-  FillHist("Gen_Phi_j2", gen_N_partons.at(1).Phi(), weight, 63, -3.15, 3.15);
+  if(gen_N_partons.at(0).Pt()>20.&&fabs(gen_N_partons.at(0).Eta())<2.7){
+    FillHist("Gen_Pt_j1", gen_N_partons.at(0).Pt(), weight, 1000, 0., 1000.);
+    FillHist("Gen_Eta_j1", gen_N_partons.at(0).Eta(), weight, 100, -5., 5.);
+    FillHist("Gen_Phi_j1", gen_N_partons.at(0).Phi(), weight, 63, -3.15, 3.15);
+  }
+  if(gen_N_partons.at(1).Pt()>20.&&fabs(gen_N_partons.at(1).Eta())<2.7){
+    FillHist("Gen_Pt_j2", gen_N_partons.at(1).Pt(), weight, 1000, 0., 1000.);
+    FillHist("Gen_Eta_j2", gen_N_partons.at(1).Eta(), weight, 100, -5., 5.);
+    FillHist("Gen_Phi_j2", gen_N_partons.at(1).Phi(), weight, 63, -3.15, 3.15);
+  }
   FillHist("Gen_Pt_N", gen_N.Pt(), weight, 1000, 0., 1000.);
   FillHist("Gen_Eta_N", gen_N.Eta(), weight, 100, -5., 5.);
   FillHist("Gen_Phi_N", gen_N.Phi(), weight, 63, -3.15, 3.15);
@@ -484,10 +492,11 @@ void SampleValidation::executeEventFromParameter(AnalyzerParameter param){
     for(unsigned int i=0; i<W_jets1.size(); i++){
       cout << "pt: " << W_jets1[i].Pt() << ", eta: " << W_jets1[i].Eta() << ", phi: " << W_jets1[i].Phi() << endl;
     }
-
-    FillHist("Pt_Wjet1", W_jets1.at(0).Pt(), weight, 1000, 0., 1000.);
-    FillHist("Eta_Wjet1", W_jets1.at(0).Eta(), weight, 100, -5., 5.);
-    FillHist("Phi_Wjet1", W_jets1.at(0).Phi(), weight, 63, -3.15, 3.15);
+    if(W_jets1.at(0).Pt()>20.&&fabs(W_jets1.at(0).Eta())<2.7){
+      FillHist("Pt_Wjet1", W_jets1.at(0).Pt(), weight, 1000, 0., 1000.);
+      FillHist("Eta_Wjet1", W_jets1.at(0).Eta(), weight, 100, -5., 5.);
+      FillHist("Phi_Wjet1", W_jets1.at(0).Phi(), weight, 63, -3.15, 3.15);
+    }
   }
   if(W_jets2.size()>0){
 
@@ -497,14 +506,18 @@ void SampleValidation::executeEventFromParameter(AnalyzerParameter param){
     }
 
     if(W_jets1.size()==0){
-      FillHist("Pt_Wjet2", W_jets2.at(0).Pt(), weight, 1000, 0., 1000.);
-      FillHist("Eta_Wjet2", W_jets2.at(0).Eta(), weight, 100, -5., 5.);
-      FillHist("Phi_Wjet2", W_jets2.at(0).Phi(), weight, 63, -3.15, 3.15);
+      if(W_jets2.at(0).Pt()>20.&&fabs(W_jets2.at(0).Eta())<2.7){
+        FillHist("Pt_Wjet2", W_jets2.at(0).Pt(), weight, 1000, 0., 1000.);
+        FillHist("Eta_Wjet2", W_jets2.at(0).Eta(), weight, 100, -5., 5.);
+        FillHist("Phi_Wjet2", W_jets2.at(0).Phi(), weight, 63, -3.15, 3.15);
+      }
     }
 		else if(W_jets1.size()>0&&(&W_jets2.at(0)!=&W_jets1.at(0))){
-      FillHist("Pt_Wjet2", W_jets2.at(0).Pt(), weight, 1000, 0., 1000.);
-      FillHist("Eta_Wjet2", W_jets2.at(0).Eta(), weight, 100, -5., 5.);
-      FillHist("Phi_Wjet2", W_jets2.at(0).Phi(), weight, 63, -3.15, 3.15);
+      if(W_jets2.at(0).Pt()>20.&&fabs(W_jets2.at(0).Eta())<2.7){
+        FillHist("Pt_Wjet2", W_jets2.at(0).Pt(), weight, 1000, 0., 1000.);
+        FillHist("Eta_Wjet2", W_jets2.at(0).Eta(), weight, 100, -5., 5.);
+        FillHist("Phi_Wjet2", W_jets2.at(0).Phi(), weight, 63, -3.15, 3.15);
+      }
     }
 	}
 
