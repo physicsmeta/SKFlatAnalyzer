@@ -71,7 +71,7 @@ void DrawCutflow(TString channel, TString region, TString ID, TString period, in
 
 }
 
-void DrawSignalCutflow(TString index, TString sample, TString ID, TString channel = "dimu", TString region = "lowSR1", TString SaveAs = "n"){
+void DrawHighPtCutflow(TString index, TString sample, TString ID, TString channel = "dimu", TString region = "lowSR1", TString SaveAs = "n"){
 
   TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/HNtypeI_SR/2016/"+index+"/HNtypeI_SR_"+sample+".root";
   TFile* f1 = new TFile(filename);
@@ -80,7 +80,7 @@ void DrawSignalCutflow(TString index, TString sample, TString ID, TString channe
   //  gSystem->Exec("mkdir -p Cutflow/2016/"+IDs.at(i));
   //}
   for(int i=0; i<Signal_IDs.size(); i++){
-    gSystem->Exec("mkdir -p Cutflow/Signal/2016/"+index+"/"+Signal_IDs.at(i));
+    gSystem->Exec("mkdir -p Cutflow/Signal/2016/"+Signal_IDs.at(i));
 	}
 
   TString title;
@@ -134,12 +134,12 @@ void DrawSignalCutflow(TString index, TString sample, TString ID, TString channe
 
 }
 
-void SaveAll_Signal(){
+void SaveAll_HighPt(){
 
   for(int i=0; i<indices.size(); i++){
     for(int j=0; j<samples.size(); j++){
       for(int k=0; k<Signal_IDs.size(); k++){
-        DrawSignalCutflow(indices.at(i), samples.at(j), Signal_IDs.at(k), "dimu", "lowSR1", "y");
+        DrawHighPtCutflow(indices.at(i), samples.at(j), Signal_IDs.at(k), "dimu", "lowSR1", "y");
       }
     }
   }
