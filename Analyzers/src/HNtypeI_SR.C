@@ -50,12 +50,12 @@ void HNtypeI_SR::initializeAnalyzer(){
   EMuTriggersH.clear();
 
   if(DataYear==2016){                                                                   // Lumi values for trigger weight (/pb)
-    //MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v");                       // 27267.591112919 
-    //MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_v");                     // 27267.591112919 //JH : NOTE these two are prescaled at 2016H -> https://its.cern.ch/jira/browse/CMSHLT-1002
-    //MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v");                    // 35918.219492947
-    //MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_v");                  // 35918.219492947 //JH : TODO why we need this though we already have superset
-    MuonTriggers.push_back("HLT_Mu50_v");                    
-    MuonTriggers.push_back("HLT_TkMu50_v");                  //JH : to see how many events are cut with high pt
+    MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_v");                       // 27267.591112919 
+    MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_v");                     // 27267.591112919 //JH : NOTE these two are prescaled at 2016H -> https://its.cern.ch/jira/browse/CMSHLT-1002
+    MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v");                    // 35918.219492947
+    MuonTriggers.push_back("HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_v");                  // 35918.219492947 //JH : TODO why we need this though we already have superset
+    //MuonTriggers.push_back("HLT_Mu50_v");                    
+    //MuonTriggers.push_back("HLT_TkMu50_v");                  //JH : to see how many events are cut with high pt
     MuonTriggersH.push_back("HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_v");                   // 35918.219492947
     MuonTriggersH.push_back("HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ_v");                 // 35918.219492947
     //MuonTriggers.push_back("HLT_Mu17_Mu8_SameSign_DZ_v");
@@ -76,8 +76,8 @@ void HNtypeI_SR::initializeAnalyzer(){
     //Mu23Ele12Triggers.push_back("HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_v");
     //Mu23Ele12Triggers.push_back("HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_DZ_v");
 
-    //MuonPtCut1 = 20., MuonPtCut2 = 10.;
-    MuonPtCut1 = 50., MuonPtCut2 = 50.; //JH : to see how many events are cut with high pt
+    MuonPtCut1 = 20., MuonPtCut2 = 10.;
+    //MuonPtCut1 = 50., MuonPtCut2 = 50.; //JH : to see how many events are cut with high pt
     ElectronPtCut1 = 25., ElectronPtCut2 = 15.;
     EMuPtCut1 = 25., EMuPtCut2 = 15.;
     //EMuPtCut1 = 25., EMuPtCut2 = 10.;
