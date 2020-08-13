@@ -167,7 +167,7 @@ bool Jet::PassPileupMVA(TString WP) const {
       else if(this->Pt() < 50.){ if(PileupJetId() > -0.01) pass=true; }
       else pass=true;
     }
-    else return false;
+    else pass=true;
   }
   else if(WP=="medium"){
     if(fabs(this->Eta()) < 2.5){
@@ -198,7 +198,7 @@ bool Jet::PassPileupMVA(TString WP) const {
       else if(this->Pt() < 50.){ if(PileupJetId() > -0.17) pass=true; }
       else pass=true;
     }
-    else return false;
+    else pass=true;
   }
   else if(WP=="loose"){
     if(fabs(this->Eta()) < 2.5){
@@ -229,12 +229,12 @@ bool Jet::PassPileupMVA(TString WP) const {
       else if(this->Pt() < 50.){ if(PileupJetId() > -0.38) pass=true; }
       else pass=true;
     }
-    else return false;
+    else pass=true;
   }
   else{
     cout << "[Jet::PassPileupID] No wp : " << WP << endl;
     exit(EXIT_FAILURE);
   }
 
-  return true;
+  return pass;
 }
