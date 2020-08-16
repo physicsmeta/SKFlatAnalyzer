@@ -20,6 +20,7 @@ public:
   vector<TString> MuonTriggers;
   vector<TString> MuonTriggersBtoG;
   vector<TString> MuonTriggersH;
+  vector<TString> MuonTriggersHighPt;
   vector<TString> ElectronTriggers;
   vector<TString> EMuTriggers;
   vector<TString> EMuTriggersBtoG;
