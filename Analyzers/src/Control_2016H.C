@@ -1,14 +1,14 @@
-#include "Control.h"
+#include "Control_2016H.h"
 
-Control::Control(){
+Control_2016H::Control_2016H(){
 
 }
 
-void Control::initializeAnalyzer(){
+void Control_2016H::initializeAnalyzer(){
 
   //==== if you use "--userflags RunSyst" with SKFlat.py, HasFlag("RunSyst") will return "true"
 //  RunSyst = HasFlag("RunSyst");
-//  cout << "[Control::initializeAnalyzer] RunSyst = " << RunSyst << endl;
+//  cout << "[Control_2016H::initializeAnalyzer] RunSyst = " << RunSyst << endl;
   RunFake = HasFlag("RunFake");
   RunCF = HasFlag("RunCF");
 
@@ -38,7 +38,7 @@ void Control::initializeAnalyzer(){
   //==== At this point, sample informations (e.g., IsDATA, DataStream, MCSample, or DataYear) are all set
   //==== You can define sample-dependent or year-dependent variables here
   //==== (Example) Year-dependent variables
-  //==== I defined "TString IsoMuTriggerName;" and "double TriggerSafePtCut;" in Analyzers/include/Control.h 
+  //==== I defined "TString IsoMuTriggerName;" and "double TriggerSafePtCut;" in Analyzers/include/Control_2016H.h 
   //==== IsoMuTriggerName is a year-dependent variable, and you don't want to do "if(Dataer==~~)" for every event (let's save cpu time).
   //==== Then, do it here, which only ran once for each macro
 
@@ -94,8 +94,8 @@ void Control::initializeAnalyzer(){
     ElectronTightIDs.pop_back(); ElectronTightIDs.push_back("HEEP2018_dZ"); //JH 
   }
 
-//  cout << "[Control::initializeAnalyzer] IsoMuTriggerName = " << IsoMuTriggerName << endl;
-//  cout << "[Control::initializeAnalyzer TriggerSafePtCut = " << TriggerSafePtCut << endl;
+//  cout << "[Control_2016H::initializeAnalyzer] IsoMuTriggerName = " << IsoMuTriggerName << endl;
+//  cout << "[Control_2016H::initializeAnalyzer TriggerSafePtCut = " << TriggerSafePtCut << endl;
 
   //==== B-Tagging
   //==== add taggers and WP that you want to use in analysis
@@ -107,13 +107,13 @@ void Control::initializeAnalyzer(){
   mcCorr->SetJetTaggingParameters(jtps); //JH : NOTE This is used in mcCorr->SetupJetTagging() in m.initializeAnalyzerTools();
 }
 
-Control::~Control(){
+Control_2016H::~Control_2016H(){
 
   //==== Destructor of this Analyzer
 
 }
 
-void Control::executeEvent(){
+void Control_2016H::executeEvent(){
 
   //================================================================
   //====  Example 1
@@ -125,7 +125,7 @@ void Control::executeEvent(){
   //==== and then check ID booleans.
   //==== GetAllMuons not only loops over all MINIAOD muons, but also actually CONSTRUCT muon objects for each muons.
   //==== We are now running systematics, and you don't want to do this for every systematic sources
-  //==== So, I defined "vector<Muon> AllMuons;" in Analyzers/include/Control.h,
+  //==== So, I defined "vector<Muon> AllMuons;" in Analyzers/include/Control_2016H.h,
   //==== and save muons objects at the very beginning of executeEvent().
   //==== Later, do "SelectMuons(AllMuons, ID, pt, eta)" to get muons with ID cuts
   AllMuons = GetAllMuons();
@@ -138,7 +138,7 @@ void Control::executeEvent(){
   //==== If data, 1.;
   //==== If MC && DataYear > 2017, 1.;
   //==== If MC && DataYear <= 2017, we have to reweight the event with this value
-  //==== I defined "double weight_Prefire;" in Analyzers/include/Control.h
+  //==== I defined "double weight_Prefire;" in Analyzers/include/Control_2016H.h
 //  weight_Prefire = GetPrefireWeight(0);
 
   AnalyzerParameter param;
@@ -196,7 +196,7 @@ void Control::executeEvent(){
   }
 }
 
-void Control::executeEventFromParameter(AnalyzerParameter param){
+void Control_2016H::executeEventFromParameter(AnalyzerParameter param){
 
   vector<TString> channels = {"dimu", "diel", "emu"};
   vector<TString> regionsSM = {"DYmm", "DYee", "DYemu", "WZ", "ZG", "WG", "ZZ"}; 
@@ -306,7 +306,7 @@ void Control::executeEventFromParameter(AnalyzerParameter param){
     //this_AllElectrons = ScaleElectrons( this_AllElectrons, -1 );
   }
   else{
-    cout << "[Control::executeEventFromParameter] Wrong syst" << endl;
+    cout << "[Control_2016H::executeEventFromParameter] Wrong syst" << endl;
     exit(EXIT_FAILURE);
   }*/
 
@@ -608,7 +608,7 @@ void Control::executeEventFromParameter(AnalyzerParameter param){
           if(!ev.PassTrigger(MuonTriggersHighPt)) continue;
         }
         else{
-          if(!ev.PassTrigger(MuonTriggers)) continue;
+          if(!ev.PassTrigger(MuonTriggersH)) continue;
         }
         if(!(muons.at(0).Pt()>MuonPtCut1 && muons.at(1).Pt()>MuonPtCut2)) continue;
 			}
@@ -761,7 +761,7 @@ void Control::executeEventFromParameter(AnalyzerParameter param){
           if(!ev.PassTrigger(MuonTriggersHighPt)) continue; 
 				}
 				else{
-          if(!ev.PassTrigger(MuonTriggers)) continue; 
+          if(!ev.PassTrigger(MuonTriggersH)) continue; 
 				}
         if(!(muons.at(0).Pt()>MuonPtCut1 && muons.at(1).Pt()>MuonPtCut2)) continue;
       }
@@ -1072,7 +1072,7 @@ void Control::executeEventFromParameter(AnalyzerParameter param){
           if(!ev.PassTrigger(MuonTriggersHighPt)) continue; 
 				}
 				else{
-          if(!ev.PassTrigger(MuonTriggers)) continue; 
+          if(!ev.PassTrigger(MuonTriggersH)) continue; 
 				}
       }
       if(electrons.size() == 4){
