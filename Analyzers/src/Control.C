@@ -132,7 +132,7 @@ void Control::executeEvent(){
   AllElectrons = GetAllElectrons();
   AllJets = GetAllJets();
 //  AllFatJets = GetAllFatJets();
-  AllFatJets = puppiCorr->Correct(GetAllFatJets()); //JH : puppiCorr = new FakeBackgroundEstimator(); in the constructor of AnalyzerCore.C; apply correction to fatjet.SDMass(); the total weight = gen correction * reco correction, from SKFlatAnalyzer/data/Run2Legacy_v4/DataYear/PuppiSoftdropMassCorr/puppiCorr.root
+  AllFatJets = puppiCorr->Correct(GetAllFatJets()); //JH : puppiCorr = new PuppiSoftdropMassCorr(); in the constructor of AnalyzerCore.C; apply correction to fatjet.SDMass(); the total weight = gen correction * reco correction, from SKFlatAnalyzer/data/Run2Legacy_v4/DataYear/PuppiSoftdropMassCorr/puppiCorr.root
 
   //==== Get L1Prefire reweight
   //==== If data, 1.;
@@ -199,7 +199,6 @@ void Control::executeEvent(){
 void Control::executeEventFromParameter(AnalyzerParameter param){
 
   vector<TString> channels = {"dimu", "diel", "emu"};
-  vector<TString> regions = {"fakeCR1", "lowSR1", "lowCR1", "highSR1", "highCR1", "lowSR2", "lowCR2", "highSR2", "highCR2"}; 
   vector<TString> regionsSM = {"DYmm", "DYee", "DYemu", "WZ", "ZG", "WG", "ZZ"}; 
   vector<TString> channels3L = {"mmm", "mme", "mee", "eee"}; //JH : iterate for the number of e
   vector<TString> channels4L = {"mmmm", "mmee", "eeee"}; //JH : iterate for the number of e / 2
@@ -256,7 +255,8 @@ void Control::executeEventFromParameter(AnalyzerParameter param){
   //======================
 
   vector<Electron> this_AllElectrons = AllElectrons;
-  vector<Muon> this_AllMuons = AllMuons;
+  if(param.Muon_Tight_ID.Contains("HighPt")) this_AllMuons = UseTunePMuon(AllMuons);
+  else this_AllMuons = AllMuons;
   vector<Jet> this_AllJets = AllJets;
   vector<FatJet> this_AllFatJets = AllFatJets;
   vector<Gen> gens = GetGens();
@@ -542,10 +542,15 @@ void Control::executeEventFromParameter(AnalyzerParameter param){
   trigger_lumi = 1., dimu_trig_weight = 0., emu_trig_weight = 0.;
   if(!IsDATA){
     if(DataYear==2016){
-      if(ev.PassTrigger(MuonTriggers)){
-        if(ev.PassTrigger(MuonTriggers)) dimu_trig_weight += 27267.591;
-        if(ev.PassTrigger(MuonTriggersH)) dimu_trig_weight += 8650.628;
-        trigger_lumi = dimu_trig_weight;
+      if(param.Muon_Tight_ID.Contains("HighPt")){
+        trigger_lumi = ev.GetTriggerLumi("Full");
+      }
+      else{
+        if(ev.PassTrigger(MuonTriggers)){
+          if(ev.PassTrigger(MuonTriggers)) dimu_trig_weight += 27267.591;
+          if(ev.PassTrigger(MuonTriggersH)) dimu_trig_weight += 8650.628;
+          trigger_lumi = dimu_trig_weight;
+        }
       }
       if(ev.PassTrigger(ElectronTriggers)){
         trigger_lumi = ev.GetTriggerLumi("Full");
