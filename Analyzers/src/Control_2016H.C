@@ -204,8 +204,8 @@ void Control_2016H::executeEventFromParameter(AnalyzerParameter param){
   vector<TString> channels4L = {"mmmm", "mmee", "eeee"}; //JH : iterate for the number of e / 2
   TString IDsuffix;
   //if(param.Electron_Tight_ID.Contains("V2")) IDsuffix = "HNV2";
-  if(param.Electron_Tight_ID.Contains("HighPt")) IDsuffix = "HighPt";
-  if(param.Electron_Tight_ID.Contains("POGTight")) IDsuffix = "POGTight";
+  if(param.Muon_Tight_ID.Contains("HighPt")) IDsuffix = "HighPt";
+  if(param.Muon_Tight_ID.Contains("POGTight")) IDsuffix = "POGTight";
   TString LepCategory = "TT";
   double cutflow_max = 10.;
   int cutflow_bin = 10;
@@ -543,7 +543,9 @@ void Control_2016H::executeEventFromParameter(AnalyzerParameter param){
   if(!IsDATA){
     if(DataYear==2016){
       if(param.Muon_Tight_ID.Contains("HighPt")){
-        trigger_lumi = ev.GetTriggerLumi("Full");
+        if(ev.PassTrigger(MuonTriggersHighPt)){
+          trigger_lumi = ev.GetTriggerLumi("Full");
+				}
       }
       else{
         if(ev.PassTrigger(MuonTriggers)){
@@ -582,10 +584,8 @@ void Control_2016H::executeEventFromParameter(AnalyzerParameter param){
     }
 
     // Cutflow : passing dilepton triggers (dimu || diel || emu)
-    for(unsigned int it_rg2=0; it_rg2<regionsSM.size(); it_rg2++){
-      FillHist(regionsSM.at(it_rg2)+"/Number_Events_"+IDsuffix, 1.5, weight, cutflow_bin, 0., cutflow_max);
-      FillHist(regionsSM.at(it_rg2)+"/Number_Events_unweighted_"+IDsuffix, 1.5, 1., cutflow_bin, 0., cutflow_max);
-    }
+    FillHist(regionsSM.at(it_rg2)+"/Number_Events_"+IDsuffix, 1.5, weight, cutflow_bin, 0., cutflow_max);
+    FillHist(regionsSM.at(it_rg2)+"/Number_Events_unweighted_"+IDsuffix, 1.5, 1., cutflow_bin, 0., cutflow_max);
 
     if(param.Muon_Tight_ID.Contains("HighPt")){
       MuonPtCut1 = 50., MuonPtCut2 = 50.;
@@ -622,10 +622,6 @@ void Control_2016H::executeEventFromParameter(AnalyzerParameter param){
         if(!(leptons.at(0)->Pt()>EMuPtCut1 && leptons.at(1)->Pt()>EMuPtCut2)) continue;
 			}
 
-      // Select prompt only
-      if(-4<=GetLeptonType(*leptons.at(0), gens)&&GetLeptonType(*leptons.at(0), gens)<=0) continue;
-      if(-4<=GetLeptonType(*leptons.at(1), gens)&&GetLeptonType(*leptons.at(1), gens)<=0) continue;
-
       weight = 1.;
       // weights for MC
       if(!IsDATA){
@@ -658,6 +654,11 @@ void Control_2016H::executeEventFromParameter(AnalyzerParameter param){
           else ele_idsf = 1.;
           weight *= ele_recosf*ele_idsf;
         }
+
+        // Select prompt only
+        if(-4<=GetLeptonType(*leptons.at(0), gens)&&GetLeptonType(*leptons.at(0), gens)<=0) continue;
+        if(-4<=GetLeptonType(*leptons.at(1), gens)&&GetLeptonType(*leptons.at(1), gens)<=0) continue;
+
       }
 
       if(RunFake) weight *= fakeEst->GetWeight(leptons, param);
@@ -770,11 +771,6 @@ void Control_2016H::executeEventFromParameter(AnalyzerParameter param){
         if(!(electrons.at(0).Pt()>ElectronPtCut1 && electrons.at(1).Pt()>ElectronPtCut2)) continue;
       }
 
-      // Select prompt only
-      if(-4<=GetLeptonType(*leptons.at(0), gens)&&GetLeptonType(*leptons.at(0), gens)<=0) continue;
-      if(-4<=GetLeptonType(*leptons.at(1), gens)&&GetLeptonType(*leptons.at(1), gens)<=0) continue;
-      if(-4<=GetLeptonType(*leptons.at(2), gens)&&GetLeptonType(*leptons.at(2), gens)<=0) continue;
-
       weight = 1., trigger_lumi = 1., dimu_trig_weight = 0.;
       // weights for MC 
       if(!IsDATA){
@@ -823,6 +819,12 @@ void Control_2016H::executeEventFromParameter(AnalyzerParameter param){
           else ele_idsf = 1.;
           weight *= ele_recosf*ele_idsf;
         }
+
+        // Select prompt only
+        if(-4<=GetLeptonType(*leptons.at(0), gens)&&GetLeptonType(*leptons.at(0), gens)<=0) continue;
+        if(-4<=GetLeptonType(*leptons.at(1), gens)&&GetLeptonType(*leptons.at(1), gens)<=0) continue;
+        if(-4<=GetLeptonType(*leptons.at(2), gens)&&GetLeptonType(*leptons.at(2), gens)<=0) continue;
+
       }
 
       if(RunFake) weight *= fakeEst->GetWeight(leptons, param);
@@ -1080,12 +1082,6 @@ void Control_2016H::executeEventFromParameter(AnalyzerParameter param){
         if(!(electrons.at(0).Pt()>ElectronPtCut1 && electrons.at(1).Pt()>ElectronPtCut2)) continue;
       }
 
-      // Select prompt only
-      if(-4<=GetLeptonType(*leptons.at(0), gens)&&GetLeptonType(*leptons.at(0), gens)<=0) continue;
-      if(-4<=GetLeptonType(*leptons.at(1), gens)&&GetLeptonType(*leptons.at(1), gens)<=0) continue;
-      if(-4<=GetLeptonType(*leptons.at(2), gens)&&GetLeptonType(*leptons.at(2), gens)<=0) continue;
-      if(-4<=GetLeptonType(*leptons.at(3), gens)&&GetLeptonType(*leptons.at(3), gens)<=0) continue;
-
       weight = 1.;
       // weights for MC
       if(!IsDATA){
@@ -1117,6 +1113,13 @@ void Control_2016H::executeEventFromParameter(AnalyzerParameter param){
           else ele_idsf = 1.;
           weight *= ele_recosf*ele_idsf;
         }
+
+        // Select prompt only
+        if(-4<=GetLeptonType(*leptons.at(0), gens)&&GetLeptonType(*leptons.at(0), gens)<=0) continue;
+        if(-4<=GetLeptonType(*leptons.at(1), gens)&&GetLeptonType(*leptons.at(1), gens)<=0) continue;
+        if(-4<=GetLeptonType(*leptons.at(2), gens)&&GetLeptonType(*leptons.at(2), gens)<=0) continue;
+        if(-4<=GetLeptonType(*leptons.at(3), gens)&&GetLeptonType(*leptons.at(3), gens)<=0) continue;
+
       }
 
       if(RunFake) weight *= fakeEst->GetWeight(leptons, param);
