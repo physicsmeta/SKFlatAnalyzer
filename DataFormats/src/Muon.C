@@ -106,7 +106,11 @@ bool Muon::PassID(TString ID) const {
   if(ID=="POGMedium") return isPOGMedium();
   if(ID=="POGLoose") return isPOGLoose();
   if(ID=="POGTightWithTightIso") return Pass_POGTightWithTightIso();
+  if(ID=="POGTightWithLooseIso") return Pass_POGTightWithLooseIso();
+  if(ID=="POGTightWithVetoIso") return Pass_POGTightWithVetoIso();
   if(ID=="POGHighPtWithLooseTrkIso") return Pass_POGHighPtWithLooseTrkIso();
+  if(ID=="POGHighPtWithVeryLooseTrkIso") return Pass_POGHighPtWithVeryLooseTrkIso();
+  if(ID=="POGHighPtWithVetoTrkIso") return Pass_POGHighPtWithVetoTrkIso();
   //==== Customized
   if(ID=="TEST") return Pass_TESTID();
   if(ID=="HNVeto2016") return Pass_HNVeto2016();
@@ -130,9 +134,29 @@ bool Muon::Pass_POGTightWithTightIso() const {
   if(!( RelIso()<0.15 ))  return false;
   return true;
 }
+bool Muon::Pass_POGTightWithLooseIso() const {
+  if(!( isPOGTight() )) return false;
+  if(!( RelIso()<0.4 ))  return false;
+  return true;
+}
+bool Muon::Pass_POGTightWithVetoIso() const {
+  if(!( isPOGTight() )) return false;
+  if(!( RelIso()<0.6 ))  return false;
+  return true;
+}
 bool Muon::Pass_POGHighPtWithLooseTrkIso() const {
   if(!( isPOGHighPt() )) return false;
   if(!( TrkIso()/TuneP4().Pt()<0.1 )) return false;
+  return true;
+}
+bool Muon::Pass_POGHighPtWithVeryLooseTrkIso() const {
+  if(!( isPOGHighPt() )) return false;
+  if(!( TrkIso()/TuneP4().Pt()<0.3 )) return false;
+  return true;
+}
+bool Muon::Pass_POGHighPtWithVetoTrkIso() const {
+  if(!( isPOGHighPt() )) return false;
+  if(!( TrkIso()/TuneP4().Pt()<0.4 )) return false;
   return true;
 }
 

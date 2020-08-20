@@ -159,6 +159,7 @@ bool Electron::PassID(TString ID) const{
   if(ID=="passMVAID_iso_WP80") return passMVAID_iso_WP80();
   if(ID=="passMVAID_iso_WP90") return passMVAID_iso_WP90();
   //==== Customized
+  if(ID=="NewVetoID") return Pass_NewVetoID();
   if(ID=="SUSYTight") return Pass_SUSYTight();
   if(ID=="SUSYLoose") return Pass_SUSYLoose();
   if(ID=="NOCUT") return true;
@@ -273,6 +274,15 @@ bool Electron::Pass_HEEP2018_dZ() const{
   else{
     if(!( fabs(dZ()) <0.20 )) return false;
   }
+
+  return true;
+}
+
+bool Electron::Pass_NewVetoID() const{
+  if(!passVetoID() ) return false;
+  if(!( fabs(dXY()) <0.2 )) return false;
+  if(!( fabs(dZ()) <0.5 )) return false;
+  if(! (RelIso()<0.6) ) return false;
 
   return true;
 }

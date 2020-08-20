@@ -101,7 +101,11 @@ public:
   //==== ID
   bool PassID(TString ID) const;
   bool Pass_POGTightWithTightIso() const;
+  bool Pass_POGTightWithLooseIso() const;
+  bool Pass_POGTightWithVetoIso() const;
   bool Pass_POGHighPtWithLooseTrkIso() const;
+  bool Pass_POGHighPtWithVeryLooseTrkIso() const;
+  bool Pass_POGHighPtWithVetoTrkIso() const;
   bool Pass_TESTID() const;
  
   void SetValidMuonHits(int n);
