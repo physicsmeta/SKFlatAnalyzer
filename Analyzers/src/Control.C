@@ -638,15 +638,17 @@ void Control::executeEventFromParameter(AnalyzerParameter param){
             muon_recosf   = mcCorr->MuonReco_SF("HighPtMuonRecoSF", muons.at(i).Eta(), muon_miniaodP, 0);
             muon_idsf     = mcCorr->MuonID_SF("NUM_HighPtID_DEN_genTracks", muons.at(i).Eta(), muons.at(i).MiniAODPt(), 0);
             muon_isosf    = mcCorr->MuonISO_SF("NUM_LooseRelTkIso_DEN_HighPtIDandIPCut", muons.at(i).Eta(), muons.at(i).MiniAODPt(), 0);
-            muon_trigsf   = mcCorr->MuonTrigger_SF("POGHighPtLooseTrkIso", "Mu50", muons, 0);
           }
           else{
             muon_recosf = 1.;
             muon_idsf     = mcCorr->MuonID_SF("NUM_TightID_DEN_genTracks", muons.at(i).Eta(), muons.at(i).MiniAODPt(), 0);
             muon_isosf    = mcCorr->MuonISO_SF("NUM_TightRelIso_DEN_TightIDandIPCut", muons.at(i).Eta(), muons.at(i).MiniAODPt(), 0);
           }
-          weight *= muon_recosf*muon_idsf*muon_isosf*muon_trigsf;
+          weight *= muon_recosf*muon_idsf*muon_isosf;
         }
+        if(param.Muon_Tight_ID.Contains("HighPt")) muon_trigsf = mcCorr->MuonTrigger_SF("POGHighPtLooseTrkIso", "Mu50", muons, 0);
+        else muon_trigsf = mcCorr->DiMuonTrigger_SF("Lead17_POGTight", "Tail8_POGTight", muons);
+        weight *= muon_trigsf;
 
         for(unsigned int j=0; j<electrons.size(); j++){
           ele_recosf = mcCorr->ElectronReco_SF(electrons.at(j).scEta(), electrons.at(j).UncorrPt(), 0);
@@ -804,15 +806,17 @@ void Control::executeEventFromParameter(AnalyzerParameter param){
             muon_recosf   = mcCorr->MuonReco_SF("HighPtMuonRecoSF", muons.at(i).Eta(), muon_miniaodP, 0);
             muon_idsf     = mcCorr->MuonID_SF("NUM_HighPtID_DEN_genTracks",  muons.at(i).Eta(), muons.at(i).MiniAODPt(), 0);
             muon_isosf    = mcCorr->MuonISO_SF("NUM_LooseRelTkIso_DEN_HighPtIDandIPCut", muons.at(i).Eta(), muons.at(i).MiniAODPt(), 0);
-            muon_trigsf   = mcCorr->MuonTrigger_SF("POGHighPtLooseTrkIso", "Mu50", muons, 0);
           }
           else{
             muon_recosf = 1.;
             muon_idsf     = mcCorr->MuonID_SF("NUM_TightID_DEN_genTracks", muons.at(i).Eta(), muons.at(i).MiniAODPt(), 0);
             muon_isosf    = mcCorr->MuonISO_SF("NUM_TightRelIso_DEN_TightIDandIPCut", muons.at(i).Eta(), muons.at(i).MiniAODPt(), 0);
           }
-          weight *= muon_recosf*muon_idsf*muon_isosf*muon_trigsf;
+          weight *= muon_recosf*muon_idsf*muon_isosf;
         }
+        if(param.Muon_Tight_ID.Contains("HighPt")) muon_trigsf = mcCorr->MuonTrigger_SF("POGHighPtLooseTrkIso", "Mu50", muons, 0);
+        else muon_trigsf = mcCorr->DiMuonTrigger_SF("Lead17_POGTight", "Tail8_POGTight", muons);
+        weight *= muon_trigsf;
 
         for(unsigned int j=0; j<electrons.size(); j++){
           ele_recosf = mcCorr->ElectronReco_SF(electrons.at(j).scEta(), electrons.at(j).UncorrPt(), 0);
@@ -1100,15 +1104,18 @@ void Control::executeEventFromParameter(AnalyzerParameter param){
             muon_recosf   = mcCorr->MuonReco_SF("HighPtMuonRecoSF", muons.at(i).Eta(), muon_miniaodP, 0);
             muon_idsf     = mcCorr->MuonID_SF("NUM_HighPtID_DEN_genTracks",  muons.at(i).Eta(), muons.at(i).MiniAODPt(), 0);
             muon_isosf    = mcCorr->MuonISO_SF("NUM_LooseRelTkIso_DEN_HighPtIDandIPCut", muons.at(i).Eta(), muons.at(i).MiniAODPt(), 0);
-            muon_trigsf   = mcCorr->MuonTrigger_SF("POGHighPtLooseTrkIso", "Mu50", muons, 0);
           }
           else{
             muon_recosf = 1.;
             muon_idsf     = mcCorr->MuonID_SF("NUM_TightID_DEN_genTracks", muons.at(i).Eta(), muons.at(i).MiniAODPt(), 0);
             muon_isosf    = mcCorr->MuonISO_SF("NUM_TightRelIso_DEN_TightIDandIPCut", muons.at(i).Eta(), muons.at(i).MiniAODPt(), 0);
           }
-          weight *= muon_recosf*muon_idsf*muon_isosf*muon_trigsf;
+          weight *= muon_recosf*muon_idsf*muon_isosf;
         }
+        if(param.Muon_Tight_ID.Contains("HighPt")) muon_trigsf = mcCorr->MuonTrigger_SF("POGHighPtLooseTrkIso", "Mu50", muons, 0);
+        else muon_trigsf = mcCorr->DiMuonTrigger_SF("Lead17_POGTight", "Tail8_POGTight", muons);
+        weight *= muon_trigsf;
+
         for(unsigned int j=0; j<electrons.size(); j++){
           ele_recosf = mcCorr->ElectronReco_SF(electrons.at(j).scEta(), electrons.at(j).UncorrPt(), 0);
           if(param.Electron_Tight_ID.Contains("HEEP")){

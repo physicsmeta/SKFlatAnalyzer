@@ -485,8 +485,7 @@ double MCCorrection::MuonTrigger_SF(TString ID, TString trig, const std::vector<
 
 }
 
-double GetBinContent4SF(TH2* hist, double valx, double valy, double sys){
-//double RootHelper::GetBinContentUser(TH2* hist,double valx,double valy,int sys){
+double MCCorrection::GetBinContent4SF(TH2* hist, double valx, double valy, double sys){
   double xmin=hist->GetXaxis()->GetXmin();
   double xmax=hist->GetXaxis()->GetXmax();
   double ymin=hist->GetYaxis()->GetXmin();
@@ -500,39 +499,34 @@ double GetBinContent4SF(TH2* hist, double valx, double valy, double sys){
   return hist->GetBinContent(hist->FindBin(valx,valy))+sys*hist->GetBinError(hist->FindBin(valx,valy));
 }
 
-double MCCorrection::DiLeptonTrigger_SF(TString IdKey0,TString IdKey1,const vector<Lepton*>& leps,int sys){
-  if(leps.size() < 2){
-    cout<<"[MCCorrection::DiLeptonTrg_SF] only dilepton algorithm"<<endl;
+double MCCorrection::DiMuonTrigger_SF(TString IdKey0,TString IdKey1,const vector<Muon>& muons,int sys){
+  if(muons.size() < 2){
+    cout<<"[MCCorrection::DiMuonTrigger_SF] only dimuon algorithm"<<endl;
     return 1;
   }
 
   if(IdKey0 == "Default" && IdKey1 == "Default") return 1.;
 
-  //cout<<"DiLeptonTrg: pt0 "<<leps[0]->Pt()<<endl;
+  //cout<<"DiLeptonTrg: pt0 "<<muons[0]->Pt()<<endl;
   std::map< TString, TH2F* > map_hist_Lepton;
-  if(leps[0]->LeptonFlavour()==Lepton::MUON){
+  if(muons[0].LeptonFlavour()==Lepton::MUON){
     map_hist_Lepton = map_hist_Muon;
-  }else if(leps[0]->LeptonFlavour()==Lepton::ELECTRON){
-    map_hist_Lepton = map_hist_Electron;
   }else{
-    cout <<"[MCCorrection::DiLeptonTrg_SF] Only for Muon or Electron"<<endl;
+    cout <<"[MCCorrection::DiMuonTrigger_SF] Only for Muon"<<endl;
     exit(EXIT_FAILURE);
   }
 
   double this_pt[2]={},this_eta[2]={};
   for(int i=0;i<2;i++){
-    if(leps[i]->LeptonFlavour()==Lepton::MUON){
-      this_pt[i]=((Muon*)leps.at(i))->MiniAODPt();
-      this_eta[i]=leps.at(i)->Eta();
-    }else if(leps[i]->LeptonFlavour()==Lepton::ELECTRON){
-      this_pt[i]=leps.at(i)->Pt();
-      this_eta[i]=((Electron*)leps.at(i))->scEta();
+    if(muons[i].LeptonFlavour()==Lepton::MUON){
+      this_pt[i]=(muons.at(i)).MiniAODPt();
+      this_eta[i]=(muons.at(i)).Eta();
     }else{
-      cout << "[MCCorrection::DiLeptonTrg_SF] It is not lepton"<<endl;
+      cout << "[MCCorrection::DiLeptonTrg_SF] It is not muon"<<endl;
       exit(EXIT_FAILURE);
     }
   }
-  if(DataYear==2016&&leps[0]->LeptonFlavour()==Lepton::MUON){
+  if(DataYear==2016){
     TH2F* this_hist[8]={};
     TString sdata[2]={"DATA","MC"};
     TString speriod[2]={"BCDEF","GH"};
