@@ -59,6 +59,8 @@ public:
   double MuonTrigger_Eff(TString ID, TString trig, int DataOrMC, double eta, double pt, int sys=0);
   double MuonTrigger_SF(TString ID, TString trig, const std::vector<Muon>& muons, int sys=0);
   double MuonTrigger_SF(TString ID, TString trig, const std::vector<Muon *>& muons, int sys=0);
+  double GetBinContent4SF(TH2* hist, double valx, double valy, double sys=0);
+  double DiLeptonTrigger_SF(TString IdKey0,TString IdKey1,const vector<Lepton*>& leps,int sys=0);
 
   std::map< TString, TH2F* > map_hist_Muon;
 

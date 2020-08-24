@@ -485,6 +485,104 @@ double MCCorrection::MuonTrigger_SF(TString ID, TString trig, const std::vector<
 
 }
 
+double GetBinContent4SF(TH2* hist, double valx, double valy, double sys){
+//double RootHelper::GetBinContentUser(TH2* hist,double valx,double valy,int sys){
+  double xmin=hist->GetXaxis()->GetXmin();
+  double xmax=hist->GetXaxis()->GetXmax();
+  double ymin=hist->GetYaxis()->GetXmin();
+  double ymax=hist->GetYaxis()->GetXmax();
+  if(xmin>=0) valx=fabs(valx);
+  if(valx<xmin) valx=xmin+0.001;
+  if(valx>xmax) valx=xmax-0.001;
+  if(ymin>=0) valy=fabs(valy);
+  if(valy<ymin) valy=ymin+0.001;
+  if(valy>ymax) valy=ymax-0.001;
+  return hist->GetBinContent(hist->FindBin(valx,valy))+sys*hist->GetBinError(hist->FindBin(valx,valy));
+}
+
+double MCCorrection::DiLeptonTrigger_SF(TString IdKey0,TString IdKey1,const vector<Lepton*>& leps,int sys){
+  if(leps.size() < 2){
+    cout<<"[MCCorrection::DiLeptonTrg_SF] only dilepton algorithm"<<endl;
+    return 1;
+  }
+
+  if(IdKey0 == "Default" && IdKey1 == "Default") return 1.;
+
+  //cout<<"DiLeptonTrg: pt0 "<<leps[0]->Pt()<<endl;
+  std::map< TString, TH2F* > map_hist_Lepton;
+  if(leps[0]->LeptonFlavour()==Lepton::MUON){
+    map_hist_Lepton = map_hist_Muon;
+  }else if(leps[0]->LeptonFlavour()==Lepton::ELECTRON){
+    map_hist_Lepton = map_hist_Electron;
+  }else{
+    cout <<"[MCCorrection::DiLeptonTrg_SF] Only for Muon or Electron"<<endl;
+    exit(EXIT_FAILURE);
+  }
+
+  double this_pt[2]={},this_eta[2]={};
+  for(int i=0;i<2;i++){
+    if(leps[i]->LeptonFlavour()==Lepton::MUON){
+      this_pt[i]=((Muon*)leps.at(i))->MiniAODPt();
+      this_eta[i]=leps.at(i)->Eta();
+    }else if(leps[i]->LeptonFlavour()==Lepton::ELECTRON){
+      this_pt[i]=leps.at(i)->Pt();
+      this_eta[i]=((Electron*)leps.at(i))->scEta();
+    }else{
+      cout << "[MCCorrection::DiLeptonTrg_SF] It is not lepton"<<endl;
+      exit(EXIT_FAILURE);
+    }
+  }
+  if(DataYear==2016&&leps[0]->LeptonFlavour()==Lepton::MUON){
+    TH2F* this_hist[8]={};
+    TString sdata[2]={"DATA","MC"};
+    TString speriod[2]={"BCDEF","GH"};
+    for(int id=0;id<2;id++){
+      for(int ip=0;ip<2;ip++){
+  this_hist[4*id+2*ip]=map_hist_Lepton["Trigger_Eff_"+sdata[id]+"_"+IdKey0+"_"+speriod[ip]]; //JH : id = iteration on data/MC, ip = iteration on period
+  this_hist[4*id+2*ip+1]=map_hist_Lepton["Trigger_Eff_"+sdata[id]+"_"+IdKey1+"_"+speriod[ip]]; //JH : this_hist = {"DATA_Lead17_BtoF","DATA_Tail8_BtoF","DATA_Lead17_GH","DATA_Tail8_GH", same for MC}
+      }
+    }
+    if(!this_hist[0]||!this_hist[1]||!this_hist[2]||!this_hist[3]){
+      cout << "[MCCorection::Trigger_SF] No "<<IdKey0<<" or "<<IdKey1<<endl;
+      exit(EXIT_FAILURE);
+    }
+
+    double lumi_periodB = 5.929001722;
+    double lumi_periodC = 2.645968083;
+    double lumi_periodD = 4.35344881;
+    double lumi_periodE = 4.049732039;
+    double lumi_periodF = 3.157020934;
+    double lumi_periodG = 7.549615806;
+    double lumi_periodH = 8.545039549 + 0.216782873;
+
+    double total_lumi = (lumi_periodB+lumi_periodC+lumi_periodD+lumi_periodE+lumi_periodF+lumi_periodG+lumi_periodH);
+
+    double WeightBtoF = (lumi_periodB+lumi_periodC+lumi_periodD+lumi_periodE+lumi_periodF)/total_lumi;
+    double WeightGtoH = (lumi_periodG+lumi_periodH)/total_lumi;
+
+    double triggerEff[4]={1.,1.,1.,1.};
+    for(int i=0;i<4;i++){
+      for(int il=0;il<2;il++){
+  triggerEff[i]*=GetBinContent4SF(this_hist[2*i+il],this_eta[il],this_pt[il],(i<2?1.:-1.)*sys); //JH : multiply leg1*leg2 for DATA_BtoF, DATA_GH, MC_BtoF, MC_GH
+      }
+    }
+    return (triggerEff[0]*WeightBtoF+triggerEff[1]*WeightGtoH)/(triggerEff[2]*WeightBtoF+triggerEff[3]*WeightGtoH); //JH : return weighted trig eff.
+  }else{
+    TH2F* this_hist[2]={NULL,NULL};
+    double triggerSF=1.;
+    this_hist[0]=map_hist_Lepton["Trigger_SF_"+IdKey0];
+    this_hist[1]=map_hist_Lepton["Trigger_SF_"+IdKey1];
+    if(!this_hist[0]||!this_hist[1]){
+      cout << "[MCCorrection::DiLepTrg_SF] No Trigger_SF_"<<IdKey0<<" or Trigger_SF_"<<IdKey1<<endl;
+      exit(EXIT_FAILURE);
+    }
+    for(int i=0;i<2;i++){
+      triggerSF*=GetBinContent4SF(this_hist[i],this_eta[i],this_pt[i],sys);
+    }
+    return triggerSF;
+  }
+}
+
 double MCCorrection::ElectronID_SF(TString ID, double sceta, double pt, int sys){
 
   if(ID=="Default") return 1.;
