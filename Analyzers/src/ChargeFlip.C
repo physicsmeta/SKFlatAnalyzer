@@ -8,10 +8,9 @@ void ChargeFlip::initializeAnalyzer(){
 
   if(DataYear==2016){
     EleIDs = { 
-      "HNTightV2",
-      "HNLooseV23",
-      "HNTight2016",
-      "HNLoose2016",
+      "HEEP_dZ_CF",
+      "HNTightV1",
+      "HNMVATight",
     }; // PassID() in Electron.C
     EleIDSFKeys = {
       "",
@@ -139,7 +138,8 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
 
     /* CF ID selection */
 
-    eles = SelectElectrons(AllEles, param.Electron_User_ID, 25., 2.5);
+    if(param.Electron_User_ID.Contains("HEEP")) eles = SelectElectrons(AllEles, param.Electron_User_ID, 50., 2.5);
+    else eles = SelectElectrons(AllEles, param.Electron_User_ID, 25., 2.5);
     std::sort(eles.begin(), eles.end(), PtComparing);
 
     vector<Gen> gens = GetGens();

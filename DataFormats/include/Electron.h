@@ -118,6 +118,7 @@ public:
   inline bool passMVAID_iso_WP90() const {return PassSelector(POG_MVA_ISO_WP90); }
   inline bool passHEEPID() const {return PassSelector(POG_HEEP); }
   bool passHEEP2018Prompt() const;
+  bool Pass_HEEP_dZ_CF() const;
   bool Pass_HEEP_dZ() const;
   bool Pass_HEEP2018_dZ() const;
   bool Pass_NewVetoID() const;
@@ -136,12 +137,13 @@ public:
   bool Pass_HNLooseV21() const;
   bool Pass_HNLooseV22() const;
   bool Pass_HNLooseV23() const;
-  bool Pass_HNTight() const;
+  bool Pass_HNTight(double dxyCut, double dzCut, bool isPOGIP) const;
   bool Pass_HNTightV2() const;
   bool Pass_HNMVALoose() const;
   bool Pass_HNMVALooseV2() const;
-  bool Pass_HNMVATight() const;
+  bool Pass_HNMVATight(double relisoCut, double dxyCut, double dzCut, bool isPOGIP) const;
   bool Pass_HNMVATightV2() const;
+  bool Pass_TriggerEmulation() const;
 
   bool Pass_ISRLoose() const;
   bool Pass_ISRTight() const;

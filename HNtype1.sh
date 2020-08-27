@@ -19,8 +19,8 @@
 
 #python python/SKFlat.py -a Signal -y 2016 -l submitList/2016_Signal.txt -n 50 &
 
-python python/SKFlat.py -a Control -y 2016 -l submitList/Dilepton_SM_CR_2016.txt -n 50 --skim SkimTree_Dilepton &
-python python/SKFlat.py -a Control -y 2016 -l submitList/NoSkim_SM_CR.txt -n 50 &
+python python/SKFlat.py -a Control -y 2016 -l submitList/Dilepton_SM_CR_2016.txt -n 50 --skim SkimTree_Dilepton --userflags SM &
+python python/SKFlat.py -a Control -y 2016 -l submitList/NoSkim_SM_CR.txt -n 50 --userflags SM &
 
 ### CF ###
 #python python/SKFlat.py -a Signal -y 2016 -l submitList/2016_DoubleEG_BtoH.txt -n 80 --skim SkimTree_Dilepton --userflags RunCF &
@@ -41,11 +41,12 @@ python python/SKFlat.py -a Control -y 2016 -l submitList/NoSkim_SM_CR.txt -n 50 
 #python python/SKFlat.py -a Signal -y 2016 -l submitList/2016_MuonEG_BtoG.txt -n 50 --skim SkimTree_Dilepton &
 #python python/SKFlat.py -a Signal_2016H -y 2016 -l submitList/2016_periodH.txt -n 80 --skim SkimTree_Dilepton &
 
-#python python/SKFlat.py -a Control -y 2016 -l submitList/2016_DoubleMuon_BtoG.txt -n 50 --skim SkimTree_Dilepton &
+python python/SKFlat.py -a Control -y 2016 -l submitList/2016_DoubleMuon_BtoG.txt -n 50 --skim SkimTree_Dilepton --userflags SM &
+#python python/SKFlat.py -a Control_2016H -y 2016 -i DoubleMuon:H -n 50 --skim SkimTree_Dilepton --userflags SM &
 #python python/SKFlat.py -a Control -y 2016 -l submitList/2016_DoubleEG_BtoH.txt -n 50 --skim SkimTree_Dilepton &
 #python python/SKFlat.py -a Control -y 2016 -l submitList/2016_MuonEG_BtoG.txt -n 50 --skim SkimTree_Dilepton &
 #python python/SKFlat.py -a Control_2016H -y 2016 -l submitList/2016_periodH.txt -n 50 --skim SkimTree_Dilepton &
-#python python/SKFlat.py -a Control -y 2016 -l submitList/2016_SingleMuon_BtoH.txt -n 50 &
+python python/SKFlat.py -a Control -y 2016 -l submitList/2016_SingleMuon_BtoH.txt -n 50 --userflags SM &
 
 ####TEST####
 #python python/SKFlat.py -a Control_2016H -y 2016 -l submitList/2016_DoubleMuon_H.txt -n 50 --skim SkimTree_Dilepton &
