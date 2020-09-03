@@ -1,0 +1,1 @@
+/gv0/DATA/SKFlat/Run2Legacy_v4/2016/PrivateMC/HNtypeI/HeavyMajoranaNeutrinoToDiLepton_Tchannel_NLO_MuMu_M1000/HeavyMajoranaNeutrinoToDiLepton_Tchannel_NLO_MuMu_M1000_2016_Ntuple.root
