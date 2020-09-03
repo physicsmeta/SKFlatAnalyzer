@@ -200,6 +200,7 @@ public:
 
   void PrintGen(const std::vector<Gen>& gens);
   Gen GetGenMatchedLepton(const Lepton& lep, const std::vector<Gen>& gens);
+  Gen GetGenMatchedLepton(const Lepton& lep, const std::vector<Gen>& gens, const double dR);
   Gen GetGenMatchedPhoton(const Lepton& lep, const std::vector<Gen>& gens);
   vector<int> TrackGenSelfHistory(const Gen& me, const std::vector<Gen>& gens);
   Gen* FindLastCopy(Gen *me, std::vector<Gen> gens);

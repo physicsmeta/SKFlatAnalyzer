@@ -158,51 +158,85 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
         if(truth_lep.PID() == 11) truth_lep_Charge = -1;
         else if(truth_lep.PID() == -11) truth_lep_Charge = 1;
       
+        //Measure with original method (many 1/pt bins, 3 eta bins)
         if(abs(eles.at(i).scEta())<0.8){
           FillHist(param.Name+"/CFrate/EtaRegion1_Denom", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
+          FillHist(param.Name+"/CFrate_IP/EtaRegion1_Denom", eles.at(i).dXY(), 1., 50, 0., 0.05);
           if(truth_lep_Charge*eles.at(i).Charge()<0){
-            cout << "!!EtaRegion1!! truth lepton charge : " << truth_lep_Charge << ", reco lepton charge : " << eles.at(i).Charge() << endl;
+            //cout << "!!EtaRegion1!! truth lepton charge : " << truth_lep_Charge << ", reco lepton charge : " << eles.at(i).Charge() << endl;
             FillHist(param.Name+"/CFrate/EtaRegion1_Num", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
-            // SH's ask //
-            if(eles.size() == 2&&i == 0){
-            FillHist(param.Name+"/CFrate/EtaRegion1_IsLeading", 1, 1, 2, 0, 2);
-            }
-            else if(eles.size() == 2&&i == 1){
-            FillHist(param.Name+"/CFrate/EtaRegion1_IsLeading", 0, 1, 2, 0, 2);
-            }
-            //
+            FillHist(param.Name+"/CFrate_IP/EtaRegion1_Num", eles.at(i).dXY(), 1., 50, 0., 0.05);
+            //// SH's ask //
+            //if(eles.size() == 2&&i == 0){
+            //FillHist(param.Name+"/CFrate/EtaRegion1_IsLeading", 1, 1, 2, 0, 2);
+            //}
+            //else if(eles.size() == 2&&i == 1){
+            //FillHist(param.Name+"/CFrate/EtaRegion1_IsLeading", 0, 1, 2, 0, 2);
+            //}
           }
         }
         else if(0.8<=abs(eles.at(i).scEta())&&abs(eles.at(i).scEta())<1.4442){
           FillHist(param.Name+"/CFrate/EtaRegion2_Denom", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
+          FillHist(param.Name+"/CFrate_IP/EtaRegion2_Denom", eles.at(i).dXY(), 1., 50, 0., 0.05);
           if(truth_lep_Charge*eles.at(i).Charge()<0){
-            cout << "!!EtaRegion2!! truth lepton charge : " << truth_lep_Charge << ", reco lepton charge : " << eles.at(i).Charge() << endl;
+            //cout << "!!EtaRegion2!! truth lepton charge : " << truth_lep_Charge << ", reco lepton charge : " << eles.at(i).Charge() << endl;
             FillHist(param.Name+"/CFrate/EtaRegion2_Num", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
-            // SH's ask //
-            if(eles.size() == 2&&i == 0){
-            FillHist(param.Name+"/CFrate/EtaRegion2_IsLeading", 1, 1, 2, 0, 2);
-            }
-            else if(eles.size() == 2&&i == 1){
-            FillHist(param.Name+"/CFrate/EtaRegion2_IsLeading", 0, 1, 2, 0, 2);
-            }
-            //
+            FillHist(param.Name+"/CFrate_IP/EtaRegion2_Num", eles.at(i).dXY(), 1., 50, 0., 0.05);
+            //// SH's ask //
+            //if(eles.size() == 2&&i == 0){
+            //FillHist(param.Name+"/CFrate/EtaRegion2_IsLeading", 1, 1, 2, 0, 2);
+            //}
+            //else if(eles.size() == 2&&i == 1){
+            //FillHist(param.Name+"/CFrate/EtaRegion2_IsLeading", 0, 1, 2, 0, 2);
+            //}
           }
         }
         else if(1.556<=abs(eles.at(i).scEta())&&abs(eles.at(i).scEta())<2.5){
           FillHist(param.Name+"/CFrate/EtaRegion3_Denom", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
+          FillHist(param.Name+"/CFrate_IP/EtaRegion3_Denom", eles.at(i).dXY(), 1., 100, 0., 0.1);
           if(truth_lep_Charge*eles.at(i).Charge()<0){
-            cout << "!!EtaRegion3!! truth lepton charge : " << truth_lep_Charge << ", reco lepton charge : " << eles.at(i).Charge() << endl;
+            //cout << "!!EtaRegion3!! truth lepton charge : " << truth_lep_Charge << ", reco lepton charge : " << eles.at(i).Charge() << endl;
             FillHist(param.Name+"/CFrate/EtaRegion3_Num", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
-            // SH's ask //
-            if(eles.size() == 2&&i == 0){
-            FillHist(param.Name+"/CFrate/EtaRegion3_IsLeading", 1, 1, 2, 0, 2);
-            }
-            else if(eles.size() == 2&&i == 1){
-            FillHist(param.Name+"/CFrate/EtaRegion3_IsLeading", 0, 1, 2, 0, 2);
-            }
-            //
+            FillHist(param.Name+"/CFrate_IP/EtaRegion3_Num", eles.at(i).dXY(), 1., 100, 0., 0.1);
+            //// SH's ask //
+            //if(eles.size() == 2&&i == 0){
+            //FillHist(param.Name+"/CFrate/EtaRegion3_IsLeading", 1, 1, 2, 0, 2);
+            //}
+            //else if(eles.size() == 2&&i == 1){
+            //FillHist(param.Name+"/CFrate/EtaRegion3_IsLeading", 0, 1, 2, 0, 2);
+            //}
           }
         }
+
+        //Measure with eta bins
+        
+        FillHist(param.Name+"/CFrate_Eta/Denom", abs(eles.at(i).scEta()), 1., 250, 0., 2.5);
+        if(truth_lep_Charge*eles.at(i).Charge()<0){
+          //cout << "!!EtaRegion3!! truth lepton charge : " << truth_lep_Charge << ", reco lepton charge : " << eles.at(i).Charge() << endl;
+          FillHist(param.Name+"/CFrate_Eta/Num", abs(eles.at(i).scEta()), 1., 250, 0., 2.5);
+        }
+
+      }
+    }
+
+    if(HasFlag("CFrateValidation")){
+
+      /* Select events with only two tight same-sign electrons */
+      if(eles.size()==2&&eles.at(0).Charge()*eles.at(1).Charge()>0){
+
+        for(int i=0; i<4; i++){
+
+          double dR = (i+1)*0.1;
+
+          Gen truth_lep1 = GetGenMatchedLepton(eles.at(0), gens, dR);
+          Gen truth_lep2 = GetGenMatchedLepton(eles.at(1), gens, dR);
+
+          FillHist(param.Name+"/CFrateValidation/Total", dR, 1, 4, 0.1, 0.5);
+          if(abs(truth_lep1.PID())==11&&abs(truth_lep2.PID())==11) FillHist(param.Name+"/CFrateValidation/Matched", dR, 1, 4, 0.1, 0.5);
+          else if(truth_lep1.PID()==0||truth_lep2.PID()==0) FillHist(param.Name+"/CFrateValidation/Missed", dR, 1, 4, 0.1, 0.5);
+
+        }
+
       }
     }
 

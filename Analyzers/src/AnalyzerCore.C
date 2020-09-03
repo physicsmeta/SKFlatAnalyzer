@@ -1786,6 +1786,42 @@ Gen AnalyzerCore::GetGenMatchedLepton(const Lepton& lep, const std::vector<Gen>&
 
 }
 
+Gen AnalyzerCore::GetGenMatchedLepton(const Lepton& lep, const std::vector<Gen>& gens, const double dR){
+
+  //==== find status 1 lepton
+
+  int reco_PID = -999;
+  if(lep.LeptonFlavour()==Lepton::ELECTRON) reco_PID = 11;
+  else if(lep.LeptonFlavour()==Lepton::MUON) reco_PID = 13;
+  else{
+    cout << "[AnalyzerCore::GetGenMatchedLepton] input lepton flavour not set" << endl;
+    exit(EXIT_FAILURE);
+  }
+
+  double min_dR = dR;
+  Gen gen_closest;
+  for(unsigned int i=0; i<gens.size(); i++){
+
+    Gen gen = gens.at(i);
+
+    //==== Status 1
+    if( gen.Status() != 1 ) continue;
+    //==== PID
+    if( abs( gen.PID() ) != reco_PID ) continue;
+    //==== reject ISR?
+    if( gen.MotherIndex() < 0 ) continue;
+    //==== dR matching
+    if( gen.DeltaR( lep ) < min_dR ){
+      min_dR = gen.DeltaR( lep ) ;
+      gen_closest = gen;
+    }
+
+  }
+
+  return gen_closest;
+
+}
+
 Gen AnalyzerCore::GetGenMatchedPhoton(const Lepton& lep, const std::vector<Gen>& gens){
 
   double min_dR = 0.2;
