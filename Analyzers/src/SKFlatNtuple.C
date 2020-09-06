@@ -49,8 +49,8 @@ void SKFlatNtuple::Loop(){
 
     fChain->GetEntry(jentry);
 
-    //executeEvent();
-    executeEvent(jentry); //JH : CF only
+    executeEvent();
+    //executeEvent(jentry); //JH : CF only
 
     //std::cout << jentry << " :" << muon_pt->size() << std::endl;
 

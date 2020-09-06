@@ -1,10 +1,13 @@
 vector<TString> channels = {"dimu", "diel", "emu"};
 vector<TString> regions = {"lowSR1", "lowSR2", "highSR1", "highSR2"};
 vector<TString> IDs = {"HN16", "HNV2"};
+//vector<TString> channels = {"dimu"};
+//vector<TString> regions = {"highSR1", "highSR2"};
+//vector<TString> IDs = {"HN16"};
 vector<TString> periods = {"B_ver2", "C", "D", "E", "F", "G", "H"};
 vector<TString> weights = {"Number_Events", "Number_Events_unweighted"};
 
-vector<TString> indices = {"SingleTrigger_pt_50_50","dimuTrigger_pt20_10","dimuTrigger_pt50_50"};
+vector<TString> triggers = {"SingleTrigger_pt_50_50","dimuTrigger_pt20_10","dimuTrigger_pt50_50"};
 vector<TString> samples = {"HNToMuMu_Sch_M70","HNToMuMu_Sch_M90","HNToMuMu_Sch_M100","HNToMuMu_Sch_M200"};
 vector<TString> Signal_IDs = {"LRSM", "HNV2"};
 
@@ -22,7 +25,8 @@ void DrawCutflow(TString channel, TString region, TString ID, TString period, in
   
   TString title;
   if(doWeight==0) title = channel+"_"+region+"_"+ID+"_"+period+"_Cutflow";
-  else if(doWeight==1) title = channel+"_"+region+"_"+ID+"_"+period+"_Cutflow (weighted)";
+  //else if(doWeight==1) title = channel+"_"+region+"_"+ID+"_"+period+"_Cutflow (weighted)";
+  else if(doWeight==1) title = channel+"_"+region+"_"+ID+"_"+period+"_Cutflow";
 
   TH1D *h1 = (TH1D*)f1->Get(channel+"/"+region+"/"+weights.at(doWeight)+"_"+ID);
   TH1D *h2 = new TH1D("h2",title,10,0,10);
@@ -71,9 +75,9 @@ void DrawCutflow(TString channel, TString region, TString ID, TString period, in
 
 }
 
-void DrawHighPtCutflow(TString index, TString sample, TString ID, TString channel = "dimu", TString region = "lowSR1", TString SaveAs = "n"){
+void DrawMCCutflow(TString trigger, TString sample, TString ID TString channel = "dimu", TString region = "lowSR1", TString SaveAs = "n"){
 
-  TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/HNtypeI_SR/2016/"+index+"/HNtypeI_SR_"+sample+".root";
+  TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/HNtypeI_SR/2016/"+trigger+"/HNtypeI_SR_"+sample+".root";
   TFile* f1 = new TFile(filename);
   
   //for(int i=0; i<IDs.size(); i++){
@@ -84,7 +88,7 @@ void DrawHighPtCutflow(TString index, TString sample, TString ID, TString channe
 	}
 
   TString title;
-  title = index+"_"+sample+"_"+channel+"_Preselection_"+ID+"_Cutflow";
+  title = trigger+"_"+sample+"_"+channel+"_Preselection_"+ID+"_Cutflow";
 
   TH1D *h1 = (TH1D*)f1->Get(channel+"/"+region+"/Number_Events_"+ID);
   TH1D *h2 = new TH1D("h2",title,10,0,10);
@@ -134,12 +138,12 @@ void DrawHighPtCutflow(TString index, TString sample, TString ID, TString channe
 
 }
 
-void SaveAll_HighPt(){
+void SaveAll_MC(){
 
-  for(int i=0; i<indices.size(); i++){
+  for(int i=0; i<triggers.size(); i++){
     for(int j=0; j<samples.size(); j++){
       for(int k=0; k<Signal_IDs.size(); k++){
-        DrawHighPtCutflow(indices.at(i), samples.at(j), Signal_IDs.at(k), "dimu", "lowSR1", "y");
+        DrawMCCutflow(triggers.at(i), samples.at(j), Signal_IDs.at(k), "dimu", "lowSR1", "y");
       }
     }
   }

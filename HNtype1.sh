@@ -19,8 +19,8 @@
 
 #python python/SKFlat.py -a Signal -y 2016 -l submitList/2016_Signal.txt -n 50 &
 
-python python/SKFlat.py -a Control -y 2016 -l submitList/Dilepton_SM_CR_2016.txt -n 50 --skim SkimTree_Dilepton --userflags SM &
-python python/SKFlat.py -a Control -y 2016 -l submitList/NoSkim_SM_CR.txt -n 50 --userflags SM &
+#python python/SKFlat.py -a Control -y 2016 -l submitList/Dilepton_SM_CR_2016.txt -n 50 --skim SkimTree_Dilepton --userflags SM &
+#python python/SKFlat.py -a Control -y 2016 -l submitList/NoSkim_SM_CR.txt -n 50 --userflags SM &
 
 ### CF ###
 #python python/SKFlat.py -a Signal -y 2016 -l submitList/2016_DoubleEG_BtoH.txt -n 80 --skim SkimTree_Dilepton --userflags RunCF &
@@ -41,12 +41,12 @@ python python/SKFlat.py -a Control -y 2016 -l submitList/NoSkim_SM_CR.txt -n 50 
 #python python/SKFlat.py -a Signal -y 2016 -l submitList/2016_MuonEG_BtoG.txt -n 50 --skim SkimTree_Dilepton &
 #python python/SKFlat.py -a Signal_2016H -y 2016 -l submitList/2016_periodH.txt -n 80 --skim SkimTree_Dilepton &
 
-python python/SKFlat.py -a Control -y 2016 -l submitList/2016_DoubleMuon_BtoG.txt -n 50 --skim SkimTree_Dilepton --userflags SM &
+#python python/SKFlat.py -a Control -y 2016 -l submitList/2016_DoubleMuon_BtoG.txt -n 50 --skim SkimTree_Dilepton --userflags SM &
 #python python/SKFlat.py -a Control_2016H -y 2016 -i DoubleMuon:H -n 50 --skim SkimTree_Dilepton --userflags SM &
 #python python/SKFlat.py -a Control -y 2016 -l submitList/2016_DoubleEG_BtoH.txt -n 50 --skim SkimTree_Dilepton &
 #python python/SKFlat.py -a Control -y 2016 -l submitList/2016_MuonEG_BtoG.txt -n 50 --skim SkimTree_Dilepton &
 #python python/SKFlat.py -a Control_2016H -y 2016 -l submitList/2016_periodH.txt -n 50 --skim SkimTree_Dilepton &
-python python/SKFlat.py -a Control -y 2016 -l submitList/2016_SingleMuon_BtoH.txt -n 50 --userflags SM &
+#python python/SKFlat.py -a Control -y 2016 -l submitList/2016_SingleMuon_BtoH.txt -n 50 --userflags SM &
 
 ####TEST####
 #python python/SKFlat.py -a Control_2016H -y 2016 -l submitList/2016_DoubleMuon_H.txt -n 50 --skim SkimTree_Dilepton &
@@ -118,6 +118,27 @@ python python/SKFlat.py -a Control -y 2016 -l submitList/2016_SingleMuon_BtoH.tx
 #python python/SKFlat.py -a Signal -y 2018 -l submitList/2018_EGamma.txt -n 80 --skim SkimTree_Dilepton &
 #python python/SKFlat.py -a Signal -y 2018 -l submitList/2018_MuonEG.txt -n 80 --skim SkimTree_Dilepton &
 
+
+############################################
+### Signal acceptance check
+############################################
+
+python python/SKFlat.py -a Signal_opt -y 2016 -i HNToMuMu_Tch_M700 -n 50 --userflags M700 &
+#python python/SKFlat.py -a Signal_opt -y 2016 -i HNToMuMu_Tch_M700 -n 50 --userflags M700,pp &
+#python python/SKFlat.py -a Signal_opt -y 2016 -i HNToMuMu_Tch_M700 -n 50 --userflags M700,mm &
+python python/SKFlat.py -a Signal_opt -y 2016 -i Last_HNToMupMup_Tch_M700 -n 50 --userflags M700 &
+python python/SKFlat.py -a Signal_opt -y 2016 -i Last_HNToMumMum_Tch_M700 -n 50 --userflags M700 &
+python python/SKFlat.py -a Signal_opt -y 2016 -i HNToMuMu_Tch_M1000 -n 50 --userflags M1000 &
+#python python/SKFlat.py -a Signal_opt -y 2016 -i HNToMuMu_Tch_M1000 -n 50 --userflags M1000,pp &
+#python python/SKFlat.py -a Signal_opt -y 2016 -i HNToMuMu_Tch_M1000 -n 50 --userflags M1000,mm &
+python python/SKFlat.py -a Signal_opt -y 2016 -i Last_HNToMupMup_Tch_M1000 -n 50 --userflags M1000 &
+python python/SKFlat.py -a Signal_opt -y 2016 -i Last_HNToMumMum_Tch_M1000 -n 50 --userflags M1000 &
+#python python/SKFlat.py -a Signal_opt -y 2016 -i HNToMuMu_Tch_M1500 -n 50 --userflags M1500 &
+#python python/SKFlat.py -a Signal_opt -y 2016 -i HNToMuMu_Tch_M1500 -n 50 --userflags M1500,pp &
+#python python/SKFlat.py -a Signal_opt -y 2016 -i HNToMuMu_Tch_M1500 -n 50 --userflags M1500,mm &
+python python/SKFlat.py -a Signal_opt -y 2016 -i Last_HNToMupMup_Tch_M1500 -n 50 --userflags M1500 &
+python python/SKFlat.py -a Signal_opt -y 2016 -i Last_HNToMupMup_Tch_M1500 -n 50 --userflags M1500,pp &
+#python python/SKFlat.py -a Signal_opt -y 2016 -i Last_HNToMupMup_Tch_M1500 -n 50 --userflags M1500,mm &
 
 
 ############################################

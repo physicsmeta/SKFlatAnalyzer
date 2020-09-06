@@ -1,2 +1,2 @@
 # alias PD xsec nmc sumw
-HNToMuMu_Tch_M1000	HeavyMajoranaNeutrinoToDiLepton_Tchannel_NLO_MuMu_M1000	1.30387511868e-07	49691	0.0065514
+HNToMuMu_Tch_M1000	HeavyMajoranaNeutrinoToDiLepton_Tchannel_NLO_MuMu_M1000	1.30387511868e-07	49691	23895
