@@ -233,6 +233,8 @@ void Signal_opt::executeEventFromParameter(AnalyzerParameter param){
       if(IsPP == 1) return;
     }
 
+    PrintGen(gens_signcheck);
+
   } //JH : total weight calculation done.
 
 
@@ -769,12 +771,25 @@ void Signal_opt::executeEventFromParameter(AnalyzerParameter param){
 
           FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_"+IDsuffix, 7.5, weight, cutflow_bin, 0., cutflow_max);
           FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_unweighted_"+IDsuffix, 7.5, 1., cutflow_bin, 0., cutflow_max);
+          FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Njets_"+IDsuffix, jets.size(), weight, 10, 0, 10);
           FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/ZCand_Mass_"+IDsuffix, ZCand.M(), weight, 1000, 0., 1000.);
           FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/ZCand_Pt_"+IDsuffix, ZCand.Pt(), weight, 1000, 0., 1000.);
           FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Lep1_Pt_"+IDsuffix, leptons.at(0)->Pt(), weight, 1000, 0., 1000.);
           FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Lep2_Pt_"+IDsuffix, leptons.at(1)->Pt(), weight, 1000, 0., 1000.);
           FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Lep1_Eta_"+IDsuffix, leptons.at(0)->Eta(), weight, 50, -2.5, 2.5);
           FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Lep2_Eta_"+IDsuffix, leptons.at(1)->Eta(), weight, 50, -2.5, 2.5);
+          FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Jet1_Pt_"+IDsuffix, jets.at(0).Pt(), weight, 1000, 0., 1000.);
+          FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Jet2_Pt_"+IDsuffix, jets.at(1).Pt(), weight, 1000, 0., 1000.);
+          FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/WJet1_Pt_"+IDsuffix, jets.at(j3).Pt(), weight, 1000, 0., 1000.);
+          FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/WJet2_Pt_"+IDsuffix, jets.at(j4).Pt(), weight, 1000, 0., 1000.);
+          FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Jet1_Mass_"+IDsuffix, jets.at(0).M(), weight, 1000, 0., 1000.);
+          FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Jet2_Mass_"+IDsuffix, jets.at(1).M(), weight, 1000, 0., 1000.);
+          FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/WJet1_Mass_"+IDsuffix, jets.at(j3).M(), weight, 1000, 0., 1000.);
+          FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/WJet2_Mass_"+IDsuffix, jets.at(j4).M(), weight, 1000, 0., 1000.);
+          FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Jet1_Eta_"+IDsuffix, jets.at(0).Eta(), weight, 50, -2.5, 2.5);
+          FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Jet2_Eta_"+IDsuffix, jets.at(1).Eta(), weight, 50, -2.5, 2.5);
+          FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/WJet1_Eta_"+IDsuffix, jets.at(j3).Eta(), weight, 50, -2.5, 2.5);
+          FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/WJet2_Eta_"+IDsuffix, jets.at(j4).Eta(), weight, 50, -2.5, 2.5);
           FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/MET_"+IDsuffix, MET, weight, 1000, 0., 1000.);
           FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/MET2ST_"+IDsuffix, MET2ST, weight, 1000, 0., 1000.);
           FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/WCand1_Mass_"+IDsuffix, WCand1.M(), weight, 1000, 0., 1000.);

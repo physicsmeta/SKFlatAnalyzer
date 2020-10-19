@@ -166,6 +166,7 @@ bool Electron::PassID(TString ID) const{
   if(ID=="TEST") return Pass_TESTID();
   if(ID=="TightWithIPcut") return Pass_CutBasedTightWithIPcut();
   if(ID=="HEEP_dZ_CF") return Pass_HEEP_dZ_CF();
+  if(ID=="HEEP2018_dZ_CF") return Pass_HEEP2018_dZ_CF();
   if(ID=="HEEP_dZ") return Pass_HEEP_dZ();
   if(ID=="HEEP2018_dZ") return Pass_HEEP2018_dZ();
   if(ID=="CutBasedLooseNoIso") return Pass_CutBasedLooseNoIso();
@@ -255,6 +256,23 @@ bool Electron::Pass_CutBasedTightWithIPcut() const{
 
 bool Electron::Pass_HEEP_dZ_CF() const{
   if(!passHEEPID() ) return false;
+
+  if( fabs(scEta()) <= 1.479 ){
+    if(!( fabs(dZ()) <0.10 )) return false;
+  }
+  else{
+    if(!( fabs(dZ()) <0.20 )) return false;
+  }
+
+  if(! (PassConversionVeto()) ) return false;
+  if(! (IsGsfCtfScPixChargeConsistent()) ) return false;
+  if(! (Pass_TriggerEmulation()) ) return false;
+
+  return true;
+}
+
+bool Electron::Pass_HEEP2018_dZ_CF() const{
+  if(!passHEEP2018Prompt() ) return false;
 
   if( fabs(scEta()) <= 1.479 ){
     if(!( fabs(dZ()) <0.10 )) return false;

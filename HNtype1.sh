@@ -134,9 +134,9 @@ python python/SKFlat.py -a Signal_opt -y 2016 -i HNToMuMu_Tch_M1000 -n 50 --user
 python python/SKFlat.py -a Signal_opt -y 2016 -i Last_HNToMupMup_Tch_M1000 -n 50 --userflags M1000 &
 python python/SKFlat.py -a Signal_opt -y 2016 -i Last_HNToMumMum_Tch_M1000 -n 50 --userflags M1000 &
 #python python/SKFlat.py -a Signal_opt -y 2016 -i HNToMuMu_Tch_M1500 -n 50 --userflags M1500 &
-#python python/SKFlat.py -a Signal_opt -y 2016 -i HNToMuMu_Tch_M1500 -n 50 --userflags M1500,pp &
+python python/SKFlat.py -a Signal_opt -y 2016 -i HNToMuMu_Tch_M1500 -n 50 --userflags M1500,pp &
 #python python/SKFlat.py -a Signal_opt -y 2016 -i HNToMuMu_Tch_M1500 -n 50 --userflags M1500,mm &
-python python/SKFlat.py -a Signal_opt -y 2016 -i Last_HNToMupMup_Tch_M1500 -n 50 --userflags M1500 &
+#python python/SKFlat.py -a Signal_opt -y 2016 -i Last_HNToMupMup_Tch_M1500 -n 50 --userflags M1500 &
 python python/SKFlat.py -a Signal_opt -y 2016 -i Last_HNToMupMup_Tch_M1500 -n 50 --userflags M1500,pp &
 #python python/SKFlat.py -a Signal_opt -y 2016 -i Last_HNToMupMup_Tch_M1500 -n 50 --userflags M1500,mm &
 

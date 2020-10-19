@@ -119,6 +119,7 @@ public:
   inline bool passHEEPID() const {return PassSelector(POG_HEEP); }
   bool passHEEP2018Prompt() const;
   bool Pass_HEEP_dZ_CF() const;
+  bool Pass_HEEP2018_dZ_CF() const;
   bool Pass_HEEP_dZ() const;
   bool Pass_HEEP2018_dZ() const;
   bool Pass_NewVetoID() const;

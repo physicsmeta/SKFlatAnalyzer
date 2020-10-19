@@ -17,6 +17,38 @@ ofstream Mean_Sigma("Acceptance/Signal/2016/Mean_Sigma_comparison.txt");
 ofstream acceptance("Acceptance/Signal/2016/acceptance.txt");
 ofstream cutflow_eff("Acceptance/Signal/2016/cutflow_eff.txt");
 
+cutflow_eff<<"//high mass SR1// (M700, 1000, 1500)\n";
+cutflow_eff<<"1th cut : No cut\n";
+cutflow_eff<<"2th cut : MET filter\n";
+cutflow_eff<<"3th cut : Dilepton trigger\n";
+cutflow_eff<<"4th cut : 2 tight leptons\n";
+cutflow_eff<<"5th cut : same sign\n";
+cutflow_eff<<"6th cut : 3rd lepton veto\n";
+cutflow_eff<<"7th cut : m(ll) > 10GeV\n";
+cutflow_eff<<"8th cut : jet selection (preselection end)\n";
+cutflow_eff<<"9th cut : SR1 signal selection\n";
+cutflow_eff<<"10th cut : Njet < 4\n";
+cutflow_eff<<"11th cut : pt_j1 > 25GeV\n";
+cutflow_eff<<"12th cut : pt_l1 > 110GeV\n";
+cutflow_eff<<"13th cut : 50GeV < m(jj) < 120GeV\n";
+cutflow_eff<<"14th cut : 800GeV < m(lljj)\n";
+cutflow_eff<<"15th cut : 370GeV < m(l1jj) < (885GeV, 1230GeV, 2220GeV)\n";
+cutflow_eff<<"16th cut : MET2ST < 7GeV\n\n";
+cutflow_eff<<"//high mass SR2//\n";
+cutflow_eff<<"1th cut : No cut\n";
+cutflow_eff<<"2th cut : MET filter\n";
+cutflow_eff<<"3th cut : Dilepton trigger\n";
+cutflow_eff<<"4th cut : 2 tight leptons\n";
+cutflow_eff<<"5th cut : same sign\n";
+cutflow_eff<<"6th cut : 3rd lepton veto\n";
+cutflow_eff<<"7th cut : m(ll) > 10GeV\n";
+cutflow_eff<<"8th cut : jet selection (preselection end)\n";
+cutflow_eff<<"9th cut : SR2 signal selection \n";
+cutflow_eff<<"10th cut : pt_l1 > 140GeV\n";
+cutflow_eff<<"11th cut : 40GeV < m(J) < 130GeV\n";
+cutflow_eff<<"12th cut : (635GeV, 900GeV, 1330GeV) < m(l1J) < (825GeV, 1205GeV, 1800GeV)\n";
+cutflow_eff<<"(13th cut : MET2ST < 15GeV) - already in 9th cut\n\n";
+
   for(unsigned int i=0; i<flag.size(); i++){
   
     TFile *f_on, *f_off;
@@ -153,8 +185,11 @@ ofstream cutflow_eff("Acceptance/Signal/2016/cutflow_eff.txt");
     for(int j=0; j<16; j++){
       TString i_t_1 = Form("%d",j+1);
       TString item_t_on_SR1 = Form("%f",100*h2_on_SR1_cutflow->GetBinContent(j+1));
+      TString item_t_on_SR1_rel = Form("%f",100*(1-h2_on_SR1_cutflow->GetBinContent(j+1)/h2_on_SR1_cutflow->GetBinContent(j)));
       TString item_t_off_SR1 = Form("%f",100*h2_off_SR1_cutflow->GetBinContent(j+1));
-      cutflow_eff << i_t_1+"th eff. : "+item_t_on_SR1+"%\t\t"+item_t_off_SR1+"%\n";
+      TString item_t_off_SR1_rel = Form("%f",100*(1-h2_off_SR1_cutflow->GetBinContent(j+1)/h2_off_SR1_cutflow->GetBinContent(j)));
+      TString item_t_diff_SR1 = Form("%f",100*(h2_on_SR1_cutflow->GetBinContent(j+1)-h2_off_SR1_cutflow->GetBinContent(j+1)));
+      cutflow_eff << i_t_1+"th eff. : "+item_t_on_SR1+"%\t\t"+item_t_on_SR1_rel+"%\t\t"+item_t_off_SR1+"%\t\t"+item_t_off_SR1_rel+"%\t\t"+item_t_diff_SR1+"%\n";
     }
 
     TLegend* legend1 = new TLegend(0.75,0.8,0.9,0.9);
@@ -196,8 +231,11 @@ ofstream cutflow_eff("Acceptance/Signal/2016/cutflow_eff.txt");
     for(int i=0; i<12; i++){
       TString i_t_2 = Form("%d",i+1);
       TString item_t_on_SR2 = Form("%f",100*h2_on_SR2_cutflow->GetBinContent(i+1));
+      TString item_t_on_SR2_rel = Form("%f",100*(1-h2_on_SR2_cutflow->GetBinContent(i+1)/h2_on_SR2_cutflow->GetBinContent(i)));
       TString item_t_off_SR2 = Form("%f",100*h2_off_SR2_cutflow->GetBinContent(i+1));
-      cutflow_eff << i_t_2+"th eff. : "+item_t_on_SR2+"%\t\t"+item_t_off_SR2+"%\n";
+      TString item_t_off_SR2_rel = Form("%f",100*(1-h2_off_SR2_cutflow->GetBinContent(i+1)/h2_off_SR2_cutflow->GetBinContent(i)));
+      TString item_t_diff_SR2 = Form("%f",100*(h2_on_SR2_cutflow->GetBinContent(i+1)-h2_off_SR2_cutflow->GetBinContent(i+1)));
+      cutflow_eff << i_t_2+"th eff. : "+item_t_on_SR2+"%\t\t"+item_t_on_SR2_rel+"%\t\t"+item_t_off_SR2+"%\t\t"+item_t_off_SR2_rel+"%\t\t"+item_t_diff_SR2+"%\n";
     }
     cutflow_eff << "\n";
 
@@ -207,9 +245,9 @@ ofstream cutflow_eff("Acceptance/Signal/2016/cutflow_eff.txt");
     legend2->Draw();
 
     for(unsigned int j=0; j<ID.size(); j++){ 
-      gSystem->Exec("mkdir -p Cutflow/Signal/2016/"+flag.at(i)+"/"+ID.at(j));
-      c1->SaveAs("Cutflow/Signal/2016/"+flag.at(i)+"/"+ID.at(j)+"/"+title1+".png");
-      c2->SaveAs("Cutflow/Signal/2016/"+flag.at(i)+"/"+ID.at(j)+"/"+title2+".png");
+      gSystem->Exec("mkdir -p Acceptance/Signal/2016/"+flag.at(i)+"/"+ID.at(j));
+      c1->SaveAs("Acceptance/Signal/2016/"+flag.at(i)+"/"+ID.at(j)+"/"+title1+".png");
+      c2->SaveAs("Acceptance/Signal/2016/"+flag.at(i)+"/"+ID.at(j)+"/"+title2+".png");
     }
 
     delete c1;

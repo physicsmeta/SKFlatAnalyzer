@@ -21,9 +21,9 @@ void ChargeFlip::initializeAnalyzer(){
   }
   else if(DataYear==2017){
     EleIDs = {
-      "HNTightV2",
-      "HNLooseV23",
-      "HNTight2016",
+      "HEEP_dZ_CF",
+      "HNTightV1",
+      "HNMVATight",
     };
     EleIDSFKeys = {
       "",
@@ -34,9 +34,9 @@ void ChargeFlip::initializeAnalyzer(){
   }
   else if(DataYear==2018){
     EleIDs = {
-      "HNTightV2",
-      "HNLooseV23",
-      "HNTight2016",
+      "HEEP2018_dZ_CF",
+      "HNTightV1",
+      "HNMVATight",
     };
     EleIDSFKeys = {
       "",
@@ -144,7 +144,7 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
 
     vector<Gen> gens = GetGens();
     vector<Electron> eles_prmt = ElectronPromptOnlyChargeFlip(eles, gens); // Get prompt electrons except conversions
-  	
+    
     if(HasFlag("CFrate")){
 
       /* Measure CF rate using MC */
@@ -161,11 +161,9 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
         //Measure with original method (many 1/pt bins, 3 eta bins)
         if(abs(eles.at(i).scEta())<0.8){
           FillHist(param.Name+"/CFrate/EtaRegion1_Denom", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
-          FillHist(param.Name+"/CFrate_IP/EtaRegion1_Denom", eles.at(i).dXY(), 1., 50, 0., 0.05);
           if(truth_lep_Charge*eles.at(i).Charge()<0){
             //cout << "!!EtaRegion1!! truth lepton charge : " << truth_lep_Charge << ", reco lepton charge : " << eles.at(i).Charge() << endl;
             FillHist(param.Name+"/CFrate/EtaRegion1_Num", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
-            FillHist(param.Name+"/CFrate_IP/EtaRegion1_Num", eles.at(i).dXY(), 1., 50, 0., 0.05);
             //// SH's ask //
             //if(eles.size() == 2&&i == 0){
             //FillHist(param.Name+"/CFrate/EtaRegion1_IsLeading", 1, 1, 2, 0, 2);
@@ -177,11 +175,9 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
         }
         else if(0.8<=abs(eles.at(i).scEta())&&abs(eles.at(i).scEta())<1.4442){
           FillHist(param.Name+"/CFrate/EtaRegion2_Denom", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
-          FillHist(param.Name+"/CFrate_IP/EtaRegion2_Denom", eles.at(i).dXY(), 1., 50, 0., 0.05);
           if(truth_lep_Charge*eles.at(i).Charge()<0){
             //cout << "!!EtaRegion2!! truth lepton charge : " << truth_lep_Charge << ", reco lepton charge : " << eles.at(i).Charge() << endl;
             FillHist(param.Name+"/CFrate/EtaRegion2_Num", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
-            FillHist(param.Name+"/CFrate_IP/EtaRegion2_Num", eles.at(i).dXY(), 1., 50, 0., 0.05);
             //// SH's ask //
             //if(eles.size() == 2&&i == 0){
             //FillHist(param.Name+"/CFrate/EtaRegion2_IsLeading", 1, 1, 2, 0, 2);
@@ -193,11 +189,9 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
         }
         else if(1.556<=abs(eles.at(i).scEta())&&abs(eles.at(i).scEta())<2.5){
           FillHist(param.Name+"/CFrate/EtaRegion3_Denom", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
-          FillHist(param.Name+"/CFrate_IP/EtaRegion3_Denom", eles.at(i).dXY(), 1., 100, 0., 0.1);
           if(truth_lep_Charge*eles.at(i).Charge()<0){
             //cout << "!!EtaRegion3!! truth lepton charge : " << truth_lep_Charge << ", reco lepton charge : " << eles.at(i).Charge() << endl;
             FillHist(param.Name+"/CFrate/EtaRegion3_Num", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
-            FillHist(param.Name+"/CFrate_IP/EtaRegion3_Num", eles.at(i).dXY(), 1., 100, 0., 0.1);
             //// SH's ask //
             //if(eles.size() == 2&&i == 0){
             //FillHist(param.Name+"/CFrate/EtaRegion3_IsLeading", 1, 1, 2, 0, 2);
@@ -211,9 +205,11 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
         //Measure with eta bins
         
         FillHist(param.Name+"/CFrate_Eta/Denom", abs(eles.at(i).scEta()), 1., 250, 0., 2.5);
+        FillHist(param.Name+"/CFrate_IP/Denom", eles.at(i).dXY(), 1., 100, 0., 0.1);
         if(truth_lep_Charge*eles.at(i).Charge()<0){
           //cout << "!!EtaRegion3!! truth lepton charge : " << truth_lep_Charge << ", reco lepton charge : " << eles.at(i).Charge() << endl;
           FillHist(param.Name+"/CFrate_Eta/Num", abs(eles.at(i).scEta()), 1., 250, 0., 2.5);
+          FillHist(param.Name+"/CFrate_IP/Num", eles.at(i).dXY(), 1., 100, 0., 0.1);
         }
 
       }
@@ -503,13 +499,13 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
       }
       TString X_string = Form("%f",X);
       X_string = X_string(0,3)+"%";
-  		
+      
       for(int j=0;j<2;j++){
         eles_shifted.at(j).SetE(eles_shifted.at(j).E()*(1-X/100));
         eles_shifted.at(j).SetPtEtaPhiE(eles_shifted.at(j).E() * TMath::Sin(eles_shifted.at(j).Theta()), eles_shifted.at(j).Eta(), eles_shifted.at(j).Phi(), eles_shifted.at(j).E());
       }
   
-  		Particle ZCand_shifted = eles_shifted.at(0) + eles_shifted.at(1);
+      Particle ZCand_shifted = eles_shifted.at(0) + eles_shifted.at(1);
       double weight_shifted = GetCFweight(eles_shifted, param.Electron_User_ID);
       //double weight_shifted_SF = GetCFweight_SF(eles_shifted, param.Electron_User_ID);
   
@@ -536,7 +532,7 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
             FillHist(param.Name+"/ScaleFactor/EE_ZMass_OS_CFweighted_shifted_"+X_string, ZCand_shifted.M(), weight_shifted, NBin, MllLeft, MllRight);
             //FillHist(param.Name+"/ScaleFactor/EE_ZMass_OS_CFSFweighted_shifted_"+X_string, ZCand_shifted.M(), weight_shifted_SF, NBin, MllLeft, MllRight);
           }
-  				
+          
         }
       }
     }
