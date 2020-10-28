@@ -8,9 +8,9 @@ void ChargeFlip::initializeAnalyzer(){
 
   if(DataYear==2016){
     EleIDs = { 
-      "HEEP_dZ_CF",
+      //"HEEP_dZ_CF",
       "HNTightV1",
-      "HNMVATight",
+      //"HNMVATight",
     }; // PassID() in Electron.C
     EleIDSFKeys = {
       "",
@@ -21,7 +21,7 @@ void ChargeFlip::initializeAnalyzer(){
   }
   else if(DataYear==2017){
     EleIDs = {
-      "HEEP_dZ_CF",
+      //"HEEP_dZ_CF",
       "HNTightV1",
       "HNMVATight",
     };
@@ -34,7 +34,7 @@ void ChargeFlip::initializeAnalyzer(){
   }
   else if(DataYear==2018){
     EleIDs = {
-      "HEEP2018_dZ_CF",
+      //"HEEP2018_dZ_CF",
       "HNTightV1",
       "HNMVATight",
     };

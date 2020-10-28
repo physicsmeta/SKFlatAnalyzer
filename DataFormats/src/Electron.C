@@ -177,7 +177,7 @@ bool Electron::PassID(TString ID) const{
   if(ID=="HNLooseV21") return Pass_HNLooseV21();
   if(ID=="HNLooseV22") return Pass_HNLooseV22();
   if(ID=="HNLooseV23") return Pass_HNLooseV23();
-  if(ID=="HNTightV1") return Pass_HNTight(0.05, 0.1, true);
+  if(ID=="HNTightV1") return Pass_HNTight(0.05, 0.1, 4., true);
   if(ID=="HNTightV2") return Pass_HNTightV2();
   if(ID=="HNMVALoose") return Pass_HNMVALoose();
   if(ID=="HNMVALooseV2") return Pass_HNMVALooseV2();
@@ -598,7 +598,7 @@ bool Electron::Pass_HNLooseV23() const{
   return true;
 }
 
-bool Electron::Pass_HNTight(double dxyCut, double dzCut, bool isPOGIP) const{
+bool Electron::Pass_HNTight(double dxyCut, double dzCut, double sipCut, bool isPOGIP) const{
   if(! (passTightID()) ) return false;
   //if(! (RelIso()<relisoCut) ) return false;
   if( fabs(scEta()) <= 1.479 ){
@@ -612,7 +612,10 @@ bool Electron::Pass_HNTight(double dxyCut, double dzCut, bool isPOGIP) const{
       if(! (fabs(dXY())<dxyCut && fabs(dZ())<dzCut) ) return false;
     }
   }
-  if(! (IsGsfCtfScPixChargeConsistent()) ) return false;
+  if(! (fabs(IP3D()/IP3Derr())<sipCut) ) return false;
+  if(UncorrPt() < 300.){
+    if(! (IsGsfCtfScPixChargeConsistent()) ) return false;
+  }
   if(! (Pass_TriggerEmulation()) ) return false;
   return true;
 }

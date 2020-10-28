@@ -8,11 +8,11 @@ TFile* f1 = new TFile(filename);
 TString samplename = filename(filename.Last('/')+12,filename.Length());
 samplename.ReplaceAll(".root","");
 
-gSystem->Exec("mkdir "+samplename);
+gSystem->Exec("mkdir -p "+samplename);
 
 vector<TString> User_ID;
-User_ID.push_back("HEEP_dZ_CF");
-User_ID.push_back("HNMVATight");
+//User_ID.push_back("HEEP_dZ_CF");
+//User_ID.push_back("HNMVATight");
 User_ID.push_back("HNTightV1");
 
 for(unsigned int i=0; i<User_ID.size(); i++){
@@ -78,6 +78,7 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   TCanvas* c3 = new TCanvas("c3","ChargeFlip_EtaRegion3 ("+User_ID.at(i)+")",300,100,900,800);
   
   c1->cd();
+  c1->SetLogy();
   
   TGraphErrors* gr1 = new TGraphErrors(X_1.size(),&X_1[0],&Y_1[0],&EX_1[0],&EY_1[0]);
   gr1->SetMarkerStyle(20);
@@ -97,6 +98,7 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   // Done and repeat for EtaRegion2, 3 //
   
   c2->cd();
+  c2->SetLogy();
   
   TGraphErrors* gr2 = new TGraphErrors(X_2.size(),&X_2[0],&Y_2[0],&EX_2[0],&EY_2[0]);
   gr2->SetMarkerStyle(20);
@@ -116,6 +118,7 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   
   
   c3->cd();
+  c3->SetLogy();
   
   TGraphErrors* gr3 = new TGraphErrors(X_3.size(),&X_3[0],&Y_3[0],&EX_3[0],&EY_3[0]);
   gr3->SetMarkerStyle(20);
@@ -137,9 +140,9 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   //c2->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_EtaRegion2.pdf");
   //c3->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_EtaRegion3.pdf");
 
-  c1->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_EtaRegion1.png");
-  c2->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_EtaRegion2.png");
-  c3->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_EtaRegion3.png");
+  c1->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_EtaRegion1_logY.png");
+  c2->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_EtaRegion2_logY.png");
+  c3->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_EtaRegion3_logY.png");
 
 }
 
