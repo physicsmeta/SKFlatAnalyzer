@@ -138,7 +138,7 @@ public:
   bool Pass_HNLooseV21() const;
   bool Pass_HNLooseV22() const;
   bool Pass_HNLooseV23() const;
-  bool Pass_HNTight(double dxyCut, double dzCut, double sipCut, bool isPOGIP) const;
+  bool Pass_HNTight(double chargeCut, double dxyCut, double dzCut, double sipCut, bool isPOGIP) const;
   bool Pass_HNTightV2() const;
   bool Pass_HNMVALoose() const;
   bool Pass_HNMVALooseV2() const;

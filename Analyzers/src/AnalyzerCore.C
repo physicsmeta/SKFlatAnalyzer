@@ -1750,6 +1750,21 @@ void AnalyzerCore::PrintGen(const std::vector<Gen>& gens){
 
 }
 
+void AnalyzerCore::JHPrintGen(const std::vector<Gen>& gens){
+
+  cout << "===========================================================" << endl;
+  cout << "RunNumber:EventNumber = " << run << ":" << event << endl;
+  cout << "index\tPID\tStatus\tMIdx\tMPID\tStart\tPt\tEta\tPhi\tM\tIsPromptFinalState" << endl;
+  for(unsigned int i=2; i<gens.size(); i++){
+    Gen gen = gens.at(i);
+    vector<int> history = TrackGenSelfHistory(gen, gens);
+    cout << i << "\t" << gen.PID() << "\t" << gen.Status() << "\t" << gen.MotherIndex() << "\t" << gens.at(gen.MotherIndex()).PID()<< "\t" << history[0] << "\t";
+    printf("%.2f\t%.2f\t%.2f\t%.2f\t",gen.Pt(), gen.Eta(), gen.Phi(), gen.M());
+		cout << ">" << gen.isPromptFinalState() << "<" << endl;
+  }
+
+}
+
 Gen AnalyzerCore::GetGenMatchedLepton(const Lepton& lep, const std::vector<Gen>& gens){
 
   //==== find status 1 lepton

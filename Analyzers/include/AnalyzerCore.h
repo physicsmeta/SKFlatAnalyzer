@@ -199,6 +199,7 @@ public:
   //==== GenMatching
 
   void PrintGen(const std::vector<Gen>& gens);
+  void JHPrintGen(const std::vector<Gen>& gens);
   Gen GetGenMatchedLepton(const Lepton& lep, const std::vector<Gen>& gens);
   Gen GetGenMatchedLepton(const Lepton& lep, const std::vector<Gen>& gens, const double dR);
   Gen GetGenMatchedPhoton(const Lepton& lep, const std::vector<Gen>& gens);

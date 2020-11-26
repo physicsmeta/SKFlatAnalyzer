@@ -23,7 +23,7 @@ void ChargeFlip::initializeAnalyzer(){
     EleIDs = {
       //"HEEP_dZ_CF",
       "HNTightV1",
-      "HNMVATight",
+      //"HNMVATight",
     };
     EleIDSFKeys = {
       "",
@@ -36,7 +36,7 @@ void ChargeFlip::initializeAnalyzer(){
     EleIDs = {
       //"HEEP2018_dZ_CF",
       "HNTightV1",
-      "HNMVATight",
+      //"HNMVATight",
     };
     EleIDSFKeys = {
       "",
@@ -70,8 +70,13 @@ void ChargeFlip::executeEvent(Long64_t Nentry){
     param.CFsyst_ = AnalyzerParameter::CF_Central;
   
     param.Name = EleID;
-  
-    param.Electron_User_ID = EleID;
+ 
+    if(HasFlag("250")){
+      param.Electron_User_ID = EleID+"_250";
+    }
+    else if(HasFlag("200")){
+      param.Electron_User_ID = EleID+"_200";
+    } // To check 3charge cut
   
     executeEventFromParameter(param, Nentry);
   
@@ -204,12 +209,12 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
 
         //Measure with eta bins
         
-        FillHist(param.Name+"/CFrate_Eta/Denom", abs(eles.at(i).scEta()), 1., 250, 0., 2.5);
-        FillHist(param.Name+"/CFrate_IP/Denom", eles.at(i).dXY(), 1., 100, 0., 0.1);
+        FillHist(param.Name+"/CFrate_Eta/Denom", abs(eles.at(i).scEta()), 1., 50, -2.5, 2.5);
+        FillHist(param.Name+"/CFrate_IP/Denom", eles.at(i).dXY(), 1., 200, -0.1, 0.1);
         if(truth_lep_Charge*eles.at(i).Charge()<0){
           //cout << "!!EtaRegion3!! truth lepton charge : " << truth_lep_Charge << ", reco lepton charge : " << eles.at(i).Charge() << endl;
-          FillHist(param.Name+"/CFrate_Eta/Num", abs(eles.at(i).scEta()), 1., 250, 0., 2.5);
-          FillHist(param.Name+"/CFrate_IP/Num", eles.at(i).dXY(), 1., 100, 0., 0.1);
+          FillHist(param.Name+"/CFrate_Eta/Num", abs(eles.at(i).scEta()), 1., 50, -2.5, 2.5);
+          FillHist(param.Name+"/CFrate_IP/Num", eles.at(i).dXY(), 1., 200, -0.1, 0.1);
         }
 
       }
