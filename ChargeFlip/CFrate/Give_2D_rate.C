@@ -1,17 +1,5 @@
 {
-//TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip/2016/CFrate__/ChargeFlip_DYJets_TTLL.root";
-//TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip/2016/CFrate__/ChargeFlip_DYJets_TTLL_DYJetsPt100ToInf.root";
-//TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip_IDv2/2016/CFrate__/ChargeFlip_IDv2_DYJets_TTLL.root";
-//TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/ChargeFlip/2016/CFrate__250__/ChargeFlip_All_250.root";
-//TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/ChargeFlip/2016/CFrate__250__/ChargeFlip_DYJets_MG.root";
-//TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/ChargeFlip/2016/CFrate__250__/ChargeFlip_SkimTree_Dilepton_DYJets.root";
-//TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/ChargeFlip/2016/CFrate__250__/ChargeFlip_SkimTree_Dilepton_TTLL_powheg.root";
-//TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/ChargeFlip/2016/CFrate__250__/ChargeFlip_TTLJ_powheg.root";
-//TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/ChargeFlip/2016/CFrate__250__/ChargeFlip_DYJets_MG_HT-70to100.root";
-TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/ChargeFlip/2016/CFrate__250__/ChargeFlip_SkimTree_Dilepton_DYJets_Pt-50To100.root";
-//TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/ChargeFlip/2016/CFrate__250__/ChargeFlip_SkimTree_Dilepton_DYJets_M.root";
-//TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/ChargeFlip/2016/CFrate__250__/ChargeFlip_SkimTree_Dilepton_DYJets_Pt.root";
-//TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/ChargeFlip/2016/CFrate__250__/ChargeFlip_DYJets_MG_HT.root";
+TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/ChargeFlip/2016/CFrate__250__/ChargeFlip_All_250.root";
 TFile* f1 = new TFile(filename);
 
 TString samplename = filename(filename.Last('/')+12,filename.Length());
@@ -23,6 +11,10 @@ vector<TString> User_ID;
 //User_ID.push_back("HEEP_dZ_CF");
 //User_ID.push_back("HNMVATight");
 User_ID.push_back("HNTightV1");
+
+vector<double> etaval = {0, 0.8, 1.4442, 1.556, 2.5};
+outfile = new TFile("CFrate_2D.root","RECREATE");
+TH2D *hist = new TH2D("CFrate_2016","",40,0,0.04,4,&etaval[0]);
 
 for(unsigned int i=0; i<User_ID.size(); i++){
 
@@ -51,35 +43,55 @@ for(unsigned int i=0; i<User_ID.size(); i++){
     EY_3.push_back(Y_3[i]*(sqrt(pow(h6->GetBinError(i+1)/h6->GetBinContent(i+1),2)+pow(h5->GetBinError(i+1)/h5->GetBinContent(i+1),2))));
   }
   
-  for (int i=0; i<X_1.size();) {
-    if ( (Y_1.at(i) == 0) || (isnan(Y_1.at(i)) != 0) ) {
-      X_1.erase(X_1.begin()+i);
-      EX_1.erase(EX_1.begin()+i);
-      Y_1.erase(Y_1.begin()+i);
-      EY_1.erase(EY_1.begin()+i);
-    }
-    else i++;
-  }
-  for (int i=0; i<X_2.size();) {
-    if ( (Y_2.at(i) == 0) || (isnan(Y_2.at(i)) != 0) ) {
-      X_2.erase(X_2.begin()+i);
-      EX_2.erase(EX_2.begin()+i);
-      Y_2.erase(Y_2.begin()+i);
-      EY_2.erase(EY_2.begin()+i);
-    }
-    else i++;
-  }
-  for (int i=0; i<X_3.size();) {
-    if ( (Y_3.at(i) == 0) || (isnan(Y_3.at(i)) != 0) ) {
-      X_3.erase(X_3.begin()+i);
-      EX_3.erase(EX_3.begin()+i);
-      Y_3.erase(Y_3.begin()+i);
-      EY_3.erase(EY_3.begin()+i);
-    }
-    else i++;
-  }
+  //for (int i=0; i<X_1.size();) {
+  //  if ( (Y_1.at(i) == 0) || (isnan(Y_1.at(i)) != 0) ) {
+  //    X_1.erase(X_1.begin()+i);
+  //    EX_1.erase(EX_1.begin()+i);
+  //    Y_1.erase(Y_1.begin()+i);
+  //    EY_1.erase(EY_1.begin()+i);
+  //  }
+  //  else i++;
+  //}
+  //for (int i=0; i<X_2.size();) {
+  //  if ( (Y_2.at(i) == 0) || (isnan(Y_2.at(i)) != 0) ) {
+  //    X_2.erase(X_2.begin()+i);
+  //    EX_2.erase(EX_2.begin()+i);
+  //    Y_2.erase(Y_2.begin()+i);
+  //    EY_2.erase(EY_2.begin()+i);
+  //  }
+  //  else i++;
+  //}
+  //for (int i=0; i<X_3.size();) {
+  //  if ( (Y_3.at(i) == 0) || (isnan(Y_3.at(i)) != 0) ) {
+  //    X_3.erase(X_3.begin()+i);
+  //    EX_3.erase(EX_3.begin()+i);
+  //    Y_3.erase(Y_3.begin()+i);
+  //    EY_3.erase(EY_3.begin()+i);
+  //  }
+  //  else i++;
+  //}
   
-  
+  // Save the 2D histo //
+
+  for(int i=0; i<40; i++){
+    hist->SetBinContent(i+1,1,Y_1.at(i));
+    hist->SetBinContent(i+1,2,Y_2.at(i));
+    hist->SetBinContent(i+1,3,0);
+    hist->SetBinContent(i+1,4,Y_3.at(i));
+    hist->SetBinError(i+1,1,EY_1.at(i));
+    hist->SetBinError(i+1,2,EY_2.at(i));
+    hist->SetBinError(i+1,4,EY_3.at(i));
+  }
+  outfile->cd();
+  hist->Write();
+
+
+
+
+
+
+/*
+
   // Draw the plots //
   
   TCanvas* c1 = new TCanvas("c1","ChargeFlip_EtaRegion1 ("+User_ID.at(i)+")",200,200,900,800);
@@ -157,6 +169,8 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   //c1->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_EtaRegion1_logY.png");
   //c2->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_EtaRegion2_logY.png");
   //c3->SaveAs(samplename+"/"+User_ID.at(i)+"_NoFit_EtaRegion3_logY.png");
+
+*/
 
 }
 

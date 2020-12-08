@@ -6,7 +6,7 @@ TFile* f1 = new TFile(filename);
 TString samplename = filename(filename.Last('/')+12,filename.Length());
 samplename.ReplaceAll(".root","");
 
-gSystem->Exec("mkdir "+samplename);
+//gSystem->Exec("mkdir "+samplename);
 
 vector<TString> User_ID;
 User_ID.push_back("HNTight2016");
