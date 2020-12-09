@@ -1,4 +1,4 @@
-void Fit(TString fit = "pol1", TString zoom = "n", TString save = "n"){
+void Fit(TString fit = "pol1", TString scan = "n", TString zoom = "n", TString save = "n"){
 TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/ChargeFlip/2016/CFrate__250__/ChargeFlip_All_250.root";
 //TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip_IDv2/2016/CFrate__/ChargeFlip_IDv2_DYJets_TTLL.root";
 TFile* f1 = new TFile(filename);
@@ -25,9 +25,9 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   
   vector<double> X_1, EX_1, X_2, EX_2, X_3, EX_3;
   for (int i=0; i<40; i++) {
-    X_1.push_back((2*i+1)*(0.04/80.)); EX_1.push_back(0.); 
-    X_2.push_back((2*i+1)*(0.04/80.)); EX_2.push_back(0.);
-    X_3.push_back((2*i+1)*(0.04/80.)); EX_3.push_back(0.);
+    X_1.push_back((2*i+1)*(0.04/80.)); EX_1.push_back(0); 
+    X_2.push_back((2*i+1)*(0.04/80.)); EX_2.push_back(0);
+    X_3.push_back((2*i+1)*(0.04/80.)); EX_3.push_back(0);
   }
   vector<double> Y_1, EY_1, Y_2, EY_2, Y_3, EY_3;
   for (int i=0; i<40; i++) {
@@ -94,26 +94,26 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   
   // Define fit function and range //
  
-  vector<double> gr1_range = {0, 0.004, 0.0155, 0.041};
+  vector<double> gr1_range = {0, 0.004, 0.016, 0.041};
 
   TF1 *gr1_fit1, *gr1_fit2, *gr1_fit3;
 
-	if(fit == "pol1"){
+  if(fit == "pol1"){
     gr1_fit1 = new TF1("gr1_fit1","pol1",gr1_range[0],gr1_range[1]);
     gr1_fit2 = new TF1("gr1_fit2","pol1",gr1_range[1],gr1_range[2]);
-	}
-	else if(fit == "invx"){
+  }
+  else if(fit == "invx"){
     gr1_fit1 = new TF1("gr1_fit1","[0]/(x+[1])+[2]",gr1_range[0],gr1_range[1]);
     gr1_fit2 = new TF1("gr1_fit2","[0]/(x+[1])+[2]",gr1_range[1],gr1_range[2]);
-	}
-	else if(fit == "expo"){
+  }
+  else if(fit == "expo"){
     gr1_fit1 = new TF1("gr1_fit1","expo",gr1_range[0],gr1_range[1]);
     gr1_fit2 = new TF1("gr1_fit2","expo",gr1_range[1],gr1_range[2]);
-	}
-	else if(fit == "expo_invx"){
+  }
+  else if(fit == "expo_invx"){
     gr1_fit1 = new TF1("gr1_fit1","expo",gr1_range[0],gr1_range[1]);
     gr1_fit2 = new TF1("gr1_fit2","[0]/(x+[1])+[2]",gr1_range[1],gr1_range[2]);
-	}
+  }
   gr1_fit3 = new TF1("gr1_fit3","pol1",gr1_range[2],gr1_range[3]);
   
   gr1_fit1->SetLineWidth(2);
@@ -189,22 +189,22 @@ for(unsigned int i=0; i<User_ID.size(); i++){
 
   TF1 *gr2_fit1, *gr2_fit2, *gr2_fit3;
 
-	if(fit == "pol1"){
+  if(fit == "pol1"){
     gr2_fit1 = new TF1("gr2_fit1","pol1",gr2_range[0],gr2_range[1]);
     gr2_fit2 = new TF1("gr2_fit2","pol1",gr2_range[1],gr2_range[2]);
-	}
-	else if(fit == "invx"){
+  }
+  else if(fit == "invx"){
     gr2_fit1 = new TF1("gr2_fit1","[0]/(x+[1])+[2]",gr2_range[0],gr2_range[1]);
     gr2_fit2 = new TF1("gr2_fit2","[0]/(x+[1])+[2]",gr2_range[1],gr2_range[2]);
-	}
-	else if(fit == "expo"){
+  }
+  else if(fit == "expo"){
     gr2_fit1 = new TF1("gr2_fit1","expo",gr2_range[0],gr2_range[1]);
     gr2_fit2 = new TF1("gr2_fit2","expo",gr2_range[1],gr2_range[2]);
-	}
-	else if(fit == "expo_invx"){
+  }
+  else if(fit == "expo_invx"){
     gr2_fit1 = new TF1("gr2_fit1","expo",gr2_range[0],gr2_range[1]);
     gr2_fit2 = new TF1("gr2_fit2","[0]/(x+[1])+[2]",gr2_range[1],gr2_range[2]);
-	}
+  }
   gr2_fit3 = new TF1("gr2_fit3","pol1",gr2_range[2],gr2_range[3]);
   
   gr2_fit1->SetLineWidth(2);
@@ -270,26 +270,26 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   if(zoom == "y") gr3->GetYaxis()->SetRangeUser(0.,0.02);
   
 
-  vector<double> gr3_range = {0, 0.004, 0.021, 0.04};
+  vector<double> gr3_range = {0, 0.004, 0.022, 0.04};
 
   TF1 *gr3_fit1, *gr3_fit2, *gr3_fit3;
 
-	if(fit == "pol1"){
+  if(fit == "pol1"){
     gr3_fit1 = new TF1("gr3_fit1","pol1",gr3_range[0],gr3_range[1]);
     gr3_fit2 = new TF1("gr3_fit2","pol1",gr3_range[1],gr3_range[2]);
-	}
-	else if(fit == "invx"){
+  }
+  else if(fit == "invx"){
     gr3_fit1 = new TF1("gr3_fit1","[0]/(x+[1])+[2]",gr3_range[0],gr3_range[1]);
     gr3_fit2 = new TF1("gr3_fit2","[0]/(x+[1])+[2]",gr3_range[1],gr3_range[2]);
-	}
-	else if(fit == "expo"){
+  }
+  else if(fit == "expo"){
     gr3_fit1 = new TF1("gr3_fit1","expo",gr3_range[0],gr3_range[1]);
     gr3_fit2 = new TF1("gr3_fit2","expo",gr3_range[1],gr3_range[2]);
-	}
-	else if(fit == "expo_invx"){
+  }
+  else if(fit == "expo_invx"){
     gr3_fit1 = new TF1("gr3_fit1","expo",gr3_range[0],gr3_range[1]);
     gr3_fit2 = new TF1("gr3_fit2","[0]/(x+[1])+[2]",gr3_range[1],gr3_range[2]);
-	}
+  }
   gr3_fit3 = new TF1("gr3_fit3","pol1",gr3_range[2],gr3_range[3]);
 
   gr3_fit1->SetLineWidth(2);
@@ -334,6 +334,101 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   gr3_legend->AddEntry(gr3_fit2,"medium pt","l");
   gr3_legend->AddEntry(gr3_fit3,"low pt","l");
   gr3_legend->Draw();
+
+
+  // Scan the best range to get smooth function
+
+  if(scan == "y"){
+    double bndry;
+    vector<TGraphErrors*> grs;
+    grs.push_back(gr1);
+    grs.push_back(gr2);
+    grs.push_back(gr3);
+
+    cout << "================fit optimizing...=================" << endl;
+
+    for(int i=0; i<3; i++){
+      cout << "// Eta region " << i+1 << " //" << endl;
+
+      // Test two separate functions
+      vector<double> bndrys;
+      map<double, double> RelErr, Chi2overNDF;
+
+      for(int j=2; j<35; j++){
+        bndry = 0.004+0.001*j;
+        TF1 *fit_temp1 = new TF1("fit_temp1","[0]/(x+[1])+[2]",0.004,bndry);
+        TF1 *fit_temp2 = new TF1("fit_temp2","pol1",bndry,0.04);
+        grs.at(i)->Fit(fit_temp1,"RNQ");
+        grs.at(i)->Fit(fit_temp2,"RNQ+"); //JH : R -> use range. N -> no drawing. Q -> quiet.
+
+        double par1[3];
+        double par2[2];
+        fit_temp1->GetParameters(par1);
+        fit_temp2->GetParameters(par2);
+        
+        double chi2_1 = fit_temp1->GetChisquare();
+        double chi2_2 = fit_temp2->GetChisquare();
+        double ndf1 = fit_temp1->GetNDF();
+        double ndf2 = fit_temp2->GetNDF();
+
+        double medval = par1[0]/(bndry+par1[1])+par1[2];
+        double lowval = par2[0]+par2[1]*bndry;
+
+        RelErr[bndry] = (medval - lowval) / ( (medval+lowval)/2. ) ;
+        Chi2overNDF[bndry] = (chi2_1/ndf1) * (chi2_2/ndf2) ;
+
+        bndrys.push_back(bndry);
+        //cout << "CFrate at " << bndry << " in medium pt : " << medval << endl;
+        //cout << "CFrate at " << bndry << " in low pt : " << lowval << endl;
+        cout << "rel. error at " << bndry << " : " << 100 * RelErr[bndry] << "%" << endl;
+        cout << "Chi2/ndf at " << bndry << " : " << Chi2overNDF[bndry] << endl;
+      }
+
+      double MinRelErr = 10000.;
+      double MinChi2overNDF = 10000.;
+      double RelErrOpt = 0.;
+      double Ch2Opt = 0.;
+      for(int k=0; k<bndrys.size(); k++){
+        if(fabs( RelErr[bndrys[k]] ) < MinRelErr){
+          RelErrOpt = bndrys[k];
+          MinRelErr = RelErr[bndrys[k]];
+        }
+        if(Chi2overNDF[bndrys[k]] < MinChi2overNDF){
+          Ch2Opt = bndrys[k];
+          MinChi2overNDF = Chi2overNDF[bndrys[k]];
+        }
+      }
+      cout << "rel. error opt at " << RelErrOpt << " : " << 100 * MinRelErr << "%" << endl;
+      cout << ">>>>>>>>>>Chi2/ndf : " << Chi2overNDF[RelErrOpt] << endl;
+      cout << "Chi2/ndf opt at " << Ch2Opt << " : " << MinChi2overNDF << endl; //JH : the lower is the better (<1 is the best)
+      cout << ">>>>>>>>rel. error : " << 100 * RelErr[Ch2Opt] << "%" << endl;
+
+      vector<double> opts = {0.014, 0.025, 0.023}; // to check opt results by eyes
+      TF1 *fit_opt1 = new TF1("fit_opt1","[0]/(x+[1])+[2]",0.004,opts.at(i));
+      TF1 *fit_opt2 = new TF1("fit_opt2","pol1",opts.at(i),0.04);
+      fit_opt1->SetLineColor(kGreen);
+      fit_opt2->SetLineColor(kBlue);
+      grs.at(i)->Fit(fit_opt1,"RQ");
+      grs.at(i)->Fit(fit_opt2,"RQ+");
+
+/*
+      // What if using just a single function
+      TF1 *fit_alt = new TF1("fit_alt","[0]/(x+[1])+[2]",0.004,0.04);
+      fit_alt->SetLineColor(kRed);
+      grs.at(i)->Fit(fit_alt,"RQ");
+      double chi2_alt = fit_alt->GetChisquare();
+      double ndf_alt = fit_alt->GetNDF();
+      cout << "////////////////////////////////////" << endl;
+      cout << "Chi2/ndf with one fitting : " << chi2_alt/ndf_alt << endl;
+*/
+
+    }
+  }
+
+
+
+
+
 
 
   if(save == "y"){
