@@ -170,8 +170,19 @@
 ### MC validation year by year at presel level.
 #################################################
 
-python python/SKFlat.py -a Presel -y 2016 -i HNToMuMu_Tch_M700 -n 50 &
-python python/SKFlat.py -a Presel -y 2016 -i Last_HNToMupMup_Tch_M700 -n 50 &
-python python/SKFlat.py -a Presel -y 2016 -i Last_HNToMumMum_Tch_M700 -n 50 &
-python python/SKFlat.py -a Presel -y 2016 -i HNToMuMu_Tch_M1000 -n 50 &
-
+#python python/SKFlat.py -a Presel -y 2017 -i DYTypeI_SS_EE_M100 -n 50 &
+#python python/SKFlat.py -a Presel -y 2017 -i DYTypeI_SS_EE_M700 -n 50 &
+#python python/SKFlat.py -a Presel -y 2018 -i DYTypeI_SS_EE_M100 -n 50 &
+#python python/SKFlat.py -a Presel -y 2018 -i DYTypeI_SS_EE_M700 -n 50 &
+#python python/SKFlat.py -a Presel -y 2017 -i DYTypeI_SS_MuMu_M100 -n 50 &
+#python python/SKFlat.py -a Presel -y 2017 -i DYTypeI_SS_MuMu_M700 -n 50 &
+#python python/SKFlat.py -a Presel -y 2018 -i DYTypeI_SS_MuMu_M100 -n 50 &
+#python python/SKFlat.py -a Presel -y 2018 -i DYTypeI_SS_MuMu_M700 -n 50 &
+python python/SKFlat.py -a Presel -y 2017 -i DYTypeI_OS_EE_M100 -n 50 &
+python python/SKFlat.py -a Presel -y 2017 -i DYTypeI_OS_EE_M700 -n 50 &
+python python/SKFlat.py -a Presel -y 2018 -i DYTypeI_OS_EE_M100 -n 50 &
+python python/SKFlat.py -a Presel -y 2018 -i DYTypeI_OS_EE_M700 -n 50 &
+python python/SKFlat.py -a Presel -y 2017 -i DYTypeI_OS_MuMu_M100 -n 50 &
+python python/SKFlat.py -a Presel -y 2017 -i DYTypeI_OS_MuMu_M700 -n 50 &
+python python/SKFlat.py -a Presel -y 2018 -i DYTypeI_OS_MuMu_M100 -n 50 &
+python python/SKFlat.py -a Presel -y 2018 -i DYTypeI_OS_MuMu_M700 -n 50 &

@@ -210,7 +210,7 @@ void Presel::executeEventFromParameter(AnalyzerParameter param){
     weight *= weight_norm_1invpb*ev.GetTriggerLumi("Full"); //JH : weight_norm_1invpb = xsec/sumW; Lumi = 35.9, 41.5, 59.7(fb-1) total 137fb-1
     weight *= ev.MCweight(); //JH : gen_weight in MiniAOD
     weight *= GetPrefireWeight(0); //JH : No issue in 2018, otherwise returns L1PrefireReweight_Central in MiniAOD
-    weight *= GetPileUpWeight(nPileUp,0); //JH : mcCorr->GetPileUpWeight(N_pileup, syst); mcCorr->GetPileUpWeight2017(N_pileup, syst); NOTE 2018 not yet added.
+    //weight *= GetPileUpWeight(nPileUp,0); //JH : mcCorr->GetPileUpWeight(N_pileup, syst); mcCorr->GetPileUpWeight2017(N_pileup, syst); NOTE 2018 not yet added.
   } //JH : total weight calculation done.
 
   // Cutflow : No Cuts
@@ -503,7 +503,7 @@ void Presel::executeEventFromParameter(AnalyzerParameter param){
       weight *= weight_norm_1invpb*trigger_lumi;
       weight *= ev.MCweight();
       weight *= GetPrefireWeight(0);
-      weight *= GetPileUpWeight(nPileUp,0);
+      //weight *= GetPileUpWeight(nPileUp,0);
     } //JH : recalculate total weight for 2016 period dependency.
 
     // Cutflow : passing dilepton triggers
@@ -528,7 +528,7 @@ void Presel::executeEventFromParameter(AnalyzerParameter param){
         weight *= weight_norm_1invpb*trigger_lumi; //JH : trigger_lumi for period dependency
         weight *= ev.MCweight();
         weight *= GetPrefireWeight(0);
-        weight *= GetPileUpWeight(nPileUp,0);
+        //weight *= GetPileUpWeight(nPileUp,0);
 
         for(unsigned int i=0; i<muons.size(); i++){
 //          muon_idsf = mcCorr->MuonID_SF(param.Muon_ID_SF_Key,  muons.at(i).Eta(), muons.at(i).MiniAODPt(), 0);
@@ -568,10 +568,10 @@ void Presel::executeEventFromParameter(AnalyzerParameter param){
       FillHist(channels.at(it_ch)+"/Number_Events_"+IDsuffix, 3.5, weight, cutflow_bin, 0., cutflow_max);
       FillHist(channels.at(it_ch)+"/Number_Events_unweighted_"+IDsuffix, 3.5, 1., cutflow_bin, 0., cutflow_max);
 
-      if(!RunCF && leptons.at(0)->Charge()*leptons.at(1)->Charge()<0) continue;
-      if(RunCF && leptons.at(0)->Charge()*leptons.at(1)->Charge()>0) continue;
+      if(MCSample.Contains("SS") && leptons.at(0)->Charge()*leptons.at(1)->Charge()<0) continue;
+      if(MCSample.Contains("OS") && leptons.at(0)->Charge()*leptons.at(1)->Charge()>0) continue;
 
-      // Cutflow : same-sign (oppsite-sign when RunCF=true)
+      // Cutflow : same-sign (oppsite-sign when OS)
       FillHist(channels.at(it_ch)+"/Number_Events_"+IDsuffix, 4.5, weight, cutflow_bin, 0., cutflow_max);
       FillHist(channels.at(it_ch)+"/Number_Events_unweighted_"+IDsuffix, 4.5, 1., cutflow_bin, 0., cutflow_max);
 

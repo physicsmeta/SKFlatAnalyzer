@@ -134,11 +134,12 @@ public:
   bool Pass_HNLoose2016() const;
   bool Pass_HNTight2016() const;
 
-  bool Pass_HNLoose() const;
+  bool Pass_HNLoose(double relisoCut, double dxyCut, double dzCut, double sipCut, bool isPOGIP) const;
   bool Pass_HNLooseV21() const;
   bool Pass_HNLooseV22() const;
   bool Pass_HNLooseV23() const;
   bool Pass_HNTight(double chargeCut, double dxyCut, double dzCut, double sipCut, bool isPOGIP) const;
+  bool Pass_HNTight(double dxyCut, double dzCut, double sipCut, bool isPOGIP) const;
   bool Pass_HNTightV2() const;
   bool Pass_HNMVALoose() const;
   bool Pass_HNMVALooseV2() const;
@@ -146,6 +147,7 @@ public:
   bool Pass_HNMVATightV2() const;
   bool Pass_TriggerEmulation() const;
 
+  bool Pass_ISRVeto(double relisoCut) const;
   bool Pass_ISRLoose() const;
   bool Pass_ISRTight() const;
 

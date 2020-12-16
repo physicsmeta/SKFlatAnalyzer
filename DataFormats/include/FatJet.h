@@ -37,6 +37,7 @@ public:
   inline bool Pass_tightJetID() const { return j_tightJetID; }
   inline bool Pass_tightLepVetoJetID() const { return j_tightLepVetoJetID; }
   bool Pass_HNTight() const;
+  bool Pass_HNTight(double tau21Cut) const;
 
   bool PassID(TString ID) const;
 
