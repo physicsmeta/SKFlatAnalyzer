@@ -123,21 +123,21 @@
 ### Signal acceptance check
 ############################################
 
-python python/SKFlat.py -a Signal_opt -y 2016 -i HNToMuMu_Tch_M700 -n 50 --userflags M700 &
+#python python/SKFlat.py -a Signal_opt -y 2016 -i HNToMuMu_Tch_M700 -n 50 --userflags M700 &
 #python python/SKFlat.py -a Signal_opt -y 2016 -i HNToMuMu_Tch_M700 -n 50 --userflags M700,pp &
 #python python/SKFlat.py -a Signal_opt -y 2016 -i HNToMuMu_Tch_M700 -n 50 --userflags M700,mm &
-python python/SKFlat.py -a Signal_opt -y 2016 -i Last_HNToMupMup_Tch_M700 -n 50 --userflags M700 &
-python python/SKFlat.py -a Signal_opt -y 2016 -i Last_HNToMumMum_Tch_M700 -n 50 --userflags M700 &
-python python/SKFlat.py -a Signal_opt -y 2016 -i HNToMuMu_Tch_M1000 -n 50 --userflags M1000 &
+#python python/SKFlat.py -a Signal_opt -y 2016 -i Last_HNToMupMup_Tch_M700 -n 50 --userflags M700 &
+#python python/SKFlat.py -a Signal_opt -y 2016 -i Last_HNToMumMum_Tch_M700 -n 50 --userflags M700 &
+#python python/SKFlat.py -a Signal_opt -y 2016 -i HNToMuMu_Tch_M1000 -n 50 --userflags M1000 &
 #python python/SKFlat.py -a Signal_opt -y 2016 -i HNToMuMu_Tch_M1000 -n 50 --userflags M1000,pp &
 #python python/SKFlat.py -a Signal_opt -y 2016 -i HNToMuMu_Tch_M1000 -n 50 --userflags M1000,mm &
-python python/SKFlat.py -a Signal_opt -y 2016 -i Last_HNToMupMup_Tch_M1000 -n 50 --userflags M1000 &
-python python/SKFlat.py -a Signal_opt -y 2016 -i Last_HNToMumMum_Tch_M1000 -n 50 --userflags M1000 &
+#python python/SKFlat.py -a Signal_opt -y 2016 -i Last_HNToMupMup_Tch_M1000 -n 50 --userflags M1000 &
+#python python/SKFlat.py -a Signal_opt -y 2016 -i Last_HNToMumMum_Tch_M1000 -n 50 --userflags M1000 &
 #python python/SKFlat.py -a Signal_opt -y 2016 -i HNToMuMu_Tch_M1500 -n 50 --userflags M1500 &
-python python/SKFlat.py -a Signal_opt -y 2016 -i HNToMuMu_Tch_M1500 -n 50 --userflags M1500,pp &
+#python python/SKFlat.py -a Signal_opt -y 2016 -i HNToMuMu_Tch_M1500 -n 50 --userflags M1500,pp &
 #python python/SKFlat.py -a Signal_opt -y 2016 -i HNToMuMu_Tch_M1500 -n 50 --userflags M1500,mm &
 #python python/SKFlat.py -a Signal_opt -y 2016 -i Last_HNToMupMup_Tch_M1500 -n 50 --userflags M1500 &
-python python/SKFlat.py -a Signal_opt -y 2016 -i Last_HNToMupMup_Tch_M1500 -n 50 --userflags M1500,pp &
+#python python/SKFlat.py -a Signal_opt -y 2016 -i Last_HNToMupMup_Tch_M1500 -n 50 --userflags M1500,pp &
 #python python/SKFlat.py -a Signal_opt -y 2016 -i Last_HNToMupMup_Tch_M1500 -n 50 --userflags M1500,mm &
 
 
@@ -166,4 +166,12 @@ python python/SKFlat.py -a Signal_opt -y 2016 -i Last_HNToMupMup_Tch_M1500 -n 50
 #python python/SKFlat.py -a HNtypeI_Cutflow -y 2016 -i DoubleMuon:B_ver2 -n 80 --skim SkimTree_Dilepton &
 #python python/SKFlat.py -a HNtypeI_Cutflow -y 2016 -i WZTo3LNu_powheg -n 80 --skim SkimTree_Dilepton &
 
+#################################################
+### MC validation year by year at presel level.
+#################################################
+
+python python/SKFlat.py -a Presel -y 2016 -i HNToMuMu_Tch_M700 -n 50 &
+python python/SKFlat.py -a Presel -y 2016 -i Last_HNToMupMup_Tch_M700 -n 50 &
+python python/SKFlat.py -a Presel -y 2016 -i Last_HNToMumMum_Tch_M700 -n 50 &
+python python/SKFlat.py -a Presel -y 2016 -i HNToMuMu_Tch_M1000 -n 50 &
 

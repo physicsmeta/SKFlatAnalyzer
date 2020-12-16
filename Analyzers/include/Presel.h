@@ -1,9 +1,9 @@
-#ifndef Signal_h
-#define Signal_h
+#ifndef Presel_h
+#define Presel_h
 
 #include "AnalyzerCore.h"
 
-class Signal : public AnalyzerCore {
+class Presel : public AnalyzerCore {
 
 public:
 
@@ -53,8 +53,8 @@ public:
 
 //  double weight_Prefire;
 
-  Signal();
-  ~Signal();
+  Presel();
+  ~Presel();
 
 };
 

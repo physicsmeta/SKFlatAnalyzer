@@ -25,5 +25,6 @@
 #pragma link C++ class Signal_opt+;
 #pragma link C++ class SampleValidation+;
 #pragma link C++ class test+;
+#pragma link C++ class Presel+;
 
 #endif

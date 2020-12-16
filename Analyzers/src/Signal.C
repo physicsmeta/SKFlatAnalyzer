@@ -12,13 +12,14 @@ void Signal::initializeAnalyzer(){
   RunFake = HasFlag("RunFake");
   RunCF = HasFlag("RunCF");
 
-  MuonTightIDs = {"HNTight2016", "POGHighPtWithLooseTrkIso", "POGTightWithTightIso"};
-  MuonLooseIDs = {"HNLoose2016", "POGMedium", "POGMedium"};
-  MuonVetoIDs  = {"HNVeto2016", "POGLoose", "POGLoose"};
-  ElectronTightIDs = {"HNTight2016", "HEEP_dZ", "HNTightV2"};
-  ElectronLooseIDs = {"HNLoose2016", "HNLooseV23", "HNLooseV23"};
-  ElectronVetoIDs  = {"HNVeto2016", "passVetoID", "passVetoID"};
-  FakeRateIDs = {"HNtypeI_16", "HNtypeI_16", "HNtypeI_16"}; //JH : NOTE This is used in fakeEst->ReadHistograms() in m.initializeAnalyzerTools() 
+  MuonTightIDs = {"HNTightV1"};
+  MuonLooseIDs = {"HNLooseV3"};
+  MuonVetoIDs  = {"ISRVeto"};
+  ElectronTightIDs = {"HNTightV1"};
+  ElectronLooseIDs = {"HNLooseV1"};
+  ElectronVetoIDs  = {"ISRVeto"};
+  MuonFRNames      = {"HNRun2"};
+  ElectronFRNames  = {"HNRun2"}; //JH : NOTE This is used in fakeEst->ReadHistograms() in m.initializeAnalyzerTools() 
 
   //==== At this point, sample informations (e.g., IsDATA, DataStream, MCSample, or DataYear) are all set
   //==== You can define sample-dependent or year-dependent variables here
@@ -72,8 +73,6 @@ void Signal::initializeAnalyzer(){
     MuonPtCut1 = 20., MuonPtCut2 = 10.;
     ElectronPtCut1 = 25., ElectronPtCut2 = 15.;
     EMuPtCut1 = 25., EMuPtCut2 = 15.;
-
-    ElectronTightIDs.pop_back(); ElectronTightIDs.push_back("HEEP2018_dZ"); //JH 
   }
 
 //  cout << "[Signal::initializeAnalyzer] IsoMuTriggerName = " << IsoMuTriggerName << endl;
@@ -132,7 +131,8 @@ void Signal::executeEvent(){
     TString ElectronTightID = ElectronTightIDs.at(it_id);
     TString ElectronLooseID = ElectronLooseIDs.at(it_id);
     TString ElectronVetoID  = ElectronVetoIDs.at(it_id);
-    TString FakeRateID = FakeRateIDs.at(it_id);
+    TString MuonFRName      = MuonFRNames.at(it_id);
+    TString ElectronFRName  = ElectronFRNames.at(it_id);
 
     param.Clear();
 
@@ -144,7 +144,7 @@ void Signal::executeEvent(){
     param.Muon_Tight_ID = MuonTightID;
     param.Muon_Loose_ID = MuonLooseID;
     param.Muon_Veto_ID  = MuonVetoID;
-    param.Muon_FR_ID = FakeRateID;     // ID name in histmap_Muon.txt
+    param.Muon_FR_ID = MuonFRName;     // ID name in histmap_Muon.txt
     param.Muon_FR_Key = "AwayJetPt40"; // histname
     //param.Muon_ID_SF_Key = "NUM_TightID_DEN_genTracks";
     //param.Muon_ISO_SF_Key = "NUM_TightRelIso_DEN_TightIDandIPCut";
@@ -157,7 +157,7 @@ void Signal::executeEvent(){
     param.Electron_Tight_ID = ElectronTightID;
     param.Electron_Loose_ID = ElectronLooseID;
     param.Electron_Veto_ID  = ElectronVetoID;
-    param.Electron_FR_ID = FakeRateID;     // ID name in histmap_Electron.txt
+    param.Electron_FR_ID = ElectronFRName;     // ID name in histmap_Electron.txt
     param.Electron_FR_Key = "AwayJetPt40"; // histname
     //param.Electron_ID_SF_Key = "passTightID";
     param.Electron_ID_SF_Key = "";
@@ -167,7 +167,9 @@ void Signal::executeEvent(){
     // Jet ID
 //    param.Jet_ID = "tightLepVeto";
     param.Jet_ID = "HNTight";
-    param.FatJet_ID = "HNTight";
+    //param.FatJet_ID = "HNTight";
+    if(DataYear==2016) param.FatJet_ID = "HNTight0p55";
+    else param.FatJet_ID = "HNTight0p45"; //JH : TODO
 
     executeEventFromParameter(param);
 
@@ -183,11 +185,15 @@ void Signal::executeEvent(){
 
 void Signal::executeEventFromParameter(AnalyzerParameter param){
 
-  vector<TString> channels = {"dimu", "diel", "emu"};
+  vector<TString> channels;
+  if(IsDATA){
+    if(DataStream.Contains("DoubleMuon")) channels.push_back("dimu");
+    else if(DataStream.Contains("DoubleEG") || DataStream.Contains("EGamma")) channels.push_back("diel");
+    else if(DataStream.Contains("MuonEG")) channels.push_back("emu");
+  }
+  else channels = {"dimu", "diel", "emu"};
   vector<TString> regions = {"fakeCR1", "lowSR1", "lowCR1", "highSR1", "highCR1", "lowSR2", "lowCR2", "highSR2", "highCR2"}; 
-  TString IDsuffix = "LRSM";
-  if(param.Electron_Tight_ID.Contains("V2")) IDsuffix = "HNV2";
-  if(param.Electron_Tight_ID.Contains("2016")) IDsuffix = "HN16";
+  TString IDsuffix = "Run2";
   TString LepCategory = "TT";
   double cutflow_max = 10.;
   int cutflow_bin = 10;
@@ -211,11 +217,11 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
   // Cutflow : No Cuts
   for(unsigned int it_ch=0; it_ch<channels.size(); it_ch++){
     for(unsigned int it_rg=0; it_rg<regions.size(); it_rg++){
-      FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_"+IDsuffix, -0.5, weight, cutflow_bin, 0., cutflow_max);
-      FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_unweighted_"+IDsuffix, -0.5, 1., cutflow_bin, 0., cutflow_max);
+      FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_"+IDsuffix, 0.5, weight, cutflow_bin, 0., cutflow_max);
+      FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_unweighted_"+IDsuffix, 0.5, 1., cutflow_bin, 0., cutflow_max);
     }
-    FillHist(channels.at(it_ch)+"/fakeCR2/Number_Events_"+IDsuffix, -0.5, weight, cutflow_bin, 0., cutflow_max);
-    FillHist(channels.at(it_ch)+"/fakeCR2/Number_Events_unweighted_"+IDsuffix, -0.5, 1., cutflow_bin, 0., cutflow_max);
+    FillHist(channels.at(it_ch)+"/fakeCR2/Number_Events_"+IDsuffix, 0.5, weight, cutflow_bin, 0., cutflow_max);
+    FillHist(channels.at(it_ch)+"/fakeCR2/Number_Events_unweighted_"+IDsuffix, 0.5, 1., cutflow_bin, 0., cutflow_max);
   }
 
   //========================
@@ -227,11 +233,11 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
   // Cutflow : MET filter
   for(unsigned int it_ch=0; it_ch<channels.size(); it_ch++){
     for(unsigned int it_rg=0; it_rg<regions.size(); it_rg++){
-      FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_"+IDsuffix, 0.5, weight, cutflow_bin, 0., cutflow_max);
-      FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_unweighted_"+IDsuffix, 0.5, 1., cutflow_bin, 0., cutflow_max);
+      FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_"+IDsuffix, 1.5, weight, cutflow_bin, 0., cutflow_max);
+      FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_unweighted_"+IDsuffix, 1.5, 1., cutflow_bin, 0., cutflow_max);
     }
-    FillHist(channels.at(it_ch)+"/fakeCR2/Number_Events_"+IDsuffix, 0.5, weight, cutflow_bin, 0., cutflow_max);
-    FillHist(channels.at(it_ch)+"/fakeCR2/Number_Events_unweighted_"+IDsuffix, 0.5, 1., cutflow_bin, 0., cutflow_max);
+    FillHist(channels.at(it_ch)+"/fakeCR2/Number_Events_"+IDsuffix, 1.5, weight, cutflow_bin, 0., cutflow_max);
+    FillHist(channels.at(it_ch)+"/fakeCR2/Number_Events_unweighted_"+IDsuffix, 1.5, 1., cutflow_bin, 0., cutflow_max);
   }
 
   //==============
@@ -311,7 +317,7 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
     ElectronID = param.Electron_Loose_ID;
   }
 
-  vector<Muon> muons = SelectMuons(this_AllMuons, MuonID, 10., 2.4);
+  vector<Muon> muons = SelectMuons(this_AllMuons, MuonID, 5., 2.4);
   vector<Muon> muons_veto = SelectMuons(this_AllMuons, param.Muon_Veto_ID, 5., 2.4);
   vector<Electron> electrons = SelectElectrons(this_AllElectrons, ElectronID, 10., 2.5);
   vector<Electron> electrons_veto = SelectElectrons(this_AllElectrons, param.Electron_Veto_ID, 10., 2.5); //JH : lepton selection done
@@ -337,10 +343,10 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
     if(!(this_AllFatJets.at(i).Pt() > 200.)) continue;
     if(!(fabs(this_AllFatJets.at(i).Eta()) < 2.7)) continue;
     for(unsigned int j=0; j<muons_veto.size(); j++){
-      if(this_AllFatJets.at(i).DeltaR(muons_veto.at(j)) < 1.0) lepton_count1++; //JH : muon cleaning
+      if(this_AllFatJets.at(i).DeltaR(muons_veto.at(j)) < 0.8) lepton_count1++; //JH : muon cleaning
     }
     for(unsigned int j=0; j<electrons_veto.size(); j++){
-      if(this_AllFatJets.at(i).DeltaR(electrons_veto.at(j)) < 1.0) lepton_count1++; //JH : electron cleaning
+      if(this_AllFatJets.at(i).DeltaR(electrons_veto.at(j)) < 0.8) lepton_count1++; //JH : electron cleaning
     } 
     if(lepton_count1 > 0) continue;
     fatjets.push_back(this_AllFatJets.at(i));
@@ -358,7 +364,7 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
       if(this_AllJets.at(i).DeltaR(electrons_veto.at(j)) < 0.4) lepton_count2++; //JH : electron cleaning
     }
     for(unsigned int j=0; j<fatjets.size(); j++){
-      if(this_AllJets.at(i).DeltaR(fatjets.at(j)) < 0.8) fatjet_count++; //JH : fatjet cleaning
+      if(this_AllJets.at(i).DeltaR(fatjets.at(j)) < 1.0) fatjet_count++; //JH : fatjet cleaning
     }
     if(lepton_count2 > 0) continue;
     if(fatjet_count > 0) continue;
@@ -433,8 +439,7 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
   int ossf_mass10 = 0;
   
   // Set tight_iso cut & calculate pTcone
-  double mu_tight_iso = 0.15;
-  //if(IDsuffix == "HNV2") mu_tight_iso = 0.1;
+  double mu_tight_iso = 0.05;
   if(IDsuffix == "HN16") mu_tight_iso = 0.07;
 
   double el_tight_iso = 0.;
@@ -492,7 +497,7 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
   // Define leptons (pT order)
   for(unsigned int i=0; i<muons.size(); i++) leptons.push_back(&muons.at(i));
   for(unsigned int i=0; i<electrons.size(); i++) leptons.push_back(&electrons.at(i));
-  std::sort(leptons.begin(), leptons.end(), PtComparingPtr);
+  std::sort(leptons.begin(), leptons.end(), PtComparingPtr); //JH : lepton sorting
 
   // Define leptons passing veto IDs
   for(unsigned int i=0; i<muons_veto.size(); i++) leptons_veto.push_back(&muons_veto.at(i));
@@ -530,27 +535,27 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
   // Loop for each channel : it_ch (0,1,2) = (mumu, ee, emu)
   for(unsigned int it_ch=0; it_ch<channels.size(); it_ch++){
 
-    if(it_ch==0){ LeptonPtCut1 = MuonPtCut1; LeptonPtCut2 = MuonPtCut2; }
-    if(it_ch==1){ LeptonPtCut1 = ElectronPtCut1; LeptonPtCut2 = ElectronPtCut2; }
-    if(it_ch==2){ LeptonPtCut1 = EMuPtCut1; LeptonPtCut2 = EMuPtCut2; }
-    if((it_ch==0||it_ch==2) && RunCF) continue; //JH : mumu, emu are irrelevant to CF
+    if(channels.at(it_ch)=="dimu"){ LeptonPtCut1 = MuonPtCut1; LeptonPtCut2 = MuonPtCut2; }
+    else if(channels.at(it_ch)=="diel"){ LeptonPtCut1 = ElectronPtCut1; LeptonPtCut2 = ElectronPtCut2; }
+    else if(channels.at(it_ch)=="emu"){ LeptonPtCut1 = EMuPtCut1; LeptonPtCut2 = EMuPtCut2; }
+    if( (channels.at(it_ch).Contains("mu")) && RunCF) continue; //JH : mumu, emu are irrelevant to CF
 
     // Triggers for each channel
-    if(it_ch==0 && !ev.PassTrigger(MuonTriggers)) continue; //JH : NOTE PassTrigger runs for loop and returns true even if a single item in triggers vector is fired;
-    if(it_ch==1 && !ev.PassTrigger(ElectronTriggers)) continue;
-    if(it_ch==2 && !ev.PassTrigger(EMuTriggers)) continue; //JH : NOTE logically, I can use the following cut to avoid possible trigger double counting : e.g. (1) pass MuonTrigger (2) pass Electron Trigger && not pass Muon Trigger (3) pass EMu Trigger && not pass Muon Trigger nor Electron Trigger. But then this would not be consistent with the MC trigger lumi weight. So I will just let it as is. the possible (small) double counting happen in data and MC both, so doesn't matter.
+    if(channels.at(it_ch)=="dimu" && !ev.PassTrigger(MuonTriggers)) continue; //JH : NOTE PassTrigger runs for loop and returns true even if a single item in triggers vector is fired;
+    if(channels.at(it_ch)=="diel" && !ev.PassTrigger(ElectronTriggers)) continue;
+    if(channels.at(it_ch)=="emu" && !ev.PassTrigger(EMuTriggers)) continue; //JH : NOTE logically, I can use the following cut to avoid possible trigger double counting : e.g. (1) pass MuonTrigger (2) pass Electron Trigger && not pass Muon Trigger (3) pass EMu Trigger && not pass Muon Trigger nor Electron Trigger. But then this would not be consistent with the MC trigger lumi weight. So I will just let it as is. the possible (small) double counting happen in data and MC both, so doesn't matter.
 
     // Period-dependent trigger weight (only for 2016 MC)
     trigger_lumi = 1., dimu_trig_weight = 0., emu_trig_weight = 0.;
     if(!IsDATA){
       if(DataYear==2016){
-        if(it_ch==0){
+        if(channels.at(it_ch)=="dimu"){
           if(ev.PassTrigger(MuonTriggers)) dimu_trig_weight += 27267.591;
           if(ev.PassTrigger(MuonTriggersH)) dimu_trig_weight += 8650.628; //JH : ??? in AN, they used dz with all period. why should we allow (dimu & not dz)?
           trigger_lumi = dimu_trig_weight;
         }
-        if(it_ch==1) trigger_lumi = ev.GetTriggerLumi("Full");
-        if(it_ch==2){
+        if(channels.at(it_ch)=="diel") trigger_lumi = ev.GetTriggerLumi("Full");
+        if(channels.at(it_ch)=="emu"){
           if(ev.PassTrigger(EMuTriggers)) emu_trig_weight += 27267.591;
           if(ev.PassTrigger(EMuTriggersH)) emu_trig_weight += 8650.628; //JH
           trigger_lumi = emu_trig_weight; 
@@ -561,36 +566,32 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
       }
     }
 
+    weight = 1.;
+    if(!IsDATA){
+      weight *= weight_norm_1invpb*trigger_lumi;
+      weight *= ev.MCweight();
+      weight *= GetPrefireWeight(0);
+      weight *= GetPileUpWeight(nPileUp,0);
+    } //JH : recalculate total weight for 2016 period dependency.
+
     // Cutflow : passing dilepton triggers
     for(unsigned int it_rg=0; it_rg<regions.size(); it_rg++){
-      weight = 1.;
-      if(!IsDATA){
-        weight *= weight_norm_1invpb*trigger_lumi;
-        weight *= ev.MCweight();
-        weight *= GetPrefireWeight(0);
-        weight *= GetPileUpWeight(nPileUp,0);
-      } //JH : recalculate total weight for 2016 period dependency.
-      FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_"+IDsuffix, 1.5, weight, cutflow_bin, 0., cutflow_max);
-      FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_unweighted_"+IDsuffix, 1.5, 1., cutflow_bin, 0., cutflow_max);
+      FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_"+IDsuffix, 2.5, weight, cutflow_bin, 0., cutflow_max);
+      FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_unweighted_"+IDsuffix, 2.5, 1., cutflow_bin, 0., cutflow_max);
     }
-    FillHist(channels.at(it_ch)+"/fakeCR2/Number_Events_"+IDsuffix, 1.5, weight, cutflow_bin, 0., cutflow_max);
-    FillHist(channels.at(it_ch)+"/fakeCR2/Number_Events_unweighted_"+IDsuffix, 1.5, 1., cutflow_bin, 0., cutflow_max); 
+    FillHist(channels.at(it_ch)+"/fakeCR2/Number_Events_"+IDsuffix, 2.5, weight, cutflow_bin, 0., cutflow_max);
+    FillHist(channels.at(it_ch)+"/fakeCR2/Number_Events_unweighted_"+IDsuffix, 2.5, 1., cutflow_bin, 0., cutflow_max); 
 
     if(leptons.size() == 2){ 
-      if(it_ch==0){ if(!(muons.size()==2 && electrons.size()==0)) continue; }
-      if(it_ch==1){ if(!(muons.size()==0 && electrons.size()==2)) continue; }
-      if(it_ch==2){ if(!(muons.size()==1 && electrons.size()==1)) continue; }
+      if(channels.at(it_ch)=="dimu"){ if(!(muons.size()==2 && electrons.size()==0)) continue; }
+      if(channels.at(it_ch)=="diel"){ if(!(muons.size()==0 && electrons.size()==2)) continue; }
+      if(channels.at(it_ch)=="emu"){ if(!(muons.size()==1 && electrons.size()==1)) continue; }
 
       ZCand = *leptons.at(0) + *leptons.at(1);
 
       weight = 1., muon_recosf = 1., muon_idsf = 1., muon_isosf = 1., ele_idsf = 1., ele_recosf = 1.;
       // weights for MC
       if(!IsDATA){
-        //// Gen matching with dR < 0.1
-        //Gen truth_lep1 = GetGenMatchedLepton(*leptons.at(0), gens);
-        //Gen truth_lep2 = GetGenMatchedLepton(*leptons.at(1), gens);
-        //if(truth_lep1.PID() == 0) continue;
-        //if(truth_lep2.PID() == 0) continue;
         
         // Select prompt only
         if(-4<=GetLeptonType(*leptons.at(0), gens)&&GetLeptonType(*leptons.at(0), gens)<=0) continue;
@@ -644,26 +645,16 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
       
       // Cutflow : 2 tight leptons (gen-matched, pT > trigger thresholds)
       for(unsigned int it_rg=0; it_rg<regions.size(); it_rg++){
-        FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_"+IDsuffix, 2.5, weight, cutflow_bin, 0., cutflow_max);
-        FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_unweighted_"+IDsuffix, 2.5, 1., cutflow_bin, 0., cutflow_max);
-      }
-      FillHist(channels.at(it_ch)+"/fakeCR2/Number_Events_"+IDsuffix, 2.5, weight, cutflow_bin, 0., cutflow_max);
-      FillHist(channels.at(it_ch)+"/fakeCR2/Number_Events_unweighted_"+IDsuffix, 2.5, 1., cutflow_bin, 0., cutflow_max);
-
-      if(!RunCF && leptons.at(0)->Charge()*leptons.at(1)->Charge()<0) continue;
-      if(RunCF && leptons.at(0)->Charge()*leptons.at(1)->Charge()>0) continue;
-
-      // Cutflow : same-sign (oppsite-sign when RunCF=true)
-      for(unsigned int it_rg=0; it_rg<regions.size(); it_rg++){
         FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_"+IDsuffix, 3.5, weight, cutflow_bin, 0., cutflow_max);
         FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_unweighted_"+IDsuffix, 3.5, 1., cutflow_bin, 0., cutflow_max);
       }
       FillHist(channels.at(it_ch)+"/fakeCR2/Number_Events_"+IDsuffix, 3.5, weight, cutflow_bin, 0., cutflow_max);
       FillHist(channels.at(it_ch)+"/fakeCR2/Number_Events_unweighted_"+IDsuffix, 3.5, 1., cutflow_bin, 0., cutflow_max);
 
-      if(lepton_veto_size > 0) continue;
+      if(!RunCF && leptons.at(0)->Charge()*leptons.at(1)->Charge()<0) continue;
+      if(RunCF && leptons.at(0)->Charge()*leptons.at(1)->Charge()>0) continue;
 
-      // Cutflow : veto 3rd leptons using veto ID
+      // Cutflow : same-sign (oppsite-sign when RunCF=true)
       for(unsigned int it_rg=0; it_rg<regions.size(); it_rg++){
         FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_"+IDsuffix, 4.5, weight, cutflow_bin, 0., cutflow_max);
         FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_unweighted_"+IDsuffix, 4.5, 1., cutflow_bin, 0., cutflow_max);
@@ -671,16 +662,26 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
       FillHist(channels.at(it_ch)+"/fakeCR2/Number_Events_"+IDsuffix, 4.5, weight, cutflow_bin, 0., cutflow_max);
       FillHist(channels.at(it_ch)+"/fakeCR2/Number_Events_unweighted_"+IDsuffix, 4.5, 1., cutflow_bin, 0., cutflow_max);
 
-      if(!(ZCand.M() > 10.)) continue; 
-      if(it_ch==1 && IsOnZ(ZCand.M(), 10.)) continue; //JH : see p.12 of preapproval -> https://indico.cern.ch/event/694943/contributions/2849972/attachments/1583026/2501796/180115__JaesungKim__JetsX_Meeting__HN_DiLepton_PreApproval.pdf
+      if(lepton_veto_size > 0) continue;
 
-      // Cutflow : m(ll) > 10 GeV, |m(ll)-m(Z)| > 10 GeV for ee 
+      // Cutflow : veto 3rd leptons using veto ID
       for(unsigned int it_rg=0; it_rg<regions.size(); it_rg++){
         FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_"+IDsuffix, 5.5, weight, cutflow_bin, 0., cutflow_max);
         FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_unweighted_"+IDsuffix, 5.5, 1., cutflow_bin, 0., cutflow_max);
       }
       FillHist(channels.at(it_ch)+"/fakeCR2/Number_Events_"+IDsuffix, 5.5, weight, cutflow_bin, 0., cutflow_max);
-      FillHist(channels.at(it_ch)+"/fakeCR2/Number_Events_unweighted_"+IDsuffix, 5.5, 1., cutflow_bin, 0., cutflow_max);     
+      FillHist(channels.at(it_ch)+"/fakeCR2/Number_Events_unweighted_"+IDsuffix, 5.5, 1., cutflow_bin, 0., cutflow_max);
+
+      if(!(ZCand.M() > 10.)) continue; 
+      if(channels.at(it_ch)=="diel" && IsOnZ(ZCand.M(), 10.)) continue; //JH : see p.12 of preapproval -> https://indico.cern.ch/event/694943/contributions/2849972/attachments/1583026/2501796/180115__JaesungKim__JetsX_Meeting__HN_DiLepton_PreApproval.pdf
+
+      // Cutflow : m(ll) > 10 GeV, |m(ll)-m(Z)| > 10 GeV for ee 
+      for(unsigned int it_rg=0; it_rg<regions.size(); it_rg++){
+        FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_"+IDsuffix, 6.5, weight, cutflow_bin, 0., cutflow_max);
+        FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_unweighted_"+IDsuffix, 6.5, 1., cutflow_bin, 0., cutflow_max);
+      }
+      FillHist(channels.at(it_ch)+"/fakeCR2/Number_Events_"+IDsuffix, 6.5, weight, cutflow_bin, 0., cutflow_max);
+      FillHist(channels.at(it_ch)+"/fakeCR2/Number_Events_unweighted_"+IDsuffix, 6.5, 1., cutflow_bin, 0., cutflow_max);     
 
       //// Lepton categories for the fake background
       //if(it_ch == 0){
@@ -751,16 +752,16 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
       if(jets.size()+fatjets.size()==0 && Nbjet_medium==0){
        
         // Cutflow : jet requirement for non-prompt CR2 
-        FillHist(channels.at(it_ch)+"/fakeCR2/Number_Events_"+IDsuffix, 6.5, weight, cutflow_bin, 0., cutflow_max);
-        FillHist(channels.at(it_ch)+"/fakeCR2/Number_Events_unweighted_"+IDsuffix, 6.5, 1., cutflow_bin, 0., cutflow_max);
-
-        if(!(leptons.at(0)->DeltaR(*leptons.at(1)) > 2.5)) continue;
         FillHist(channels.at(it_ch)+"/fakeCR2/Number_Events_"+IDsuffix, 7.5, weight, cutflow_bin, 0., cutflow_max);
         FillHist(channels.at(it_ch)+"/fakeCR2/Number_Events_unweighted_"+IDsuffix, 7.5, 1., cutflow_bin, 0., cutflow_max);
-        //FillHist(channels.at(it_ch)+"/fakeCR2/Number_Jets_"+IDsuffix, jets.size(), weight, 10, 0., 10.);
-        //FillHist(channels.at(it_ch)+"/fakeCR2/Number_BJets_Loose_"+IDsuffix, Nbjet_loose, weight, 10, 0., 10.);
-        //FillHist(channels.at(it_ch)+"/fakeCR2/Number_BJets_Medium_"+IDsuffix, Nbjet_medium, weight, 10, 0., 10.);
-        //FillHist(channels.at(it_ch)+"/fakeCR2/Number_FatJets_"+IDsuffix, fatjets.size(), weight, 10, 0., 10.);
+
+        if(!(leptons.at(0)->DeltaR(*leptons.at(1)) > 2.5)) continue;
+        FillHist(channels.at(it_ch)+"/fakeCR2/Number_Events_"+IDsuffix, 8.5, weight, cutflow_bin, 0., cutflow_max);
+        FillHist(channels.at(it_ch)+"/fakeCR2/Number_Events_unweighted_"+IDsuffix, 8.5, 1., cutflow_bin, 0., cutflow_max);
+        FillHist(channels.at(it_ch)+"/fakeCR2/Number_Jets_"+IDsuffix, jets.size(), weight, 10, 0., 10.);
+        FillHist(channels.at(it_ch)+"/fakeCR2/Number_BJets_Loose_"+IDsuffix, Nbjet_loose, weight, 10, 0., 10.);
+        FillHist(channels.at(it_ch)+"/fakeCR2/Number_BJets_Medium_"+IDsuffix, Nbjet_medium, weight, 10, 0., 10.);
+        FillHist(channels.at(it_ch)+"/fakeCR2/Number_FatJets_"+IDsuffix, fatjets.size(), weight, 10, 0., 10.);
         FillHist(channels.at(it_ch)+"/fakeCR2/ZCand_Mass_"+IDsuffix, ZCand.M(), weight, 1000, 0., 1000.);
         FillHist(channels.at(it_ch)+"/fakeCR2/Lep1_Pt_"+IDsuffix, leptons.at(0)->Pt(), weight, 1000, 0., 1000.);
         FillHist(channels.at(it_ch)+"/fakeCR2/Lep2_Pt_"+IDsuffix, leptons.at(1)->Pt(), weight, 1000, 0., 1000.);
@@ -798,12 +799,13 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
         }
       }
 
-      if(!( fatjets.size()>0 || (jets.size()>1 && fatjets.size()==0) || (jets.size()==1 && fatjets.size()==0 && ZCand.M()<80.) )) continue; //JH 
+      //if(!( fatjets.size()>0 || (jets.size()>1 && fatjets.size()==0) || (jets.size()==1 && fatjets.size()==0 && ZCand.M()<80.) )) continue;
+      if(!( fatjets.size()>0 || jets.size()>0 )) continue; //JH : new preselection?
       
-      //FillHist(channels.at(it_ch)+"/Pre/Number_Jets_"+IDsuffix, jets.size(), weight, 10, 0., 10.);
-      //FillHist(channels.at(it_ch)+"/Pre/Number_BJets_Loose_"+IDsuffix, Nbjet_loose, weight, 10, 0., 10.);
-      //FillHist(channels.at(it_ch)+"/Pre/Number_BJets_Medium_"+IDsuffix, Nbjet_medium, weight, 10, 0., 10.);
-      //FillHist(channels.at(it_ch)+"/Pre/Number_FatJets_"+IDsuffix, fatjets.size(), weight, 10, 0., 10.);
+      FillHist(channels.at(it_ch)+"/Pre/Number_Jets_"+IDsuffix, jets.size(), weight, 10, 0., 10.);
+      FillHist(channels.at(it_ch)+"/Pre/Number_BJets_Loose_"+IDsuffix, Nbjet_loose, weight, 10, 0., 10.);
+      FillHist(channels.at(it_ch)+"/Pre/Number_BJets_Medium_"+IDsuffix, Nbjet_medium, weight, 10, 0., 10.);
+      FillHist(channels.at(it_ch)+"/Pre/Number_FatJets_"+IDsuffix, fatjets.size(), weight, 10, 0., 10.);
       FillHist(channels.at(it_ch)+"/Pre/ZCand_Mass_"+IDsuffix, ZCand.M(), weight, 1000, 0., 1000.);
       FillHist(channels.at(it_ch)+"/Pre/ZCand_Pt_"+IDsuffix, ZCand.Pt(), weight, 1000, 0., 1000.);
       FillHist(channels.at(it_ch)+"/Pre/Lep1_Pt_"+IDsuffix, leptons.at(0)->Pt(), weight, 1000, 0., 1000.);
@@ -845,14 +847,14 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
       for(unsigned int it_rg=0; it_rg<regions.size(); it_rg++){
 
         // Cutflow : jet requirement (This is the number or events at preselection)
-        FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_"+IDsuffix, 6.5, weight, cutflow_bin, 0., cutflow_max);
-        FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_unweighted_"+IDsuffix, 6.5, 1., cutflow_bin, 0., cutflow_max);
+        FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_"+IDsuffix, 7.5, weight, cutflow_bin, 0., cutflow_max);
+        FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_unweighted_"+IDsuffix, 7.5, 1., cutflow_bin, 0., cutflow_max);
 
         // non-prompt CR1 : SS 2 leptons with b-tagged jets
         if(it_rg == 0){
           if(!(Nbjet_medium > 0)) continue;
-          FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_"+IDsuffix, 7.5, weight, cutflow_bin, 0., cutflow_max);
-          FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_unweighted_"+IDsuffix, 7.5, 1., cutflow_bin, 0., cutflow_max);
+          FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_"+IDsuffix, 8.5, weight, cutflow_bin, 0., cutflow_max);
+          FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_unweighted_"+IDsuffix, 8.5, 1., cutflow_bin, 0., cutflow_max);
           //FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Jets_"+IDsuffix, jets.size(), weight, 10, 0., 10.);
           //FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_BJets_Loose_"+IDsuffix, Nbjet_loose, weight, 10, 0., 10.);
           //FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_BJets_Medium_"+IDsuffix, Nbjet_medium, weight, 10, 0., 10.);
@@ -984,8 +986,8 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
             if(!(Nbjet_medium>0 || MET2ST>20.)) continue;
           }
 
-          FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_"+IDsuffix, 7.5, weight, cutflow_bin, 0., cutflow_max);
-          FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_unweighted_"+IDsuffix, 7.5, 1., cutflow_bin, 0., cutflow_max);
+          FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_"+IDsuffix, 8.5, weight, cutflow_bin, 0., cutflow_max);
+          FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_unweighted_"+IDsuffix, 8.5, 1., cutflow_bin, 0., cutflow_max);
           //FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Jets_"+IDsuffix, jets.size(), weight, 10, 0., 10.);
           //FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_BJets_Loose_"+IDsuffix, Nbjet_loose, weight, 10, 0., 10.);
           //FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_BJets_Medium_"+IDsuffix, Nbjet_medium, weight, 10, 0., 10.);
@@ -1093,8 +1095,8 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
             if(!(Nbjet_medium>0 || MET>100.)) continue;
           }
 
-          FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_"+IDsuffix, 7.5, weight, cutflow_bin, 0., cutflow_max);
-          FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_unweighted_"+IDsuffix, 7.5, 1., cutflow_bin, 0., cutflow_max);
+          FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_"+IDsuffix, 8.5, weight, cutflow_bin, 0., cutflow_max);
+          FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_unweighted_"+IDsuffix, 8.5, 1., cutflow_bin, 0., cutflow_max);
           //FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Jets_"+IDsuffix, jets.size(), weight, 10, 0., 10.);
           //FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_BJets_Loose_"+IDsuffix, Nbjet_loose, weight, 10, 0., 10.);
           //FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_BJets_Medium_"+IDsuffix, Nbjet_medium, weight, 10, 0., 10.);
@@ -1204,8 +1206,8 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
             if(!(Nbjet_medium>0 || MET2ST>20.)) continue;
           }
 
-          FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_"+IDsuffix, 7.5, weight, cutflow_bin, 0., cutflow_max);
-          FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_unweighted_"+IDsuffix, 7.5, 1., cutflow_bin, 0., cutflow_max);
+          FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_"+IDsuffix, 8.5, weight, cutflow_bin, 0., cutflow_max);
+          FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Events_unweighted_"+IDsuffix, 8.5, 1., cutflow_bin, 0., cutflow_max);
           //FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_Jets_"+IDsuffix, jets.size(), weight, 10, 0., 10.);
           //FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_BJets_Loose_"+IDsuffix, Nbjet_loose, weight, 10, 0., 10.);
           //FillHist(channels.at(it_ch)+"/"+regions.at(it_rg)+"/Number_BJets_Medium_"+IDsuffix, Nbjet_medium, weight, 10, 0., 10.);
