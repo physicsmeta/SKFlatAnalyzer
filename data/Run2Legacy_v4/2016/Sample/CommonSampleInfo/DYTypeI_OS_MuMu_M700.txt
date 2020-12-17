@@ -1,0 +1,2 @@
+# alias PD xsec nmc sumw
+DYTypeI_OS_MuMu_M700	DYTypeI_NLO_SF_M700_2016	5.04317499435e-07	44279	41413
