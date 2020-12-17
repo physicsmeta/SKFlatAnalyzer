@@ -1,5 +1,5 @@
 {
-TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip_IDv2/2016/CFrate__/ChargeFlip_IDv2_DYJets_TTLL.root";
+TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/ChargeFlip/2016/CFrate__/ChargeFlip_All.root";
 TFile* f1 = new TFile(filename);
 
 TString samplename = filename(filename.Last('/')+12,filename.Length());
@@ -8,7 +8,9 @@ samplename.ReplaceAll(".root","");
 //gSystem->Exec("mkdir "+samplename);
 
 vector<TString> User_ID;
-User_ID.push_back("HNTightV2");
+//User_ID.push_back("HEEP_dZ_CF");
+User_ID.push_back("HNTightV1");
+//User_ID.push_back("HNMVATight");
 
 for(unsigned int i=0; i<User_ID.size(); i++){
 
@@ -23,9 +25,9 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   
   vector<double> X_1, EX_1, X_2, EX_2, X_3, EX_3;
   for (int i=0; i<40; i++) {
-    X_1.push_back((2*i+1)*(0.04/80.)); EX_1.push_back(0.04/80.); 
-    X_2.push_back((2*i+1)*(0.04/80.)); EX_2.push_back(0.04/80.);
-    X_3.push_back((2*i+1)*(0.04/80.)); EX_3.push_back(0.04/80.);
+    X_1.push_back((2*i+1)*(0.0005)); EX_1.push_back(0); 
+    X_2.push_back((2*i+1)*(0.0005)); EX_2.push_back(0);
+    X_3.push_back((2*i+1)*(0.0005)); EX_3.push_back(0);
   }
   vector<double> Y_1, EY_1, Y_2, EY_2, Y_3, EY_3;
   for (int i=0; i<40; i++) {
@@ -82,7 +84,8 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   gr1->SetTitle("ChargeFlip_|#eta|<0.8 ("+User_ID.at(i)+")");
   gr1->SetMinimum(0.);
   gr1->Draw("ZAP"); //Z : do not draw small horizontal/vertical lines the end of the error bars
-  gr1->GetXaxis()->SetRangeUser(0.,0.04);
+  if(User_ID[i].Contains("HEEP")) gr1->GetXaxis()->SetRangeUser(0.,0.02);
+  else gr1->GetXaxis()->SetRangeUser(0.,0.04);
   gr1->GetXaxis()->SetTitle("#scale[0.8]{1/p_{T} (GeV^{-1})}");
   gr1->GetXaxis()->SetTickLength(0.025);
   gr1->GetXaxis()->SetLabelSize(0.025);
@@ -91,13 +94,13 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   
   // Define fit function and range //
   
-  TF1 *gr1_fit1 = new TF1("gr1_fit1","pol1",0,0.0075);
-  TF1 *gr1_fit2 = new TF1("gr1_fit2","pol1",0.0075,0.0155);
-  TF1 *gr1_fit3 = new TF1("gr1_fit3","pol1",0.0155,0.041);
+  TF1 *gr1_fit1 = new TF1("gr1_fit1","expo",0.,0.007);
+  TF1 *gr1_fit2 = new TF1("gr1_fit2","[0]/(x+[1])+[2]",0.007,0.015);
+  TF1 *gr1_fit3 = new TF1("gr1_fit3","pol1",0.015,0.04);
   
-  gr1_fit1->SetLineWidth(2);
-  gr1_fit2->SetLineWidth(2);
-  gr1_fit3->SetLineWidth(2);
+  gr1_fit1->SetLineWidth(3);
+  gr1_fit2->SetLineWidth(3);
+  gr1_fit3->SetLineWidth(3);
   
   gr1_fit1->SetLineColor(kRed);
   gr1_fit2->SetLineColor(kGreen);
@@ -133,12 +136,32 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   //gr1_fit3_err->SetFillColor(4);
   //gr1_fit3_err->SetFillStyle(3001);
   //gr1_fit3_err->Draw("3 same");
- 
-  TLegend* gr1_legend = new TLegend(0.75,0.8,0.9,0.9);
-  gr1_legend->AddEntry(gr1_fit1,"high pt","l");
-  gr1_legend->AddEntry(gr1_fit2,"medium pt","l");
-  gr1_legend->AddEntry(gr1_fit3,"low pt","l");
-  gr1_legend->Draw();
+
+
+/*	
+  double Chisquare1 = gr1_fit1->GetChisquare();
+  TString Chisquare1_t = Form("%f",Chisquare1);
+  Chisquare1_t = Chisquare1_t(0,7);
+  int ndf1 = gr1_fit1->GetNDF();
+  TString ndf1_t = Form("%d",ndf1);
+  double par1[3];
+  gr1_fit1->GetParameters(par1);
+  TString par1_0 = Form("%.10f",par1[0]);
+  TString par1_1 = Form("%.10f",par1[1]);
+  if(!par1_1.Contains("-")) par1_1 = "+"+par1_1;
+  TString par1_2 = Form("%.10f",par1[2]);
+  double rate1 = par1[0]/(0.001+par1[1])+par1[2];
+  TString rate1_t = Form("%.10f",rate1);
+
+  // draw the textbox
+  TPaveText *pt1 = new TPaveText(0.55,0.8,0.9,0.9,"NDC");
+  pt1->SetShadowColor(0);
+  pt1->SetFillColor(0);
+  pt1->AddText("#chi^{2}/ndf : "+Chisquare1_t+"/"+ndf1_t);
+  pt1->AddText("Fit func : #frac{"+par1_0+"}{x"+par1_1+"}+"+par1_2);
+  if(!User_ID[i].Contains("V1")) pt1->AddText("CF rate at 1000GeV : "+rate1_t);
+  pt1->Draw();
+*/
 
 
   // Done and repeat for EtaRegion2, 3 //
@@ -154,7 +177,8 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   gr2->SetTitle("ChargeFlip_0.8#leq|#eta|<1.4442 ("+User_ID.at(i)+")");
   gr2->SetMinimum(0.);
   gr2->Draw("ZAP");
-  gr2->GetXaxis()->SetRangeUser(0.,0.04);
+  if(User_ID[i].Contains("HEEP")) gr2->GetXaxis()->SetRangeUser(0.,0.02);
+  else gr2->GetXaxis()->SetRangeUser(0.,0.04);
   gr2->GetXaxis()->SetTitle("#scale[0.8]{1/p_{T} (GeV^{-1})}");
   gr2->GetXaxis()->SetTickLength(0.025);
   gr2->GetXaxis()->SetLabelSize(0.025);
@@ -162,17 +186,19 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   
   
   
-  TF1 *gr2_fit1 = new TF1("gr2_fit1","pol1",0,0.0055);
-  TF1 *gr2_fit2 = new TF1("gr2_fit2","pol1",0.0055,0.02);
-  TF1 *gr2_fit3 = new TF1("gr2_fit3","pol1",0.02,0.04);
+  TF1 *gr2_fit1;
+  if(User_ID[i].Contains("HEEP")) gr2_fit1 = new TF1("gr2_fit1","[0]/(x+[1])+[2]",0.0001,0.02);
+  else gr2_fit1 = new TF1("gr2_fit1","[0]/(x+[1])+[2]",0.0001,0.04);
+  //TF1 *gr2_fit2 = new TF1("gr2_fit2","pol1",0.0055,0.0155);
+  //TF1 *gr2_fit3 = new TF1("gr2_fit3","pol1",0.0155,0.04);
   
-  gr2_fit1->SetLineWidth(2);
-  gr2_fit2->SetLineWidth(2);
-  gr2_fit3->SetLineWidth(2);
+  gr2_fit1->SetLineWidth(3);
+  //gr2_fit2->SetLineWidth(3);
+  //gr2_fit3->SetLineWidth(3);
   
-  gr2_fit1->SetLineColor(kRed);
-  gr2_fit2->SetLineColor(kGreen);
-  gr2_fit3->SetLineColor(kBlue);
+  gr2_fit1->SetLineColor(4);
+  //gr2_fit2->SetLineColor(4);
+  //gr2_fit3->SetLineColor(4);
   
   cout << endl << "//////////////////// Now fitting on EtaRegion2 ... ////////////////////" << endl;
   
@@ -185,7 +211,7 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   //gr2_fit1_err->SetFillStyle(3001);
   //gr2_fit1_err->Draw("3 same");
   
-  gr2->Fit(gr2_fit2,"R+");
+  //gr2->Fit(gr2_fit2,"R+");
 
   //TGraphErrors *gr2_fit2_err = new TGraphErrors(22);
   //for(int i=0; i<22; i++) gr2_fit2_err->SetPoint(i,0.005+0.0005*i,0);
@@ -194,7 +220,7 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   //gr2_fit2_err->SetFillStyle(3001);
   //gr2_fit2_err->Draw("3 same");
   
-  gr2->Fit(gr2_fit3,"R+");
+  //gr2->Fit(gr2_fit3,"R+");
 
   //TGraphErrors *gr2_fit3_err = new TGraphErrors(54);
   //for(int i=0; i<54; i++) gr2_fit3_err->SetPoint(i,0.0155+0.0005*i,0);
@@ -203,11 +229,32 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   //gr2_fit3_err->SetFillStyle(3001);
   //gr2_fit3_err->Draw("3 same");
   
-  TLegend* gr2_legend = new TLegend(0.75,0.8,0.9,0.9);
-  gr2_legend->AddEntry(gr2_fit1,"high pt","l");
-  gr2_legend->AddEntry(gr2_fit2,"medium pt","l");
-  gr2_legend->AddEntry(gr2_fit3,"low pt","l");
-  gr2_legend->Draw();
+/*
+
+  double Chisquare2 = gr2_fit1->GetChisquare();
+  TString Chisquare2_t = Form("%f",Chisquare2);
+  Chisquare2_t = Chisquare2_t(0,7);
+  int ndf2 = gr2_fit1->GetNDF();
+  TString ndf2_t = Form("%d",ndf2);
+  double par2[3];
+  gr2_fit1->GetParameters(par2);
+  TString par2_0 = Form("%.10f",par2[0]);
+  TString par2_1 = Form("%.10f",par2[1]);
+  if(!par2_1.Contains("-")) par2_1 = "+"+par2_1;
+  TString par2_2 = Form("%.10f",par2[2]);
+  double rate2 = par2[0]/(0.001+par2[1])+par2[2];
+  TString rate2_t = Form("%.10f",rate2);
+
+  // draw the textbox
+  TPaveText *pt2 = new TPaveText(0.55,0.8,0.9,0.9,"NDC");
+  pt2->SetShadowColor(0);
+  pt2->SetFillColor(0);
+  pt2->AddText("#chi^{2}/ndf : "+Chisquare2_t+"/"+ndf2_t);
+  pt2->AddText("Fit func : #frac{"+par2_0+"}{x"+par2_1+"}+"+par2_2);
+  pt2->AddText("CF rate at 1000GeV : "+rate2_t);
+  pt2->Draw();
+
+*/
 
   
   c3->cd();
@@ -221,24 +268,27 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   gr3->SetTitle("ChargeFlip_1.556#leq|#eta|<2.5 ("+User_ID.at(i)+")");
   gr3->SetMinimum(0.);
   gr3->Draw("ZAP");
-  gr3->GetXaxis()->SetRangeUser(0.,0.04);
+  if(User_ID[i].Contains("HEEP")) gr3->GetXaxis()->SetRangeUser(0.,0.02);
+  else gr3->GetXaxis()->SetRangeUser(0.,0.04);
   gr3->GetXaxis()->SetTitle("#scale[0.8]{1/p_{T} (GeV^{-1})}");
   gr3->GetXaxis()->SetTickLength(0.025);
   gr3->GetXaxis()->SetLabelSize(0.025);
   gr3->GetYaxis()->SetLabelSize(0.025);
   
   
-  TF1 *gr3_fit1 = new TF1("gr3_fit1","pol1",0,0.0105);
-  TF1 *gr3_fit2 = new TF1("gr3_fit2","pol1",0.0105,0.02049);
-  TF1 *gr3_fit3 = new TF1("gr3_fit3","pol1",0.02049,0.04);
+  TF1 *gr3_fit1;
+  if(User_ID[i].Contains("HEEP")) gr3_fit1 = new TF1("gr3_fit1","[0]/(x+[1])+[2]",0.0001,0.02);
+  else gr3_fit1 = new TF1("gr3_fit1","[0]/(x+[1])+[2]",0.0001,0.04);
+  //TF1 *gr3_fit2 = new TF1("gr3_fit2","pol1",0.0105,0.02049);
+  //TF1 *gr3_fit3 = new TF1("gr3_fit3","pol1",0.02049,0.04);
   
-  gr3_fit1->SetLineWidth(2);
-  gr3_fit2->SetLineWidth(2);
-  gr3_fit3->SetLineWidth(2);
+  gr3_fit1->SetLineWidth(3);
+  //gr3_fit2->SetLineWidth(3);
+  //gr3_fit3->SetLineWidth(3);
   
-  gr3_fit1->SetLineColor(kRed);
-  gr3_fit2->SetLineColor(kGreen);
-  gr3_fit3->SetLineColor(kBlue);
+  gr3_fit1->SetLineColor(4);
+  //gr3_fit2->SetLineColor(4);
+  //gr3_fit3->SetLineColor(4);
   
   cout << endl << "//////////////////// Now fitting on EtaRegion3 ... ////////////////////" << endl;
   
@@ -251,7 +301,7 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   //gr3_fit1_err->SetFillStyle(3001);
   //gr3_fit1_err->Draw("3 same");
   
-  gr3->Fit(gr3_fit2,"R+");
+  //gr3->Fit(gr3_fit2,"R+");
 
   //TGraphErrors *gr3_fit2_err = new TGraphErrors(10);
   //for(int i=0; i<10; i++) gr3_fit2_err->SetPoint(i,0.011+0.001*i,0);
@@ -260,7 +310,7 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   //gr3_fit2_err->SetFillStyle(3001);
   //gr3_fit2_err->Draw("3 same");
   
-  gr3->Fit(gr3_fit3,"R+");
+  //gr3->Fit(gr3_fit3,"R+");
 
   //TGraphErrors *gr3_fit3_err = new TGraphErrors(22);
   //for(int i=0; i<22; i++) gr3_fit3_err->SetPoint(i,0.02+0.001*i,0);
@@ -269,11 +319,32 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   //gr3_fit3_err->SetFillStyle(3001);
   //gr3_fit3_err->Draw("3 same");
   
-  TLegend* gr3_legend = new TLegend(0.75,0.8,0.9,0.9);
-  gr3_legend->AddEntry(gr3_fit1,"high pt","l");
-  gr3_legend->AddEntry(gr3_fit2,"medium pt","l");
-  gr3_legend->AddEntry(gr3_fit3,"low pt","l");
-  gr3_legend->Draw();
+/*
+
+  double Chisquare3 = gr3_fit1->GetChisquare();
+  TString Chisquare3_t = Form("%f",Chisquare3);
+  Chisquare3_t = Chisquare3_t(0,7);
+  int ndf3 = gr3_fit1->GetNDF();
+  TString ndf3_t = Form("%d",ndf3);
+  double par3[3];
+  gr3_fit1->GetParameters(par3);
+  TString par3_0 = Form("%.10f",par3[0]);
+  TString par3_1 = Form("%.10f",par3[1]);
+  if(!par3_1.Contains("-")) par3_1 = "+"+par3_1;
+  TString par3_2 = Form("%.10f",par3[2]);
+  double rate3 = par3[0]/(0.001+par3[1])+par3[2];
+  TString rate3_t = Form("%.10f",rate3);
+
+  // draw the textbox
+  TPaveText *pt3 = new TPaveText(0.55,0.8,0.9,0.9,"NDC");
+  pt3->SetShadowColor(0);
+  pt3->SetFillColor(0);
+  pt3->AddText("#chi^{2}/ndf : "+Chisquare3_t+"/"+ndf3_t);
+  pt3->AddText("Fit func : #frac{"+par3_0+"}{x"+par3_1+"}+"+par3_2);
+  pt3->AddText("CF rate at 1000GeV : "+rate3_t);
+  pt3->Draw();
+
+*/
 
 
   //c1->SaveAs(samplename+"/"+User_ID.at(i)+"_Fit_EtaRegion1.pdf");

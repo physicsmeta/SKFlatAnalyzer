@@ -170,14 +170,14 @@
 ### MC validation year by year at presel level.
 #################################################
 
-python python/SKFlat.py -a Presel -y 2016 -i DYTypeI_SS_EE_M100 -n 50 &
-python python/SKFlat.py -a Presel -y 2016 -i DYTypeI_SS_EE_M700 -n 50 &
-python python/SKFlat.py -a Presel -y 2016 -i DYTypeI_SS_MuMu_M100 -n 50 &
-python python/SKFlat.py -a Presel -y 2016 -i DYTypeI_SS_MuMu_M700 -n 50 &
-python python/SKFlat.py -a Presel -y 2016 -i DYTypeI_OS_EE_M100 -n 50 &
-python python/SKFlat.py -a Presel -y 2016 -i DYTypeI_OS_EE_M700 -n 50 &
-python python/SKFlat.py -a Presel -y 2016 -i DYTypeI_OS_MuMu_M100 -n 50 &
-python python/SKFlat.py -a Presel -y 2016 -i DYTypeI_OS_MuMu_M700 -n 50 &
+#python python/SKFlat.py -a Presel -y 2016 -i DYTypeI_SS_EE_M100 -n 50 &
+#python python/SKFlat.py -a Presel -y 2016 -i DYTypeI_SS_EE_M700 -n 50 &
+#python python/SKFlat.py -a Presel -y 2016 -i DYTypeI_SS_MuMu_M100 -n 50 &
+#python python/SKFlat.py -a Presel -y 2016 -i DYTypeI_SS_MuMu_M700 -n 50 &
+#python python/SKFlat.py -a Presel -y 2016 -i DYTypeI_OS_EE_M100 -n 50 &
+#python python/SKFlat.py -a Presel -y 2016 -i DYTypeI_OS_EE_M700 -n 50 &
+#python python/SKFlat.py -a Presel -y 2016 -i DYTypeI_OS_MuMu_M100 -n 50 &
+#python python/SKFlat.py -a Presel -y 2016 -i DYTypeI_OS_MuMu_M700 -n 50 &
 #python python/SKFlat.py -a Presel -y 2017 -i DYTypeI_SS_EE_M100 -n 50 &
 #python python/SKFlat.py -a Presel -y 2017 -i DYTypeI_SS_EE_M700 -n 50 &
 #python python/SKFlat.py -a Presel -y 2017 -i DYTypeI_SS_MuMu_M100 -n 50 &
@@ -194,3 +194,16 @@ python python/SKFlat.py -a Presel -y 2016 -i DYTypeI_OS_MuMu_M700 -n 50 &
 #python python/SKFlat.py -a Presel -y 2018 -i DYTypeI_OS_EE_M700 -n 50 &
 #python python/SKFlat.py -a Presel -y 2018 -i DYTypeI_OS_MuMu_M100 -n 50 &
 #python python/SKFlat.py -a Presel -y 2018 -i DYTypeI_OS_MuMu_M700 -n 50 &
+
+#python python/SKFlat.py -a Presel -y 2016 -i DoubleEG:B_ver2 -n 80 --skim SkimTree_Dilepton & #test
+#python python/SKFlat.py -a Presel -y 2016 -l submitList/2016_DoubleMuon_BtoG.txt -n 80 --skim SkimTree_Dilepton --nmax 80 &
+#python python/SKFlat.py -a Presel -y 2016 -l submitList/2016_DoubleEG_BtoH.txt -n 80 --skim SkimTree_Dilepton --nmax 80 &
+#python python/SKFlat.py -a Presel -y 2016 -l submitList/2016_MuonEG_BtoG.txt -n 80 --skim SkimTree_Dilepton --nmax 80 &
+#python python/SKFlat.py -a Presel -y 2017 -l submitList/2017_DoubleMuon.txt -n 80 --skim SkimTree_Dilepton --nmax 80 &
+#python python/SKFlat.py -a Presel -y 2017 -l submitList/2017_DoubleEG.txt -n 80 --skim SkimTree_Dilepton --nmax 80 &
+#python python/SKFlat.py -a Presel -y 2017 -l submitList/2017_MuonEG.txt -n 80 --skim SkimTree_Dilepton --nmax 80 &
+#python python/SKFlat.py -a Presel -y 2018 -l submitList/2018_DoubleMuon.txt -n 80 --skim SkimTree_Dilepton --nmax 80 &
+#python python/SKFlat.py -a Presel -y 2018 -l submitList/2018_EGamma.txt -n 80 --skim SkimTree_Dilepton --nmax 80 &
+#python python/SKFlat.py -a Presel -y 2018 -l submitList/2018_MuonEG.txt -n 80 --skim SkimTree_Dilepton --nmax 80 &
+python python/SKFlat.py -a Presel_2016H -y 2016 -l submitList/2016_DoubleMuon_H.txt -n 80 --skim SkimTree_Dilepton --nmax 80 &
+python python/SKFlat.py -a Presel_2016H -y 2016 -l submitList/2016_MuonEG_H.txt -n 80 --skim SkimTree_Dilepton --nmax 80 &

@@ -70,6 +70,8 @@ void ChargeFlip::executeEvent(Long64_t Nentry){
     param.CFsyst_ = AnalyzerParameter::CF_Central;
   
     param.Name = EleID;
+
+    param.Electron_User_ID = EleID;
  
     if(HasFlag("250")){
       param.Electron_User_ID = EleID+"_250";

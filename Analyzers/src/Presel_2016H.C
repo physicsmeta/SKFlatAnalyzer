@@ -1,14 +1,14 @@
-#include "Presel.h"
+#include "Presel_2016H.h"
 
-Presel::Presel(){
+Presel_2016H::Presel_2016H(){
 
 }
 
-void Presel::initializeAnalyzer(){
+void Presel_2016H::initializeAnalyzer(){
 
   //==== if you use "--userflags RunSyst" with SKFlat.py, HasFlag("RunSyst") will return "true"
 //  RunSyst = HasFlag("RunSyst");
-//  cout << "[Presel::initializeAnalyzer] RunSyst = " << RunSyst << endl;
+//  cout << "[Presel_2016H::initializeAnalyzer] RunSyst = " << RunSyst << endl;
   RunFake = HasFlag("RunFake");
   RunCF = HasFlag("RunCF");
 
@@ -24,7 +24,7 @@ void Presel::initializeAnalyzer(){
   //==== At this point, sample informations (e.g., IsDATA, DataStream, MCSample, or DataYear) are all set
   //==== You can define sample-dependent or year-dependent variables here
   //==== (Example) Year-dependent variables
-  //==== I defined "TString IsoMuTriggerName;" and "double TriggerSafePtCut;" in Analyzers/include/Presel.h 
+  //==== I defined "TString IsoMuTriggerName;" and "double TriggerSafePtCut;" in Analyzers/include/Presel_2016H.h 
   //==== IsoMuTriggerName is a year-dependent variable, and you don't want to do "if(Dataer==~~)" for every event (let's save cpu time).
   //==== Then, do it here, which only ran once for each macro
 
@@ -75,8 +75,8 @@ void Presel::initializeAnalyzer(){
     EMuPtCut1 = 25., EMuPtCut2 = 15.;
   }
 
-//  cout << "[Presel::initializeAnalyzer] IsoMuTriggerName = " << IsoMuTriggerName << endl;
-//  cout << "[Presel::initializeAnalyzer TriggerSafePtCut = " << TriggerSafePtCut << endl;
+//  cout << "[Presel_2016H::initializeAnalyzer] IsoMuTriggerName = " << IsoMuTriggerName << endl;
+//  cout << "[Presel_2016H::initializeAnalyzer TriggerSafePtCut = " << TriggerSafePtCut << endl;
 
   //==== B-Tagging
   //==== add taggers and WP that you want to use in analysis
@@ -88,13 +88,13 @@ void Presel::initializeAnalyzer(){
   mcCorr->SetJetTaggingParameters(jtps); //JH : NOTE This is used in mcCorr->SetupJetTagging() in m.initializeAnalyzerTools();
 }
 
-Presel::~Presel(){
+Presel_2016H::~Presel_2016H(){
 
   //==== Destructor of this Analyzer
 
 }
 
-void Presel::executeEvent(){
+void Presel_2016H::executeEvent(){
 
   //================================================================
   //====  Example 1
@@ -106,7 +106,7 @@ void Presel::executeEvent(){
   //==== and then check ID booleans.
   //==== GetAllMuons not only loops over all MINIAOD muons, but also actually CONSTRUCT muon objects for each muons.
   //==== We are now running systematics, and you don't want to do this for every systematic sources
-  //==== So, I defined "vector<Muon> AllMuons;" in Analyzers/include/Presel.h,
+  //==== So, I defined "vector<Muon> AllMuons;" in Analyzers/include/Presel_2016H.h,
   //==== and save muons objects at the very beginning of executeEvent().
   //==== Later, do "SelectMuons(AllMuons, ID, pt, eta)" to get muons with ID cuts
   AllMuons = GetAllMuons();
@@ -119,7 +119,7 @@ void Presel::executeEvent(){
   //==== If data, 1.;
   //==== If MC && DataYear > 2017, 1.;
   //==== If MC && DataYear <= 2017, we have to reweight the event with this value
-  //==== I defined "double weight_Prefire;" in Analyzers/include/Presel.h
+  //==== I defined "double weight_Prefire;" in Analyzers/include/Presel_2016H.h
 //  weight_Prefire = GetPrefireWeight(0);
 
   AnalyzerParameter param;
@@ -183,7 +183,7 @@ void Presel::executeEvent(){
   }
 }
 
-void Presel::executeEventFromParameter(AnalyzerParameter param){
+void Presel_2016H::executeEventFromParameter(AnalyzerParameter param){
 
   vector<TString> channels;
   if(IsDATA){
@@ -235,7 +235,7 @@ void Presel::executeEventFromParameter(AnalyzerParameter param){
   //==== Trigger
   //==============
 
-  if(!(ev.PassTrigger(MuonTriggers) || ev.PassTrigger(ElectronTriggers) || ev.PassTrigger(EMuTriggers))) return; 
+  if(!(ev.PassTrigger(MuonTriggersH) || ev.PassTrigger(ElectronTriggers) || ev.PassTrigger(EMuTriggersH))) return; 
 
   //======================
   //==== Copy AllObjects
@@ -293,7 +293,7 @@ void Presel::executeEventFromParameter(AnalyzerParameter param){
     //this_AllElectrons = ScaleElectrons( this_AllElectrons, -1 );
   }
   else{
-    cout << "[Presel::executeEventFromParameter] Wrong syst" << endl;
+    cout << "[Presel_2016H::executeEventFromParameter] Wrong syst" << endl;
     exit(EXIT_FAILURE);
   }*/
 
@@ -456,7 +456,7 @@ void Presel::executeEventFromParameter(AnalyzerParameter param){
 
   //=====================================================================================
   //=====================================================================================
-  //==== Preselection, low/high mass signal regions
+  //==== preselection, low/high mass signal regions
   //=====================================================================================
   //=====================================================================================
 
@@ -473,9 +473,9 @@ void Presel::executeEventFromParameter(AnalyzerParameter param){
     if( (channels.at(it_ch).Contains("mu")) && RunCF) continue; //JH : mumu, emu are irrelevant to CF
 
     // Triggers for each channel
-    if(channels.at(it_ch)=="dimu" && !ev.PassTrigger(MuonTriggers)) continue; //JH : NOTE PassTrigger runs for loop and returns true even if a single item in triggers vector is fired;
+    if(channels.at(it_ch)=="dimu" && !ev.PassTrigger(MuonTriggersH)) continue; //JH : NOTE PassTrigger runs for loop and returns true even if a single item in triggers vector is fired;
     if(channels.at(it_ch)=="diel" && !ev.PassTrigger(ElectronTriggers)) continue;
-    if(channels.at(it_ch)=="emu" && !ev.PassTrigger(EMuTriggers)) continue; //JH : NOTE logically, I can use the following cut to avoid possible trigger double counting : e.g. (1) pass MuonTrigger (2) pass Electron Trigger && not pass Muon Trigger (3) pass EMu Trigger && not pass Muon Trigger nor Electron Trigger. But then this would not be consistent with the MC trigger lumi weight. So I will just let it as is. the possible (small) double counting happen in data and MC both, so doesn't matter.
+    if(channels.at(it_ch)=="emu" && !ev.PassTrigger(EMuTriggersH)) continue; //JH : NOTE logically, I can use the following cut to avoid possible trigger double counting : e.g. (1) pass MuonTrigger (2) pass Electron Trigger && not pass Muon Trigger (3) pass EMu Trigger && not pass Muon Trigger nor Electron Trigger. But then this would not be consistent with the MC trigger lumi weight. So I will just let it as is. the possible (small) double counting happen in data and MC both, so doesn't matter.
 
     // Period-dependent trigger weight (only for 2016 MC)
     trigger_lumi = 1., dimu_trig_weight = 0., emu_trig_weight = 0.;
@@ -559,7 +559,7 @@ void Presel::executeEventFromParameter(AnalyzerParameter param){
       } //JH : Now total weight including 2016 trigger lumi and lepton SF done && lepton gen-matching (for first 2 leptons only) done
 
       /////////////////////////////////////////////////////////
-      //// Preselection (triggers have been already applied.)
+      //// preselection (triggers have been already applied.)
       /////////////////////////////////////////////////////////
 
       if(!(leptons.at(0)->Pt()>LeptonPtCut1 && leptons.at(1)->Pt()>LeptonPtCut2)) continue;
