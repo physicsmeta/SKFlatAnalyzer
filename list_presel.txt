@@ -1,0 +1,9 @@
+#sample	var	title	xran1	xran2	yran	rebin	SaveAs
+#DYTypeI_SS_EE_M100	Lep1_Pt	pt(l1)	0	300	500	5	n
+#DYTypeI_OS_EE_M100	Lep1_Pt	pt(l1)	0	300	500	5	n
+DYTypeI_SS_MuMu_M100	Lep1_Pt	pt(l1)	0	300	1200	5	n
+#DYTypeI_OS_MuMu_M100	Lep1_Pt	pt(l1)	0	300	1000	5	n
+#DYTypeI_SS_EE_M700	Lep1_Pt	pt(l1)	0	300	500	5	n
+#DYTypeI_OS_EE_M700	Lep1_Pt	pt(l1)	0	300	500	5	n
+#DYTypeI_SS_MuMu_M700	Lep1_Pt	pt(l1)	0	300	1000	5	n
+#DYTypeI_OS_MuMu_M700	Lep1_Pt	pt(l1)	0	300	1000	5	n
