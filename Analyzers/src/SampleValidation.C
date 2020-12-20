@@ -24,10 +24,14 @@ void SampleValidation::executeEvent(){
 
   AnalyzerParameter param;
 
-  param.Muon_Tight_ID = "POGTight";
-  param.Muon_Veto_ID  = "POGLoose";
-  param.Electron_Tight_ID = "passTightID";
-  param.Electron_Veto_ID  = "passVetoID";
+  param.Muon_Tight_ID = "HNTightV1";
+  param.Muon_Veto_ID  = "ISRVeto";
+  param.Electron_Tight_ID = "HNTightV1";
+  param.Electron_Veto_ID  = "ISRVeto";
+
+  param.Jet_ID = "HNTight";
+  if(DataYear==2016) param.FatJet_ID = "HNTight0p55";
+  else param.FatJet_ID = "HNTight0p45";
 
   executeEventFromParameter(param);
 
@@ -70,31 +74,23 @@ void SampleValidation::executeEventFromParameter(AnalyzerParameter param){
   //==== Copy AllObjects
   //======================
 
-  //vector<Electron> this_AllElectrons = AllElectrons;
-  //vector<Muon> this_AllMuons = AllMuons;
-  //vector<Jet> this_AllJets = AllJets;
-  //vector<FatJet> this_AllFatJets = AllFatJets;
+  vector<Electron> this_AllElectrons = AllElectrons;
+  vector<Muon> this_AllMuons = AllMuons;
+  vector<Jet> this_AllJets = AllJets;
+  vector<FatJet> this_AllFatJets = AllFatJets;
   vector<Gen> gens = GetGens();
 
-  Gen hard_l, HN_l, last_HN, W, ISR_parton;
-	vector<Gen> hard_partons, N_partons;
+  //Gen hard_l, HN_l, last_HN, W, ISR_parton;
+  //vector<Gen> hard_partons, N_partons;
 
-	for(unsigned int i=0; i<gens.size(); i++){
+  //for(unsigned int i=0; i<gens.size(); i++){
 
     //FillHist("Pt_HN_mu", HN_mu.Pt(), weight, 1000, 0., 1000.);
     //FillHist("Eta_HN_mu", HN_mu.Eta(), weight, 100, -5., 5.);
     //FillHist("Phi_HN_mu", HN_mu.Phi(), weight, 63, -3.15, 3.15);
 
-  }
+  //}
 
-
-
-
-
-
-
-
-/*
 
   cout << "================================================" << endl;
   cout << "all muon size: " << this_AllMuons.size() << endl;
@@ -127,11 +123,14 @@ void SampleValidation::executeEventFromParameter(AnalyzerParameter param){
   // Fatjet selection
   for(unsigned int i=0; i<this_AllFatJets.size(); i++){
     lepton_count1 = 0;
+    if(!(this_AllFatJets.at(i).PassID(param.FatJet_ID))) continue; //JH : "HNTight"
+    if(!(this_AllFatJets.at(i).Pt() > 200.)) continue;
+    if(!(fabs(this_AllFatJets.at(i).Eta()) < 2.7)) continue;
     for(unsigned int j=0; j<muons_veto.size(); j++){
-      if(this_AllFatJets.at(i).DeltaR(muons_veto.at(j)) < 1.0) lepton_count1++; //JH : muon cleaning
+      if(this_AllFatJets.at(i).DeltaR(muons_veto.at(j)) < 0.8) lepton_count1++; //JH : muon cleaning
     }
     for(unsigned int j=0; j<electrons_veto.size(); j++){
-      if(this_AllFatJets.at(i).DeltaR(electrons_veto.at(j)) < 1.0) lepton_count1++; //JH : electron cleaning
+      if(this_AllFatJets.at(i).DeltaR(electrons_veto.at(j)) < 0.8) lepton_count1++; //JH : electron cleaning
     } 
     if(lepton_count1 > 0) continue;
     fatjets.push_back(this_AllFatJets.at(i));
@@ -139,17 +138,20 @@ void SampleValidation::executeEventFromParameter(AnalyzerParameter param){
 
   for(unsigned int i=0; i<this_AllJets.size(); i++){
     lepton_count2 = 0, fatjet_count = 0;
+    if(!(this_AllJets.at(i).PassID(param.Jet_ID))) continue; //JH :"HNTight"
+    if(!(this_AllJets.at(i).Pt() > 20.)) continue;
+    if(!(fabs(this_AllJets.at(i).Eta()) < 2.7)) continue;
     for(unsigned int j=0; j<muons_veto.size(); j++){
       if(this_AllJets.at(i).DeltaR(muons_veto.at(j)) < 0.4) lepton_count2++; //JH : muon cleaning
     }
     for(unsigned int j=0; j<electrons_veto.size(); j++){
       if(this_AllJets.at(i).DeltaR(electrons_veto.at(j)) < 0.4) lepton_count2++; //JH : electron cleaning
     }
-    //for(unsigned int j=0; j<fatjets.size(); j++){
-    //  if(this_AllJets.at(i).DeltaR(fatjets.at(j)) < 0.8) fatjet_count++; //JH : fatjet cleaning
-    //}
+    for(unsigned int j=0; j<fatjets.size(); j++){
+      if(this_AllJets.at(i).DeltaR(fatjets.at(j)) < 1.0) fatjet_count++; //JH : fatjet cleaning
+    }
     if(lepton_count2 > 0) continue;
-    //if(fatjet_count > 0) continue;
+    if(fatjet_count > 0) continue;
     jets.push_back(this_AllJets.at(i));
   }
 
@@ -169,31 +171,33 @@ void SampleValidation::executeEventFromParameter(AnalyzerParameter param){
 
   std::sort(muons.begin(), muons.end(), PtComparing);
   std::sort(muons_veto.begin(), muons_veto.end(), PtComparing);
-  if(electrons.size()>0) std::sort(electrons.begin(), electrons.end(), PtComparing);
-  if(electrons_veto.size()>0) std::sort(electrons_veto.begin(), electrons_veto.end(), PtComparing);
+  std::sort(electrons.begin(), electrons.end(), PtComparing);
+  std::sort(electrons_veto.begin(), electrons_veto.end(), PtComparing);
   std::sort(jets.begin(), jets.end(), PtComparing);
   //std::sort(jets_nolepveto.begin(), jets_nolepveto.end(), PtComparing);
-  if(fatjets.size()>0) std::sort(fatjets.begin(), fatjets.end(), PtComparing);
+  std::sort(fatjets.begin(), fatjets.end(), PtComparing);
+
+/*
 
   // muon selection
 
   Muon HN_mu, hard_mu;
   for(unsigned int i=0; i<muons.size(); i++){
     if (GetGenMatchedLepton(muons.at(i),gens).PID()!=0){
-			Gen truth_mu = GetGenMatchedLepton(muons.at(i),gens);
+      Gen truth_mu = GetGenMatchedLepton(muons.at(i),gens);
       if (gens.at(TrackGenSelfHistory(truth_mu,gens).at(1)).PID() == 9900012){
         HN_mu = muons[i];
-				cout << "HN_mu exists;" << endl;
-				cout << "pt: " << HN_mu.Pt() << ", eta: " << HN_mu.Eta() << ", phi: " << HN_mu.Phi() << endl;
-				cout << "matched gen Index: " << truth_mu.Index() << ", PID: " << truth_mu.PID() << ", mother's PID: " << gens.at(TrackGenSelfHistory(truth_mu,gens).at(1)).PID() << endl;
-				cout << "pt: " << truth_mu.Pt() << ", eta: " << truth_mu.Eta() << ", phi: " << truth_mu.Phi() << endl;
+        cout << "HN_mu exists;" << endl;
+        cout << "pt: " << HN_mu.Pt() << ", eta: " << HN_mu.Eta() << ", phi: " << HN_mu.Phi() << endl;
+        cout << "matched gen Index: " << truth_mu.Index() << ", PID: " << truth_mu.PID() << ", mother's PID: " << gens.at(TrackGenSelfHistory(truth_mu,gens).at(1)).PID() << endl;
+        cout << "pt: " << truth_mu.Pt() << ", eta: " << truth_mu.Eta() << ", phi: " << truth_mu.Phi() << endl;
       }
       if ((abs(gens.at(TrackGenSelfHistory(truth_mu,gens).at(1)).PID()) == 24) || (abs(gens.at(TrackGenSelfHistory(truth_mu,gens).at(1)).PID()) <= 4) || abs(gens.at(TrackGenSelfHistory(truth_mu,gens).at(1)).PID()) == 21 ){
         hard_mu = muons[i];
-				cout << "hard_mu exists;" << endl;
-				cout << "pt: " << hard_mu.Pt() << ", eta: " << hard_mu.Eta() << ", phi: " << hard_mu.Phi() << endl;
-				cout << "matched gen Index: " << truth_mu.Index() << ", PID: " << truth_mu.PID() << ", mother's PID: " << gens.at(TrackGenSelfHistory(truth_mu,gens).at(1)).PID() << endl;
-				cout << "pt: " << truth_mu.Pt() << ", eta: " << truth_mu.Eta() << ", phi: " << truth_mu.Phi() << endl;
+        cout << "hard_mu exists;" << endl;
+        cout << "pt: " << hard_mu.Pt() << ", eta: " << hard_mu.Eta() << ", phi: " << hard_mu.Phi() << endl;
+        cout << "matched gen Index: " << truth_mu.Index() << ", PID: " << truth_mu.PID() << ", mother's PID: " << gens.at(TrackGenSelfHistory(truth_mu,gens).at(1)).PID() << endl;
+        cout << "pt: " << truth_mu.Pt() << ", eta: " << truth_mu.Eta() << ", phi: " << truth_mu.Phi() << endl;
       }
     }
   }
@@ -202,42 +206,42 @@ void SampleValidation::executeEventFromParameter(AnalyzerParameter param){
     FillHist("Pt_HN_mu", HN_mu.Pt(), weight, 1000, 0., 1000.);
     FillHist("Eta_HN_mu", HN_mu.Eta(), weight, 100, -5., 5.);
     FillHist("Phi_HN_mu", HN_mu.Phi(), weight, 63, -3.15, 3.15);
-		if(fabs(HN_mu.Eta())<2.4){
+    if(fabs(HN_mu.Eta())<2.4){
       FillHist("fid_Pt_HN_mu", HN_mu.Pt(), weight, 1000, 0., 1000.);
       FillHist("fid_Eta_HN_mu", HN_mu.Eta(), weight, 100, -5., 5.);
       FillHist("fid_Phi_HN_mu", HN_mu.Phi(), weight, 63, -3.15, 3.15);
-		}
+    }
   }
   if(hard_mu.Chi2()!=999.){
     FillHist("Pt_hard_mu", hard_mu.Pt(), weight, 1000, 0., 1000.);
     FillHist("Eta_hard_mu", hard_mu.Eta(), weight, 100, -5., 5.);
     FillHist("Phi_hard_mu", hard_mu.Phi(), weight, 63, -3.15, 3.15);
-		if(fabs(hard_mu.Eta())<2.4){
+    if(fabs(hard_mu.Eta())<2.4){
       FillHist("fid_Pt_hard_mu", hard_mu.Pt(), weight, 1000, 0., 1000.);
       FillHist("fid_Eta_hard_mu", hard_mu.Eta(), weight, 100, -5., 5.);
       FillHist("fid_Phi_hard_mu", hard_mu.Phi(), weight, 63, -3.15, 3.15);
-		}
+    }
   }
 
   if(muons.size()>0){
     FillHist("Pt_mu1", muons.at(0).Pt(), weight, 1000, 0., 1000.);
     FillHist("Eta_mu1", muons.at(0).Eta(), weight, 100, -5., 5.);
     FillHist("Phi_mu1", muons.at(0).Phi(), weight, 63, -3.15, 3.15);
-		if(fabs(muons[0].Eta())<2.4){
+    if(fabs(muons[0].Eta())<2.4){
       FillHist("fid_Pt_mu1", muons.at(0).Pt(), weight, 1000, 0., 1000.);
       FillHist("fid_Eta_mu1", muons.at(0).Eta(), weight, 100, -5., 5.);
       FillHist("fid_Phi_mu1", muons.at(0).Phi(), weight, 63, -3.15, 3.15);
-		}
+    }
   }
   if(muons.size()>1){
     FillHist("Pt_mu2", muons.at(1).Pt(), weight, 1000, 0., 1000.);
     FillHist("Eta_mu2", muons.at(1).Eta(), weight, 100, -5., 5.);
     FillHist("Phi_mu2", muons.at(1).Phi(), weight, 63, -3.15, 3.15);
-		if(fabs(muons[1].Eta())<2.4){
+    if(fabs(muons[1].Eta())<2.4){
       FillHist("fid_Pt_mu2", muons.at(1).Pt(), weight, 1000, 0., 1000.);
       FillHist("fid_Eta_mu2", muons.at(1).Eta(), weight, 100, -5., 5.);
       FillHist("fid_Phi_mu2", muons.at(1).Phi(), weight, 63, -3.15, 3.15);
-		}
+    }
   }
   if(electrons.size()>0){
     FillHist("Pt_e1", electrons.at(0).Pt(), weight, 1000, 0., 1000.);
@@ -270,73 +274,80 @@ void SampleValidation::executeEventFromParameter(AnalyzerParameter param){
     FillHist("M_fatjet", fatjets.at(0).M(), weight, 1000, 0., 1000.);
   }
 
-  //Gen *last_HN, *hard_l, *HN_l, *W_l;
-  //vector<Gen*> hard_Ws, hard_partons, leptons, N_partons;
+*/
 
-  //for (unsigned int i=0; i<gens.size(); i++){
-  //  if(gens[i].isHardProcess()){
-  //    if(abs(gens[i].PID())==24) hard_Ws.push_back(&gens[i]);
-  //    else if(abs(gens[i].PID())<=4||gens[i].PID()==21) hard_partons.push_back(&gens[i]);
-  //    cout << "a" << endl;
-  //  }
-  //}
-	//PrintGen(gens);
-  //for(unsigned int i=0; i<gens.size(); i++){
-	//	cout << "&gens[i]: " << &gens[i] << endl;
-  //  if(gens[i].PID()==9900012) last_HN=&gens[i];
-	//	cout << "last_HN: " << last_HN << endl;
-  //  cout << i << "th particle:" << endl;
-  //  cout << "b" << endl;
-	//	cout << "gens[i].PID(): " << gens[i].PID() << endl;
-	//	cout << "abs(gens[i].PID()): " << abs(gens[i].PID()) << endl;
-	//	cout << "gens[i].MotherIndex(): " << gens[i].MotherIndex() << endl;
-	//	cout << "hard_partons.at(0)->Index(): " << hard_partons.at(0)->Index() << endl;
-	//	cout << "((abs(gens[i].PID())==11)||(abs(gens[i].PID())==13)): " << ((abs(gens[i].PID())==11)||(abs(gens[i].PID())==13)) << endl;
-  //  cout << "(gens[i].MotherIndex()==hard_partons.at(0)->Index()): " << (gens[i].MotherIndex()==hard_partons.at(0)->Index()) << endl;
-  //  cout << (((abs(gens[i].PID())==11)||(abs(gens[i].PID())==13))&&(gens[i].MotherIndex()==hard_partons.at(0)->Index())) << endl;
-  //  cout <<"bb" << endl;
-  //  if(((abs(gens[i].PID())==11)||(abs(gens[i].PID())==13))&&((gens[i].MotherIndex()==hard_partons.at(0)->Index())||(abs(gens[gens[i].MotherIndex()].PID())==24))){
-  //    cout << "C" << endl;
-  //    hard_l=&gens[i]; 
-  //    cout << "D" << endl;
-  //  }
-	//	if(last_HN->PID()!=0){
-	//		cout << "E" << endl;
-  //    if((abs(gens[i].PID())==11||abs(gens[i].PID())==13)&&(gens[i].MotherIndex()==last_HN->Index())){
-  //      HN_l=&gens[i];
-  //      cout << "e" << endl;
-  //    }
-	//	}
-  //  if((abs(gens[i].PID())==11||abs(gens[i].PID())==13)&&(abs(gens[gens[i].MotherIndex()].PID())==24)){
-  //    W_l=&gens[i];
-  //    cout << "f" << endl;
-  //  }
-  //  if(gens[i].isPromptFinalState()){
-  //    if(abs(gens[i].PID())==11||abs(gens[i].PID())==13) leptons.push_back(&gens[i]);
-  //    cout << "g" << endl;
-  //  }    
-  //}
+  Gen *last_HN=NULL;
+  Gen *hard_l=NULL;
+  Gen *HN_l=NULL;
+  Gen *W_l=NULL;
+  vector<Gen*> hard_Ws, hard_partons, leptons, N_partons;
 
-  //for(int i=0;i<hard_partons.size();i++){
-  //  if(abs((gens[hard_partons.at(i)->MotherIndex()]).PID())==24||(gens[hard_partons.at(i)->MotherIndex()]).PID()==9900012) N_partons.push_back(hard_partons.at(i));
-  //  cout << "h" << endl;
-  //}
+  for (unsigned int i=0; i<gens.size(); i++){
+    if(gens[i].isHardProcess()){
+      if(abs(gens[i].PID())==24) hard_Ws.push_back(&gens[i]);
+      else if(abs(gens[i].PID())<=4||gens[i].PID()==21) hard_partons.push_back(&gens[i]);
+      cout << "a" << endl;
+    }
+  }
+  PrintGen(gens);
+  for(unsigned int i=0; i<gens.size(); i++){
+    cout << "&gens[i]: " << &gens[i] << endl;
+    if(gens[i].PID()==9900012) last_HN=&gens[i];
+    cout << "last_HN: " << last_HN << endl;
+    cout << i << "th particle:" << endl;
+    cout << "b" << endl;
+    cout << "gens[i].PID(): " << gens[i].PID() << endl;
+    cout << "abs(gens[i].PID()): " << abs(gens[i].PID()) << endl;
+    cout << "gens[i].MotherIndex(): " << gens[i].MotherIndex() << endl;
+    cout << "hard_partons.at(0)->Index(): " << hard_partons.at(0)->Index() << endl;
+    cout << "((abs(gens[i].PID())==11)||(abs(gens[i].PID())==13)): " << ((abs(gens[i].PID())==11)||(abs(gens[i].PID())==13)) << endl;
+    cout << "(gens[i].MotherIndex()==hard_partons.at(0)->Index()): " << (gens[i].MotherIndex()==hard_partons.at(0)->Index()) << endl;
+    cout << (((abs(gens[i].PID())==11)||(abs(gens[i].PID())==13))&&(gens[i].MotherIndex()==hard_partons.at(0)->Index())) << endl;
+    cout <<"bbb" << endl;
+    if(((abs(gens[i].PID())==11)||(abs(gens[i].PID())==13))&&((gens[i].MotherIndex()==hard_partons.at(0)->Index())||(abs(gens[gens[i].MotherIndex()].PID())==24))){
+      cout << "C" << endl;
+      hard_l=&gens[i]; 
+      cout << "D" << endl;
+    }
+    if(last_HN){
+      cout << "E" << endl;
+      if((abs(gens[i].PID())==11||abs(gens[i].PID())==13)&&(gens[i].MotherIndex()==last_HN->Index())){
+        HN_l=&gens[i];
+        cout << "e" << endl;
+      }
+    }
+    if((abs(gens[i].PID())==11||abs(gens[i].PID())==13)&&(abs(gens[gens[i].MotherIndex()].PID())==24)){
+      W_l=&gens[i];
+      cout << "f" << endl;
+    }
+    if(gens[i].isPromptFinalState()){
+      if(abs(gens[i].PID())==11||abs(gens[i].PID())==13) leptons.push_back(&gens[i]);
+      cout << "g" << endl;
+    }    
+  }
 
-  //if(hard_Ws.size()>0){
-  //  for(int i=0;i<hard_Ws.size();i++) hard_Ws.at(i) = FindLastCopy(hard_Ws.at(i),gens);
-  //  cout << "i" << endl;
-  //}
-  //cout << "hard_l: " << hard_l << endl;
-  //if(hard_l->PID()!=0) hard_l = FindLastCopy(hard_l,gens);
-  //cout << "j" << endl;
-	//cout << "W_l: " << W_l << endl;
-  //if(W_l->PID()!=0) W_l = FindLastCopy(W_l,gens);
-  //cout << "k" << endl;
+  for(int i=0;i<hard_partons.size();i++){
+    if(abs((gens[hard_partons.at(i)->MotherIndex()]).PID())==24||(gens[hard_partons.at(i)->MotherIndex()]).PID()==9900012) N_partons.push_back(hard_partons.at(i));
+    cout << "h" << endl;
+  }
 
-  //FillHist("Gen_Pt_Nlepton", HN_l->Pt(), weight, 1000, 0., 1000.);
-  //cout << "l" << endl;
-  //FillHist("Gen_Eta_Nlepton", HN_l->Eta(), weight, 100, -5., 5.);
-  //FillHist("Gen_Phi_Nlepton", HN_l->Phi(), weight, 63, -3.15, 3.15); 
+  if(hard_Ws.size()>0){
+    for(int i=0;i<hard_Ws.size();i++) hard_Ws.at(i) = FindLastCopy(hard_Ws.at(i),gens);
+    cout << "i" << endl;
+  }
+  cout << "hard_l: " << hard_l << endl;
+  if(hard_l!=0) hard_l = FindLastCopy(hard_l,gens);
+  cout << "j" << endl;
+  cout << "W_l: " << W_l << endl;
+  if(W_l) W_l = FindLastCopy(W_l,gens);
+  cout << "k" << endl;
+
+  FillHist("Gen_Pt_Nlepton", HN_l->Pt(), weight, 1000, 0., 1000.);
+  cout << "l" << endl;
+  FillHist("Gen_Eta_Nlepton", HN_l->Eta(), weight, 100, -5., 5.);
+  FillHist("Gen_Phi_Nlepton", HN_l->Phi(), weight, 63, -3.15, 3.15); 
+
+/*
 
   vector<Gen> gen_muons, gen_N_partons;
   Gen gen_N, gen_HN_mu, gen_hard_mu;
@@ -351,38 +362,38 @@ void SampleValidation::executeEventFromParameter(AnalyzerParameter param){
   FillHist("Gen_Pt_HN_mu", gen_HN_mu.Pt(), weight, 1000, 0., 1000.);
   FillHist("Gen_Eta_HN_mu", gen_HN_mu.Eta(), weight, 100, -5., 5.);
   FillHist("Gen_Phi_HN_mu", gen_HN_mu.Phi(), weight, 63, -3.15, 3.15);
-	if(fabs(gen_HN_mu.Eta())<2.4){
+  if(fabs(gen_HN_mu.Eta())<2.4){
     FillHist("fid_Gen_Pt_HN_mu", gen_HN_mu.Pt(), weight, 1000, 0., 1000.);
     FillHist("fid_Gen_Eta_HN_mu", gen_HN_mu.Eta(), weight, 100, -5., 5.);
     FillHist("fid_Gen_Phi_HN_mu", gen_HN_mu.Phi(), weight, 63, -3.15, 3.15);
-	}
+  }
   FillHist("Gen_Pt_hard_mu", gen_hard_mu.Pt(), weight, 1000, 0., 1000.);
   FillHist("Gen_Eta_hard_mu", gen_hard_mu.Eta(), weight, 100, -5., 5.);
   FillHist("Gen_Phi_hard_mu", gen_hard_mu.Phi(), weight, 63, -3.15, 3.15);
-	if(fabs(gen_hard_mu.Eta())<2.4){
+  if(fabs(gen_hard_mu.Eta())<2.4){
     FillHist("fid_Gen_Pt_hard_mu", gen_hard_mu.Pt(), weight, 1000, 0., 1000.);
     FillHist("fid_Gen_Eta_hard_mu", gen_hard_mu.Eta(), weight, 100, -5., 5.);
     FillHist("fid_Gen_Phi_hard_mu", gen_hard_mu.Phi(), weight, 63, -3.15, 3.15);
-	}
+  }
   
   std::sort(gen_muons.begin(), gen_muons.end(), PtComparing);
   std::sort(gen_N_partons.begin(), gen_N_partons.end(), PtComparing);
   FillHist("Gen_Pt_mu1", gen_muons.at(0).Pt(), weight, 1000, 0., 1000.);
   FillHist("Gen_Eta_mu1", gen_muons.at(0).Eta(), weight, 100, -5., 5.);
   FillHist("Gen_Phi_mu1", gen_muons.at(0).Phi(), weight, 63, -3.15, 3.15);
-	if(fabs(gen_muons.at(0).Eta())<2.4){
+  if(fabs(gen_muons.at(0).Eta())<2.4){
     FillHist("fid_Gen_Pt_mu1", gen_muons.at(0).Pt(), weight, 1000, 0., 1000.);
     FillHist("fid_Gen_Eta_mu1", gen_muons.at(0).Eta(), weight, 100, -5., 5.);
     FillHist("fid_Gen_Phi_mu1", gen_muons.at(0).Phi(), weight, 63, -3.15, 3.15);
-	}
+  }
   FillHist("Gen_Pt_mu2", gen_muons.at(1).Pt(), weight, 1000, 0., 1000.);
   FillHist("Gen_Eta_mu2", gen_muons.at(1).Eta(), weight, 100, -5., 5.);
   FillHist("Gen_Phi_mu2", gen_muons.at(1).Phi(), weight, 63, -3.15, 3.15);
-	if(fabs(gen_muons.at(1).Eta())<2.4){
+  if(fabs(gen_muons.at(1).Eta())<2.4){
     FillHist("fid_Gen_Pt_mu2", gen_muons.at(1).Pt(), weight, 1000, 0., 1000.);
     FillHist("fid_Gen_Eta_mu2", gen_muons.at(1).Eta(), weight, 100, -5., 5.);
     FillHist("fid_Gen_Phi_mu2", gen_muons.at(1).Phi(), weight, 63, -3.15, 3.15);
-	}
+  }
   if(gen_N_partons.at(0).Pt()>20.&&fabs(gen_N_partons.at(0).Eta())<2.7){
     FillHist("Gen_Pt_j1", gen_N_partons.at(0).Pt(), weight, 1000, 0., 1000.);
     FillHist("Gen_Eta_j1", gen_N_partons.at(0).Eta(), weight, 100, -5., 5.);
@@ -401,11 +412,11 @@ void SampleValidation::executeEventFromParameter(AnalyzerParameter param){
   FillHist("nPileUp", nPileUp, weight, 100, 0., 100.);
 
   vector<Jet> W_jets1, W_jets2;
-	cout << "For each jet:" << endl;
+  cout << "For each jet:" << endl;
   for(unsigned int i=0; i<jets.size(); i++){
-		cout << "pt: " << jets[i].Pt() << ", eta: " << jets[i].Eta() << ", phi: " << jets[i].Phi() << endl;
+    cout << "pt: " << jets[i].Pt() << ", eta: " << jets[i].Eta() << ", phi: " << jets[i].Phi() << endl;
     if (jets[i].DeltaR(gen_N_partons[0])<0.3) W_jets1.push_back(jets[i]);
-		if (jets[i].DeltaR(gen_N_partons[1])<0.3) W_jets2.push_back(jets[i]);
+    if (jets[i].DeltaR(gen_N_partons[1])<0.3) W_jets2.push_back(jets[i]);
   }
   std::sort(W_jets1.begin(), W_jets1.end(), PtComparing);
   auto last1 = unique(W_jets1.begin(), W_jets1.end());
@@ -439,23 +450,23 @@ void SampleValidation::executeEventFromParameter(AnalyzerParameter param){
         FillHist("Phi_Wjet2", W_jets2.at(0).Phi(), weight, 63, -3.15, 3.15);
       }
     }
-		else if(W_jets1.size()>0&&(&W_jets2.at(0)!=&W_jets1.at(0))){
+    else if(W_jets1.size()>0&&(&W_jets2.at(0)!=&W_jets1.at(0))){
       if(W_jets2.at(0).Pt()>20.&&fabs(W_jets2.at(0).Eta())<2.7){
         FillHist("Pt_Wjet2", W_jets2.at(0).Pt(), weight, 1000, 0., 1000.);
         FillHist("Eta_Wjet2", W_jets2.at(0).Eta(), weight, 100, -5., 5.);
         FillHist("Phi_Wjet2", W_jets2.at(0).Phi(), weight, 63, -3.15, 3.15);
       }
     }
-	}
+  }
 
   for(unsigned int i=0; i<gen_N_partons.size(); i++){
     cout << "W parton Index: " << gen_N_partons[i].Index() << ", PID: " << gen_N_partons[i].PID() << endl;
     cout << "pt: " << gen_N_partons[i].Pt() << ", eta: " << gen_N_partons[i].Eta() << ", phi: " << gen_N_partons[i].Phi() << endl;
   }
-	cout << "dR: " << gen_N_partons[0].DeltaR(gen_N_partons[1]) << endl;
-
-*/
+  cout << "dR: " << gen_N_partons[0].DeltaR(gen_N_partons[1]) << endl;
 
   PrintGen(gens);
+
+*/
 
 }

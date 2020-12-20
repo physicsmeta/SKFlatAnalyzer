@@ -94,8 +94,9 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   
   // Define fit function and range //
   
-  TF1 *gr1_fit1 = new TF1("gr1_fit1","expo",0.,0.007);
-  TF1 *gr1_fit2 = new TF1("gr1_fit2","[0]/(x+[1])+[2]",0.007,0.015);
+  //TF1 *gr1_fit1 = new TF1("gr1_fit1","[0]/(x+[1])+[2]",0.001,0.04);
+  TF1 *gr1_fit1 = new TF1("gr1_fit1","expo",0.,0.002);
+  TF1 *gr1_fit2 = new TF1("gr1_fit2","[0]/(x+[1])+[2]",0.002,0.015);
   TF1 *gr1_fit3 = new TF1("gr1_fit3","pol1",0.015,0.04);
   
   gr1_fit1->SetLineWidth(3);
@@ -354,6 +355,10 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   //c1->SaveAs(samplename+"/"+User_ID.at(i)+"_Fit_EtaRegion1.png");
   //c2->SaveAs(samplename+"/"+User_ID.at(i)+"_Fit_EtaRegion2.png");
   //c3->SaveAs(samplename+"/"+User_ID.at(i)+"_Fit_EtaRegion3.png");
+
+  c1->SaveAs("Fit_Test3_EtaRegion1.png");
+  //c2->SaveAs("Fit_EtaRegion2.png");
+  //c3->SaveAs("Fit_EtaRegion3.png");
 
   //c1->SaveAs(samplename+"/"+User_ID.at(i)+"_FitErrorBand_EtaRegion1.pdf");
   //c2->SaveAs(samplename+"/"+User_ID.at(i)+"_FitErrorBand_EtaRegion2.pdf");

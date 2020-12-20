@@ -9,8 +9,8 @@ while(getline(in,line)){
   if(this_line.Contains("#")) continue;
 
   TString sample, var, title, SaveAs;
-  int xran1, xran2, rebin;
-  double yran;
+  double xran1, xran2, yran;
+  int rebin;
   is >> sample;
   is >> var;
   is >> title;
@@ -46,7 +46,8 @@ while(getline(in,line)){
   }
   
   //gSystem->Exec("rootls "+filename1);
-  gSystem->Exec("mkdir -p Presel");
+  //gSystem->Exec("mkdir -p Presel/"+sample);
+  gSystem->Exec("mkdir -p Presel/");
 
   TCanvas* c1 = new TCanvas("c1",title,200,350,700,650);
   c1->cd();
@@ -100,6 +101,7 @@ while(getline(in,line)){
     legend->Draw();
   }
 
+  //if(SaveAs=="y") c1->SaveAs("Presel/"+sample+"/"+var+".png");
   if(SaveAs=="y") c1->SaveAs("Presel/"+sample+"_"+var+".png");
 }
 
