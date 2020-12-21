@@ -596,9 +596,12 @@ void Presel::executeEventFromParameter(AnalyzerParameter param){
       FillHist(channels.at(it_ch)+"/Pre/Number_BJets_Loose_"+IDsuffix, Nbjet_loose, weight, 10, 0., 10.);
       FillHist(channels.at(it_ch)+"/Pre/Number_BJets_Medium_"+IDsuffix, Nbjet_medium, weight, 10, 0., 10.);
       FillHist(channels.at(it_ch)+"/Pre/Number_FatJets_"+IDsuffix, fatjets.size(), weight, 10, 0., 10.);
-      if(fatjets.size()>0) FillHist(channels.at(it_ch)+"/Pre/FatJet_Mass_"+IDsuffix, fatjets.at(0).M(), weight, 1000, 0., 1000.);
-      if(fatjets.size()>0) FillHist(channels.at(it_ch)+"/Pre/FatJet_Pt_"+IDsuffix, fatjets.at(0).Pt(), weight, 1000, 0., 1000.);
-      if(fatjets.size()>0) FillHist(channels.at(it_ch)+"/Pre/FatJet_Eta_"+IDsuffix, fatjets.at(0).Eta(), weight, 54, -2.7, 2.7);
+      if(fatjets.size()>0){
+        FillHist(channels.at(it_ch)+"/Pre/FatJet_Mass_"+IDsuffix, fatjets.at(0).M(), weight, 1000, 0., 1000.);
+        FillHist(channels.at(it_ch)+"/Pre/FatJet_Pt_"+IDsuffix, fatjets.at(0).Pt(), weight, 1000, 0., 1000.);
+        FillHist(channels.at(it_ch)+"/Pre/FatJet_Eta_"+IDsuffix, fatjets.at(0).Eta(), weight, 54, -2.7, 2.7);
+        FillHist(channels.at(it_ch)+"/Pre/NCand2_Mass_"+IDsuffix, (*leptons.at(0)+fatjets.at(0)).M(), weight, 2000, 0., 2000.);
+      }
       if(jets.size()>0){
         FillHist(channels.at(it_ch)+"/Pre/Jet1_Mass_"+IDsuffix, jets.at(0).M(), weight, 1000, 0., 1000.);
         FillHist(channels.at(it_ch)+"/Pre/Jet1_Pt_"+IDsuffix, jets.at(0).Pt(), weight, 1000, 0., 1000.);
@@ -608,6 +611,7 @@ void Presel::executeEventFromParameter(AnalyzerParameter param){
         FillHist(channels.at(it_ch)+"/Pre/DiJet_Mass_"+IDsuffix, (jets.at(0)+jets.at(1)).M(), weight, 1000, 0., 1000.);
         FillHist(channels.at(it_ch)+"/Pre/Jet2_Pt_"+IDsuffix, jets.at(1).Pt(), weight, 1000, 0., 1000.);
         FillHist(channels.at(it_ch)+"/Pre/Jet2_Eta_"+IDsuffix, jets.at(1).Eta(), weight, 54, -2.7, 2.7);
+        FillHist(channels.at(it_ch)+"/Pre/NCand1_Mass_"+IDsuffix, (*leptons.at(0)+jets.at(0)+jets.at(1)).M(), weight, 2000, 0., 2000.);
       }
       FillHist(channels.at(it_ch)+"/Pre/ZCand_Mass_"+IDsuffix, ZCand.M(), weight, 1000, 0., 1000.);
       FillHist(channels.at(it_ch)+"/Pre/ZCand_Pt_"+IDsuffix, ZCand.Pt(), weight, 1000, 0., 1000.);

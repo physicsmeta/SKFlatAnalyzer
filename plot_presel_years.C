@@ -1,6 +1,6 @@
-void plot_presel(){
+void plot_presel_years(){
 
-ifstream in("list_presel.txt");
+ifstream in("list_presel_years.txt");
 string line;
 
 while(getline(in,line)){
@@ -8,17 +8,20 @@ while(getline(in,line)){
   TString this_line = line;
   if(this_line.Contains("#")) continue;
 
-  TString sample, var, title, SaveAs;
+  TString sample, channel, var, title, this_xran1, this_yran, SaveAs;
   double xran1, xran2, yran;
   int rebin;
   is >> sample;
+  is >> channel;
   is >> var;
   is >> title;
-  is >> xran1;
+  is >> this_xran1;
   is >> xran2;
-  is >> yran;
+  is >> this_yran;
   is >> rebin;
   is >> SaveAs;
+
+  TString mass = sample(sample.Last('M'),sample.Length());
 
   TString filename1 = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/Presel/2016/Presel_"+sample+".root";
   TString filename2 = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/Presel/2017/Presel_"+sample+".root";
@@ -26,36 +29,27 @@ while(getline(in,line)){
   TFile* file1 = new TFile(filename1);
   TFile* file2 = new TFile(filename2);
   TFile* file3 = new TFile(filename3);
-  TH1D* var1;
-  TH1D* var2;
-  TH1D* var3;
-  if(sample.Contains("EE") || sample.Contains("DoubleEG") || sample.Contains("EGamma")){
-  var1 = (TH1D*)file1->Get("diel/Pre/"+var+"_Run2");
-  var2 = (TH1D*)file2->Get("diel/Pre/"+var+"_Run2");
-  var3 = (TH1D*)file3->Get("diel/Pre/"+var+"_Run2");
-  }
-  else if(sample.Contains("MuMu") || sample.Contains("DoubleMuon")){
-  var1 = (TH1D*)file1->Get("dimu/Pre/"+var+"_Run2");
-  var2 = (TH1D*)file2->Get("dimu/Pre/"+var+"_Run2");
-  var3 = (TH1D*)file3->Get("dimu/Pre/"+var+"_Run2");
-  }
-  else if(sample.Contains("MuonEG")){
-  var1 = (TH1D*)file1->Get("emu/Pre/"+var+"_Run2");
-  var2 = (TH1D*)file2->Get("emu/Pre/"+var+"_Run2");
-  var3 = (TH1D*)file3->Get("emu/Pre/"+var+"_Run2");
-  }
+  TH1D* var1 = (TH1D*)file1->Get(channel+"/Pre/"+var+"_Run2");
+  TH1D* var2 = (TH1D*)file2->Get(channel+"/Pre/"+var+"_Run2");
+  TH1D* var3 = (TH1D*)file3->Get(channel+"/Pre/"+var+"_Run2");
   
   //gSystem->Exec("rootls "+filename1);
   //gSystem->Exec("mkdir -p Presel/"+sample);
-  gSystem->Exec("mkdir -p Presel/");
+  gSystem->Exec("mkdir -p Presel/years");
 
   TCanvas* c1 = new TCanvas("c1",title,200,350,700,650);
   c1->cd();
   
-  var1->SetTitle(title+" #scale[0.5]{"+sample+"}");
+  if(sample.Contains("DYTypeI")) var1->SetTitle(title+" #scale[0.5]{: S-ch, "+channel+", "+mass+"}");
+  else if(sample.Contains("VBFTypeI")) var1->SetTitle(title+" #scale[0.5]{: T-ch, "+channel+", "+mass+"}");
+  else var1->SetTitle(title+" #scale[0.5]{"+sample+"_"+channel+"}");
   var1->SetStats(0);
   var1->Rebin(rebin);
+  if(this_xran1 == "auto") xran1 = var1->GetXaxis()->GetXmin();
+  else if(this_xran1 != "auto") xran1 = this_xran1.Atof();
   var1->GetXaxis()->SetRangeUser(xran1,xran2);
+  if(this_yran == "auto") yran = var1->GetMaximum()*1.2;
+  else if(this_yran != "auto") yran = this_yran.Atof();
   var1->GetYaxis()->SetRangeUser(0,yran);
   if(var.Contains("Pt") || var.Contains("Mass")) var1->GetXaxis()->SetTitle(title+" [GeV]");
   else var1->GetXaxis()->SetTitle(title);
@@ -86,23 +80,13 @@ while(getline(in,line)){
   var3->Draw("same hist ep");
   
   TLegend* legend;
-  if(var.Contains("pt")){
-    legend = new TLegend(0.62,0.65,0.9,0.9);
-    legend->AddEntry(var1,"#scale[0.9]{2016 "+sample+"}","l");
-    legend->AddEntry(var2,"#scale[0.9]{2017 "+sample+"}","l");
-    legend->AddEntry(var3,"#scale[0.9]{2018 "+sample+"}","l");
-    legend->Draw();
-  }
-  else{
-    legend = new TLegend(0.62,0.75,0.9,0.9);
-    legend->AddEntry(var1,"#scale[0.9]{2016 "+sample+"}","l");
-    legend->AddEntry(var2,"#scale[0.9]{2017 "+sample+"}","l");
-    legend->AddEntry(var3,"#scale[0.9]{2018 "+sample+"}","l");
-    legend->Draw();
-  }
+  legend = new TLegend(0.7,0.75,0.9,0.9);
+  legend->AddEntry(var1,"2016","l");
+  legend->AddEntry(var2,"2017","l");
+  legend->AddEntry(var3,"2018","l");
+  legend->Draw();
 
-  //if(SaveAs=="y") c1->SaveAs("Presel/"+sample+"/"+var+".png");
-  if(SaveAs=="y") c1->SaveAs("Presel/"+sample+"_"+var+".png");
+  if(SaveAs=="y") c1->SaveAs("Presel/years/"+sample+"_"+channel+"_"+var+".png");
 }
 
 }

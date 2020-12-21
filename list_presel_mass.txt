@@ -1,0 +1,26 @@
+#sample channel	var	title	xran1	xran2	yran	rebin	SaveAs
+##To show at Jets+X meeting
+DYTypeI_SS_MuMu	dimu	Lep1_Pt	pt(l1)	auto	1000 auto	5	y
+DYTypeI_SS_MuMu	dimu	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
+DYTypeI_SS_MuMu	dimu	Lep2_Pt	pt(l2)	auto	1000	auto	5	y
+DYTypeI_SS_MuMu	dimu	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
+DYTypeI_SS_MuMu	dimu	NCand1_Mass	M(l1jj)	auto	2000	auto	10	y
+DYTypeI_SS_MuMu	dimu	NCand2_Mass	M(l1J)	auto	2000	auto	10	y
+DYTypeI_SS_EE	diel	Lep1_Pt	pt(l1)	auto	1000 auto	5	y
+DYTypeI_SS_EE	diel	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
+DYTypeI_SS_EE	diel	Lep2_Pt	pt(l2)	auto	1000	auto	5	y
+DYTypeI_SS_EE	diel	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
+DYTypeI_SS_EE	diel	NCand1_Mass	M(l1jj)	auto	2000	auto	10	y
+DYTypeI_SS_EE	diel	NCand2_Mass	M(l1J)	auto	2000	auto	10	y
+VBFTypeI_SS_MuMu	dimu	Lep1_Pt	pt(l1)	auto	1000 auto	5	y
+VBFTypeI_SS_MuMu	dimu	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
+VBFTypeI_SS_MuMu	dimu	Lep2_Pt	pt(l2)	auto	1000	auto	5	y
+VBFTypeI_SS_MuMu	dimu	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
+VBFTypeI_SS_MuMu	dimu	NCand1_Mass	M(l1jj)	auto	2000	auto	10	y
+VBFTypeI_SS_MuMu	dimu	NCand2_Mass	M(l1J)	auto	2000	auto	10	y
+VBFTypeI_SS_EE	diel	Lep1_Pt	pt(l1)	auto	1000 auto	5	y
+VBFTypeI_SS_EE	diel	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
+VBFTypeI_SS_EE	diel	Lep2_Pt	pt(l2)	auto	1000	auto	5	y
+VBFTypeI_SS_EE	diel	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
+VBFTypeI_SS_EE	diel	NCand1_Mass	M(l1jj)	auto	2000	auto	10	y
+VBFTypeI_SS_EE	diel	NCand2_Mass	M(l1J)	auto	2000	auto	10	y

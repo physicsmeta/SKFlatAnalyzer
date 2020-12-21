@@ -286,66 +286,48 @@ void SampleValidation::executeEventFromParameter(AnalyzerParameter param){
     if(gens[i].isHardProcess()){
       if(abs(gens[i].PID())==24) hard_Ws.push_back(&gens[i]);
       else if(abs(gens[i].PID())<=4||gens[i].PID()==21) hard_partons.push_back(&gens[i]);
-      cout << "a" << endl;
     }
   }
   PrintGen(gens);
   for(unsigned int i=0; i<gens.size(); i++){
-    cout << "&gens[i]: " << &gens[i] << endl;
-    if(gens[i].PID()==9900012) last_HN=&gens[i];
-    cout << "last_HN: " << last_HN << endl;
     cout << i << "th particle:" << endl;
-    cout << "b" << endl;
-    cout << "gens[i].PID(): " << gens[i].PID() << endl;
-    cout << "abs(gens[i].PID()): " << abs(gens[i].PID()) << endl;
-    cout << "gens[i].MotherIndex(): " << gens[i].MotherIndex() << endl;
-    cout << "hard_partons.at(0)->Index(): " << hard_partons.at(0)->Index() << endl;
-    cout << "((abs(gens[i].PID())==11)||(abs(gens[i].PID())==13)): " << ((abs(gens[i].PID())==11)||(abs(gens[i].PID())==13)) << endl;
-    cout << "(gens[i].MotherIndex()==hard_partons.at(0)->Index()): " << (gens[i].MotherIndex()==hard_partons.at(0)->Index()) << endl;
-    cout << (((abs(gens[i].PID())==11)||(abs(gens[i].PID())==13))&&(gens[i].MotherIndex()==hard_partons.at(0)->Index())) << endl;
-    cout <<"bbb" << endl;
+    if(gens[i].PID()==9900012) last_HN=&gens[i];
+    if(last_HN) cout << "^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~this is the last_HN : " << last_HN << endl;
     if(((abs(gens[i].PID())==11)||(abs(gens[i].PID())==13))&&((gens[i].MotherIndex()==hard_partons.at(0)->Index())||(abs(gens[gens[i].MotherIndex()].PID())==24))){
-      cout << "C" << endl;
       hard_l=&gens[i]; 
-      cout << "D" << endl;
+      cout << "^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~this is the hard_l : " << hard_l << endl;
     }
     if(last_HN){
-      cout << "E" << endl;
       if((abs(gens[i].PID())==11||abs(gens[i].PID())==13)&&(gens[i].MotherIndex()==last_HN->Index())){
         HN_l=&gens[i];
-        cout << "e" << endl;
+        cout << "^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~this is the HN_l : " << HN_l << endl;
       }
     }
     if((abs(gens[i].PID())==11||abs(gens[i].PID())==13)&&(abs(gens[gens[i].MotherIndex()].PID())==24)){
       W_l=&gens[i];
-      cout << "f" << endl;
+      cout << "^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~this is the W_l : " << W_l << endl;
     }
     if(gens[i].isPromptFinalState()){
       if(abs(gens[i].PID())==11||abs(gens[i].PID())==13) leptons.push_back(&gens[i]);
-      cout << "g" << endl;
     }    
   }
 
   for(int i=0;i<hard_partons.size();i++){
     if(abs((gens[hard_partons.at(i)->MotherIndex()]).PID())==24||(gens[hard_partons.at(i)->MotherIndex()]).PID()==9900012) N_partons.push_back(hard_partons.at(i));
-    cout << "h" << endl;
   }
 
   if(hard_Ws.size()>0){
     for(int i=0;i<hard_Ws.size();i++) hard_Ws.at(i) = FindLastCopy(hard_Ws.at(i),gens);
-    cout << "i" << endl;
   }
+  if(hard_l) hard_l = FindLastCopy(hard_l,gens);
   cout << "hard_l: " << hard_l << endl;
-  if(hard_l!=0) hard_l = FindLastCopy(hard_l,gens);
-  cout << "j" << endl;
-  cout << "W_l: " << W_l << endl;
   if(W_l) W_l = FindLastCopy(W_l,gens);
-  cout << "k" << endl;
+  cout << "W_l: " << W_l << endl;
 
   FillHist("Gen_Pt_Nlepton", HN_l->Pt(), weight, 1000, 0., 1000.);
-  cout << "l" << endl;
   FillHist("Gen_Eta_Nlepton", HN_l->Eta(), weight, 100, -5., 5.);
   FillHist("Gen_Phi_Nlepton", HN_l->Phi(), weight, 63, -3.15, 3.15); 
+  FillHist("Gen_Mass_Nreco", (*HN_l+*N_partons.at(0)+*N_partons.at(1)).M(), weight, 1000, 0., 1000.); 
 
 /*
 

@@ -195,14 +195,14 @@
 #python python/SKFlat.py -a Presel -y 2018 -i DYTypeI_OS_MuMu_M100 -n 50 &
 #python python/SKFlat.py -a Presel -y 2018 -i DYTypeI_OS_MuMu_M700 -n 50 &
 
-python python/SKFlat.py -a Presel -y 2016 -i DYJets --skim SkimTree_Dilepton -n 50 &
-python python/SKFlat.py -a Presel -y 2016 -i DYJets_MG -n 50 &
-python python/SKFlat.py -a Presel -y 2016 -i TTLL_powheg --skim SkimTree_Dilepton -n 50 &
-python python/SKFlat.py -a Presel -y 2017 -i DYJets --skim SkimTree_Dilepton -n 50 &
-python python/SKFlat.py -a Presel -y 2017 -i TTLL_powheg --skim SkimTree_Dilepton -n 50 &
-python python/SKFlat.py -a Presel -y 2018 -i DYJets --skim SkimTree_Dilepton -n 50 &
-python python/SKFlat.py -a Presel -y 2018 -i DYJets_MG -n 50 &
-python python/SKFlat.py -a Presel -y 2018 -i TTLL_powheg --skim SkimTree_Dilepton -n 50 &
+#python python/SKFlat.py -a Presel -y 2016 -i DYJets --skim SkimTree_Dilepton -n 50 &
+#python python/SKFlat.py -a Presel -y 2016 -i DYJets_MG -n 50 &
+#python python/SKFlat.py -a Presel -y 2016 -i TTLL_powheg --skim SkimTree_Dilepton -n 50 &
+#python python/SKFlat.py -a Presel -y 2017 -i DYJets --skim SkimTree_Dilepton -n 50 &
+#python python/SKFlat.py -a Presel -y 2017 -i TTLL_powheg --skim SkimTree_Dilepton -n 50 &
+#python python/SKFlat.py -a Presel -y 2018 -i DYJets --skim SkimTree_Dilepton -n 50 &
+#python python/SKFlat.py -a Presel -y 2018 -i DYJets_MG -n 50 &
+#python python/SKFlat.py -a Presel -y 2018 -i TTLL_powheg --skim SkimTree_Dilepton -n 50 &
 
 #python python/SKFlat.py -a Presel -y 2016 -i DoubleEG:B_ver2 -n 80 --skim SkimTree_Dilepton & #test
 #python python/SKFlat.py -a Presel -y 2016 -l submitList/2016_DoubleMuon_BtoG.txt -n 80 --skim SkimTree_Dilepton --nmax 80 &
@@ -218,9 +218,70 @@ python python/SKFlat.py -a Presel -y 2018 -i TTLL_powheg --skim SkimTree_Dilepto
 #python python/SKFlat.py -a Presel_2016H -y 2016 -l submitList/2016_MuonEG_H.txt -n 80 --skim SkimTree_Dilepton --nmax 80 &
 
 
+python python/SKFlat.py -a Presel -y 2016 -i DYTypeI_SS_EE_M100 -n 50 & 
+python python/SKFlat.py -a Presel -y 2016 -i DYTypeI_SS_EE_M500 -n 50 & 
+python python/SKFlat.py -a Presel -y 2016 -i DYTypeI_SS_EE_M1200 -n 50 & 
+python python/SKFlat.py -a Presel -y 2016 -i VBFTypeI_SS_EE_M500 -n 50 & 
+python python/SKFlat.py -a Presel -y 2016 -i VBFTypeI_SS_EE_M1200 -n 50 & 
+python python/SKFlat.py -a Presel -y 2016 -i DYTypeI_SS_MuMu_M100 -n 50 & 
+python python/SKFlat.py -a Presel -y 2016 -i DYTypeI_SS_MuMu_M500 -n 50 & 
+python python/SKFlat.py -a Presel -y 2016 -i DYTypeI_SS_MuMu_M1200 -n 50 & 
+python python/SKFlat.py -a Presel -y 2016 -i VBFTypeI_SS_MuMu_M500 -n 50 & 
+python python/SKFlat.py -a Presel -y 2016 -i VBFTypeI_SS_MuMu_M1200 -n 50 & 
+python python/SKFlat.py -a Presel -y 2017 -i DYTypeI_SS_EE_M100 -n 50 & 
+python python/SKFlat.py -a Presel -y 2017 -i DYTypeI_SS_EE_M500 -n 50 & 
+python python/SKFlat.py -a Presel -y 2017 -i DYTypeI_SS_EE_M1200 -n 50 & 
+python python/SKFlat.py -a Presel -y 2017 -i VBFTypeI_SS_EE_M500 -n 50 & 
+python python/SKFlat.py -a Presel -y 2017 -i VBFTypeI_SS_EE_M1200 -n 50 & 
+python python/SKFlat.py -a Presel -y 2017 -i DYTypeI_SS_MuMu_M100 -n 50 & 
+python python/SKFlat.py -a Presel -y 2017 -i DYTypeI_SS_MuMu_M500 -n 50 & 
+python python/SKFlat.py -a Presel -y 2017 -i DYTypeI_SS_MuMu_M1200 -n 50 & 
+python python/SKFlat.py -a Presel -y 2017 -i VBFTypeI_SS_MuMu_M500 -n 50 & 
+python python/SKFlat.py -a Presel -y 2017 -i VBFTypeI_SS_MuMu_M1200 -n 50 & 
+python python/SKFlat.py -a Presel -y 2018 -i DYTypeI_SS_EE_M100 -n 50 & 
+python python/SKFlat.py -a Presel -y 2018 -i DYTypeI_SS_EE_M500 -n 50 & 
+python python/SKFlat.py -a Presel -y 2018 -i DYTypeI_SS_EE_M1200 -n 50 & 
+python python/SKFlat.py -a Presel -y 2018 -i VBFTypeI_SS_EE_M500 -n 50 & 
+python python/SKFlat.py -a Presel -y 2018 -i VBFTypeI_SS_EE_M1200 -n 50 & 
+python python/SKFlat.py -a Presel -y 2018 -i DYTypeI_SS_MuMu_M100 -n 50 & 
+python python/SKFlat.py -a Presel -y 2018 -i DYTypeI_SS_MuMu_M500 -n 50 & 
+python python/SKFlat.py -a Presel -y 2018 -i DYTypeI_SS_MuMu_M1200 -n 50 & 
+python python/SKFlat.py -a Presel -y 2018 -i VBFTypeI_SS_MuMu_M500 -n 50 & 
+python python/SKFlat.py -a Presel -y 2018 -i VBFTypeI_SS_MuMu_M1200 -n 50 & 
+
+
 #################################################
 ### MC validation at gen, reco level
 #################################################
 
-python python/SKFlat.py -a SampleValidation -y 2016 -i DYTypeI_SS_EE_M100 -n 50 & #test
+#python python/SKFlat.py -a SampleValidation -y 2016 -i DYTypeI_SS_EE_M100 -n 50 & 
+#python python/SKFlat.py -a SampleValidation -y 2016 -i DYTypeI_SS_EE_M500 -n 50 & 
+#python python/SKFlat.py -a SampleValidation -y 2016 -i DYTypeI_SS_EE_M1200 -n 50 & 
+#python python/SKFlat.py -a SampleValidation -y 2016 -i VBFTypeI_SS_EE_M500 -n 50 & 
+#python python/SKFlat.py -a SampleValidation -y 2016 -i VBFTypeI_SS_EE_M1200 -n 50 & 
+#python python/SKFlat.py -a SampleValidation -y 2016 -i DYTypeI_SS_MuMu_M100 -n 50 & 
+#python python/SKFlat.py -a SampleValidation -y 2016 -i DYTypeI_SS_MuMu_M500 -n 50 & 
+#python python/SKFlat.py -a SampleValidation -y 2016 -i DYTypeI_SS_MuMu_M1200 -n 50 & 
+#python python/SKFlat.py -a SampleValidation -y 2016 -i VBFTypeI_SS_MuMu_M500 -n 50 & 
+#python python/SKFlat.py -a SampleValidation -y 2016 -i VBFTypeI_SS_MuMu_M1200 -n 50 & 
+#python python/SKFlat.py -a SampleValidation -y 2017 -i DYTypeI_SS_EE_M100 -n 50 & 
+#python python/SKFlat.py -a SampleValidation -y 2017 -i DYTypeI_SS_EE_M500 -n 50 & 
+#python python/SKFlat.py -a SampleValidation -y 2017 -i DYTypeI_SS_EE_M1200 -n 50 & 
+#python python/SKFlat.py -a SampleValidation -y 2017 -i VBFTypeI_SS_EE_M500 -n 50 & 
+#python python/SKFlat.py -a SampleValidation -y 2017 -i VBFTypeI_SS_EE_M1200 -n 50 & 
+#python python/SKFlat.py -a SampleValidation -y 2017 -i DYTypeI_SS_MuMu_M100 -n 50 & 
+#python python/SKFlat.py -a SampleValidation -y 2017 -i DYTypeI_SS_MuMu_M500 -n 50 & 
+#python python/SKFlat.py -a SampleValidation -y 2017 -i DYTypeI_SS_MuMu_M1200 -n 50 & 
+#python python/SKFlat.py -a SampleValidation -y 2017 -i VBFTypeI_SS_MuMu_M500 -n 50 & 
+#python python/SKFlat.py -a SampleValidation -y 2017 -i VBFTypeI_SS_MuMu_M1200 -n 50 & 
+#python python/SKFlat.py -a SampleValidation -y 2018 -i DYTypeI_SS_EE_M100 -n 50 & 
+#python python/SKFlat.py -a SampleValidation -y 2018 -i DYTypeI_SS_EE_M500 -n 50 & 
+#python python/SKFlat.py -a SampleValidation -y 2018 -i DYTypeI_SS_EE_M1200 -n 50 & 
+#python python/SKFlat.py -a SampleValidation -y 2018 -i VBFTypeI_SS_EE_M500 -n 50 & 
+#python python/SKFlat.py -a SampleValidation -y 2018 -i VBFTypeI_SS_EE_M1200 -n 50 & 
+#python python/SKFlat.py -a SampleValidation -y 2018 -i DYTypeI_SS_MuMu_M100 -n 50 & 
+#python python/SKFlat.py -a SampleValidation -y 2018 -i DYTypeI_SS_MuMu_M500 -n 50 & 
+#python python/SKFlat.py -a SampleValidation -y 2018 -i DYTypeI_SS_MuMu_M1200 -n 50 & 
+#python python/SKFlat.py -a SampleValidation -y 2018 -i VBFTypeI_SS_MuMu_M500 -n 50 & 
+#python python/SKFlat.py -a SampleValidation -y 2018 -i VBFTypeI_SS_MuMu_M1200 -n 50 & 
 #python python/SKFlat.py -a SampleValidation -y 2016 -i DYTypeI_SS_EE_M700 -n 50 &
