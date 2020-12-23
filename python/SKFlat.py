@@ -908,7 +908,7 @@ if GotError:
   JobFinishEmail = ErrorLog+"\n------------------------------------------------\n"+JobFinishEmail
   EmailTitle = '[ERROR] Summary of JobID '+str_RandomNumber
 
-if IsKNU:
-  SendEmailbyGMail(USER,SKFlatLogEmail,EmailTitle,JobFinishEmail)
-else:
-  SendEmail(USER,SKFlatLogEmail,EmailTitle,JobFinishEmail)
+#if IsKNU:
+#  SendEmailbyGMail(USER,SKFlatLogEmail,EmailTitle,JobFinishEmail)
+#else:
+#  SendEmail(USER,SKFlatLogEmail,EmailTitle,JobFinishEmail) #JH : not use
