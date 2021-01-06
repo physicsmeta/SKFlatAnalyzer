@@ -1637,20 +1637,20 @@ double AnalyzerCore::GetCFrates(TString id, double pt, double eta){
 
   if(id == "HNTightV1"){
     if(eta < 0.8){
-      if(x < 0.005){ a = 9.58505e-04; b = -0.159759; rate = TMath::Exp(a + b*x); }
-      else if(x>=0.005 && x<0.0155){ a = 2.07325e-04; b = -0.0086346; c = 0.; rate = a/(x+b)+c; }
-      else{ a = 9.37334e-05; b = -9.81244e-04; rate = a + b*x; }
+      if(x < 0.003){ a = -5.36862e+00; b = -1.11415e+03; rate = TMath::Exp(a + b*x); }
+      else if(x>=0.003 && x<0.013){ a = 8.08592e-07; b = 1.42417e-03; c = -1.78244e-05; rate = a/(x+b)+c; }
+      else{ a = 5.2938e-05; b = -0.00105457; rate = a + b*x; }
     }
     else if(eta>=0.8 && eta<1.479){
-      if(x < 0.0055){ a = 0.00382245; b = -0.455401; rate = TMath::Exp(a + b*x); }
-      else if(x>=0.0055 && x<0.0155){ a = 0.00165421; b = -0.0732609; c = 0.; rate = a/(x+b)+c; }
-      else{ a = 6.57784e-04; b = -0.00653361; rate = a + b*x; }
+      if(x < 0.003){ a = -4.21012e+00; b = -7.62790e+02; rate = TMath::Exp(a + b*x); }
+      else if(x>=0.003 && x<0.014){ a = 5.11499e-06; b = 3.33130e-04; c = 2.38459e-05; rate = a/(x+b)+c; }
+      else{ a = 0.000497532; b = -0.0109166; rate = a + b*x; }
     }
     else{
       //if(x < 0.01){ a = 0.0127778; b = -0.744197; }
       //else if(x>=0.01 && x<0.0205){ a = 0.00725863; b = -0.18864; }
       //else{ a = 0.00417112; b = -0.0371866; }
-			a = 0.00165421; b = -0.0732609; c = 0.; rate = a/(x+b)+c;
+			a = 3.90494e-05; b = 6.00814e-04; c = 3.38818e-04; rate = a/(x+b)+c;
     }
   }
   //else if(id == "HNTightV2"){
