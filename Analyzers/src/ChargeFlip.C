@@ -150,7 +150,7 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
     std::sort(eles.begin(), eles.end(), PtComparing);
 
     vector<Gen> gens = GetGens();
-    vector<Electron> eles_prmt = ElectronPromptOnlyChargeFlip(eles, gens); // Get prompt electrons except conversions
+    vector<Electron> eles_prmpt = ElectronPromptOnlyChargeFlip(eles, gens); // Get prompt electrons except conversions
     
     if(HasFlag("CFrate")){
 
@@ -248,64 +248,64 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
     if(HasFlag("ClosureTest")){
 
       /* MC Closure test start */
-      
+     
       if(!PassMETFilter()) return;
       Particle METv = ev.GetMETVector();
+
+      //if(eles.size() == 2){
   
-      if(eles.size() == 2){
+      //  double weight = GetCFweight(eles, param.Electron_User_ID);
   
-        double weight = GetCFweight(eles, param.Electron_User_ID);
+      //  Particle ZCand = eles.at(0)+eles.at(1);
   
-        Particle ZCand = eles.at(0)+eles.at(1);
+      //  if(75.<=ZCand.M()&&ZCand.M()<105.){
+      //    if(eles.at(0).Charge()*eles.at(1).Charge()<0){
+      //      FillHist(param.Name+"/ClosureTest/ZMass_OS_CFweighted", ZCand.M(), weight, 40, 75., 105.);
+      //    }
+      //    else{
+      //      FillHist(param.Name+"/ClosureTest/ZMass_SS", ZCand.M(), 1., 40, 75., 105.);
+      //      FillHist(param.Name+"/ClosureTest/pt1_SS", eles.at(0).Pt(), 1., 70, 20., 90.);
+      //      FillHist(param.Name+"/ClosureTest/pt2_SS", eles.at(1).Pt(), 1., 70, 20., 90.);
+      //      FillHist(param.Name+"/ClosureTest/MET_SS", METv.Pt(), 1., 100, 0., 100.);
+      //    }
+      //  }
+      //}
   
-        if(75.<=ZCand.M()&&ZCand.M()<105.){
-          if(eles.at(0).Charge()*eles.at(1).Charge()<0){
-            FillHist(param.Name+"/ClosureTest/ZMass_OS_CFweighted", ZCand.M(), weight, 40, 75., 105.);
+      /* Now require only prompt electrons in SS events */
+
+      if(eles_prmpt.size() == 2){
+
+        double weight_prmpt = GetCFweight(eles_prmpt, param.Electron_User_ID, false, 0.);
+
+        Particle ZCand_prmpt = eles_prmpt.at(0)+eles_prmpt.at(1);
+
+        if(70.<=ZCand_prmpt.M()&&ZCand_prmpt.M()<110.){
+          if(eles_prmpt.at(0).Charge()*eles_prmpt.at(1).Charge()<0){
+            FillHist(param.Name+"/ClosureTest/ZMass_prmpt_OS_CFweighted", ZCand_prmpt.M(), weight_prmpt, 40, 70., 110.);
           }
           else{
-            FillHist(param.Name+"/ClosureTest/ZMass_SS", ZCand.M(), 1., 40, 75., 105.);
-            FillHist(param.Name+"/ClosureTest/pt1_SS", eles.at(0).Pt(), 1., 70, 20., 90.);
-            FillHist(param.Name+"/ClosureTest/pt2_SS", eles.at(1).Pt(), 1., 70, 20., 90.);
-            FillHist(param.Name+"/ClosureTest/MET_SS", METv.Pt(), 1., 100, 0., 100.);
+            FillHist(param.Name+"/ClosureTest/ZMass_prmpt_SS", ZCand_prmpt.M(), 1., 40, 70., 110.);
+            FillHist(param.Name+"/ClosureTest/pt1_prmpt_SS", eles_prmpt.at(0).Pt(), 1., 70, 20., 90.);
+            FillHist(param.Name+"/ClosureTest/pt2_prmpt_SS", eles_prmpt.at(1).Pt(), 1., 70, 20., 90.);
+            FillHist(param.Name+"/ClosureTest/MET_prmpt_SS", METv.Pt(), 1., 100, 0., 100.);
           }
         }
       }
-  
-//      /* Now see what is changed when requiring only prompt electrons in SS events */
-//
-//      if(eles_prmt.size() == 2){
-//
-//        double weight_prmt = GetCFweight(eles_prmt, param.Electron_User_ID);
-//
-//        Particle ZCand_prmt = eles_prmt.at(0)+eles_prmt.at(1);
-//
-//        if(70.<=ZCand_prmt.M()&&ZCand_prmt.M()<110.){
-//          if(eles_prmt.at(0).Charge()*eles_prmt.at(1).Charge()<0){
-//            FillHist(param.Name+"/ClosureTest/ZMass_prmt_OS_CFweighted", ZCand_prmt.M(), weight_prmt, 40, 70., 110.);
-//          }
-//          else{
-//            FillHist(param.Name+"/ClosureTest/ZMass_prmt_SS", ZCand_prmt.M(), 1., 40, 70., 110.);
-//            FillHist(param.Name+"/ClosureTest/pt1_prmt_SS", eles_prmt.at(0).Pt(), 1., 70, 20., 90.);
-//            FillHist(param.Name+"/ClosureTest/pt2_prmt_SS", eles_prmt.at(1).Pt(), 1., 70, 20., 90.);
-//            FillHist(param.Name+"/ClosureTest/MET_prmt_SS", METv.Pt(), 1., 100, 0., 100.);
-//          }
-//        }
-//      }
   
       //
   
       /* There's disagreement between OS_CFweighted and SS(where NO requirement on its promptness?). */
       /* Now, Let's shift the electrons' energy */
       
-      if(eles.size() != 2) return;
+      if(eles_prmpt.size() != 2) return;
   
-      Particle ZCand = eles.at(0)+eles.at(1);
+      Particle ZCand = eles_prmpt.at(0)+eles_prmpt.at(1);
       Particle ZCand_tmp;
       Particle METv_tmp;
       double weight_tmp;
   
       for(int i=0;i<50;i++){
-        vector<Electron> eles_tmp = eles; // copy the vector
+        vector<Electron> eles_tmp = eles_prmpt; // copy the vector
         for(int j=0;j<2;j++){
           eles_tmp.at(j).SetE(eles_tmp.at(j).E()*(1-0.001*(i+1)));
           eles_tmp.at(j).SetPtEtaPhiE(eles_tmp.at(j).E() * TMath::Sin(eles_tmp.at(j).Theta()), eles_tmp.at(j).Eta(), eles_tmp.at(j).Phi(), eles_tmp.at(j).E());
@@ -313,11 +313,11 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
   
         ZCand_tmp = eles_tmp.at(0) + eles_tmp.at(1);
         METv_tmp.SetPxPyPzE(METv.Px()+ZCand.Px()-ZCand_tmp.Px(),METv.Py()+ZCand.Py()-ZCand_tmp.Py(),0,METv.E()+ZCand.E()-ZCand_tmp.E());
-        weight_tmp = GetCFweight(eles_tmp, param.Electron_User_ID);
+        weight_tmp = GetCFweight(eles_tmp, param.Electron_User_ID, false, 0.);
   
         if(! (75.<=ZCand_tmp.M()&&ZCand_tmp.M()<105.) ) continue;
   
-        if(eles.at(0).Charge()*eles.at(1).Charge()<0){
+        if(eles_prmpt.at(0).Charge()*eles_prmpt.at(1).Charge()<0){
           FillHist(param.Name+"/ClosureTest/ZMass_OS_CFweighted_shifted_"+TString::Itoa(i+1,10), ZCand_tmp.M(), weight_tmp, 40, 75., 105.);
           FillHist(param.Name+"/ClosureTest/pt1_OS_CFweighted_shifted_"+TString::Itoa(i+1,10), eles_tmp.at(0).Pt(), weight_tmp, 70, 20., 90.);
           FillHist(param.Name+"/ClosureTest/pt2_OS_CFweighted_shifted_"+TString::Itoa(i+1,10), eles_tmp.at(1).Pt(), weight_tmp, 70, 20., 90.);
@@ -515,8 +515,8 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
       }
   
       Particle ZCand_shifted = eles_shifted.at(0) + eles_shifted.at(1);
-      double weight_shifted = GetCFweight(eles_shifted, param.Electron_User_ID);
-      //double weight_shifted_SF = GetCFweight_SF(eles_shifted, param.Electron_User_ID);
+      double weight_shifted = GetCFweight(eles_shifted, param.Electron_User_ID, false, 0.);
+      //double weight_shifted_SF = GetCFweight_SF(eles_shifted, param.Electron_User_ID, true, 0.);
   
       Particle METv_shifted;
       METv_shifted.SetPxPyPzE(METv.Px()+ZCand.Px()-ZCand_shifted.Px(),METv.Py()+ZCand.Py()-ZCand_shifted.Py(),0,METv.E()+ZCand.E()-ZCand_shifted.E());
@@ -550,6 +550,7 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
 
 }
 
+/*
 double ChargeFlip::GetCFweight(std::vector<Electron> eles, TString id){
   
   double prob[2];
@@ -718,6 +719,7 @@ double ChargeFlip::GetCFweight_SF(std::vector<Electron> eles, TString id){
   }
 
 }
+*/
 
 double ChargeFlip::GetHalfSampleWeight(const Electron& electron, TString id){;
 

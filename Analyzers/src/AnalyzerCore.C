@@ -1629,71 +1629,71 @@ std::vector<Electron> AnalyzerCore::ShiftElectronEnergy(const std::vector<Electr
 }
 
 double AnalyzerCore::GetCFrates(TString id, double pt, double eta){
-  if(!id.Contains("HNTight")) return 0.;
 
   eta = fabs(eta);
-  double ivt_pt = 1./pt;
-  double a = 999., b = 999.;  // fit function = a + b/pT
+  double x = 1./pt;
+  double a, b, c;
+  double rate;
 
-  if(id == "HNTight"){
+  if(id == "HNTightV1"){
     if(eta < 0.8){
-      if(ivt_pt < 0.005){ a = 9.58505e-04; b = -0.159759; }
-      else if(ivt_pt>=0.005 && ivt_pt<0.0155){ a = 2.07325e-04; b = -0.0086346; }
-      else{ a = 9.37334e-05; b = -9.81244e-04; }
+      if(x < 0.005){ a = 9.58505e-04; b = -0.159759; rate = TMath::Exp(a + b*x); }
+      else if(x>=0.005 && x<0.0155){ a = 2.07325e-04; b = -0.0086346; c = 0.; rate = a/(x+b)+c; }
+      else{ a = 9.37334e-05; b = -9.81244e-04; rate = a + b*x; }
     }
     else if(eta>=0.8 && eta<1.479){
-      if(ivt_pt < 0.0055){ a = 0.00382245; b = -0.455401; }
-      else if(ivt_pt>=0.0055 && ivt_pt<0.0155){ a = 0.00165421; b = -0.0732609; }
-      else{ a = 6.57784e-04; b = -0.00653361; }
+      if(x < 0.0055){ a = 0.00382245; b = -0.455401; rate = TMath::Exp(a + b*x); }
+      else if(x>=0.0055 && x<0.0155){ a = 0.00165421; b = -0.0732609; c = 0.; rate = a/(x+b)+c; }
+      else{ a = 6.57784e-04; b = -0.00653361; rate = a + b*x; }
     }
     else{
-      if(ivt_pt < 0.01){ a = 0.0127778; b = -0.744197; }
-      else if(ivt_pt>=0.01 && ivt_pt<0.0205){ a = 0.00725863; b = -0.18864; }
-      else{ a = 0.00417112; b = -0.0371866; }
+      //if(x < 0.01){ a = 0.0127778; b = -0.744197; }
+      //else if(x>=0.01 && x<0.0205){ a = 0.00725863; b = -0.18864; }
+      //else{ a = 0.00417112; b = -0.0371866; }
+			a = 0.00165421; b = -0.0732609; c = 0.; rate = a/(x+b)+c;
     }
   }
-  else if(id == "HNTightV2"){
-    if(eta < 0.8){
-      if(ivt_pt < 0.0075){ a = 2.91353e-04; b = -0.0296481; }
-      else if(ivt_pt>=0.0075 && ivt_pt<0.0155){ a = 1.25648e-04; b = -0.00616739; }
-      else{ a = 3.75795e-05; b = -7.1692e-04; }
-    }
-    else if(eta>=0.8 && eta<1.479){
-      if(ivt_pt < 0.0055){ a = 0.00293283; b = -0.385095; }
-      else if(ivt_pt>=0.0055 && ivt_pt<0.0155){ a = 0.00101466; b = -0.0496765; }
-      else{ a = 3.4362e-04; b = -0.00840559; }
-    }
-    else{
-      if(ivt_pt < 0.0105){ a = 0.00920799; b = -0.66068; }
-      else if(ivt_pt>=0.0105 && ivt_pt<0.0205){ a = 0.00409673; b = -0.164067; }
-      else{ a = 0.00135968; b = -0.0270099; }
-    }
-  }
-  else{
-    if(eta < 0.8){
-      if(ivt_pt < 0.0075){ a = 4.12045e-04; b = -0.0445416; }
-      else if(ivt_pt>=0.0075 && ivt_pt<0.0155){ a = 1.1869e-04; b = -0.00448807; }
-      else{ a = 7.2859e-05; b = -0.00158132; }
-    }
-    else if(eta>=0.8 && eta<1.479){
-      if(ivt_pt < 0.0055){ a = 0.00320894; b = -0.420695; }
-      else if(ivt_pt>=0.0055 && ivt_pt<0.0155){ a = 0.00110226; b = -0.0522899; }
-      else{ a = 3.83228e-04; b = -0.00813698; }
-    }
-    else{
-      if(ivt_pt < 0.01){ a = 0.0101037; b = -0.746975; }
-      else if(ivt_pt>=0.01 && ivt_pt<0.019){ a = 0.00440033; b = -0.178011; }
-      else{ a = 0.00159123; b = -0.0318552; }
-    }
-  }
+  //else if(id == "HNTightV2"){
+  //  if(eta < 0.8){
+  //    if(x < 0.0075){ a = 2.91353e-04; b = -0.0296481; }
+  //    else if(x>=0.0075 && x<0.0155){ a = 1.25648e-04; b = -0.00616739; }
+  //    else{ a = 3.75795e-05; b = -7.1692e-04; }
+  //  }
+  //  else if(eta>=0.8 && eta<1.479){
+  //    if(x < 0.0055){ a = 0.00293283; b = -0.385095; }
+  //    else if(x>=0.0055 && x<0.0155){ a = 0.00101466; b = -0.0496765; }
+  //    else{ a = 3.4362e-04; b = -0.00840559; }
+  //  }
+  //  else{
+  //    if(x < 0.0105){ a = 0.00920799; b = -0.66068; }
+  //    else if(x>=0.0105 && x<0.0205){ a = 0.00409673; b = -0.164067; }
+  //    else{ a = 0.00135968; b = -0.0270099; }
+  //  }
+  //}
+  //else{
+  //  if(eta < 0.8){
+  //    if(x < 0.0075){ a = 4.12045e-04; b = -0.0445416; }
+  //    else if(x>=0.0075 && x<0.0155){ a = 1.1869e-04; b = -0.00448807; }
+  //    else{ a = 7.2859e-05; b = -0.00158132; }
+  //  }
+  //  else if(eta>=0.8 && eta<1.479){
+  //    if(x < 0.0055){ a = 0.00320894; b = -0.420695; }
+  //    else if(x>=0.0055 && x<0.0155){ a = 0.00110226; b = -0.0522899; }
+  //    else{ a = 3.83228e-04; b = -0.00813698; }
+  //  }
+  //  else{
+  //    if(x < 0.01){ a = 0.0101037; b = -0.746975; }
+  //    else if(x>=0.01 && x<0.019){ a = 0.00440033; b = -0.178011; }
+  //    else{ a = 0.00159123; b = -0.0318552; }
+  //  }
+  //}
 
-  double rate = a + b*ivt_pt;
   if(rate < 0.) rate = 0.;
   return rate;
 
 }
 
-double AnalyzerCore::GetCFweight(vector<Lepton *> lepptrs, AnalyzerParameter param, bool applySF, int syst){
+double AnalyzerCore::GetCFweight(vector<Lepton *> lepptrs, AnalyzerParameter param, bool applySF, double syst){
   if(!param.Electron_Tight_ID.Contains("HNTight")) return 0.;
   if(lepptrs.size() > 2) return 0.;
 
@@ -1714,14 +1714,43 @@ double AnalyzerCore::GetCFweight(vector<Lepton *> lepptrs, AnalyzerParameter par
 
     if(applySF){
       if(fabs(el.at(i).scEta()) < 1.479){
-        if(param.Electron_Tight_ID == "HNTight") sf.push_back(0.585533 + syst*0.);
-        else if(param.Electron_Tight_ID == "HNTightV2") sf.push_back(0.4584 + syst*0.);
-        else sf.push_back(0.49666 + syst*0.);
+        if(param.Electron_Tight_ID == "HNTightV1") sf.push_back(0.585533 * (1 + syst));
+        else if(param.Electron_Tight_ID == "HNTightV2") sf.push_back(0.4584 * (1 + syst));
+        else sf.push_back(0.49666 * (1 + syst));
       }
       else{
-        if(param.Electron_Tight_ID == "HNTight") sf.push_back(0.831019 + syst*0.);
-        else if(param.Electron_Tight_ID == "HNTightV2") sf.push_back(0.66078 + syst*0.);
-        else sf.push_back(0.652357 + syst*0.);
+        if(param.Electron_Tight_ID == "HNTightV1") sf.push_back(0.831019 * (1 + syst));
+        else if(param.Electron_Tight_ID == "HNTightV2") sf.push_back(0.66078 * (1 + syst));
+        else sf.push_back(0.652357 * (1 + syst));
+      }
+    }
+    else sf.push_back(1.);
+
+    cfweight += sf.at(i)*CFweight.at(i);
+  }
+
+  return cfweight;
+
+}
+
+double AnalyzerCore::GetCFweight(vector<Electron> eles, TString id, bool applySF, double syst){
+
+  std::vector<double> CFrate, CFweight, sf;
+  double cfweight = 0.;
+  for(unsigned int i=0; i<eles.size(); i++){
+    CFrate.push_back(GetCFrates(id, eles.at(i).Pt(), eles.at(i).scEta()));
+    CFweight.push_back(CFrate.at(i)/(1.-CFrate.at(i)));
+
+    if(applySF){
+      if(fabs(eles.at(i).scEta()) < 1.479){
+        if(id == "HNTightV1") sf.push_back(0.585533 * (1 + syst));
+        else if(id == "HNTightV2") sf.push_back(0.4584 * (1 + syst));
+        else sf.push_back(0.49666 * (1 + syst));
+      }
+      else{
+        if(id == "HNTightV1") sf.push_back(0.831019 * (1 + syst));
+        else if(id == "HNTightV2") sf.push_back(0.66078 * (1 + syst));
+        else sf.push_back(0.652357 * (1 + syst));
       }
     }
     else sf.push_back(1.);

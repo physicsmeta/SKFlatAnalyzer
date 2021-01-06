@@ -12,8 +12,8 @@ public:
   void executeEvent(Long64_t Nentry);
   void executeEventFromParameter(AnalyzerParameter param, Long64_t Nentry);
 	
-  double GetCFweight(std::vector<Electron> eles, TString id);
-	double GetCFweight_SF(std::vector<Electron> eles, TString id);
+  //double GetCFweight(std::vector<Electron> eles, TString id);
+	//double GetCFweight_SF(std::vector<Electron> eles, TString id);
   double GetHalfSampleWeight(const Electron& electron, TString id);
 
   TString EleTriggerName;
