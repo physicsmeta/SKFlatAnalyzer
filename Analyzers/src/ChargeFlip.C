@@ -260,10 +260,10 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
   
       //  if(75.<=ZCand.M()&&ZCand.M()<105.){
       //    if(eles.at(0).Charge()*eles.at(1).Charge()<0){
-      //      FillHist(param.Name+"/ClosureTest/ZMass_OS_CFweighted", ZCand.M(), weight, 40, 75., 105.);
+      //      FillHist(param.Name+"/ClosureTest/ZMass_OS_CFweighted", ZCand.M(), weight, 30, 75., 105.);
       //    }
       //    else{
-      //      FillHist(param.Name+"/ClosureTest/ZMass_SS", ZCand.M(), 1., 40, 75., 105.);
+      //      FillHist(param.Name+"/ClosureTest/ZMass_SS", ZCand.M(), 1., 30, 75., 105.);
       //      FillHist(param.Name+"/ClosureTest/pt1_SS", eles.at(0).Pt(), 1., 70, 20., 90.);
       //      FillHist(param.Name+"/ClosureTest/pt2_SS", eles.at(1).Pt(), 1., 70, 20., 90.);
       //      FillHist(param.Name+"/ClosureTest/MET_SS", METv.Pt(), 1., 100, 0., 100.);
@@ -279,12 +279,12 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
 
         Particle ZCand_prmpt = eles_prmpt.at(0)+eles_prmpt.at(1);
 
-        if(70.<=ZCand_prmpt.M()&&ZCand_prmpt.M()<110.){
+        if(75.<=ZCand_prmpt.M()&&ZCand_prmpt.M()<105.){
           if(eles_prmpt.at(0).Charge()*eles_prmpt.at(1).Charge()<0){
-            FillHist(param.Name+"/ClosureTest/ZMass_prmpt_OS_CFweighted", ZCand_prmpt.M(), weight_prmpt, 40, 70., 110.);
+            FillHist(param.Name+"/ClosureTest/ZMass_prmpt_OS_CFweighted", ZCand_prmpt.M(), weight_prmpt, 30, 75., 105.);
           }
           else{
-            FillHist(param.Name+"/ClosureTest/ZMass_prmpt_SS", ZCand_prmpt.M(), 1., 40, 70., 110.);
+            FillHist(param.Name+"/ClosureTest/ZMass_prmpt_SS", ZCand_prmpt.M(), 1., 30, 75., 105.);
             FillHist(param.Name+"/ClosureTest/pt1_prmpt_SS", eles_prmpt.at(0).Pt(), 1., 70, 20., 90.);
             FillHist(param.Name+"/ClosureTest/pt2_prmpt_SS", eles_prmpt.at(1).Pt(), 1., 70, 20., 90.);
             FillHist(param.Name+"/ClosureTest/MET_prmpt_SS", METv.Pt(), 1., 100, 0., 100.);
@@ -318,7 +318,7 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
         if(! (75.<=ZCand_tmp.M()&&ZCand_tmp.M()<105.) ) continue;
   
         if(eles_prmpt.at(0).Charge()*eles_prmpt.at(1).Charge()<0){
-          FillHist(param.Name+"/ClosureTest/ZMass_OS_CFweighted_shifted_"+TString::Itoa(i+1,10), ZCand_tmp.M(), weight_tmp, 40, 75., 105.);
+          FillHist(param.Name+"/ClosureTest/ZMass_OS_CFweighted_shifted_"+TString::Itoa(i+1,10), ZCand_tmp.M(), weight_tmp, 30, 75., 105.);
           FillHist(param.Name+"/ClosureTest/pt1_OS_CFweighted_shifted_"+TString::Itoa(i+1,10), eles_tmp.at(0).Pt(), weight_tmp, 70, 20., 90.);
           FillHist(param.Name+"/ClosureTest/pt2_OS_CFweighted_shifted_"+TString::Itoa(i+1,10), eles_tmp.at(1).Pt(), weight_tmp, 70, 20., 90.);
           FillHist(param.Name+"/ClosureTest/MET_OS_CFweighted_shifted_"+TString::Itoa(i+1,10), METv_tmp.Pt(), weight_tmp, 100, 0., 100.);

@@ -202,8 +202,8 @@ python python/SKFlat.py -a ChargeFlip -y 2016 -i TTLL_powheg -n 50 --userflags C
 #python python/SKFlat.py -a ChargeFlip -y 2018 -i DYJets_MG -n 50 --userflags ClosureTest &
 #python python/SKFlat.py -a ChargeFlip -y 2018 -i TTLL_powheg -n 50 --userflags ClosureTest &
 #
-python python/SKFlat.py -a ChargeFlip -y 2016 -i DYJets -n 50 --userflags HalfSampleTest &
-python python/SKFlat.py -a ChargeFlip -y 2016 -i TTLL_powheg -n 50 --userflags HalfSampleTest &
+#python python/SKFlat.py -a ChargeFlip -y 2016 -i DYJets -n 50 --userflags HalfSampleTest &
+#python python/SKFlat.py -a ChargeFlip -y 2016 -i TTLL_powheg -n 50 --userflags HalfSampleTest &
 #python python/SKFlat.py -a ChargeFlip -y 2017 -i DYJets -n 50 --userflags HalfSampleTest &
 #python python/SKFlat.py -a ChargeFlip -y 2017 -i TTLL_powheg -n 50 --userflags HalfSampleTest &
 #python python/SKFlat.py -a ChargeFlip -y 2018 -i DYJets_MG -n 50 --userflags HalfSampleTest &

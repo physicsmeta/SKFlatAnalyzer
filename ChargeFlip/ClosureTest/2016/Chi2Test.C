@@ -1,7 +1,6 @@
 void Chi2Test(){
 
-  //TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip/2016/ClosureTest__/ChargeFlip_DYJets_TTLL.root";
-  TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip_IDv2/2016/ClosureTest__/ChargeFlip_IDv2_DYJets_TTLL.root";
+  TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/ChargeFlip/2016/ClosureTest__/ChargeFlip_DYJets.root";
   TFile* f1 = new TFile(filename);
   
   TString samplename = filename(filename.Last('/')+12,filename.Length());
@@ -10,12 +9,12 @@ void Chi2Test(){
   vector<TString> User_ID;
   //User_ID.push_back("HNTight2016");
   //User_ID.push_back("HEID");
-  User_ID.push_back("HEIDv2");
+  User_ID.push_back("HNTightV1");
   
   for(unsigned int i=0; i<User_ID.size(); i++){
   
     //TH1D* h0 = (TH1D*)f1->Get(User_ID.at(i)+"/ClosureTest/ZMass_SS");
-    TH1D* h0 = (TH1D*)f1->Get(User_ID.at(i)+"/ClosureTest/ZMass_prmt_SS");
+    TH1D* h0 = (TH1D*)f1->Get(User_ID.at(i)+"/ClosureTest/ZMass_prmpt_SS");
   
     // Chi2Test //
   

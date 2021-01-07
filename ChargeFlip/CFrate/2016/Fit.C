@@ -79,7 +79,8 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   //gr1->SetMarkerSize(0.8);
   //gr1->SetMarkerColor(kMagenta+2);
   gr1->SetLineColor(15);
-  gr1->SetTitle("ChargeFlip_|#eta|<0.8 ("+User_ID.at(i)+")");
+  //gr1->SetTitle("ChargeFlip_|#eta|<0.8 ("+User_ID.at(i)+")");
+  gr1->SetTitle("ChargeFlip_|#eta|<0.8");
   gr1->SetMinimum(0.);
   gr1->Draw("ZAP"); //Z : do not draw small horizontal/vertical lines the end of the error bars
   gr1->GetXaxis()->SetRangeUser(0.,0.04);
@@ -171,7 +172,8 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   //gr2->SetMarkerSize(0.8);
   //gr2->SetMarkerColor(kMagenta+2);
   gr2->SetLineColor(15);
-  gr2->SetTitle("ChargeFlip_0.8#leq|#eta|<1.4442 ("+User_ID.at(i)+")");
+  //gr2->SetTitle("ChargeFlip_0.8#leq|#eta|<1.4442 ("+User_ID.at(i)+")");
+  gr2->SetTitle("ChargeFlip_0.8#leq|#eta|<1.4442");
   gr2->SetMinimum(0.);
   gr2->Draw("ZAP");
   gr2->GetXaxis()->SetRangeUser(0.,0.04);
@@ -255,7 +257,8 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   //gr3->SetMarkerSize(0.8);
   //gr3->SetMarkerColor(kMagenta+2);
   gr3->SetLineColor(15);
-  gr3->SetTitle("ChargeFlip_1.556#leq|#eta|<2.5 ("+User_ID.at(i)+")");
+  //gr3->SetTitle("ChargeFlip_1.556#leq|#eta|<2.5 ("+User_ID.at(i)+")");
+  gr3->SetTitle("ChargeFlip_1.556#leq|#eta|<2.5");
   gr3->SetMinimum(0.);
   gr3->Draw("ZAP");
   gr3->GetXaxis()->SetRangeUser(0.,0.04);
