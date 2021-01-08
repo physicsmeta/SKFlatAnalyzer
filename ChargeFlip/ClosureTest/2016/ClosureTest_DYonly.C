@@ -1,6 +1,6 @@
-void ClosureTest(){
+void ClosureTest_DYonly(){
 
-TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/ChargeFlip/2016/ClosureTest__/ChargeFlip_DYJets.root";
+TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/ChargeFlip/2016/ClosureTest__/ChargeFlip_DYonly.root";
 TFile* f1 = new TFile(filename);
 
 TString samplename = filename(filename.Last('/')+12,filename.Length());
@@ -13,9 +13,9 @@ TString User_ID = "HNTightV1";
 //TH1D* h0 = (TH1D*)f1->Get(User_ID+"/ClosureTest/ZMass_SS");
 TH1D* h0 = (TH1D*)f1->Get(User_ID+"/ClosureTest/ZMass_prmpt_SS");
 
-// 1.2% //
+// 0.9% //
 
-TH1D* h1 = (TH1D*)f1->Get(User_ID+"/ClosureTest/ZMass_OS_CFweighted_shifted_12");
+TH1D* h1 = (TH1D*)f1->Get(User_ID+"/ClosureTest/ZMass_OS_CFweighted_shifted_9");
 
 vector<double> x_1, ex_1, x_2, ex_2, x_3, ex_3;
 for (int i=0; i<30; i++) {
@@ -229,13 +229,13 @@ LineAtOne_2->Draw();
 
 //TH1D* h2 = (TH1D*)f1->Get(User_ID+"/ClosureTest/pt1_SS");
 TH1D* h2 = (TH1D*)f1->Get(User_ID+"/ClosureTest/pt1_prmpt_SS");
-TH1D* h3 = (TH1D*)f1->Get(User_ID+"/ClosureTest/pt1_OS_CFweighted_shifted_12");
+TH1D* h3 = (TH1D*)f1->Get(User_ID+"/ClosureTest/pt1_OS_CFweighted_shifted_9");
 //TH1D* h4 = (TH1D*)f1->Get(User_ID+"/ClosureTest/pt2_SS");
 TH1D* h4 = (TH1D*)f1->Get(User_ID+"/ClosureTest/pt2_prmpt_SS");
-TH1D* h5 = (TH1D*)f1->Get(User_ID+"/ClosureTest/pt2_OS_CFweighted_shifted_12");
+TH1D* h5 = (TH1D*)f1->Get(User_ID+"/ClosureTest/pt2_OS_CFweighted_shifted_9");
 //TH1D* h6 = (TH1D*)f1->Get(User_ID+"/ClosureTest/MET_SS");
 TH1D* h6 = (TH1D*)f1->Get(User_ID+"/ClosureTest/MET_prmpt_SS");
-TH1D* h7 = (TH1D*)f1->Get(User_ID+"/ClosureTest/MET_OS_CFweighted_shifted_12");
+TH1D* h7 = (TH1D*)f1->Get(User_ID+"/ClosureTest/MET_OS_CFweighted_shifted_9");
 
 vector<double> pt1_SS_x, pt1_SS_ex, pt2_SS_x, pt2_SS_ex, MET_SS_x, MET_SS_ex, pt1_OS_x, pt1_OS_ex, pt2_OS_x, pt2_OS_ex, MET_OS_x, MET_OS_ex, pt1_R_x, pt1_R_ex, pt2_R_x, pt2_R_ex, MET_R_x, MET_R_ex;
 for (int i=0; i<55; i++) {

@@ -1,6 +1,8 @@
 void Chi2Test(){
 
-  TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/ChargeFlip/2016/ClosureTest__/ChargeFlip_DYJets.root";
+  //TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/ChargeFlip/2016/ClosureTest__/ChargeFlip_DYJets.root";
+  //TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/ChargeFlip/2016/ClosureTest__/ChargeFlip_All.root";
+  TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/ChargeFlip/2016/ClosureTest__/ChargeFlip_DYonly.root";
   TFile* f1 = new TFile(filename);
   
   TString samplename = filename(filename.Last('/')+12,filename.Length());
