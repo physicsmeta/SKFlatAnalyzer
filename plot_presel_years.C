@@ -6,11 +6,12 @@ string line;
 while(getline(in,line)){
   istringstream is(line);
   TString this_line = line;
-  if(this_line.Contains("#")) continue;
+  if(this_line.Contains("#")||this_line=="") continue;
 
-  TString sample, channel, var, title, this_xran1, this_yran, SaveAs;
+  TString type, sample, channel, var, title, this_xran1, this_yran, SaveAs;
   double xran1, xran2, yran;
   int rebin;
+  is >> type;
   is >> sample;
   is >> channel;
   is >> var;
@@ -22,10 +23,25 @@ while(getline(in,line)){
   is >> SaveAs;
 
   TString mass = sample(sample.Last('M'),sample.Length());
+  TString filename1, filename2, filename3;
 
-  TString filename1 = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/Presel/2016/Presel_"+sample+".root";
-  TString filename2 = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/Presel/2017/Presel_"+sample+".root";
-  TString filename3 = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/Presel/2018/Presel_"+sample+".root";
+  if(type == "MC"){
+    filename1 = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/Presel/2016/Presel_"+sample+".root";
+    filename2 = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/Presel/2017/Presel_"+sample+".root";
+    filename3 = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/Presel/2018/Presel_"+sample+".root";
+  }
+  else if(type == "DATA"){
+    if(channel == "diel"){
+      filename1 = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/Presel/2016/DATA/Presel_SkimTree_Dilepton_"+sample+".root";
+      filename2 = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/Presel/2017/DATA/Presel_SkimTree_Dilepton_"+sample+".root";
+      filename3 = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/Presel/2018/DATA/Presel_SkimTree_Dilepton_EGamma.root";
+    }
+    else{
+      filename1 = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/Presel/2016/DATA/Presel_SkimTree_Dilepton_"+sample+".root";
+      filename2 = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/Presel/2017/DATA/Presel_SkimTree_Dilepton_"+sample+".root";
+      filename3 = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/Presel/2018/DATA/Presel_SkimTree_Dilepton_"+sample+".root";
+    }
+  }
   TFile* file1 = new TFile(filename1);
   TFile* file2 = new TFile(filename2);
   TFile* file3 = new TFile(filename3);
@@ -40,9 +56,9 @@ while(getline(in,line)){
   TCanvas* c1 = new TCanvas("c1",title,200,350,700,650);
   c1->cd();
   
-  if(sample.Contains("DYTypeI")) var1->SetTitle(title+" #scale[0.5]{: S-ch, "+channel+", "+mass+"}");
-  else if(sample.Contains("VBFTypeI")) var1->SetTitle(title+" #scale[0.5]{: T-ch, "+channel+", "+mass+"}");
-  else var1->SetTitle(title+" #scale[0.5]{"+sample+"_"+channel+"}");
+  if(sample.Contains("DYTypeI")) var1->SetTitle(title+"#scale[0.5]{ : S-ch, "+channel+", "+mass+"}");
+  else if(sample.Contains("VBFTypeI")) var1->SetTitle(title+"#scale[0.5]{ : T-ch, "+channel+", "+mass+"}");
+  else var1->SetTitle(title+"#scale[0.5]{ : "+sample+"_"+channel+"}");
   var1->SetStats(0);
   var1->Rebin(rebin);
   if(this_xran1 == "auto") xran1 = var1->GetXaxis()->GetXmin();

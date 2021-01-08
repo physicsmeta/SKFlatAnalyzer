@@ -1,106 +1,68 @@
-#sample channel	var	title	xran1	xran2	yran	rebin	SaveAs
-#DYTypeI_SS_EE_M100	Lep1_Pt	pt(l1)	auto	300	500	5	y
-#DYTypeI_OS_EE_M100	Lep1_Pt	pt(l1)	auto	300	500	5	y
-#DYTypeI_SS_MuMu_M100	Lep1_Pt	pt(l1)	auto	300	1200	5	y
-#DYTypeI_OS_MuMu_M100	Lep1_Pt	pt(l1)	auto	300	1200	5	y
-#DYTypeI_SS_EE_M700	Lep1_Pt	pt(l1)	auto	700	500	5	y
-#DYTypeI_OS_EE_M700	Lep1_Pt	pt(l1)	auto	700	500	5	y
-#DYTypeI_SS_MuMu_M700	Lep1_Pt	pt(l1)	auto	700	1000	5	y
-#DYTypeI_OS_MuMu_M700	Lep1_Pt	pt(l1)	auto	700	1000	5	y
+#type	sample channel	var	title	xran1	xran2	yran	rebin	SaveAs
 ##
-#DYTypeI_SS_EE_M100	Lep1_Eta	eta(l1)	auto	2.5	400	1	y
-#DYTypeI_OS_EE_M100	Lep1_Eta	eta(l1)	auto	2.5	400	1	y
-#DYTypeI_SS_MuMu_M100	Lep1_Eta	eta(l1)	auto	2.5	400	1	y
-#DYTypeI_OS_MuMu_M100	Lep1_Eta	eta(l1)	auto	2.5	400	1	y
-#DYTypeI_SS_EE_M700	Lep1_Eta	eta(l1)	auto	2.5	900	1	y
-#DYTypeI_OS_EE_M700	Lep1_Eta	eta(l1)	auto	2.5	900	1	y
-#DYTypeI_SS_MuMu_M700	Lep1_Eta	eta(l1)	auto	2.5	900	1	y
-#DYTypeI_OS_MuMu_M700	Lep1_Eta	eta(l1)	auto	2.5	900	1	y
-##
-#DYTypeI_SS_EE_M100	Lep2_Pt	pt(l2)	auto	300	2000	5	y
-#DYTypeI_OS_EE_M100	Lep2_Pt	pt(l2)	auto	300	2000	5	y
-#DYTypeI_SS_MuMu_M100	Lep2_Pt	pt(l2)	auto	300	3000	5	y
-#DYTypeI_OS_MuMu_M100	Lep2_Pt	pt(l2)	auto	300	3000	5	y
-#DYTypeI_SS_EE_M700	Lep2_Pt	pt(l2)	auto	700	500	5	y
-#DYTypeI_OS_EE_M700	Lep2_Pt	pt(l2)	auto	700	500	5	y
-#DYTypeI_SS_MuMu_M700	Lep2_Pt	pt(l2)	auto	700	1000	5	y
-#DYTypeI_OS_MuMu_M700	Lep2_Pt	pt(l2)	auto	700	1000	5	y
-##
-#DYTypeI_SS_EE_M100	Lep2_Eta	eta(l2)	auto	2.5	400	1	y
-#DYTypeI_OS_EE_M100	Lep2_Eta	eta(l2)	auto	2.5	400	1	y
-#DYTypeI_SS_MuMu_M100	Lep2_Eta	eta(l2)	auto	2.5	400	1	y
-#DYTypeI_OS_MuMu_M100	Lep2_Eta	eta(l2)	auto	2.5	400	1	y
-#DYTypeI_SS_EE_M700	Lep2_Eta	eta(l2)	auto	2.5	900	1	y
-#DYTypeI_OS_EE_M700	Lep2_Eta	eta(l2)	auto	2.5	900	1	y
-#DYTypeI_SS_MuMu_M700	Lep2_Eta	eta(l2)	auto	2.5	900	1	y
-#DYTypeI_OS_MuMu_M700	Lep2_Eta	eta(l2)	auto	2.5	900	1	y
-##
-#SkimTree_Dilepton_DYJets	dimu	Lep1_Eta	eta(l1)	auto	2.5	auto	1	n
-#SkimTree_Dilepton_DYJets	dimu	Lep1_Pt	pt(l1)	auto	100 auto	5	n
-#SkimTree_Dilepton_DYJets	dimu	Lep2_Eta	eta(l2)	auto	2.5	auto	1	n
-#SkimTree_Dilepton_DYJets	dimu	Lep2_Pt	pt(l2)	auto	100	auto	5	n
-#SkimTree_Dilepton_DYJets	diel	Lep1_Eta	eta(l1)	auto	2.5	auto	1	n
-#SkimTree_Dilepton_DYJets	diel	Lep1_Pt	pt(l1)	auto	100 auto	5	n
-#SkimTree_Dilepton_DYJets	diel	Lep2_Eta	eta(l2)	auto	2.5	auto	1	n
-#SkimTree_Dilepton_DYJets	diel	Lep2_Pt	pt(l2)	auto	100	auto	5	n
+MC	SkimTree_Dilepton_DYJets	dimu	Lep1_Pt	pt(l1)	auto	100 auto	1	y
+MC	SkimTree_Dilepton_DYJets	dimu	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
+MC	SkimTree_Dilepton_DYJets	dimu	Lep2_Pt	pt(l2)	auto	100	auto	1	y
+MC	SkimTree_Dilepton_DYJets	dimu	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
+MC	SkimTree_Dilepton_DYJets	diel	Lep1_Pt	pt(l1)	auto	100 auto	1	y
+MC	SkimTree_Dilepton_DYJets	diel	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
+MC	SkimTree_Dilepton_DYJets	diel	Lep2_Pt	pt(l2)	auto	100	auto	1	y
+MC	SkimTree_Dilepton_DYJets	diel	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
+MC	SkimTree_Dilepton_TTLL_powheg	dimu	Lep1_Pt	pt(l1)	auto	100 auto	1	y
+MC	SkimTree_Dilepton_TTLL_powheg	dimu	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
+MC	SkimTree_Dilepton_TTLL_powheg	dimu	Lep2_Pt	pt(l2)	auto	100	auto	1	y
+MC	SkimTree_Dilepton_TTLL_powheg	dimu	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
+MC	SkimTree_Dilepton_TTLL_powheg	diel	Lep1_Pt	pt(l1)	auto	100 auto	1	y
+MC	SkimTree_Dilepton_TTLL_powheg	diel	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
+MC	SkimTree_Dilepton_TTLL_powheg	diel	Lep2_Pt	pt(l2)	auto	100	auto	1	y
+MC	SkimTree_Dilepton_TTLL_powheg	diel	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
+DATA	DoubleMuon	dimu	Lep1_Pt	pt(l1)	auto	100 auto	1	y
+DATA	DoubleMuon	dimu	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
+DATA	DoubleMuon	dimu	Lep2_Pt	pt(l2)	auto	100	auto	1	y
+DATA	DoubleMuon	dimu	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
+DATA	DoubleEG	diel	Lep1_Pt	pt(l1)	auto	100 auto	1	y
+DATA	DoubleEG	diel	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
+DATA	DoubleEG	diel	Lep2_Pt	pt(l2)	auto	100	auto	1	y
+DATA	DoubleEG	diel	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
 ##To show at Jets+X meeting
-DYTypeI_SS_MuMu_M100	dimu	Lep1_Pt	pt(l1)	auto	1000 auto	5	y
-DYTypeI_SS_MuMu_M100	dimu	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
-DYTypeI_SS_MuMu_M100	dimu	Lep2_Pt	pt(l2)	auto	1000	auto	5	y
-DYTypeI_SS_MuMu_M100	dimu	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
-DYTypeI_SS_MuMu_M100	dimu	NCand1_Mass	M(l1jj)	auto	2000	auto	10	y
-DYTypeI_SS_MuMu_M100	dimu	NCand2_Mass	M(l1J)	auto	2000	auto	10	y
-DYTypeI_SS_EE_M100	diel	Lep1_Pt	pt(l1)	auto	1000 auto	5	y
-DYTypeI_SS_EE_M100	diel	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
-DYTypeI_SS_EE_M100	diel	Lep2_Pt	pt(l2)	auto	1000	auto	5	y
-DYTypeI_SS_EE_M100	diel	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
-DYTypeI_SS_EE_M100	diel	NCand1_Mass	M(l1jj)	auto	2000	auto	10	y
-DYTypeI_SS_EE_M100	diel	NCand2_Mass	M(l1J)	auto	2000	auto	10	y
-DYTypeI_SS_MuMu_M500	dimu	Lep1_Pt	pt(l1)	auto	1000 auto	5	y
-DYTypeI_SS_MuMu_M500	dimu	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
-DYTypeI_SS_MuMu_M500	dimu	Lep2_Pt	pt(l2)	auto	1000	auto	5	y
-DYTypeI_SS_MuMu_M500	dimu	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
-DYTypeI_SS_MuMu_M500	dimu	NCand1_Mass	M(l1jj)	auto	2000	auto	10	y
-DYTypeI_SS_MuMu_M500	dimu	NCand2_Mass	M(l1J)	auto	2000	auto	10	y
-DYTypeI_SS_EE_M500	diel	Lep1_Pt	pt(l1)	auto	1000 auto	5	y
-DYTypeI_SS_EE_M500	diel	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
-DYTypeI_SS_EE_M500	diel	Lep2_Pt	pt(l2)	auto	1000	auto	5	y
-DYTypeI_SS_EE_M500	diel	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
-DYTypeI_SS_EE_M500	diel	NCand1_Mass	M(l1jj)	auto	2000	auto	10	y
-DYTypeI_SS_EE_M500	diel	NCand2_Mass	M(l1J)	auto	2000	auto	10	y
-DYTypeI_SS_MuMu_M1200	dimu	Lep1_Pt	pt(l1)	auto	1000 auto	5	y
-DYTypeI_SS_MuMu_M1200	dimu	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
-DYTypeI_SS_MuMu_M1200	dimu	Lep2_Pt	pt(l2)	auto	1000	auto	5	y
-DYTypeI_SS_MuMu_M1200	dimu	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
-DYTypeI_SS_MuMu_M1200	dimu	NCand1_Mass	M(l1jj)	auto	2000	auto	10	y
-DYTypeI_SS_MuMu_M1200	dimu	NCand2_Mass	M(l1J)	auto	2000	auto	10	y
-DYTypeI_SS_EE_M1200	diel	Lep1_Pt	pt(l1)	auto	1000 auto	5	y
-DYTypeI_SS_EE_M1200	diel	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
-DYTypeI_SS_EE_M1200	diel	Lep2_Pt	pt(l2)	auto	1000	auto	5	y
-DYTypeI_SS_EE_M1200	diel	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
-DYTypeI_SS_EE_M1200	diel	NCand1_Mass	M(l1jj)	auto	2000	auto	10	y
-DYTypeI_SS_EE_M1200	diel	NCand2_Mass	M(l1J)	auto	2000	auto	10	y
-VBFTypeI_SS_MuMu_M500	dimu	Lep1_Pt	pt(l1)	auto	1000 auto	5	y
-VBFTypeI_SS_MuMu_M500	dimu	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
-VBFTypeI_SS_MuMu_M500	dimu	Lep2_Pt	pt(l2)	auto	1000	auto	5	y
-VBFTypeI_SS_MuMu_M500	dimu	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
-VBFTypeI_SS_MuMu_M500	dimu	NCand1_Mass	M(l1jj)	auto	2000	auto	10	y
-VBFTypeI_SS_MuMu_M500	dimu	NCand2_Mass	M(l1J)	auto	2000	auto	10	y
-VBFTypeI_SS_EE_M500	diel	Lep1_Pt	pt(l1)	auto	1000 auto	5	y
-VBFTypeI_SS_EE_M500	diel	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
-VBFTypeI_SS_EE_M500	diel	Lep2_Pt	pt(l2)	auto	1000	auto	5	y
-VBFTypeI_SS_EE_M500	diel	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
-VBFTypeI_SS_EE_M500	diel	NCand1_Mass	M(l1jj)	auto	2000	auto	10	y
-VBFTypeI_SS_EE_M500	diel	NCand2_Mass	M(l1J)	auto	2000	auto	10	y
-VBFTypeI_SS_MuMu_M1200	dimu	Lep1_Pt	pt(l1)	auto	1000 auto	5	y
-VBFTypeI_SS_MuMu_M1200	dimu	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
-VBFTypeI_SS_MuMu_M1200	dimu	Lep2_Pt	pt(l2)	auto	1000	auto	5	y
-VBFTypeI_SS_MuMu_M1200	dimu	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
-VBFTypeI_SS_MuMu_M1200	dimu	NCand1_Mass	M(l1jj)	auto	2000	auto	10	y
-VBFTypeI_SS_MuMu_M1200	dimu	NCand2_Mass	M(l1J)	auto	2000	auto	10	y
-VBFTypeI_SS_EE_M1200	diel	Lep1_Pt	pt(l1)	auto	1000 auto	5	y
-VBFTypeI_SS_EE_M1200	diel	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
-VBFTypeI_SS_EE_M1200	diel	Lep2_Pt	pt(l2)	auto	1000	auto	5	y
-VBFTypeI_SS_EE_M1200	diel	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
-VBFTypeI_SS_EE_M1200	diel	NCand1_Mass	M(l1jj)	auto	2000	auto	10	y
-VBFTypeI_SS_EE_M1200	diel	NCand2_Mass	M(l1J)	auto	2000	auto	10	y
+#MC	DYTypeI_SS_MuMu_M100	dimu	Lep1_Pt	pt(l1)	auto	1000 auto	5	y
+#MC	DYTypeI_SS_MuMu_M100	dimu	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
+#MC	DYTypeI_SS_MuMu_M100	dimu	Lep2_Pt	pt(l2)	auto	1000	auto	5	y
+#MC	DYTypeI_SS_MuMu_M100	dimu	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
+#MC	DYTypeI_SS_EE_M100	diel	Lep1_Pt	pt(l1)	auto	1000 auto	5	y
+#MC	DYTypeI_SS_EE_M100	diel	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
+#MC	DYTypeI_SS_EE_M100	diel	Lep2_Pt	pt(l2)	auto	1000	auto	5	y
+#MC	DYTypeI_SS_EE_M100	diel	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
+#MC	DYTypeI_SS_MuMu_M500	dimu	Lep1_Pt	pt(l1)	auto	1000 auto	5	y
+#MC	DYTypeI_SS_MuMu_M500	dimu	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
+#MC	DYTypeI_SS_MuMu_M500	dimu	Lep2_Pt	pt(l2)	auto	1000	auto	5	y
+#MC	DYTypeI_SS_MuMu_M500	dimu	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
+#MC	DYTypeI_SS_EE_M500	diel	Lep1_Pt	pt(l1)	auto	1000 auto	5	y
+#MC	DYTypeI_SS_EE_M500	diel	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
+#MC	DYTypeI_SS_EE_M500	diel	Lep2_Pt	pt(l2)	auto	1000	auto	5	y
+#MC	DYTypeI_SS_EE_M500	diel	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
+#MC	DYTypeI_SS_MuMu_M1200	dimu	Lep1_Pt	pt(l1)	auto	1000 auto	5	y
+#MC	DYTypeI_SS_MuMu_M1200	dimu	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
+#MC	DYTypeI_SS_MuMu_M1200	dimu	Lep2_Pt	pt(l2)	auto	1000	auto	5	y
+#MC	DYTypeI_SS_MuMu_M1200	dimu	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
+#MC	DYTypeI_SS_EE_M1200	diel	Lep1_Pt	pt(l1)	auto	1000 auto	5	y
+#MC	DYTypeI_SS_EE_M1200	diel	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
+#MC	DYTypeI_SS_EE_M1200	diel	Lep2_Pt	pt(l2)	auto	1000	auto	5	y
+#MC	DYTypeI_SS_EE_M1200	diel	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
+#MC	VBFTypeI_SS_MuMu_M500	dimu	Lep1_Pt	pt(l1)	auto	1000 auto	5	y
+#MC	VBFTypeI_SS_MuMu_M500	dimu	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
+#MC	VBFTypeI_SS_MuMu_M500	dimu	Lep2_Pt	pt(l2)	auto	1000	auto	5	y
+#MC	VBFTypeI_SS_MuMu_M500	dimu	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
+#MC	VBFTypeI_SS_EE_M500	diel	Lep1_Pt	pt(l1)	auto	1000 auto	5	y
+#MC	VBFTypeI_SS_EE_M500	diel	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
+#MC	VBFTypeI_SS_EE_M500	diel	Lep2_Pt	pt(l2)	auto	1000	auto	5	y
+#MC	VBFTypeI_SS_EE_M500	diel	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
+#MC	VBFTypeI_SS_MuMu_M1200	dimu	Lep1_Pt	pt(l1)	auto	1000 auto	5	y
+#MC	VBFTypeI_SS_MuMu_M1200	dimu	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
+#MC	VBFTypeI_SS_MuMu_M1200	dimu	Lep2_Pt	pt(l2)	auto	1000	auto	5	y
+#MC	VBFTypeI_SS_MuMu_M1200	dimu	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
+#MC	VBFTypeI_SS_EE_M1200	diel	Lep1_Pt	pt(l1)	auto	1000 auto	5	y
+#MC	VBFTypeI_SS_EE_M1200	diel	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
+#MC	VBFTypeI_SS_EE_M1200	diel	Lep2_Pt	pt(l2)	auto	1000	auto	5	y
+#MC	VBFTypeI_SS_EE_M1200	diel	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
+
