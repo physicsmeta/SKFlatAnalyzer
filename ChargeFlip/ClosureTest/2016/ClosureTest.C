@@ -107,7 +107,7 @@ LineAtOne->Draw();
 
 cout << "N(SS) : " << h0->Integral() << endl;
 cout << "N(OS_CFweighted_shifted_1.2%) : " << h1->Integral() << endl;
-cout << "Uncert. : " << h0->Integral()/h1->Integral() << endl;
+cout << "SS/OS ratio : " << h0->Integral()/h1->Integral() << " +- " << (h0->Integral()/h1->Integral()) * sqrt(1./h0->Integral() + 1./h1->Integral()) << endl;
 
 
 //c1->cd(3);

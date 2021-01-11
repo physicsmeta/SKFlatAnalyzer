@@ -36,7 +36,7 @@ for (int i=0; i<30; i++) {
 
 // Draw the plots //
 
-TCanvas* c1 = new TCanvas("c1","ZMass : OS_CFweighted_1.2% vs SS",1000,100,900,800);
+TCanvas* c1 = new TCanvas("c1","ZMass : OS_CFweighted_0.9% vs SS",1000,100,900,800);
 c1->Divide(1,2);
 
 c1->cd(1);
@@ -47,7 +47,7 @@ gPad->SetBottomMargin(0.02);
 
 TGraphErrors* gr1 = new TGraphErrors(x_1.size(),&x_1[0],&y_1[0],&ex_1[0],&ey_1[0]);
 gr1->SetFillColor(20);
-gr1->SetTitle("ZMass : OS_CFweighted_1.2% vs SS");
+gr1->SetTitle("ZMass : OS_CFweighted_0.9% vs SS");
 //gr1->GetXaxis()->SetRangeUser(70,110);
 //gr1->SetMinimum(0.);
 gr1->Draw("AB2"); // Z : do not draw small horizontal/vertical lines the end of the error bars
@@ -106,8 +106,8 @@ LineAtOne->Draw();
 
 
 cout << "N(SS) : " << h0->Integral() << endl;
-cout << "N(OS_CFweighted_shifted_1.2%) : " << h1->Integral() << endl;
-cout << "Uncert. : " << h0->Integral()/h1->Integral() << endl;
+cout << "N(OS_CFweighted_shifted_0.9%) : " << h1->Integral() << endl;
+cout << "SS/OS ratio : " << h0->Integral()/h1->Integral() << " +- " << (h0->Integral()/h1->Integral()) * sqrt(1./h0->Integral() + 1./h1->Integral()) << endl;
 
 
 //c1->cd(3);
@@ -281,7 +281,7 @@ for (int i=0; i<80; i++){
 
 // pt1
 
-TCanvas* c3 = new TCanvas("c3","pt1 : OS_shifted_1.2% vs SS",100,100,900,800);
+TCanvas* c3 = new TCanvas("c3","pt1 : OS_shifted_0.9% vs SS",100,100,900,800);
 c3->Divide(1,2);
 
 c3->cd(1);
@@ -292,7 +292,7 @@ gPad->SetBottomMargin(0.02);
 
 TGraphErrors* pt1_OS = new TGraphErrors(pt1_OS_x.size(),&pt1_OS_x[0],&pt1_OS_y[0],&pt1_OS_ex[0],&pt1_OS_ey[0]);
 pt1_OS->SetFillColor(20);
-pt1_OS->SetTitle("pt1 : OS_CFweighted_1.2% vs SS");
+pt1_OS->SetTitle("pt1 : OS_CFweighted_0.9% vs SS");
 pt1_OS->Draw("AB2"); 
 pt1_OS->GetXaxis()->SetTickLength(0.025);
 pt1_OS->GetXaxis()->SetLabelSize(0);
@@ -346,7 +346,7 @@ LineAtOne_pt1->Draw();
 
 // pt2
 
-TCanvas* c4 = new TCanvas("c4","pt2 : OS_shifted_1.2% vs SS",100,100,900,800);
+TCanvas* c4 = new TCanvas("c4","pt2 : OS_shifted_0.9% vs SS",100,100,900,800);
 c4->Divide(1,2);
 
 c4->cd(1);
@@ -357,7 +357,7 @@ gPad->SetBottomMargin(0.02);
 
 TGraphErrors* pt2_OS = new TGraphErrors(pt2_OS_x.size(),&pt2_OS_x[0],&pt2_OS_y[0],&pt2_OS_ex[0],&pt2_OS_ey[0]);
 pt2_OS->SetFillColor(20);
-pt2_OS->SetTitle("pt2 : OS_CFweighted_1.2% vs SS");
+pt2_OS->SetTitle("pt2 : OS_CFweighted_0.9% vs SS");
 pt2_OS->Draw("AB2"); 
 pt2_OS->GetXaxis()->SetTickLength(0.025);
 pt2_OS->GetXaxis()->SetLabelSize(0);
@@ -411,7 +411,7 @@ LineAtOne_pt2->Draw();
 
 // MET
 
-TCanvas* c5 = new TCanvas("c5","MET : OS_shifted_1.2% vs SS",100,100,900,800);
+TCanvas* c5 = new TCanvas("c5","MET : OS_shifted_0.9% vs SS",100,100,900,800);
 c5->Divide(1,2);
 
 c5->cd(1);
@@ -422,7 +422,7 @@ gPad->SetBottomMargin(0.02);
 
 TGraphErrors* MET_OS = new TGraphErrors(MET_OS_x.size(),&MET_OS_x[0],&MET_OS_y[0],&MET_OS_ex[0],&MET_OS_ey[0]);
 MET_OS->SetFillColor(20);
-MET_OS->SetTitle("MET : OS_CFweighted_1.2% vs SS");
+MET_OS->SetTitle("MET : OS_CFweighted_0.9% vs SS");
 MET_OS->Draw("AB2"); 
 MET_OS->GetXaxis()->SetTickLength(0.025);
 MET_OS->GetXaxis()->SetLabelSize(0);

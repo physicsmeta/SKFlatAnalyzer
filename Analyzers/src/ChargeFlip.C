@@ -504,7 +504,7 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
       vector<Electron> eles_shifted = eles; // copy the vector
       double X;
       if(DataYear==2016){
-        if(param.Electron_User_ID=="HNTightV2") X = 1.0;
+        if(param.Electron_User_ID=="HNTightV1") X = 1.0;
       }
       TString X_string = Form("%f",X);
       X_string = X_string(0,3)+"%";

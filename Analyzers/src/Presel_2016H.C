@@ -208,7 +208,7 @@ void Presel_2016H::executeEventFromParameter(AnalyzerParameter param){
 
   if(!IsDATA){
     //weight *= weight_norm_1invpb*ev.GetTriggerLumi("Full"); //JH : weight_norm_1invpb = xsec/sumW; Lumi = 35.9, 41.5, 59.7(fb-1) total 137fb-1
-    //weight *= ev.MCweight(); //JH : gen_weight in MiniAOD
+    weight *= ev.MCweight(); //JH : gen_weight in MiniAOD
     //weight *= GetPrefireWeight(0); //JH : No issue in 2018, otherwise returns L1PrefireReweight_Central in MiniAOD
     //weight *= GetPileUpWeight(nPileUp,0); //JH : mcCorr->GetPileUpWeight(N_pileup, syst); mcCorr->GetPileUpWeight2017(N_pileup, syst); NOTE 2018 not yet added.
   } //JH : total weight calculation done.
@@ -501,7 +501,7 @@ void Presel_2016H::executeEventFromParameter(AnalyzerParameter param){
     weight = 1.;
     if(!IsDATA){
       //weight *= weight_norm_1invpb*trigger_lumi;
-      //weight *= ev.MCweight();
+      weight *= ev.MCweight();
       //weight *= GetPrefireWeight(0);
       //weight *= GetPileUpWeight(nPileUp,0);
     } //JH : recalculate total weight for 2016 period dependency.
@@ -526,7 +526,7 @@ void Presel_2016H::executeEventFromParameter(AnalyzerParameter param){
         if(-4<=GetLeptonType(*leptons.at(1), gens)&&GetLeptonType(*leptons.at(1), gens)<=0) continue;
 
         //weight *= weight_norm_1invpb*trigger_lumi; //JH : trigger_lumi for period dependency
-        //weight *= ev.MCweight();
+        weight *= ev.MCweight();
         //weight *= GetPrefireWeight(0);
         //weight *= GetPileUpWeight(nPileUp,0);
 
