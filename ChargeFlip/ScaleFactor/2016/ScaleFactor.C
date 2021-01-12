@@ -1,33 +1,59 @@
-double background(double *x, double *par){
+double pol3(double *x, double *par){
   return par[0] + par[1]*x[0] + par[2]*x[0]*x[0] + par[3]*x[0]*x[0]*x[0];
 }
 
-double background_tmp(double *x, double *par){ //SH asked
+double pol1(double *x, double *par){
   return par[0] + par[1]*x[0];
 }
 
-double gaussianPeak(double *x, double *par){
+double expo(double *x, double *par){
+  return exp(par[0] + par[1]*x[0]);
+}
+
+double gaus(double *x, double *par){
   return par[0]*exp(-0.5*pow((x[0]-par[1])/par[2],2));
 }
 
-double fitFunction(double *x, double *par){
-  return background(x,par) + gaussianPeak(x,&par[4]);
+double BW(double *x, double *par){
+  return par[0]*par[1]/((x[0]+par[2])*(x[0]+par[2])+(0.5*par[1])*(0.5*par[1]));
 }
 
-double fitFunction_tmp(double *x, double *par){
-  return background_tmp(x,par) + gaussianPeak(x,&par[2]);
+double gaus_pol1(double *x, double *par){
+  return gaus(x,par) + pol1(x,&par[3]);
 }
 
-void ScaleFactor(TString id, TString EtaRegion, int Syst = 0, TString SaveAs = "n"){ // BB, BE, EE
+double gaus_pol3(double *x, double *par){
+  return gaus(x,par) + pol3(x,&par[3]);
+}
+
+double gaus_expo(double *x, double *par){
+  return gaus(x,par) + expo(x,&par[3]);
+}
+
+double BW_pol1(double *x, double *par){
+  return BW(x,par) + pol1(x,&par[3]);
+}
+
+double BW_pol3(double *x, double *par){
+  return BW(x,par) + pol3(x,&par[3]);
+}
+
+double BW_expo(double *x, double *par){
+  return BW(x,par) + expo(x,&par[3]);
+}
+
+void ScaleFactor(TString id, TString EtaRegion, TString fit, int Syst = 0, TString SaveAs = "n"){ // BB, BE, EE
 
   TString X = ""; //energy shift
   if(id=="HEID") X = "1.3%";
+  else if(id=="HNTightV1") X = "1.0%";
   else if(id=="HNTight2016") X = "1.2%";
   
-  int MllLeft = 70; if(Syst==3) MllLeft = 75; else if(Syst==4) MllLeft = 65;
-  int MllRight = 110; if(Syst==3) MllRight = 105; else if(Syst==4) MllRight = 115;
-  int NBin = 40; if(Syst==5) NBin = 35; else if(Syst==6) NBin = 45;
-  double err = 0.5; if(Syst==3||Syst==4||Syst==5||Syst==6) err = 1.*(MllRight-MllLeft)/NBin/2.; // if NBin is fixed at 40, then err changes in both Syst 3 and 4
+  int MllLeft = 60; if(Syst==3) MllLeft = 80; else if(Syst==4) MllLeft = 70;
+  int MllRight = 120; if(Syst==3) MllRight = 100; else if(Syst==4) MllRight = 110;
+  int NBin = 30; if(Syst==5) NBin = 25; else if(Syst==6) NBin = 35;
+  //double err = 0.5; if(Syst==3||Syst==4||Syst==5||Syst==6) err = 1.*(MllRight-MllLeft)/NBin/2.; // if NBin is fixed at 40, then err changes in both Syst 3 and 4
+  double err = 1.*(MllRight-MllLeft)/NBin/2.; // if NBin is fixed at 40, then err changes in both Syst 3 and 4
   
   std::map<int, TString> RunSyst;
   RunSyst[0] = "";
@@ -39,22 +65,29 @@ void ScaleFactor(TString id, TString EtaRegion, int Syst = 0, TString SaveAs = "
   RunSyst[6] = "_Syst_NBinUp";
   
   
-  TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip/2016/ScaleFactor__RunSyst__/DATA/ChargeFlip_DoubleEG_total_NBin40_DYTTLLCF.root";
+  //TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip/2016/ScaleFactor__RunSyst__/DATA/ChargeFlip_DoubleEG_total_NBin40_DYTTLLCF.root";
+  TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/ChargeFlip/2016/ScaleFactor__/DATA/ChargeFlip_DoubleEG.root";
   TFile* f1 = new TFile(filename);
   
   TString samplename = filename(filename.Last('_')+1,filename.Length());
   samplename.ReplaceAll(".root","");
   
-  gSystem->Exec("mkdir "+samplename);
+  gSystem->Exec("mkdir -p "+samplename);
   
   TH1D* h0 = (TH1D*)f1->Get(id+RunSyst[Syst]+"/ScaleFactor/"+EtaRegion+"_ZMass_SS");
-  TH1D* h1 = (TH1D*)f1->Get(id+RunSyst[Syst]+"/ScaleFactor/"+EtaRegion+"_ZMass_OS_CFweighted_shifted_"+X);
+  TH1D* h1;
+  if(EtaRegion=="BB"||EtaRegion=="EE"){
+  h1 = (TH1D*)f1->Get(id+RunSyst[Syst]+"/ScaleFactor/"+EtaRegion+"_ZMass_OS_CFweighted_shifted_"+X);
+  }
+  else if(EtaRegion=="BE"){
+  h1 = (TH1D*)f1->Get(id+RunSyst[Syst]+"/ScaleFactor/"+EtaRegion+"_ZMass_OS_CFSFweighted_shifted_"+X);
+  }
   
   vector<double> x_1, ex_1, x_2, ex_2, x_3, ex_3;
   for (int i=0; i<NBin; i++) {
-    x_1.push_back(MllLeft+(2*i+1)*(err)); ex_1.push_back(err); 
-    x_2.push_back(MllLeft+(2*i+1)*(err)); ex_2.push_back(err); 
-    x_3.push_back(MllLeft+(2*i+1)*(err)); ex_3.push_back(err); 
+    x_1.push_back(MllLeft+(2*i+1)*(err)); ex_1.push_back(0.); 
+    x_2.push_back(MllLeft+(2*i+1)*(err)); ex_2.push_back(0.); 
+    x_3.push_back(MllLeft+(2*i+1)*(err)); ex_3.push_back(0.); 
   }
   vector<double> y_1, ey_1, y_2, ey_2, y_3, ey_3;
   for (int i=0; i<NBin; i++) {
@@ -71,6 +104,7 @@ void ScaleFactor(TString id, TString EtaRegion, int Syst = 0, TString SaveAs = "
   TCanvas* c1 = new TCanvas("c1","ZMass : SS2l ("+EtaRegion+")",100,100,900,800);
   
   TGraphErrors* gr = new TGraphErrors(x_2.size(),&x_2[0],&y_2[0],&ex_2[0],&ey_2[0]);
+  //TGraphErrors* gr = new TGraphErrors(x_1.size(),&x_1[0],&y_1[0],&ex_1[0],&ey_1[0]);
   gr->SetMarkerStyle(20);
   //gr->SetMarkerSize(0.8);
   //gr->SetMarkerColor(kMagenta+2);
@@ -88,33 +122,96 @@ void ScaleFactor(TString id, TString EtaRegion, int Syst = 0, TString SaveAs = "
   ////////////////////// original fitting //////////////////////////////
   
   
-  // create a TF1 with the range from MllLeft to MllRight and 7 parameters
-  TF1 *fitFcn = new TF1("fitFcn",fitFunction,MllLeft,MllRight,7);
-  fitFcn->SetNpx(500);
-  //fitFcn->SetLineWidth(4);
+  // create a TF1 with the range from MllLeft to MllRight and free parameters
+  TF1 *fitFcn;
+  TF1 *signalFcn;
+  TF1 *bkgFcn;
+  int NtotPar, NsigPar, NbkgPar;
+  if(fit.Contains("BW")||fit.Contains("gaus")) NsigPar = 3;
+  if(fit.Contains("pol1")||fit.Contains("expo")) NbkgPar = 2;
+  else if(fit.Contains("pol3")) NbkgPar = 4;
+  NtotPar = NsigPar + NbkgPar;
+  
+  if(fit=="BW_pol1"){
+    fitFcn = new TF1("fitFcn",BW_pol1,MllLeft,MllRight,NtotPar);
+    if(EtaRegion=="BB") fitFcn->SetParameters(80,2.5,90,0,0.1); //optimized - chi2/ndf : 634.783/25, SF : 106.8%
+    else if(EtaRegion=="EE"){
+      fitFcn->SetParameters(40,2.5,90,0,1);
+      fitFcn->SetParLimits(3,20,200); //FIXME
+    }
+
+    signalFcn = new TF1("signalFcn",BW,MllLeft,MllRight,NsigPar);
+    signalFcn->SetLineColor(kMagenta-6);
+    bkgFcn = new TF1("bkgFcn",pol1,MllLeft,MllRight,NbkgPar);
+    bkgFcn->SetLineColor(kBlue);
+  }
+  else if(fit=="BW_pol3"){
+    fitFcn = new TF1("fitFcn",BW_pol3,MllLeft,MllRight,NtotPar);
+    if(EtaRegion=="BB") fitFcn->SetParameters(312,7.,-90,-20,0.9,0.,0.); //optimized - chi2/ndf : 584.981/23, SF : 108.55%
+    else if(EtaRegion=="EE") fitFcn->SetParameters(3012.7,2.,-90,-439.,48.,40.,550.); //FIXME
+    else if(EtaRegion=="BE") fitFcn->SetParameters(412.7,7.,-90,11.,-0.7,0.,0.); //FIXME
+
+    signalFcn = new TF1("signalFcn",BW,MllLeft,MllRight,NsigPar);
+    signalFcn->SetLineColor(kMagenta-6);
+    bkgFcn = new TF1("bkgFcn",pol3,MllLeft,MllRight,NbkgPar);
+    bkgFcn->SetLineColor(kBlue);
+  }
+  else if(fit=="BW_expo"){
+    fitFcn = new TF1("fitFcn",BW_expo,MllLeft,MllRight,NtotPar);
+    if(EtaRegion=="BB") fitFcn->SetParameters(312,7.,-90,2,-0.9); //optimized - chi2/ndf : 633.434/25, SF : 108.67% XXX <--- The best chi2
+    else if(EtaRegion=="EE") fitFcn->SetParameters(312.7,2.,-90,4.,-2.); //optimized(?) - chi2/ndf : 9360.52/25, SF : 118.59%
+    else if(EtaRegion=="BE") fitFcn->SetParameters(112.7,2.,-90,11.,-0.9); //FIXME
+
+    signalFcn = new TF1("signalFcn",BW,MllLeft,MllRight,NsigPar);
+    signalFcn->SetLineColor(kMagenta-6);
+    bkgFcn = new TF1("bkgFcn",expo,MllLeft,MllRight,NbkgPar);
+    bkgFcn->SetLineColor(kBlue);
+  }
+  if(fit=="gaus_pol1"){
+    fitFcn = new TF1("fitFcn",gaus_pol1,MllLeft,MllRight,NtotPar);
+    if(EtaRegion=="BB") fitFcn->SetParameters(80,2.5,90,0,0.1); //FIXME
+    else if(EtaRegion=="EE") fitFcn->SetParameters(40,2.5,90,0,1); //FIXME
+    else if(EtaRegion=="BE") fitFcn->SetParameters(40,2.5,90,0,1); //FIXME
+
+    signalFcn = new TF1("signalFcn",gaus,MllLeft,MllRight,NsigPar);
+    signalFcn->SetLineColor(kMagenta-6);
+    bkgFcn = new TF1("bkgFcn",pol1,MllLeft,MllRight,NbkgPar);
+    bkgFcn->SetLineColor(kBlue);
+  }
+  else if(fit=="gaus_pol3"){
+    fitFcn = new TF1("fitFcn",gaus_pol3,MllLeft,MllRight,NtotPar);
+    if(EtaRegion=="BB") fitFcn->SetParameters(480,90,3,-40,0.9,0.,0.); //optimized - chi2/ndf : 602.101/23, SF : 68.16%
+    else if(EtaRegion=="EE") fitFcn->SetParameters(480,90,3,-40,0.9,0.,0.); //optimized - chi2/ndf : 3959.76/23, SF : 83.3%
+    else if(EtaRegion=="BE") fitFcn->SetParameters(480,90,3,-40,0.9,0.,0.); //optimized - chi2/ndf : 8160.63/23, SF : 93.38%
+
+    signalFcn = new TF1("signalFcn",gaus,MllLeft,MllRight,NsigPar);
+    signalFcn->SetLineColor(kMagenta-6);
+    bkgFcn = new TF1("bkgFcn",pol3,MllLeft,MllRight,NbkgPar);
+    bkgFcn->SetLineColor(kBlue);
+  }
+  else if(fit=="gaus_expo"){
+    fitFcn = new TF1("fitFcn",gaus_expo,MllLeft,MllRight,NtotPar);
+    if(EtaRegion=="BB") fitFcn->SetParameters(480,90,3,2,-0.9); //FIXME
+    else if(EtaRegion=="EE") fitFcn->SetParameters(480,90,3,4,-0.9); //FIXME chi2/ndf : 7158.70/25, SF : 90.55%
+    else if(EtaRegion=="BE") fitFcn->SetParameters(480,90,3,4,-0.9); //FIXME
+
+    signalFcn = new TF1("signalFcn",gaus,MllLeft,MllRight,NsigPar);
+    signalFcn->SetLineColor(kMagenta-6);
+    bkgFcn = new TF1("bkgFcn",expo,MllLeft,MllRight,NbkgPar);
+    bkgFcn->SetLineColor(kBlue);
+  }
+  
+  //fitFcn->SetNpx(500);
   fitFcn->SetLineColor(kRed);
-  
-  //fitFcn->SetParameters(0,0,0,0,100,90,0.5); // Parameters to get SF for BB, EE
-  fitFcn->SetParameters(0,0,0,0,80,90,0.5); // Parameters to get SF for BE
-  gr->Fit("fitFcn","V+","ep");
-  
-  
-  // improve the picture:
-  TF1 *backFcn = new TF1("backFcn",background,MllLeft,MllRight,4);
-  backFcn->SetLineColor(kBlue);
-  backFcn->Draw("same");
-  
-  TF1 *signalFcn = new TF1("signalFcn",gaussianPeak,MllLeft,MllRight,3);
-  signalFcn->SetLineColor(kMagenta-6);
-  signalFcn->SetNpx(500);
-  //signalFcn->Draw("same");
+  gr->Fit(fitFcn,"IWR");
   
   // writes the fit results into the par array
-  Double_t par[7];
+  Double_t par[NtotPar];
   fitFcn->GetParameters(par);
-  backFcn->SetParameters(par);
-  signalFcn->SetParameters(&par[4]);
+  signalFcn->SetParameters(par);
+  bkgFcn->SetParameters(&par[NsigPar]);
   
+  bkgFcn->Draw("same");
   
   /* get needed strings to put in the textbox */
   
@@ -125,7 +222,7 @@ void ScaleFactor(TString id, TString EtaRegion, int Syst = 0, TString SaveAs = "
   TString ndf_t = Form("%d",ndf);
   int SS2l_obs = h0->Integral();
   TString SS2l_obs_t = Form("%d",SS2l_obs);
-  double SS2l_bkg = backFcn->Integral(MllLeft,MllRight)/(2.*err);
+  double SS2l_bkg = bkgFcn->Integral(MllLeft,MllRight)/(2.*err); //JH : histo integral just counts the entry, but function integral calculates the area.
   TString SS2l_bkg_t = Form("%f",SS2l_bkg);
   SS2l_bkg_t = SS2l_bkg_t(0,7);
   double SS2l = signalFcn->Integral(MllLeft,MllRight)/(2.*err);
@@ -150,36 +247,6 @@ void ScaleFactor(TString id, TString EtaRegion, int Syst = 0, TString SaveAs = "
   pt->Draw();
   
   
-  ///////////////////////////// alternative fitting /////////////////////////////
-  
-  //// create a TF1 with the range from MllLeft to MllRight and 5 parameters
-  //TF1 *fitFcn_tmp = new TF1("fitFcn_tmp",fitFunction_tmp,MllLeft,MllRight,5);
-  //fitFcn_tmp->SetNpx(500);
-  ////fitFcn_tmp->SetLineWidth(4);
-  //fitFcn_tmp->SetLineColor(kRed);
-  //
-  //fitFcn_tmp->SetParameters(0,0,70,90,0.5); 
-  //gr->Fit("fitFcn_tmp","V+","ep");
-  //
-  //// improve the picture:
-  //TF1 *backFcn_tmp = new TF1("backFcn_tmp",background_tmp,MllLeft,MllRight,2);
-  //backFcn_tmp->SetLineColor(kBlue);
-  //backFcn_tmp->Draw("same");
-  //
-  //TF1 *signalFcn = new TF1("signalFcn",gaussianPeak,MllLeft,MllRight,3);
-  //signalFcn->SetLineColor(kMagenta-6);
-  //signalFcn->SetNpx(500);
-  //signalFcn->Draw("same");
-  //
-  //// writes the fit results into the par array
-  //Double_t par[5];
-  //fitFcn_tmp->GetParameters(par);
-  //backFcn_tmp->SetParameters(par);
-  //signalFcn->SetParameters(&par[2]);
-  
-  ////////////////////////////////////////////////////////////////////////
-  
-  
   // Draw the comparison plots //
   
   TCanvas* c2 = new TCanvas("c2","ZMass : OS_CFweighted vs SS ("+EtaRegion+")",1000,100,900,800);
@@ -197,12 +264,12 @@ void ScaleFactor(TString id, TString EtaRegion, int Syst = 0, TString SaveAs = "
   //gr1->SetMarkerColor(kMagenta+2);
   gr1->SetLineColor(15);
   gr1->SetTitle("ZMass : OS_CFweighted_"+X+" vs SS ("+EtaRegion+") "+RunSyst[Syst](6,10000));
-  //gr1->GetXaxis()->SetRangeUser(MllLeft,MllRight);
   //gr1->SetMinimum(0.);
   gr1->Draw("ZAP"); // Z : do not draw small horizontal/vertical lines the end of the error bars
   gr1->GetXaxis()->SetTickLength(0.025);
   gr1->GetXaxis()->SetLabelSize(0);
   gr1->GetYaxis()->SetLabelSize(0.025);
+  gr1->GetXaxis()->SetRangeUser(MllLeft,MllRight);
   
   TGraphErrors* gr2 = new TGraphErrors(x_2.size(),&x_2[0],&y_2[0],&ex_2[0],&ey_2[0]);
   gr2->SetMarkerStyle(20);
@@ -247,7 +314,7 @@ void ScaleFactor(TString id, TString EtaRegion, int Syst = 0, TString SaveAs = "
   }
   vector<double> y_4;
   for (int i=0; i<NBin; i++) {
-    y_4.push_back(gaussianPeak(&x_4[i],&par[4])/h1->GetBinContent(i+1));
+    y_4.push_back(signalFcn->Eval(x_4[i])/h1->GetBinContent(i+1));
   }
 
   //TGraphErrors* gr3 = new TGraphErrors(x_3.size(),&x_3[0],&y_3[0],&ex_3[0],&ey_3[0]);
@@ -261,10 +328,11 @@ void ScaleFactor(TString id, TString EtaRegion, int Syst = 0, TString SaveAs = "
   gr3->GetXaxis()->SetTitle("#scale[2.2]{m(ee) (GeV)}");
   gr3->GetXaxis()->SetTitleOffset(1.6);
   gr3->GetXaxis()->SetTickLength(0.05);
+  gr3->GetXaxis()->SetRangeUser(MllLeft,MllRight);
   gr3->GetYaxis()->SetLabelSize(0.05);
   gr3->GetYaxis()->SetTitle("#scale[2.2]{SS(signalFit) / OS}"); // SS(signal) / OS would be more informative than SS(observed)
   gr3->GetYaxis()->SetTitleOffset(0.8);
-  gr3->GetYaxis()->SetRangeUser(0,1.3);
+  gr3->GetYaxis()->SetRangeUser(0,3);
   gPad->SetGridx();
   gPad->SetGridy();
   
@@ -310,7 +378,7 @@ void SaveAll(){
   for (int i=0; i<2; i++){
     for (int j=0; j<2; j++){
       for (int k=0; k<7; k++){
-        ScaleFactor(m1[i],m2[j],k,"y");
+        ScaleFactor(m1[i],m2[j],"",k,"y");
       }
     }
   }

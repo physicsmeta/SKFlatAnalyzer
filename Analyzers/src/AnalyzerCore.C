@@ -1714,12 +1714,12 @@ double AnalyzerCore::GetCFweight(vector<Lepton *> lepptrs, AnalyzerParameter par
 
     if(applySF){
       if(fabs(el.at(i).scEta()) < 1.479){
-        if(param.Electron_Tight_ID == "HNTightV1") sf.push_back(0.585533 + syst*0.);
+        if(param.Electron_Tight_ID == "HNTightV1") sf.push_back(1.08674 + syst*0.);
         else if(param.Electron_Tight_ID == "HNTightV2") sf.push_back(0.4584 + syst*0.);
         else sf.push_back(0.49666 + syst*0.);
       }
       else{
-        if(param.Electron_Tight_ID == "HNTightV1") sf.push_back(0.831019 + syst*0.);
+        if(param.Electron_Tight_ID == "HNTightV1") sf.push_back(0.83324 + syst*0.);
         else if(param.Electron_Tight_ID == "HNTightV2") sf.push_back(0.66078 + syst*0.);
         else sf.push_back(0.652357 + syst*0.);
       }
@@ -1743,12 +1743,12 @@ double AnalyzerCore::GetCFweight(vector<Electron> eles, TString id, bool applySF
 
     if(applySF){
       if(fabs(eles.at(i).scEta()) < 1.479){
-        if(id == "HNTightV1") sf.push_back(0.585533 + syst*0.);
+        if(id == "HNTightV1") sf.push_back(1.08674 + syst*0.);
         else if(id == "HNTightV2") sf.push_back(0.4584 + syst*0.);
         else sf.push_back(0.49666 + syst*0.);
       }
       else{
-        if(id == "HNTightV1") sf.push_back(0.831019 + syst*0.);
+        if(id == "HNTightV1") sf.push_back(0.83324 + syst*0.);
         else if(id == "HNTightV2") sf.push_back(0.66078 + syst*0.);
         else sf.push_back(0.652357 + syst*0.);
       }
