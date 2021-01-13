@@ -516,7 +516,8 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
   
       Particle ZCand_shifted = eles_shifted.at(0) + eles_shifted.at(1);
       double weight_shifted = GetCFweight(eles_shifted, param.Electron_User_ID, false, 0.);
-      double weight_shifted_SF = GetCFweight(eles_shifted, param.Electron_User_ID, true, 0.);
+      double weight_shifted_SF1 = GetCFweight(eles_shifted, param.Electron_User_ID, true, 1);
+      double weight_shifted_SF2 = GetCFweight(eles_shifted, param.Electron_User_ID, true, 2);
   
       Particle METv_shifted;
       METv_shifted.SetPxPyPzE(METv.Px()+ZCand.Px()-ZCand_shifted.Px(),METv.Py()+ZCand.Py()-ZCand_shifted.Py(),0,METv.E()+ZCand.E()-ZCand_shifted.E());
@@ -532,8 +533,8 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
       
           // BE
           if((abs(eles_shifted.at(0).scEta())<1.4442&&abs(eles_shifted.at(1).scEta())>=1.556)||(abs(eles_shifted.at(0).scEta())>=1.556&&abs(eles_shifted.at(1).scEta())<1.4442)){
-            //FillHist(param.Name+"/ScaleFactor/BE_ZMass_OS_CFweighted_shifted_"+X_string, ZCand_shifted.M(), weight_shifted, NBin, MllLeft, MllRight);
-            FillHist(param.Name+"/ScaleFactor/BE_ZMass_OS_CFSFweighted_shifted_"+X_string, ZCand_shifted.M(), weight_shifted_SF, NBin, MllLeft, MllRight);
+            FillHist(param.Name+"/ScaleFactor/BE_ZMass_OS_CFSF1weighted_shifted_"+X_string, ZCand_shifted.M(), weight_shifted_SF1, NBin, MllLeft, MllRight);
+            FillHist(param.Name+"/ScaleFactor/BE_ZMass_OS_CFSF2weighted_shifted_"+X_string, ZCand_shifted.M(), weight_shifted_SF2, NBin, MllLeft, MllRight);
           }
       
           // EE

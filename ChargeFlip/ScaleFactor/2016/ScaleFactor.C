@@ -77,10 +77,11 @@ void ScaleFactor(TString id, TString EtaRegion, TString fit, int Syst = 0, TStri
   TH1D* h0 = (TH1D*)f1->Get(id+RunSyst[Syst]+"/ScaleFactor/"+EtaRegion+"_ZMass_SS");
   TH1D* h1;
   if(EtaRegion=="BB"||EtaRegion=="EE"){
-  h1 = (TH1D*)f1->Get(id+RunSyst[Syst]+"/ScaleFactor/"+EtaRegion+"_ZMass_OS_CFweighted_shifted_"+X);
+    h1 = (TH1D*)f1->Get(id+RunSyst[Syst]+"/ScaleFactor/"+EtaRegion+"_ZMass_OS_CFweighted_shifted_"+X);
   }
   else if(EtaRegion=="BE"){
-  h1 = (TH1D*)f1->Get(id+RunSyst[Syst]+"/ScaleFactor/"+EtaRegion+"_ZMass_OS_CFSFweighted_shifted_"+X);
+    //h1 = (TH1D*)f1->Get(id+RunSyst[Syst]+"/ScaleFactor/"+EtaRegion+"_ZMass_OS_CFSF1weighted_shifted_"+X);
+    h1 = (TH1D*)f1->Get(id+RunSyst[Syst]+"/ScaleFactor/"+EtaRegion+"_ZMass_OS_CFSF2weighted_shifted_"+X);
   }
   
   vector<double> x_1, ex_1, x_2, ex_2, x_3, ex_3;
@@ -160,7 +161,7 @@ void ScaleFactor(TString id, TString EtaRegion, TString fit, int Syst = 0, TStri
     fitFcn = new TF1("fitFcn",BW_expo,MllLeft,MllRight,NtotPar);
     if(EtaRegion=="BB") fitFcn->SetParameters(312,7.,-90,2,-0.9); //optimized - chi2/ndf : 633.434/25, SF : 108.67% XXX <--- The best chi2
     else if(EtaRegion=="EE") fitFcn->SetParameters(312.7,2.,-90,4.,-2.); //optimized(?) - chi2/ndf : 9360.52/25, SF : 118.59%
-    else if(EtaRegion=="BE") fitFcn->SetParameters(112.7,2.,-90,11.,-0.9); //FIXME
+    else if(EtaRegion=="BE") fitFcn->SetParameters(112.7,0.4,-90,11.,-0.9); //FIXME
 
     signalFcn = new TF1("signalFcn",BW,MllLeft,MllRight,NsigPar);
     signalFcn->SetLineColor(kMagenta-6);
@@ -182,7 +183,7 @@ void ScaleFactor(TString id, TString EtaRegion, TString fit, int Syst = 0, TStri
     fitFcn = new TF1("fitFcn",gaus_pol3,MllLeft,MllRight,NtotPar);
     if(EtaRegion=="BB") fitFcn->SetParameters(480,90,3,-40,0.9,0.,0.); //optimized - chi2/ndf : 602.101/23, SF : 68.16%
     else if(EtaRegion=="EE") fitFcn->SetParameters(480,90,3,-40,0.9,0.,0.); //optimized - chi2/ndf : 3959.76/23, SF : 83.3%
-    else if(EtaRegion=="BE") fitFcn->SetParameters(480,90,3,-40,0.9,0.,0.); //optimized - chi2/ndf : 8160.63/23, SF : 93.38%
+    else if(EtaRegion=="BE") fitFcn->SetParameters(480,90,3,-40,0.9,0.,0.); //optimized - chi2/ndf : 8160.63/23, SF : 93.38% || chi2/ndf : same, SF : 96.35% - 60% SF at BB gives the better result..
 
     signalFcn = new TF1("signalFcn",gaus,MllLeft,MllRight,NsigPar);
     signalFcn->SetLineColor(kMagenta-6);

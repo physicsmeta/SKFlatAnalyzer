@@ -705,9 +705,9 @@ std::vector<Electron> AnalyzerCore::SelectChargeTightElectrons(const std::vector
       //cout << "Fail ID" << endl;
       continue;
     }
-		if(! (electrons.at(i).IsGsfCtfScPixChargeConsistent() )){
-			continue;
-		}
+    if(! (electrons.at(i).IsGsfCtfScPixChargeConsistent() )){
+      continue;
+    }
     out.push_back(electrons.at(i));
   }
   return out;
@@ -730,9 +730,9 @@ std::vector<Electron> AnalyzerCore::SelectChargeTightElectronsDXY(const std::vec
       //cout << "Fail ID" << endl;
       continue;
     }
-		if(! (electrons.at(i).IsGsfCtfScPixChargeConsistent() )){
-			continue;
-		}
+    if(! (electrons.at(i).IsGsfCtfScPixChargeConsistent() )){
+      continue;
+    }
     if(!( electrons.at(i).dXY()<0.01 )){ 
       continue;
     }
@@ -758,9 +758,9 @@ std::vector<Electron> AnalyzerCore::SelectChargeTightElectronsDZ(const std::vect
       //cout << "Fail ID" << endl;
       continue;
     }
-		if(! (electrons.at(i).IsGsfCtfScPixChargeConsistent() )){
-			continue;
-		}
+    if(! (electrons.at(i).IsGsfCtfScPixChargeConsistent() )){
+      continue;
+    }
     if(!( electrons.at(i).dZ()<0.04 )){ 
       continue;
     }
@@ -786,9 +786,9 @@ std::vector<Electron> AnalyzerCore::SelectChargeTightElectronsDXYDZ(const std::v
       //cout << "Fail ID" << endl;
       continue;
     }
-		if(! (electrons.at(i).IsGsfCtfScPixChargeConsistent() )){
-			continue;
-		}
+    if(! (electrons.at(i).IsGsfCtfScPixChargeConsistent() )){
+      continue;
+    }
     if(!( electrons.at(i).dXY()<0.01 )){ 
       continue;
     }
@@ -1650,7 +1650,7 @@ double AnalyzerCore::GetCFrates(TString id, double pt, double eta){
       //if(x < 0.01){ a = 0.0127778; b = -0.744197; }
       //else if(x>=0.01 && x<0.0205){ a = 0.00725863; b = -0.18864; }
       //else{ a = 0.00417112; b = -0.0371866; }
-			a = 3.90494e-05; b = 6.00814e-04; c = 3.38818e-04; rate = a/(x+b)+c;
+      a = 3.90494e-05; b = 6.00814e-04; c = 3.38818e-04; rate = a/(x+b)+c;
     }
   }
   //else if(id == "HNTightV2"){
@@ -1743,14 +1743,13 @@ double AnalyzerCore::GetCFweight(vector<Electron> eles, TString id, bool applySF
 
     if(applySF){
       if(fabs(eles.at(i).scEta()) < 1.479){
-        if(id == "HNTightV1") sf.push_back(1.08674 + syst*0.);
-        else if(id == "HNTightV2") sf.push_back(0.4584 + syst*0.);
-        else sf.push_back(0.49666 + syst*0.);
+        if(id == "HNTightV1"){
+          if(syst == 1) sf.push_back(1.08674 + syst*0.);
+          else if(syst == 2) sf.push_back(0.68164 + syst*0.);
+        }
       }
       else{
         if(id == "HNTightV1") sf.push_back(0.83324 + syst*0.);
-        else if(id == "HNTightV2") sf.push_back(0.66078 + syst*0.);
-        else sf.push_back(0.652357 + syst*0.);
       }
     }
     else sf.push_back(1.);
@@ -1789,7 +1788,7 @@ void AnalyzerCore::JHPrintGen(const std::vector<Gen>& gens){
     vector<int> history = TrackGenSelfHistory(gen, gens);
     cout << i << "\t" << gen.PID() << "\t" << gen.Status() << "\t" << gen.MotherIndex() << "\t" << gens.at(gen.MotherIndex()).PID()<< "\t" << history[0] << "\t";
     printf("%.2f\t%.2f\t%.2f\t%.2f\t",gen.Pt(), gen.Eta(), gen.Phi(), gen.M());
-		cout << ">" << gen.isPromptFinalState() << "<" << endl;
+    cout << ">" << gen.isPromptFinalState() << "<" << endl;
   }
 
 }
@@ -1935,13 +1934,13 @@ Gen* AnalyzerCore::FindLastCopy(Gen *me, std::vector<Gen> gens){
 
   Gen* last = me;
 
-	for(unsigned int i=0; i<gens.size(); i++){
+  for(unsigned int i=0; i<gens.size(); i++){
     if(gens[i].MotherIndex()==last->Index()&&gens[i].PID()==me->PID()){
       last = &gens[i];
-		}
-	}
+    }
+  }
 
-	return last;
+  return last;
 }
 
 bool AnalyzerCore::IsFromHadron(const Gen& me, const std::vector<Gen>& gens){
