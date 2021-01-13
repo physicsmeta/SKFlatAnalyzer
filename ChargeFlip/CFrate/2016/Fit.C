@@ -456,9 +456,9 @@ for(unsigned int i=0; i<User_ID.size(); i++){
           double ndf2 = fit_temp2->GetNDF();
           double ndf3 = fit_temp3->GetNDF();
           //NDF == 0 is usually not good, but justified here because the purpose of fitting here is just to get cts shape.
-          if(ndf1==0) ndf1 = 0.5;
-          if(ndf2==0) ndf1 = 0.5;
-          if(ndf3==0) ndf1 = 0.5;
+          if(ndf1==0) ndf1 = 1.;
+          if(ndf2==0) ndf2 = 1.;
+          if(ndf3==0) ndf3 = 1.;
 
           double highval = TMath::Exp(par1[0]+bndry12*par1[1]);
           double medval12 = par2[0]/(bndry12+par2[1])+par2[2];
@@ -500,6 +500,10 @@ for(unsigned int i=0; i<User_ID.size(); i++){
       vector<double> Chi2OptRange;
       int this_k_RelErr, this_k_Chi2;
       int bad_Chi2 = 0;
+      if(bndrys.size()==0){
+        cout << "Too tight Rel. error criteria... consider loosening the condition." << endl;
+        return;
+      }
       for(int k=0; k<bndrys.size(); k++){
         if(fabs( RelErrs[k] ) < MinRelErr){
           MinRelErr = RelErrs[k];
