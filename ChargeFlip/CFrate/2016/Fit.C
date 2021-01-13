@@ -155,11 +155,31 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   //gr1_fit3_err->SetFillColor(4);
   //gr1_fit3_err->SetFillStyle(3001);
   //gr1_fit3_err->Draw("3 same");
- 
-  TLegend* gr1_legend = new TLegend(0.75,0.8,0.9,0.9);
+
+  // show the chisquare over ndf
+  double Chisquare1_1 = gr1_fit1->GetChisquare();
+  TString Chisquare1_1_t = Form("%f",Chisquare1_1);
+  Chisquare1_1_t = Chisquare1_1_t(0,7);
+  int ndf1_1 = gr1_fit1->GetNDF();
+  TString ndf1_1_t = Form("%d",ndf1_1);
+  double Chisquare1_2 = gr1_fit2->GetChisquare();
+  TString Chisquare1_2_t = Form("%f",Chisquare1_2);
+  Chisquare1_2_t = Chisquare1_2_t(0,7);
+  int ndf1_2 = gr1_fit2->GetNDF();
+  TString ndf1_2_t = Form("%d",ndf1_2);
+  double Chisquare1_3 = gr1_fit3->GetChisquare();
+  TString Chisquare1_3_t = Form("%f",Chisquare1_3);
+  Chisquare1_3_t = Chisquare1_3_t(0,7);
+  int ndf1_3 = gr1_fit3->GetNDF();
+  TString ndf1_3_t = Form("%d",ndf1_3);
+
+  TLegend* gr1_legend = new TLegend(0.65,0.7,0.9,0.9);
   gr1_legend->AddEntry(gr1_fit1,"high pt","l");
+  gr1_legend->AddEntry((TObject*)0,"#chi^{2}/ndf : "+Chisquare1_1_t+"/"+ndf1_1_t,"");
   gr1_legend->AddEntry(gr1_fit2,"medium pt","l");
+  gr1_legend->AddEntry((TObject*)0,"#chi^{2}/ndf : "+Chisquare1_2_t+"/"+ndf1_2_t,"");
   gr1_legend->AddEntry(gr1_fit3,"low pt","l");
+  gr1_legend->AddEntry((TObject*)0,"#chi^{2}/ndf : "+Chisquare1_3_t+"/"+ndf1_3_t,"");
   gr1_legend->Draw();
 
 
@@ -242,11 +262,30 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   //gr2_fit3_err->SetFillColor(4);
   //gr2_fit3_err->SetFillStyle(3001);
   //gr2_fit3_err->Draw("3 same");
-  
-  TLegend* gr2_legend = new TLegend(0.75,0.8,0.9,0.9);
+ 
+  double Chisquare2_1 = gr2_fit1->GetChisquare();
+  TString Chisquare2_1_t = Form("%f",Chisquare2_1);
+  Chisquare2_1_t = Chisquare2_1_t(0,7);
+  int ndf2_1 = gr2_fit1->GetNDF();
+  TString ndf2_1_t = Form("%d",ndf2_1);
+  double Chisquare2_2 = gr2_fit2->GetChisquare();
+  TString Chisquare2_2_t = Form("%f",Chisquare2_2);
+  Chisquare2_2_t = Chisquare2_2_t(0,7);
+  int ndf2_2 = gr2_fit2->GetNDF();
+  TString ndf2_2_t = Form("%d",ndf2_2);
+  double Chisquare2_3 = gr2_fit3->GetChisquare();
+  TString Chisquare2_3_t = Form("%f",Chisquare2_3);
+  Chisquare2_3_t = Chisquare2_3_t(0,7);
+  int ndf2_3 = gr2_fit3->GetNDF();
+  TString ndf2_3_t = Form("%d",ndf2_3);
+
+  TLegend* gr2_legend = new TLegend(0.65,0.7,0.9,0.9);
   gr2_legend->AddEntry(gr2_fit1,"high pt","l");
+  gr2_legend->AddEntry((TObject*)0,"#chi^{2}/ndf : "+Chisquare2_1_t+"/"+ndf2_1_t,"");
   gr2_legend->AddEntry(gr2_fit2,"medium pt","l");
+  gr2_legend->AddEntry((TObject*)0,"#chi^{2}/ndf : "+Chisquare2_2_t+"/"+ndf2_2_t,"");
   gr2_legend->AddEntry(gr2_fit3,"low pt","l");
+  gr2_legend->AddEntry((TObject*)0,"#chi^{2}/ndf : "+Chisquare2_3_t+"/"+ndf2_3_t,"");
   gr2_legend->Draw();
 
   
@@ -416,6 +455,10 @@ for(unsigned int i=0; i<User_ID.size(); i++){
           double ndf1 = fit_temp1->GetNDF();
           double ndf2 = fit_temp2->GetNDF();
           double ndf3 = fit_temp3->GetNDF();
+          //NDF == 0 is usually not good, but justified here because the purpose of fitting here is just to get cts shape.
+          if(ndf1==0) ndf1 = 0.5;
+          if(ndf2==0) ndf1 = 0.5;
+          if(ndf3==0) ndf1 = 0.5;
 
           double highval = TMath::Exp(par1[0]+bndry12*par1[1]);
           double medval12 = par2[0]/(bndry12+par2[1])+par2[2];
