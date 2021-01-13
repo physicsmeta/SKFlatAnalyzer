@@ -1,5 +1,5 @@
 void Fit(TString fitIB = "expo_invx", TString fitOB = "expo_invx", TString fitEC = "invx_only", TString scan = "y", TString zoom = "n", TString save = "n"){
-TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/ChargeFlip/2016/CFrate__/ChargeFlip_All.root";
+TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/ChargeFlip/2017/CFrate__/ChargeFlip_All.root";
 TFile* f1 = new TFile(filename);
 
 TString samplename = filename(filename.Last('/')+12,filename.Length());
@@ -391,7 +391,7 @@ for(unsigned int i=0; i<User_ID.size(); i++){
       double bndry12;
       double bndry23;
 
-      for(int j=2; j<6; j++){
+      for(int j=2; j<10; j++){
         bndry12 = 0.001*j;
         map<double, double> RelErr, Chi2overNDF;
         for(int k=j+1; k<39; k++){
