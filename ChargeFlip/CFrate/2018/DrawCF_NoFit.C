@@ -1,5 +1,6 @@
 {
-TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip_IDv2/2018/CFrate__/ChargeFlip_IDv2_DYJets_TTLL.root";
+//TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip_IDv2/2018/CFrate__/ChargeFlip_IDv2_DYJets_TTLL.root";
+TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/ChargeFlip/2018/CFrate__/ChargeFlip_All.root";
 TFile* f1 = new TFile(filename);
 
 TString samplename = filename(filename.Last('/')+12,filename.Length());
@@ -8,9 +9,7 @@ samplename.ReplaceAll(".root","");
 gSystem->Exec("mkdir "+samplename);
 
 vector<TString> User_ID;
-//User_ID.push_back("HNTight2016");
-//User_ID.push_back("HEID");
-User_ID.push_back("HEIDv2");
+User_ID.push_back("HNTightV1");
 
 for(unsigned int i=0; i<User_ID.size(); i++){
 
