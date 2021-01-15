@@ -196,6 +196,7 @@ public:
   double GetCFrates(TString id, double pt, double eta);
   double GetCFweight(vector<Lepton *> lepptrs, AnalyzerParameter param, bool applySF, int syst);
   double GetCFweight(vector<Electron> eles, TString id, bool applySF, int syst);
+  double GetCFweight(vector<Electron> eles, TString id, bool applySF, TString BBfit, TString EEfit);
 
   //==== GenMatching
 
@@ -237,17 +238,17 @@ public:
                 int n_binx, double *xbins,
                 int n_biny, double *ybins);
   void FillHist(TString histname,
-		double value_x, double value_y, double value_z,
-		double weight,
-		int n_binx, double x_min, double x_max,
-		int n_biny, double y_min, double y_max,
-		int n_binz, double z_min, double z_max);
+                double value_x, double value_y, double value_z,
+                double weight,
+                int n_binx, double x_min, double x_max,
+                int n_biny, double y_min, double y_max,
+                int n_binz, double z_min, double z_max);
   void FillHist(TString histname,
-		double value_x, double value_y, double value_z,
-		double weight,
-		int n_binx, double *xbins,
-		int n_biny, double *ybins,
-		int n_binz, double *zbins);
+                double value_x, double value_y, double value_z,
+                double weight,
+                int n_binx, double *xbins,
+                int n_biny, double *ybins,
+                int n_binz, double *zbins);
 
   //==== JSFillHist : 1D
   std::map< TString, std::map<TString, TH1D*> > JSmaphist_TH1D;

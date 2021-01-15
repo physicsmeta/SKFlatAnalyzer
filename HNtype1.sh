@@ -174,22 +174,30 @@
 
 #python python/SKFlat.py -a test_2016H -y 2016 -l submitList/2016_DoubleMuon_H.txt -n 80 --skim SkimTree_Dilepton & ####TEST
 
-
-python python/SKFlat.py -a test -y 2016 -l submitList/2016_DoubleMuon_BtoG.txt -n 80 --skim SkimTree_Dilepton --nmax 80 &
-python python/SKFlat.py -a test -y 2016 -l submitList/2016_DoubleEG_BtoH.txt -n 80 --skim SkimTree_Dilepton --nmax 80 &
-python python/SKFlat.py -a test -y 2016 -l submitList/2016_MuonEG_BtoG.txt -n 80 --skim SkimTree_Dilepton --nmax 80 &
-python python/SKFlat.py -a test -y 2017 -l submitList/2017_DoubleMuon.txt -n 80 --skim SkimTree_Dilepton --nmax 80 &
-python python/SKFlat.py -a test -y 2017 -l submitList/2017_DoubleEG.txt -n 80 --skim SkimTree_Dilepton --nmax 80 &
-python python/SKFlat.py -a test -y 2017 -l submitList/2017_MuonEG.txt -n 80 --skim SkimTree_Dilepton --nmax 80 &
-python python/SKFlat.py -a test -y 2018 -l submitList/2018_DoubleMuon.txt -n 80 --skim SkimTree_Dilepton --nmax 80 &
-python python/SKFlat.py -a test -y 2018 -l submitList/2018_EGamma.txt -n 80 --skim SkimTree_Dilepton --nmax 80 &
-python python/SKFlat.py -a test -y 2018 -l submitList/2018_MuonEG.txt -n 80 --skim SkimTree_Dilepton --nmax 80 &
-python python/SKFlat.py -a test_2016H -y 2016 -l submitList/2016_DoubleMuon_H.txt -n 80 --skim SkimTree_Dilepton --nmax 80 &
-python python/SKFlat.py -a test_2016H -y 2016 -l submitList/2016_MuonEG_H.txt -n 80 --skim SkimTree_Dilepton --nmax 80 &
-
+#python python/SKFlat.py -a test -y 2016 -l submitList/2016_DoubleMuon_BtoG.txt -n 80 --skim SkimTree_Dilepton --nmax 80 &
+#python python/SKFlat.py -a test -y 2016 -l submitList/2016_DoubleEG_BtoH.txt -n 80 --skim SkimTree_Dilepton --nmax 80 &
+#python python/SKFlat.py -a test -y 2016 -l submitList/2016_MuonEG_BtoG.txt -n 80 --skim SkimTree_Dilepton --nmax 80 &
+#python python/SKFlat.py -a test -y 2017 -l submitList/2017_DoubleMuon.txt -n 80 --skim SkimTree_Dilepton --nmax 80 &
+#python python/SKFlat.py -a test -y 2017 -l submitList/2017_DoubleEG.txt -n 80 --skim SkimTree_Dilepton --nmax 80 &
+#python python/SKFlat.py -a test -y 2017 -l submitList/2017_MuonEG.txt -n 80 --skim SkimTree_Dilepton --nmax 80 &
+#python python/SKFlat.py -a test -y 2018 -l submitList/2018_DoubleMuon.txt -n 80 --skim SkimTree_Dilepton --nmax 80 &
+#python python/SKFlat.py -a test -y 2018 -l submitList/2018_EGamma.txt -n 80 --skim SkimTree_Dilepton --nmax 80 &
+#python python/SKFlat.py -a test -y 2018 -l submitList/2018_MuonEG.txt -n 80 --skim SkimTree_Dilepton --nmax 80 &
+#python python/SKFlat.py -a test_2016H -y 2016 -l submitList/2016_DoubleMuon_H.txt -n 80 --skim SkimTree_Dilepton --nmax 80 &
+#python python/SKFlat.py -a test_2016H -y 2016 -l submitList/2016_MuonEG_H.txt -n 80 --skim SkimTree_Dilepton --nmax 80 &
 
 
+#################################################
+### Check the variables of various MC samples
+#################################################
 
+
+python python/SKFlat.py -a test -y 2016 -i DYJets -n 80 --nmax 10 &
+python python/SKFlat.py -a test -y 2016 -i TTLL_powheg -n 80 --nmax 10 &
+python python/SKFlat.py -a test -y 2017 -i DYJets -n 80 --nmax 10 &
+python python/SKFlat.py -a test -y 2017 -i TTLL_powheg -n 80 --nmax 10 &
+python python/SKFlat.py -a test -y 2018 -i DYJets -n 80 --nmax 10 &
+python python/SKFlat.py -a test -y 2018 -i TTLL_powheg -n 80 --nmax 10 &
 
 
 

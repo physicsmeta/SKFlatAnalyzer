@@ -80,8 +80,8 @@ void ScaleFactor(TString id, TString EtaRegion, TString fit, int Syst = 0, TStri
     h1 = (TH1D*)f1->Get(id+RunSyst[Syst]+"/ScaleFactor/"+EtaRegion+"_ZMass_OS_CFweighted_shifted_"+X);
   }
   else if(EtaRegion=="BE"){
-    //h1 = (TH1D*)f1->Get(id+RunSyst[Syst]+"/ScaleFactor/"+EtaRegion+"_ZMass_OS_CFSF1weighted_shifted_"+X);
-    h1 = (TH1D*)f1->Get(id+RunSyst[Syst]+"/ScaleFactor/"+EtaRegion+"_ZMass_OS_CFSF2weighted_shifted_"+X);
+    h1 = (TH1D*)f1->Get(id+RunSyst[Syst]+"/ScaleFactor/"+EtaRegion+"_ZMass_OS_CFSF_BWexpo_gauspol3_weighted_shifted_"+X);
+    //h1 = (TH1D*)f1->Get(id+RunSyst[Syst]+"/ScaleFactor/"+EtaRegion+"_ZMass_OS_CFSF_gauspol3_gauspol3_weighted_shifted_"+X);
   }
   
   vector<double> x_1, ex_1, x_2, ex_2, x_3, ex_3;

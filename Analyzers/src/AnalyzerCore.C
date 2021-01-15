@@ -1635,7 +1635,7 @@ double AnalyzerCore::GetCFrates(TString id, double pt, double eta){
   double a, b, c;
   double rate;
 
-	if(DataYear==2016){
+  if(DataYear==2016){
     if(id == "HNTightV1"){
       if(eta < 0.8){
         if(x < 0.003){ a = -5.36862e+00; b = -1.11415e+03; rate = TMath::Exp(a + b*x); }
@@ -1654,8 +1654,8 @@ double AnalyzerCore::GetCFrates(TString id, double pt, double eta){
         a = 3.90494e-05; b = 6.00814e-04; c = 3.38818e-04; rate = a/(x+b)+c;
       }
     }
-	}
-	else if(DataYear==2017){
+  }
+  else if(DataYear==2017){
     if(id == "HNTightV1"){
       if(eta < 0.8){
         if(x < 0.002){ a = -5.51192e+00; b = -1.30329e+03; rate = TMath::Exp(a + b*x); }
@@ -1674,8 +1674,8 @@ double AnalyzerCore::GetCFrates(TString id, double pt, double eta){
         a = 1.97099e-05; b = 4.12182e-04; c = 4.66663e-05; rate = a/(x+b)+c;
       }
     }
-	}
-	else if(DataYear==2018){
+  }
+  else if(DataYear==2018){
     if(id == "HNTightV1"){
       if(eta < 0.8){
         if(x < 0.002){ a = -5.54403e+00; b = -1.36409e+03; rate = TMath::Exp(a + b*x); }
@@ -1694,7 +1694,7 @@ double AnalyzerCore::GetCFrates(TString id, double pt, double eta){
         a = 2.21433e-05; b = 5.64423e-04; c = -3.17389e-06; rate = a/(x+b)+c;
       }
     }
-	}
+  }
   //else if(id == "HNTightV2"){
   //  if(eta < 0.8){
   //    if(x < 0.0075){ a = 2.91353e-04; b = -0.0296481; }
@@ -1784,14 +1784,60 @@ double AnalyzerCore::GetCFweight(vector<Electron> eles, TString id, bool applySF
     CFweight.push_back(CFrate.at(i)/(1.-CFrate.at(i)));
 
     if(applySF){
-      if(fabs(eles.at(i).scEta()) < 1.479){
-        if(id == "HNTightV1"){
-          if(syst == 1) sf.push_back(1.08674 + syst*0.);
-          else if(syst == 2) sf.push_back(0.68164 + syst*0.);
+      if(DataYear==2016){
+        if(fabs(eles.at(i).scEta()) < 1.479){
+          if(id == "HNTightV1") sf.push_back(0.68164 + syst*0.);
+        }
+        else{
+          if(id == "HNTightV1") sf.push_back(0.83324 + syst*0.);
         }
       }
-      else{
-        if(id == "HNTightV1") sf.push_back(0.83324 + syst*0.);
+    }
+    else sf.push_back(1.);
+
+    cfweight += sf.at(i)*CFweight.at(i);
+  }
+
+  return cfweight;
+
+}
+
+double AnalyzerCore::GetCFweight(vector<Electron> eles, TString id, bool applySF, TString BBfit, TString EEfit){
+
+  std::vector<double> CFrate, CFweight, sf;
+  double cfweight = 0.;
+  for(unsigned int i=0; i<eles.size(); i++){
+    CFrate.push_back(GetCFrates(id, eles.at(i).Pt(), eles.at(i).scEta()));
+    CFweight.push_back(CFrate.at(i)/(1.-CFrate.at(i)));
+
+    if(applySF){
+      if(DataYear==2016){
+        if(fabs(eles.at(i).scEta()) < 1.479){
+          if(id == "HNTightV1"){
+            if(BBfit == "BW_expo") sf.push_back(1.08674);
+            else if(BBfit == "gaus_pol3") sf.push_back(0.68164);
+          }
+        }
+        else{
+          if(id == "HNTightV1"){
+            if(EEfit == "BW_expo") sf.push_back(0.83324);
+            else if(EEfit == "gaus_pol3") sf.push_back(0.83324);
+          }
+        }
+      }
+      if(DataYear==2017){
+        if(fabs(eles.at(i).scEta()) < 1.479){
+          if(id == "HNTightV1"){
+            if(BBfit == "BW_expo") sf.push_back(1.66013);
+            else if(BBfit == "gaus_pol3") sf.push_back(0.97395);
+          }
+        }
+        else{
+          if(id == "HNTightV1"){
+            if(EEfit == "BW_expo") sf.push_back(1.58026);
+            else if(EEfit == "gaus_pol3") sf.push_back(1.0706);
+          }
+        }
       }
     }
     else sf.push_back(1.);
