@@ -1820,8 +1820,7 @@ double AnalyzerCore::GetCFweight(vector<Electron> eles, TString id, bool applySF
         }
         else{
           if(id == "HNTightV1"){
-            if(EEfit == "BW_expo") sf.push_back(0.83324);
-            else if(EEfit == "gaus_pol3") sf.push_back(0.83324);
+            if(EEfit == "gaus_pol3") sf.push_back(0.83324);
           }
         }
       }
@@ -1839,6 +1838,29 @@ double AnalyzerCore::GetCFweight(vector<Electron> eles, TString id, bool applySF
           }
         }
       }
+      if(DataYear==2018){
+        if(fabs(eles.at(i).scEta()) < 1.479){
+          if(id == "HNTightV1"){
+            if(BBfit == "gaus_pol3") sf.push_back(0.85626);
+          }
+        }
+        else{
+          if(id == "HNTightV1"){
+
+            if(EEfit == "gaus_pol3") sf.push_back(1.09372);
+          }
+        }
+      }
+    }
+    else sf.push_back(1.);
+
+    cfweight += sf.at(i)*CFweight.at(i);
+  }
+
+  return cfweight;
+
+}
+
     }
     else sf.push_back(1.);
 
