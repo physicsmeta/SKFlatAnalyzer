@@ -1861,16 +1861,6 @@ double AnalyzerCore::GetCFweight(vector<Electron> eles, TString id, bool applySF
 
 }
 
-    }
-    else sf.push_back(1.);
-
-    cfweight += sf.at(i)*CFweight.at(i);
-  }
-
-  return cfweight;
-
-}
-
 //=========================================================
 //==== Gen Matching Tools
 
