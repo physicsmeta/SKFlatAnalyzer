@@ -72,7 +72,7 @@ void MCCorrection::ReadHistograms(){
     if(tstring_elline.Contains("#")) continue;
 
     TString a,b,c,d,e;
-    is >> a; // ID,RERCO
+    is >> a; // ID,RECO
     is >> b; // Eff,SF
     is >> c; // <WPnames>
     is >> d; // <rootfilename>
@@ -281,6 +281,98 @@ double MCCorrection::MuonID_SF(TString ID, double eta, double pt, int sys){
   error = this_hist->GetBinError(this_bin);
 
   //cout << "[MCCorrection::MuonID_SF] value = " << value << endl;
+
+  return value+double(sys)*error;
+
+}
+
+double MCCorrection::MuonID_Eff_Period(TString ID, TString period, TString DataMC, double eta, double pt, int sys){
+
+  double value = 1.;
+  double error = 0.;
+
+  eta = fabs(eta);
+
+  if(ID.Contains("HNTight")){
+    if(pt < 10.) pt = 11.;
+    if(pt >= 500.) pt = 499.;
+    if(eta >= 2.4) eta = 2.39;
+  }
+
+  TH2F *this_hist = map_hist_Muon["ID_Eff_"+DataMC+"_"+ID+"_"+period];
+  if(!this_hist){
+    if(IgnoreNoHist) return 1.;
+    else{
+      cerr << "[MCCorrection::MuonID_Eff_Period] No "<<"ID_Eff_"+DataMC+"_"+ID+"_"+period<<endl;
+      exit(EXIT_FAILURE);
+    }
+  }
+
+  int this_bin(-999);
+
+  this_bin = this_hist->FindBin(eta,pt);
+
+  value = this_hist->GetBinContent(this_bin);
+  error = this_hist->GetBinError(this_bin);
+
+  return value+double(sys)*error;
+
+}
+
+double MCCorrection::MuonID_SF_HNtypeI(TString ID, double eta, double pt, int sys){
+
+  double value = 1.;
+  double error = 0.;
+
+  eta = fabs(eta);
+
+  if(DataYear==2016){
+
+    double lumi_periodB = 5750.490644035;
+    double lumi_periodC = 2572.903488748;
+    double lumi_periodD = 4242.291556970;
+    double lumi_periodE = 4025.228136967;
+    double lumi_periodF = 3104.509131800;
+    double lumi_periodG = 7575.824256098;
+    double lumi_periodH = 8650.628380028;
+
+    double total_lumi = (lumi_periodB+lumi_periodC+lumi_periodD+lumi_periodE+lumi_periodF+lumi_periodG+lumi_periodH);
+
+    double WeightBtoF = (lumi_periodB+lumi_periodC+lumi_periodD+lumi_periodE+lumi_periodF)/total_lumi;
+    double WeightGtoH = (lumi_periodG+lumi_periodH)/total_lumi;
+
+    double dataEff = WeightBtoF*MuonID_Eff_Period(ID, "BtoF", "DATA", eta, pt, sys) + WeightGtoH*MuonID_Eff_Period(ID, "GtoH", "DATA", eta, pt, sys);
+    double mcEff = WeightBtoF*MuonID_Eff_Period(ID, "BtoF", "MC", eta, pt, -sys) + WeightGtoH*MuonID_Eff_Period(ID, "GtoH", "MC", eta, pt, -sys);
+
+    value = dataEff/mcEff;
+    error = 0.;
+
+  }
+  else{
+
+    if(ID.Contains("HNTight")){
+      if(pt < 10.) pt = 11.;
+      if(pt >= 500.) pt = 499.;
+      if(eta >= 2.4) eta = 2.39;
+    }
+
+    TH2F *this_hist = map_hist_Muon["ID_SF_"+ID];
+    if(!this_hist){
+      if(IgnoreNoHist) return 1.;
+      else{
+        cerr << "[MCCorrection::MuonID_SF_HNtypeI] No "<<"ID_SF_"+ID<<endl;
+        exit(EXIT_FAILURE);
+      }
+    }
+
+    int this_bin(-999);
+
+    this_bin = this_hist->FindBin(eta,pt);
+
+    value = this_hist->GetBinContent(this_bin);
+    error = this_hist->GetBinError(this_bin);
+
+  }
 
   return value+double(sys)*error;
 
@@ -791,6 +883,22 @@ double MCCorrection::ElectronTrigger_SF(TString ID, TString trig, const std::vec
   }
 
   return ElectronTrigger_SF(ID, trig, muvec, sys);
+
+}
+
+// See https://twiki.cern.ch/twiki/bin/view/CMS/JetWtagging
+double MCCorrection::FatJetWtagSF(TString ID, int sys){
+
+  double sf = 1.;
+
+  if(ID.Contains("HNTight")){
+    if(DataYear==2016) sf = 1.03 + double(sys)*0.14;
+    if(DataYear==2017) sf = 0.97 + double(sys)*0.06;
+    if(DataYear==2018) sf = 0.98 + double(sys)*0.027;
+  }
+  else sf = 1.;
+
+  return sf;
 
 }
 

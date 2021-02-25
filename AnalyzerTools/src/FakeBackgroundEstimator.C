@@ -80,7 +80,8 @@ double FakeBackgroundEstimator::GetElectronFakeRate(TString ID, TString key, dou
   //if(eta>=2.5) eta = 2.49;
   //==== HOTFIX FIXME
   //if(eta>=1.479 && pt>=150) pt = 149.;
-  if(pt>=60) pt = 59;
+  //if(pt>=60) pt = 59;
+  if(pt>=100.) pt = 99.; // NOTE
 
   std::map< TString, TH2D* >::const_iterator mapit;
   mapit = map_hist_Electron.find(ID+"_"+key);
@@ -117,7 +118,13 @@ double FakeBackgroundEstimator::GetMuonFakeRate(TString ID, TString key, double 
   //if(eta>=2.5) eta = 2.49;
   //==== HOTFIX FIXME
   //if(eta<0.8 && pt>=150) pt = 149.;
-  if(pt>=60) pt = 59;
+  //if(pt>=60) pt = 59;
+  if(DataYear==2018){
+    if(pt>=60.) pt = 59.;
+  }
+  else{
+    if(pt>=80.) pt = 79.;
+  }
 
   std::map< TString, TH2D* >::const_iterator mapit;
   mapit = map_hist_Muon.find(ID+"_"+key);

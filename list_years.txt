@@ -1,76 +1,95 @@
 #type	analyzer	sample	channel	var	title	xran1	xran2	yran	rebin	SaveAs	flag
 ##
-#MC	Presel		SkimTree_Dilepton_DYJets	dimu	Lep1_Pt	pt(l1)	auto	100 auto	1	y
-#MC	Presel		SkimTree_Dilepton_DYJets	dimu	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
-#MC	Presel		SkimTree_Dilepton_DYJets	dimu	Lep2_Pt	pt(l2)	auto	100	auto	1	y
-#MC	Presel		SkimTree_Dilepton_DYJets	dimu	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
-#MC	Presel		SkimTree_Dilepton_DYJets	diel	Lep1_Pt	pt(l1)	auto	100 auto	1	y
-#MC	Presel		SkimTree_Dilepton_DYJets	diel	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
-#MC	Presel		SkimTree_Dilepton_DYJets	diel	Lep2_Pt	pt(l2)	auto	100	auto	1	y
-#MC	Presel		SkimTree_Dilepton_DYJets	diel	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
-#MC	Presel		SkimTree_Dilepton_TTLL_powheg	dimu	Lep1_Pt	pt(l1)	auto	100 auto	1	y
-#MC	Presel		SkimTree_Dilepton_TTLL_powheg	dimu	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
-#MC	Presel		SkimTree_Dilepton_TTLL_powheg	dimu	Lep2_Pt	pt(l2)	auto	100	auto	1	y
-#MC	Presel		SkimTree_Dilepton_TTLL_powheg	dimu	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
-#MC	Presel		SkimTree_Dilepton_TTLL_powheg	diel	Lep1_Pt	pt(l1)	auto	100 auto	1	y
-#MC	Presel		SkimTree_Dilepton_TTLL_powheg	diel	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
-#MC	Presel		SkimTree_Dilepton_TTLL_powheg	diel	Lep2_Pt	pt(l2)	auto	100	auto	1	y
-#MC	Presel		SkimTree_Dilepton_TTLL_powheg	diel	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
-#DATA	Presel		DoubleMuon	dimu	Lep1_Pt	pt(l1)	auto	auto auto	1	y
-#DATA	Presel		DoubleMuon	dimu	Lep1_Eta	eta(l1)	auto	auto	auto	1	y
-#DATA	Presel		DoubleMuon	dimu	Lep2_Pt	pt(l2)	auto	auto	auto	1	y
-#DATA	Presel		DoubleMuon	dimu	Lep2_Eta	eta(l2)	auto	auto	auto	1	y
-#DATA	Presel		DoubleEG	diel	Lep1_Pt	pt(l1)	auto	auto auto	1	y
+MC	Presel		SkimTree_Dilepton_DYJets	dimu	Lep1_Pt	pt(l1)	auto	100 auto	1	y
+MC	Presel		SkimTree_Dilepton_DYJets	dimu	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
+MC	Presel		SkimTree_Dilepton_DYJets	dimu	Lep2_Pt	pt(l2)	auto	100	auto	1	y
+MC	Presel		SkimTree_Dilepton_DYJets	dimu	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
+
+
+
+MC	Presel		SkimTree_Dilepton_DYJets	diel	Lep1_Pt	pt(l1)	auto	100 auto	1	y
+MC	Presel		SkimTree_Dilepton_DYJets	diel	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
+MC	Presel		SkimTree_Dilepton_DYJets	diel	Lep2_Pt	pt(l2)	auto	100	auto	1	y
+MC	Presel		SkimTree_Dilepton_DYJets	diel	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
+
+
+
+MC	Presel		SkimTree_Dilepton_TTLL_powheg	dimu	Lep1_Pt	pt(l1)	auto	100 auto	1	y
+MC	Presel		SkimTree_Dilepton_TTLL_powheg	dimu	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
+MC	Presel		SkimTree_Dilepton_TTLL_powheg	dimu	Lep2_Pt	pt(l2)	auto	100	auto	1	y
+MC	Presel		SkimTree_Dilepton_TTLL_powheg	dimu	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
+
+
+MC	Presel		SkimTree_Dilepton_TTLL_powheg	diel	Lep1_Pt	pt(l1)	auto	100 auto	1	y
+MC	Presel		SkimTree_Dilepton_TTLL_powheg	diel	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
+MC	Presel		SkimTree_Dilepton_TTLL_powheg	diel	Lep2_Pt	pt(l2)	auto	100	auto	1	y
+MC	Presel		SkimTree_Dilepton_TTLL_powheg	diel	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
+
+
+
+DATA	Presel		DoubleMuon	dimu	Lep1_Pt	pt(l1)	auto	auto auto	1	y
+DATA	Presel		DoubleMuon	dimu	Lep1_Eta	eta(l1)	auto	auto	auto	1	y
+DATA	Presel		DoubleMuon	dimu	Lep2_Pt	pt(l2)	auto	auto	auto	1	y
+DATA	Presel		DoubleMuon	dimu	Lep2_Eta	eta(l2)	auto	auto	auto	1	y
+
+
+DATA	Presel		DoubleEG	diel	Lep1_Pt	pt(l1)	auto	auto auto	1	y
 DATA	Presel		DoubleEG	diel	Lep1_Pt	pt(l1)	auto	auto 500	1	y	zoomed
-#DATA	Presel		DoubleEG	diel	Lep1_Eta	eta(l1)	auto	auto	auto	1	y
-#DATA	Presel		DoubleEG	diel	Lep2_Pt	pt(l2)	auto	auto	auto	1	y
+DATA	Presel		DoubleEG	diel	Lep1_Eta	eta(l1)	auto	auto	auto	1	y
+DATA	Presel		DoubleEG	diel	Lep2_Pt	pt(l2)	auto	auto	auto	1	y
 DATA	Presel		DoubleEG	diel	Lep2_Pt	pt(l2)	auto	auto	500	1	y	zoomed
-#DATA	Presel		DoubleEG	diel	Lep2_Eta	eta(l2)	auto	auto	auto	1	y
-#DATA	Presel		MuonEG	emu	Lep1_Pt	pt(l1)	auto	auto auto	1	y
-#DATA	Presel		MuonEG	emu	Lep1_Eta	eta(l1)	auto	auto	auto	1	y
-#DATA	Presel		MuonEG	emu	Lep2_Pt	pt(l2)	auto	auto	auto	1	y
-#DATA	Presel		MuonEG	emu	Lep2_Eta	eta(l2)	auto	auto	auto	1	y
-##To show at Jets+X meeting
-#MC	Presel		DYTypeI_SS_MuMu_M100	dimu	Lep1_Pt	pt(l1)	auto	1000 auto	5	y
-#MC	Presel		DYTypeI_SS_MuMu_M100	dimu	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
-#MC	Presel		DYTypeI_SS_MuMu_M100	dimu	Lep2_Pt	pt(l2)	auto	1000	auto	5	y
-#MC	Presel		DYTypeI_SS_MuMu_M100	dimu	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
-#MC	Presel		DYTypeI_SS_EE_M100	diel	Lep1_Pt	pt(l1)	auto	1000 auto	5	y
-#MC	Presel		DYTypeI_SS_EE_M100	diel	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
-#MC	Presel		DYTypeI_SS_EE_M100	diel	Lep2_Pt	pt(l2)	auto	1000	auto	5	y
-#MC	Presel		DYTypeI_SS_EE_M100	diel	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
-#MC	Presel		DYTypeI_SS_MuMu_M500	dimu	Lep1_Pt	pt(l1)	auto	1000 auto	5	y
-#MC	Presel		DYTypeI_SS_MuMu_M500	dimu	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
-#MC	Presel		DYTypeI_SS_MuMu_M500	dimu	Lep2_Pt	pt(l2)	auto	1000	auto	5	y
-#MC	Presel		DYTypeI_SS_MuMu_M500	dimu	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
-#MC	Presel		DYTypeI_SS_EE_M500	diel	Lep1_Pt	pt(l1)	auto	1000 auto	5	y
-#MC	Presel		DYTypeI_SS_EE_M500	diel	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
-#MC	Presel		DYTypeI_SS_EE_M500	diel	Lep2_Pt	pt(l2)	auto	1000	auto	5	y
-#MC	Presel		DYTypeI_SS_EE_M500	diel	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
-#MC	Presel		DYTypeI_SS_MuMu_M1200	dimu	Lep1_Pt	pt(l1)	auto	1000 auto	5	y
-#MC	Presel		DYTypeI_SS_MuMu_M1200	dimu	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
-#MC	Presel		DYTypeI_SS_MuMu_M1200	dimu	Lep2_Pt	pt(l2)	auto	1000	auto	5	y
-#MC	Presel		DYTypeI_SS_MuMu_M1200	dimu	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
-#MC	Presel		DYTypeI_SS_EE_M1200	diel	Lep1_Pt	pt(l1)	auto	1000 auto	5	y
-#MC	Presel		DYTypeI_SS_EE_M1200	diel	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
-#MC	Presel		DYTypeI_SS_EE_M1200	diel	Lep2_Pt	pt(l2)	auto	1000	auto	5	y
-#MC	Presel		DYTypeI_SS_EE_M1200	diel	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
-#MC	Presel		VBFTypeI_SS_MuMu_M500	dimu	Lep1_Pt	pt(l1)	auto	1000 auto	5	y
-#MC	Presel		VBFTypeI_SS_MuMu_M500	dimu	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
-#MC	Presel		VBFTypeI_SS_MuMu_M500	dimu	Lep2_Pt	pt(l2)	auto	1000	auto	5	y
-#MC	Presel		VBFTypeI_SS_MuMu_M500	dimu	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
-#MC	Presel		VBFTypeI_SS_EE_M500	diel	Lep1_Pt	pt(l1)	auto	1000 auto	5	y
-#MC	Presel		VBFTypeI_SS_EE_M500	diel	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
-#MC	Presel		VBFTypeI_SS_EE_M500	diel	Lep2_Pt	pt(l2)	auto	1000	auto	5	y
-#MC	Presel		VBFTypeI_SS_EE_M500	diel	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
-#MC	Presel		VBFTypeI_SS_MuMu_M1200	dimu	Lep1_Pt	pt(l1)	auto	1000 auto	5	y
-#MC	Presel		VBFTypeI_SS_MuMu_M1200	dimu	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
-#MC	Presel		VBFTypeI_SS_MuMu_M1200	dimu	Lep2_Pt	pt(l2)	auto	1000	auto	5	y
-#MC	Presel		VBFTypeI_SS_MuMu_M1200	dimu	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
-#MC	Presel		VBFTypeI_SS_EE_M1200	diel	Lep1_Pt	pt(l1)	auto	1000 auto	5	y
-#MC	Presel		VBFTypeI_SS_EE_M1200	diel	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
-#MC	Presel		VBFTypeI_SS_EE_M1200	diel	Lep2_Pt	pt(l2)	auto	1000	auto	5	y
-#MC	Presel		VBFTypeI_SS_EE_M1200	diel	Lep2_Eta	eta(l2)	auto	2.5	auto	1	n
+DATA	Presel		DoubleEG	diel	Lep2_Eta	eta(l2)	auto	auto	auto	1	y
+
+
+DATA	Presel		MuonEG	emu	Lep1_Pt	pt(l1)	auto	auto auto	1	y
+DATA	Presel		MuonEG	emu	Lep1_Eta	eta(l1)	auto	auto	auto	1	y
+DATA	Presel		MuonEG	emu	Lep2_Pt	pt(l2)	auto	auto	auto	1	y
+DATA	Presel		MuonEG	emu	Lep2_Eta	eta(l2)	auto	auto	auto	1	y
+
+
+##Signal samples
+
+
+MC	Presel		DYTypeI_SS_MuMu_M100	dimu	Lep1_Pt	pt(l1)	auto	1000 auto	5	y
+MC	Presel		DYTypeI_SS_MuMu_M100	dimu	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
+MC	Presel		DYTypeI_SS_MuMu_M100	dimu	Lep2_Pt	pt(l2)	auto	1000	auto	5	y
+MC	Presel		DYTypeI_SS_MuMu_M100	dimu	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
+MC	Presel		DYTypeI_SS_EE_M100	diel	Lep1_Pt	pt(l1)	auto	1000 auto	5	y
+MC	Presel		DYTypeI_SS_EE_M100	diel	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
+MC	Presel		DYTypeI_SS_EE_M100	diel	Lep2_Pt	pt(l2)	auto	1000	auto	5	y
+MC	Presel		DYTypeI_SS_EE_M100	diel	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
+MC	Presel		DYTypeI_SS_MuMu_M500	dimu	Lep1_Pt	pt(l1)	auto	1000 auto	5	y
+MC	Presel		DYTypeI_SS_MuMu_M500	dimu	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
+MC	Presel		DYTypeI_SS_MuMu_M500	dimu	Lep2_Pt	pt(l2)	auto	1000	auto	5	y
+MC	Presel		DYTypeI_SS_MuMu_M500	dimu	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
+MC	Presel		DYTypeI_SS_EE_M500	diel	Lep1_Pt	pt(l1)	auto	1000 auto	5	y
+MC	Presel		DYTypeI_SS_EE_M500	diel	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
+MC	Presel		DYTypeI_SS_EE_M500	diel	Lep2_Pt	pt(l2)	auto	1000	auto	5	y
+MC	Presel		DYTypeI_SS_EE_M500	diel	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
+MC	Presel		DYTypeI_SS_MuMu_M1200	dimu	Lep1_Pt	pt(l1)	auto	1000 auto	5	y
+MC	Presel		DYTypeI_SS_MuMu_M1200	dimu	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
+MC	Presel		DYTypeI_SS_MuMu_M1200	dimu	Lep2_Pt	pt(l2)	auto	1000	auto	5	y
+MC	Presel		DYTypeI_SS_MuMu_M1200	dimu	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
+MC	Presel		DYTypeI_SS_EE_M1200	diel	Lep1_Pt	pt(l1)	auto	1000 auto	5	y
+MC	Presel		DYTypeI_SS_EE_M1200	diel	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
+MC	Presel		DYTypeI_SS_EE_M1200	diel	Lep2_Pt	pt(l2)	auto	1000	auto	5	y
+MC	Presel		DYTypeI_SS_EE_M1200	diel	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
+MC	Presel		VBFTypeI_SS_MuMu_M500	dimu	Lep1_Pt	pt(l1)	auto	1000 auto	5	y
+MC	Presel		VBFTypeI_SS_MuMu_M500	dimu	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
+MC	Presel		VBFTypeI_SS_MuMu_M500	dimu	Lep2_Pt	pt(l2)	auto	1000	auto	5	y
+MC	Presel		VBFTypeI_SS_MuMu_M500	dimu	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
+MC	Presel		VBFTypeI_SS_EE_M500	diel	Lep1_Pt	pt(l1)	auto	1000 auto	5	y
+MC	Presel		VBFTypeI_SS_EE_M500	diel	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
+MC	Presel		VBFTypeI_SS_EE_M500	diel	Lep2_Pt	pt(l2)	auto	1000	auto	5	y
+MC	Presel		VBFTypeI_SS_EE_M500	diel	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
+MC	Presel		VBFTypeI_SS_MuMu_M1200	dimu	Lep1_Pt	pt(l1)	auto	1000 auto	5	y
+MC	Presel		VBFTypeI_SS_MuMu_M1200	dimu	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
+MC	Presel		VBFTypeI_SS_MuMu_M1200	dimu	Lep2_Pt	pt(l2)	auto	1000	auto	5	y
+MC	Presel		VBFTypeI_SS_MuMu_M1200	dimu	Lep2_Eta	eta(l2)	auto	2.5	auto	1	y
+MC	Presel		VBFTypeI_SS_EE_M1200	diel	Lep1_Pt	pt(l1)	auto	1000 auto	5	y
+MC	Presel		VBFTypeI_SS_EE_M1200	diel	Lep1_Eta	eta(l1)	auto	2.5	auto	1	y
+MC	Presel		VBFTypeI_SS_EE_M1200	diel	Lep2_Pt	pt(l2)	auto	1000	auto	5	y
+MC	Presel		VBFTypeI_SS_EE_M1200	diel	Lep2_Eta	eta(l2)	auto	2.5	auto	1	n
 
 #test analyzer
 #DATA	test		DoubleMuon	dimu	Lep1_Pt	pt(l1)	auto	100 auto	1	y

@@ -281,9 +281,9 @@
 
 ############################Scale factor using data################################
 
-python python/SKFlat.py -a ChargeFlip -y 2016 -i DoubleEG -n 50 --userflags ScaleFactor --nmax 20 &
-python python/SKFlat.py -a ChargeFlip -y 2017 -i DoubleEG -n 50 --userflags ScaleFactor --nmax 20 &
-#python python/SKFlat.py -a ChargeFlip -y 2018 -i EGamma -n 50 --userflags ScaleFactor --nmax 20 &
+#python python/SKFlat.py -a ChargeFlip -y 2016 -i DoubleEG -n 50 --userflags ScaleFactor --nmax 20 &
+#python python/SKFlat.py -a ChargeFlip -y 2017 -i DoubleEG -n 50 --userflags ScaleFactor --nmax 20 &
+python python/SKFlat.py -a ChargeFlip -y 2018 -i EGamma -n 50 --userflags ScaleFactor --nmax 20 &
 
 
 

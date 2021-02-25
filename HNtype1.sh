@@ -192,12 +192,12 @@
 #################################################
 
 
-python python/SKFlat.py -a test -y 2016 -i DYJets -n 80 --nmax 10 &
-python python/SKFlat.py -a test -y 2016 -i TTLL_powheg -n 80 --nmax 10 &
-python python/SKFlat.py -a test -y 2017 -i DYJets -n 80 --nmax 10 &
-python python/SKFlat.py -a test -y 2017 -i TTLL_powheg -n 80 --nmax 10 &
-python python/SKFlat.py -a test -y 2018 -i DYJets -n 80 --nmax 10 &
-python python/SKFlat.py -a test -y 2018 -i TTLL_powheg -n 80 --nmax 10 &
+#python python/SKFlat.py -a test -y 2016 -i DYJets -n 80 --nmax 10 &
+#python python/SKFlat.py -a test -y 2016 -i TTLL_powheg -n 80 --nmax 10 &
+#python python/SKFlat.py -a test -y 2017 -i DYJets -n 80 --nmax 10 &
+#python python/SKFlat.py -a test -y 2017 -i TTLL_powheg -n 80 --nmax 10 &
+#python python/SKFlat.py -a test -y 2018 -i DYJets -n 80 --nmax 10 &
+#python python/SKFlat.py -a test -y 2018 -i TTLL_powheg -n 80 --nmax 10 &
 
 
 

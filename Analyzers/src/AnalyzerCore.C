@@ -1775,7 +1775,7 @@ double AnalyzerCore::GetCFweight(vector<Lepton *> lepptrs, AnalyzerParameter par
 
 }
 
-double AnalyzerCore::GetCFweight(vector<Electron> eles, TString id, bool applySF, int syst){
+double AnalyzerCore::GetCFweight(vector<Electron> eles, TString id, bool applySF, int syst){ //JH : to use in ChargeFlip.C (here, leptons are not a pointer)
 
   std::vector<double> CFrate, CFweight, sf;
   double cfweight = 0.;

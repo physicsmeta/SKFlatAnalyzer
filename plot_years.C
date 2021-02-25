@@ -62,7 +62,7 @@ while(getline(in,line)){
 
   //gSystem->Exec("rootls "+filename1);
   //gSystem->Exec("mkdir -p "+analyzer+"/"+sample);
-  gSystem->Exec("mkdir -p HNplots/"+analyzer+"/years");
+  gSystem->Exec("mkdir -p HNplots/"+analyzer+"/years/"+sample);
 
   TCanvas* c1 = new TCanvas("c1",title,200,350,700,650);
   c1->cd();
@@ -116,8 +116,8 @@ while(getline(in,line)){
   legend->Draw();
 
   if(SaveAs=="y"){
-		if(flag != "") c1->SaveAs("HNplots/"+analyzer+"/years/"+sample+"_"+channel+"_"+var+"__"+flag+".png");
-		else c1->SaveAs("HNplots/"+analyzer+"/years/"+sample+"_"+channel+"_"+var+".png");
+		if(flag != "") c1->SaveAs("HNplots/"+analyzer+"/years/"+sample+"/"+channel+"_"+var+"__"+flag+".png");
+		else c1->SaveAs("HNplots/"+analyzer+"/years/"+sample+"/"+channel+"_"+var+".png");
 	}
 }
 
