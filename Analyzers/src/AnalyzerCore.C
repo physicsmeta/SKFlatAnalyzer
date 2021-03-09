@@ -1755,15 +1755,29 @@ double AnalyzerCore::GetCFweight(vector<Lepton *> lepptrs, AnalyzerParameter par
     CFweight.push_back(CFrate.at(i)/(1.-CFrate.at(i)));
 
     if(applySF){
-      if(fabs(el.at(i).scEta()) < 1.479){
-        if(param.Electron_Tight_ID == "HNTightV1") sf.push_back(1.08674 + syst*0.);
-        else if(param.Electron_Tight_ID == "HNTightV2") sf.push_back(0.4584 + syst*0.);
-        else sf.push_back(0.49666 + syst*0.);
+      if(DataYear==2016){
+        if(fabs(el.at(i).scEta()) < 1.479){
+          if(param.Electron_Tight_ID == "HNTightV1") sf.push_back(0.68164 + syst*0.);
+        }
+        else{
+          if(param.Electron_Tight_ID == "HNTightV1") sf.push_back(0.83324 + syst*0.);
+        }
       }
-      else{
-        if(param.Electron_Tight_ID == "HNTightV1") sf.push_back(0.83324 + syst*0.);
-        else if(param.Electron_Tight_ID == "HNTightV2") sf.push_back(0.66078 + syst*0.);
-        else sf.push_back(0.652357 + syst*0.);
+      if(DataYear==2017){
+        if(fabs(el.at(i).scEta()) < 1.479){
+          if(param.Electron_Tight_ID == "HNTightV1") sf.push_back(0.97395 + syst*0.);
+        }
+        else{
+          if(param.Electron_Tight_ID == "HNTightV1") sf.push_back(1.0706 + syst*0.);
+        }
+      }
+      if(DataYear==2018){
+        if(fabs(el.at(i).scEta()) < 1.479){
+          if(param.Electron_Tight_ID == "HNTightV1") sf.push_back(0.85626 + syst*0.);
+        }
+        else{
+          if(param.Electron_Tight_ID == "HNTightV1") sf.push_back(1.09372 + syst*0.);
+        }
       }
     }
     else sf.push_back(1.);
@@ -1882,13 +1896,13 @@ void AnalyzerCore::JHPrintGen(const std::vector<Gen>& gens){
 
   cout << "===========================================================" << endl;
   cout << "RunNumber:EventNumber = " << run << ":" << event << endl;
-  cout << "index\tPID\tStatus\tMIdx\tMPID\tStart\tPt\tEta\tPhi\tM\tIsPromptFinalState" << endl;
+  cout << "index\tPID\tStatus\tMIdx\tMPID\tStart\tPt\tEta\tPhi\tM\tfromHardProcessFinalState" << endl;
   for(unsigned int i=2; i<gens.size(); i++){
     Gen gen = gens.at(i);
     vector<int> history = TrackGenSelfHistory(gen, gens);
     cout << i << "\t" << gen.PID() << "\t" << gen.Status() << "\t" << gen.MotherIndex() << "\t" << gens.at(gen.MotherIndex()).PID()<< "\t" << history[0] << "\t";
     printf("%.2f\t%.2f\t%.2f\t%.2f\t",gen.Pt(), gen.Eta(), gen.Phi(), gen.M());
-    cout << ">" << gen.isPromptFinalState() << "<" << endl;
+    cout << ">" << gen.fromHardProcessFinalState() << "<" << endl;
   }
 
 }

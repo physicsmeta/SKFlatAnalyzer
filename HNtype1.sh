@@ -199,36 +199,32 @@
 #python python/SKFlat.py -a test -y 2018 -i DYJets -n 80 --nmax 10 &
 #python python/SKFlat.py -a test -y 2018 -i TTLL_powheg -n 80 --nmax 10 &
 
+#python python/SKFlat.py -a test -y 2018 -i DYTypeI_SS_EE_M100 -n 50 & 
+#python python/SKFlat.py -a test -y 2018 -i DYTypeI_SS_EE_M500 -n 50 & 
+#python python/SKFlat.py -a test -y 2018 -i DYTypeI_SS_EE_M1200 -n 50 & 
+#python python/SKFlat.py -a test -y 2018 -i VBFTypeI_SS_EE_M500 -n 50 & 
+#python python/SKFlat.py -a test -y 2018 -i VBFTypeI_SS_EE_M1200 -n 50 & 
+#python python/SKFlat.py -a test -y 2018 -i DYTypeI_SS_MuMu_M100 -n 50 & 
+#python python/SKFlat.py -a test -y 2018 -i DYTypeI_SS_MuMu_M500 -n 50 & 
+#python python/SKFlat.py -a test -y 2018 -i DYTypeI_SS_MuMu_M1200 -n 50 & 
+#python python/SKFlat.py -a test -y 2018 -i VBFTypeI_SS_MuMu_M500 -n 50 & 
+#python python/SKFlat.py -a test -y 2018 -i VBFTypeI_SS_MuMu_M1200 -n 50 & 
+#python python/SKFlat.py -a test -y 2018 -i DYTypeI_OS_EE_M100 -n 50 & 
+python python/SKFlat.py -a test -y 2018 -i DYTypeI_OS_EE_M500 -n 50 & 
+#python python/SKFlat.py -a test -y 2018 -i DYTypeI_OS_EE_M1200 -n 50 & 
+#python python/SKFlat.py -a test -y 2018 -i VBFTypeI_OS_EE_M500 -n 50 & 
+#python python/SKFlat.py -a test -y 2018 -i VBFTypeI_OS_EE_M1200 -n 50 & 
+#python python/SKFlat.py -a test -y 2018 -i DYTypeI_OS_MuMu_M100 -n 50 & 
+#python python/SKFlat.py -a test -y 2018 -i DYTypeI_OS_MuMu_M500 -n 50 & 
+#python python/SKFlat.py -a test -y 2018 -i DYTypeI_OS_MuMu_M1200 -n 50 & 
+#python python/SKFlat.py -a test -y 2018 -i VBFTypeI_OS_MuMu_M500 -n 50 & 
+#python python/SKFlat.py -a test -y 2018 -i VBFTypeI_OS_MuMu_M1200 -n 50 & 
+
 
 
 #################################################
 ### MC validation year by year at presel level.
 #################################################
-
-#python python/SKFlat.py -a Presel -y 2016 -i DYTypeI_SS_EE_M100 -n 50 &
-#python python/SKFlat.py -a Presel -y 2016 -i DYTypeI_SS_EE_M700 -n 50 &
-#python python/SKFlat.py -a Presel -y 2016 -i DYTypeI_SS_MuMu_M100 -n 50 &
-#python python/SKFlat.py -a Presel -y 2016 -i DYTypeI_SS_MuMu_M700 -n 50 &
-#python python/SKFlat.py -a Presel -y 2016 -i DYTypeI_OS_EE_M100 -n 50 &
-#python python/SKFlat.py -a Presel -y 2016 -i DYTypeI_OS_EE_M700 -n 50 &
-#python python/SKFlat.py -a Presel -y 2016 -i DYTypeI_OS_MuMu_M100 -n 50 &
-#python python/SKFlat.py -a Presel -y 2016 -i DYTypeI_OS_MuMu_M700 -n 50 &
-#python python/SKFlat.py -a Presel -y 2017 -i DYTypeI_SS_EE_M100 -n 50 &
-#python python/SKFlat.py -a Presel -y 2017 -i DYTypeI_SS_EE_M700 -n 50 &
-#python python/SKFlat.py -a Presel -y 2017 -i DYTypeI_SS_MuMu_M100 -n 50 &
-#python python/SKFlat.py -a Presel -y 2017 -i DYTypeI_SS_MuMu_M700 -n 50 &
-#python python/SKFlat.py -a Presel -y 2017 -i DYTypeI_OS_EE_M100 -n 50 &
-#python python/SKFlat.py -a Presel -y 2017 -i DYTypeI_OS_EE_M700 -n 50 &
-#python python/SKFlat.py -a Presel -y 2017 -i DYTypeI_OS_MuMu_M100 -n 50 &
-#python python/SKFlat.py -a Presel -y 2017 -i DYTypeI_OS_MuMu_M700 -n 50 &
-#python python/SKFlat.py -a Presel -y 2018 -i DYTypeI_SS_EE_M100 -n 50 &
-#python python/SKFlat.py -a Presel -y 2018 -i DYTypeI_SS_EE_M700 -n 50 &
-#python python/SKFlat.py -a Presel -y 2018 -i DYTypeI_SS_MuMu_M100 -n 50 &
-#python python/SKFlat.py -a Presel -y 2018 -i DYTypeI_SS_MuMu_M700 -n 50 &
-#python python/SKFlat.py -a Presel -y 2018 -i DYTypeI_OS_EE_M100 -n 50 &
-#python python/SKFlat.py -a Presel -y 2018 -i DYTypeI_OS_EE_M700 -n 50 &
-#python python/SKFlat.py -a Presel -y 2018 -i DYTypeI_OS_MuMu_M100 -n 50 &
-#python python/SKFlat.py -a Presel -y 2018 -i DYTypeI_OS_MuMu_M700 -n 50 &
 
 #python python/SKFlat.py -a Presel -y 2016 -i DYJets --skim SkimTree_Dilepton -n 50 &
 #python python/SKFlat.py -a Presel -y 2016 -i DYJets_MG -n 50 &
@@ -285,6 +281,37 @@
 #python python/SKFlat.py -a Presel -y 2018 -i VBFTypeI_SS_MuMu_M500 -n 50 & 
 #python python/SKFlat.py -a Presel -y 2018 -i VBFTypeI_SS_MuMu_M1200 -n 50 & 
 
+#python python/SKFlat.py -a Presel -y 2016 -i DYTypeI_OS_EE_M100 -n 50 & 
+#python python/SKFlat.py -a Presel -y 2016 -i DYTypeI_OS_EE_M500 -n 50 & 
+#python python/SKFlat.py -a Presel -y 2016 -i DYTypeI_OS_EE_M1200 -n 50 & 
+#python python/SKFlat.py -a Presel -y 2016 -i VBFTypeI_OS_EE_M500 -n 50 & 
+#python python/SKFlat.py -a Presel -y 2016 -i VBFTypeI_OS_EE_M1200 -n 50 & 
+#python python/SKFlat.py -a Presel -y 2016 -i DYTypeI_OS_MuMu_M100 -n 50 & 
+#python python/SKFlat.py -a Presel -y 2016 -i DYTypeI_OS_MuMu_M500 -n 50 & 
+#python python/SKFlat.py -a Presel -y 2016 -i DYTypeI_OS_MuMu_M1200 -n 50 & 
+#python python/SKFlat.py -a Presel -y 2016 -i VBFTypeI_OS_MuMu_M500 -n 50 & 
+#python python/SKFlat.py -a Presel -y 2016 -i VBFTypeI_OS_MuMu_M1200 -n 50 & 
+#python python/SKFlat.py -a Presel -y 2017 -i DYTypeI_OS_EE_M100 -n 50 & 
+#python python/SKFlat.py -a Presel -y 2017 -i DYTypeI_OS_EE_M500 -n 50 & 
+#python python/SKFlat.py -a Presel -y 2017 -i DYTypeI_OS_EE_M1200 -n 50 & 
+#python python/SKFlat.py -a Presel -y 2017 -i VBFTypeI_OS_EE_M500 -n 50 & 
+#python python/SKFlat.py -a Presel -y 2017 -i VBFTypeI_OS_EE_M1200 -n 50 & 
+#python python/SKFlat.py -a Presel -y 2017 -i DYTypeI_OS_MuMu_M100 -n 50 & 
+#python python/SKFlat.py -a Presel -y 2017 -i DYTypeI_OS_MuMu_M500 -n 50 & 
+#python python/SKFlat.py -a Presel -y 2017 -i DYTypeI_OS_MuMu_M1200 -n 50 & 
+#python python/SKFlat.py -a Presel -y 2017 -i VBFTypeI_OS_MuMu_M500 -n 50 & 
+#python python/SKFlat.py -a Presel -y 2017 -i VBFTypeI_OS_MuMu_M1200 -n 50 & 
+#python python/SKFlat.py -a Presel -y 2018 -i DYTypeI_OS_EE_M100 -n 50 & 
+#python python/SKFlat.py -a Presel -y 2018 -i DYTypeI_OS_EE_M500 -n 50 & 
+#python python/SKFlat.py -a Presel -y 2018 -i DYTypeI_OS_EE_M1200 -n 50 & 
+#python python/SKFlat.py -a Presel -y 2018 -i VBFTypeI_OS_EE_M500 -n 50 & 
+#python python/SKFlat.py -a Presel -y 2018 -i VBFTypeI_OS_EE_M1200 -n 50 & 
+#python python/SKFlat.py -a Presel -y 2018 -i DYTypeI_OS_MuMu_M100 -n 50 & 
+#python python/SKFlat.py -a Presel -y 2018 -i DYTypeI_OS_MuMu_M500 -n 50 & 
+#python python/SKFlat.py -a Presel -y 2018 -i DYTypeI_OS_MuMu_M1200 -n 50 & 
+#python python/SKFlat.py -a Presel -y 2018 -i VBFTypeI_OS_MuMu_M500 -n 50 & 
+#python python/SKFlat.py -a Presel -y 2018 -i VBFTypeI_OS_MuMu_M1200 -n 50 & 
+
 
 #################################################
 ### MC validation at gen, reco level
@@ -320,4 +347,3 @@
 #python python/SKFlat.py -a SampleValidation -y 2018 -i DYTypeI_SS_MuMu_M1200 -n 50 & 
 #python python/SKFlat.py -a SampleValidation -y 2018 -i VBFTypeI_SS_MuMu_M500 -n 50 & 
 #python python/SKFlat.py -a SampleValidation -y 2018 -i VBFTypeI_SS_MuMu_M1200 -n 50 & 
-#python python/SKFlat.py -a SampleValidation -y 2016 -i DYTypeI_SS_EE_M700 -n 50 &

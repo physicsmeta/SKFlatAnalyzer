@@ -1,12 +1,12 @@
-void plot_presel_mass(){
+void plot_mass(){
 
-ifstream in("list_presel_mass.txt");
+ifstream in("list_mass.txt");
 string line;
 
 while(getline(in,line)){
   istringstream is(line);
   TString this_line = line;
-  if(this_line.Contains("#")) continue;
+  if(this_line(0,1)=="#"||this_line=="") continue;
 
   TString sample, channel, var, title, this_xran1, this_yran, SaveAs;
   double xran1, xran2, yran;
