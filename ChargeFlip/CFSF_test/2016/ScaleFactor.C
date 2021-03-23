@@ -342,16 +342,16 @@ void ScaleFactor(TString id, TString EtaRegion, TString METcut, TString fit, int
   signalFcn_OS->SetParameters(par_OS);
   bkgFcn_OS->SetParameters(&par_OS[NsigPar]);
 
-	// If bkg < 0, then just omit the bkg fit.
-	if(bkgFcn_OS->Integral(MllLeft,MllRight) < 0){
-	  fitFcn_OS = signalFcn_OS;
-	  fitFcn_OS->SetLineColor(kGreen+1);
+  // If bkg < 0, then just omit the bkg fit.
+  if(bkgFcn_OS->Integral(MllLeft,MllRight) < 0){
+    fitFcn_OS = signalFcn_OS;
+    fitFcn_OS->SetLineColor(kGreen+1);
     gr_OS->Fit(fitFcn_OS,"IWR0");
     fitFcn_OS->Draw("same");
-	}
-	else{
+  }
+  else{
     fitFcn_OS->Draw("same");
-		bkgFcn_OS->Draw("same");
+    bkgFcn_OS->Draw("same");
   }
  
   // get needed strings to put in the textbox //
