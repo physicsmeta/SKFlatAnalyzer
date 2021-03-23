@@ -119,7 +119,7 @@ bool Muon::PassID(TString ID) const {
   if(ID=="HNLoose") return Pass_HNLoose();
   if(ID=="HNLooseV3") return Pass_HNLoose(0.4, 0.2, 0.5, 10.);
   if(ID=="HNTight") return Pass_HNTight();
-  if(ID=="HNTightV1") return Pass_HNTight(0.05, 0.05, 0.1, 3.);
+  if(ID=="HNTightV1") return Pass_HNTight(0.07, 0.05, 0.1, 3.);
   if(ID=="HNTightV2") return Pass_HNTightV2();
 
   if(ID=="ISRVeto") return Pass_ISRVeto(0.6);

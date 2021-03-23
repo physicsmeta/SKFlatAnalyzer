@@ -185,13 +185,7 @@ void Presel_2016H::executeEvent(){
 
 void Presel_2016H::executeEventFromParameter(AnalyzerParameter param){
 
-  vector<TString> channels;
-  if(IsDATA){
-    if(DataStream.Contains("DoubleMuon")) channels.push_back("dimu");
-    else if(DataStream.Contains("DoubleEG") || DataStream.Contains("EGamma")) channels.push_back("diel");
-    else if(DataStream.Contains("MuonEG")) channels.push_back("emu");
-  }
-  else channels = {"dimu", "diel", "emu"};
+  vector<TString> channels = {"dimu", "diel", "emu"};
   TString IDsuffix = "Run2";
   TString LepCategory = "TT";
   double cutflow_max = 10.;

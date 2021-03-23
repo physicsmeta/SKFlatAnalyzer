@@ -28,5 +28,10 @@
 #pragma link C++ class test_2016H+;
 #pragma link C++ class Presel+;
 #pragma link C++ class Presel_2016H+;
+#pragma link C++ class DY_CR+;
+#pragma link C++ class DY_CR_2016H+;
+#pragma link C++ class Control_rep+;
+#pragma link C++ class Control_rep_2016H+;
+#pragma link C++ class CFSF_test+;
 
 #endif

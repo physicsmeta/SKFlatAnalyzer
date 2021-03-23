@@ -172,13 +172,7 @@ void test_2016H::executeEvent(){
 
 void test_2016H::executeEventFromParameter(AnalyzerParameter param){
 
-  vector<TString> channels;
-  if(IsDATA){
-    if(DataStream.Contains("DoubleMuon")) channels.push_back("dimu");
-    else if(DataStream.Contains("DoubleEG") || DataStream.Contains("EGamma")) channels.push_back("diel");
-    else if(DataStream.Contains("MuonEG")) channels.push_back("emu");
-  }
-  else channels = {"dimu", "diel", "emu"};
+  vector<TString> channels = {"dimu", "diel", "emu"};
   vector<TString> regions = {"fakeCR1", "lowSR1", "lowCR1", "highSR1", "highCR1", "lowSR2", "lowCR2", "highSR2", "highCR2"}; 
   TString IDsuffix = "Run2";
   double cutflow_max = 18.;
