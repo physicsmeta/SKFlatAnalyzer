@@ -312,8 +312,8 @@ void Control_2016H::executeEventFromParameter(AnalyzerParameter param){
     ElectronID = param.Electron_Loose_ID;
   }
 
-  vector<Muon> muons = SelectMuons(this_AllMuons, MuonID, 10., 2.4);
-  vector<Muon> muons_veto = SelectMuons(this_AllMuons, param.Muon_Veto_ID, 10., 2.4);
+  vector<Muon> muons = SelectMuons(this_AllMuons, MuonID, 5., 2.4);
+  vector<Muon> muons_veto = SelectMuons(this_AllMuons, param.Muon_Veto_ID, 5., 2.4);
   vector<Electron> electrons = SelectElectrons(this_AllElectrons, ElectronID, 10., 2.5);
   vector<Electron> electrons_veto = SelectElectrons(this_AllElectrons, param.Electron_Veto_ID, 10., 2.5); //JH : lepton selection done
   vector<Jet> jets_nolepveto = SelectJets(this_AllJets, "tight", 20., 2.7); //JH : to reject bjets
@@ -541,7 +541,7 @@ void Control_2016H::executeEventFromParameter(AnalyzerParameter param){
       if(param.Muon_Tight_ID.Contains("HighPt")){
         if(ev.PassTrigger(MuonTriggersHighPt)){
           trigger_lumi = ev.GetTriggerLumi("Full");
-				}
+        }
       }
       else{
         if(ev.PassTrigger(MuonTriggers)){
@@ -599,7 +599,7 @@ void Control_2016H::executeEventFromParameter(AnalyzerParameter param){
 
       // Passing triggers & ptcut
       if(it_rg2==0||it_rg2==3){
-				if(muons.size()!=2) continue;
+        if(muons.size()!=2) continue;
         if(param.Muon_Tight_ID.Contains("HighPt")){
           if(!ev.PassTrigger(MuonTriggersHighPt)) continue;
         }
@@ -607,17 +607,17 @@ void Control_2016H::executeEventFromParameter(AnalyzerParameter param){
           if(!ev.PassTrigger(MuonTriggersH)) continue;
         }
         if(!(muons.at(0).Pt()>MuonPtCut1 && muons.at(1).Pt()>MuonPtCut2)) continue;
-			}
+      }
       if(it_rg2==1||it_rg2==4){
-				if(electrons.size()!=2) continue;
+        if(electrons.size()!=2) continue;
         if(!ev.PassTrigger(ElectronTriggers)) continue;
         if(!(electrons.at(0).Pt()>ElectronPtCut1 && electrons.at(1).Pt()>ElectronPtCut2)) continue;
-			}
+      }
       if(it_rg2==2||it_rg2==5){
-				if(!(muons.size()==1&&electrons.size()==1)) continue;
+        if(!(muons.size()==1&&electrons.size()==1)) continue;
         if(!ev.PassTrigger(EMuTriggersH)) continue;
         if(!(leptons.at(0)->Pt()>EMuPtCut1 && leptons.at(1)->Pt()>EMuPtCut2)) continue;
-			}
+      }
 
       weight = 1.;
       // weights for MC
@@ -770,10 +770,10 @@ void Control_2016H::executeEventFromParameter(AnalyzerParameter param){
           FillHist(regionsSM.at(it_rg2)+"/Mass100_MET_"+IDsuffix, MET, weight, 1000, 0., 1000.);
           FillHist(regionsSM.at(it_rg2)+"/Mass100_MET2ST_"+IDsuffix, MET2ST, weight, 1000, 0., 1000.);
 
-				}
+        }
 
       } //JH : DYmm, DYee, DYemu done
-			else{
+      else{
 
         if(!(jets.size()>1 && Nbjet_medium>0)) continue;
 
@@ -800,7 +800,7 @@ void Control_2016H::executeEventFromParameter(AnalyzerParameter param){
         FillHist(regionsSM.at(it_rg2)+"/Number_BJets_Medium_"+IDsuffix, Nbjet_medium, weight, 10, 0., 10.);
         FillHist(regionsSM.at(it_rg2)+"/Number_FatJets_"+IDsuffix, fatjets.size(), weight, 10, 0., 10.);
 
-			} //JH : TTmm, TTee, TTemu done
+      } //JH : TTmm, TTee, TTemu done
 
     } //JH : SM CR done
 
@@ -808,18 +808,28 @@ void Control_2016H::executeEventFromParameter(AnalyzerParameter param){
     //=====================================
     //==== WZ, ZG, WG control region
     //=====================================
-    if(HasFlag("WZ") && it_rg2>5 && it_rg2<9 && leptons.size()==3){ //JH : WZ, ZG, WG, 3 tight leptons
+    if(it_rg2>5 && it_rg2<9 && leptons.size()==3){ //JH : WZ, ZG, WG, 3 tight leptons
   
       // Passing triggers & ptcut
       if(muons.size() >= 2){
         if(IsDATA){ if(!isDoubleMuon) continue; }
         if(!ev.PassTrigger(MuonTriggersH)) continue; 
-        if(!(muons.at(0).Pt()>MuonPtCut1 && muons.at(1).Pt()>MuonPtCut2)) continue;
       }
       if(electrons.size() >= 2){
         if(IsDATA){ if(!isDoubleEG) continue; }
         if(!ev.PassTrigger(ElectronTriggers)) continue;
-        if(!(electrons.at(0).Pt()>ElectronPtCut1 && electrons.at(1).Pt()>ElectronPtCut2)) continue;
+      }
+      if(muons.size() == 3){
+        if(! (muons.at(0).Pt()>MuonPtCut1 && muons.at(1).Pt()>MuonPtCut2 && muons.at(2).Pt()>MuonPtCut2) ) continue;
+      }
+      if(muons.size()==2 && electrons.size()==1){
+        if(! (muons.at(0).Pt()>MuonPtCut1 && muons.at(1).Pt()>MuonPtCut2 && electrons.at(0).Pt()>ElectronPtCut2) ) continue;
+      }
+      if(muons.size()==1 && electrons.size()==2){
+        if(! (muons.at(0).Pt()>MuonPtCut2 && electrons.at(0).Pt()>ElectronPtCut1 && electrons.at(1).Pt()>ElectronPtCut2) ) continue;
+      }
+      if(electrons.size() == 3){
+        if(! (electrons.at(0).Pt()>ElectronPtCut1 && electrons.at(1).Pt()>ElectronPtCut2 && electrons.at(2).Pt()>ElectronPtCut2) ) continue;
       }
 
       weight = 1., trigger_lumi = 1., dimu_trig_weight = 0.;
@@ -827,14 +837,14 @@ void Control_2016H::executeEventFromParameter(AnalyzerParameter param){
       if(!IsDATA){
         if(DataYear==2016){
           if(muons.size() >= 2){
-						if(param.Muon_Tight_ID.Contains("HighPt")){
+            if(param.Muon_Tight_ID.Contains("HighPt")){
               trigger_lumi = ev.GetTriggerLumi("Full");
-						}
-						else{
+            }
+            else{
               if(ev.PassTrigger(MuonTriggers)) dimu_trig_weight += 27267.591;
               if(ev.PassTrigger(MuonTriggersH)) dimu_trig_weight += 8650.628;
               trigger_lumi = dimu_trig_weight;
-						}
+            }
           }
           if(electrons.size() >= 2) trigger_lumi = ev.GetTriggerLumi("Full");
         }
@@ -955,7 +965,7 @@ void Control_2016H::executeEventFromParameter(AnalyzerParameter param){
             if(fabs(ilep3-l1)>0 && fabs(ilep3-l2)>0) wlepWZ = ilep3; //JH : ilep3 != l1 nor l2
             if(fabs(ilep3-l3)>0 && fabs(ilep3-l4)>0) wlepWG = ilep3; //JH : ilep3 != l3 nor l4
           }
-          if(it_rg2 < 5) WtagLep = *leptons.at(wlepWZ); //JH : WZ, ZG
+          if(it_rg2 < 8) WtagLep = *leptons.at(wlepWZ); //JH : WZ, ZG
           else WtagLep = *leptons.at(wlepWG); //JH : WG
         }
         else continue;
@@ -1127,24 +1137,29 @@ void Control_2016H::executeEventFromParameter(AnalyzerParameter param){
     //=====================================
     //==== ZZ control region
     //=====================================
-    if(HasFlag("ZZ") && it_rg2==9 && leptons.size()==4){
+    if(it_rg2==9 && leptons.size()==4){
       if((muons.size()==1 && electrons.size()==3) || (muons.size()==3 && electrons.size()==1)) continue;
 
       // Passing triggers & ptcut
       if(muons.size() >= 2){
         if(IsDATA){ if(!isDoubleMuon) continue; }
-        if(!(muons.at(0).Pt()>MuonPtCut1 && muons.at(1).Pt()>MuonPtCut2)) continue;
-				if(param.Muon_Tight_ID.Contains("HighPt")){
+        if(muons.size() == 4){
+          if(!(muons.at(0).Pt()>MuonPtCut1 && muons.at(1).Pt()>MuonPtCut2 && muons.at(2).Pt()>MuonPtCut2 && muons.at(3).Pt()>MuonPtCut2)) continue;
+        }
+        else if(muons.size() == 2 && electrons.size() == 2){
+          if(!(muons.at(0).Pt()>MuonPtCut1 && muons.at(1).Pt()>MuonPtCut2 && electrons.at(0).Pt()>ElectronPtCut2 && electrons.at(1).Pt()>ElectronPtCut2)) continue;
+        }
+        if(param.Muon_Tight_ID.Contains("HighPt")){
           if(!ev.PassTrigger(MuonTriggersHighPt)) continue; 
-				}
-				else{
+        }
+        else{
           if(!ev.PassTrigger(MuonTriggersH)) continue; 
-				}
+        }
       }
       if(electrons.size() == 4){
         if(IsDATA){ if(!isDoubleEG) continue; }
         if(!ev.PassTrigger(ElectronTriggers)) continue;
-        if(!(electrons.at(0).Pt()>ElectronPtCut1 && electrons.at(1).Pt()>ElectronPtCut2)) continue;
+        if(!(electrons.at(0).Pt()>ElectronPtCut1 && electrons.at(1).Pt()>ElectronPtCut2 && electrons.at(2).Pt()>ElectronPtCut2 && electrons.at(3).Pt()>ElectronPtCut2)) continue;
       }
 
       weight = 1.;

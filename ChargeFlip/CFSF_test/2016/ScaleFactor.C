@@ -434,7 +434,7 @@ void ScaleFactor(TString id, TString EtaRegion, TString METcut, TString fit, int
   pt2->SetShadowColor(0);
   pt2->SetFillColor(0);
   pt2->AddText("SS_observed : "+SS2l_obs_t);
-  pt2->AddText("OS_weighted : "+OS2l_obs_t);
+  pt2->AddText("OS_predicted : "+OS2l_obs_t);
   pt2->AddText("SS_signalFit : "+SS2l_t);
   pt2->AddText("OS_signalFit : "+OS2l_t);
   pt2->AddText("SF : "+SF_t);

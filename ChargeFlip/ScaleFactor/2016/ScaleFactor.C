@@ -149,7 +149,7 @@ void ScaleFactor(TString id, TString EtaRegion, TString fit, int Syst = 0, TStri
   else if(fit=="BW_pol3"){
     fitFcn = new TF1("fitFcn",BW_pol3,MllLeft,MllRight,NtotPar);
     if(EtaRegion=="BB") fitFcn->SetParameters(312,7.,-90,-20,0.9,0.,0.); //optimized - chi2/ndf : 584.981/23, SF : 108.55%
-    else if(EtaRegion=="EE") fitFcn->SetParameters(3012.7,2.,-90,-439.,48.,40.,550.); //FIXME
+    else if(EtaRegion=="EE") fitFcn->SetParameters(32.7,2.,-90,-49.,4.,0.,50.); //FIXME
     else if(EtaRegion=="BE") fitFcn->SetParameters(412.7,7.,-90,11.,-0.7,0.,0.); //FIXME
 
     signalFcn = new TF1("signalFcn",BW,MllLeft,MllRight,NsigPar);
