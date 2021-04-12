@@ -33,5 +33,6 @@
 #pragma link C++ class Control_rep+;
 #pragma link C++ class Control_rep_2016H+;
 #pragma link C++ class CFSF_test+;
+#pragma link C++ class ttHTobb+;
 
 #endif

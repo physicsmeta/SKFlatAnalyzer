@@ -1,4 +1,4 @@
-void Fit(TString fitIB = "expo_invx", TString fitOB = "expo_invx", TString fitEC = "invx_only", TString scan = "y", TString zoom = "n", TString save = "n"){
+void Fit(TString fitIB = "expo_invx", TString fitOB = "expo_invx", TString fitEC = "invx_only", TString scan = "y", TString zoom = "n", TString save = "y"){
 TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/ChargeFlip/2016/CFrate__/ChargeFlip_All.root";
 TFile* f1 = new TFile(filename);
 
@@ -175,11 +175,11 @@ for(unsigned int i=0; i<User_ID.size(); i++){
 
   TLegend* gr1_legend = new TLegend(0.65,0.7,0.9,0.9);
   gr1_legend->AddEntry(gr1_fit1,"high pt","l");
-  gr1_legend->AddEntry((TObject*)0,"#chi^{2}/ndf : "+Chisquare1_1_t+"/"+ndf1_1_t,"");
+  //gr1_legend->AddEntry((TObject*)0,"#chi^{2}/ndf : "+Chisquare1_1_t+"/"+ndf1_1_t,"");
   gr1_legend->AddEntry(gr1_fit2,"medium pt","l");
-  gr1_legend->AddEntry((TObject*)0,"#chi^{2}/ndf : "+Chisquare1_2_t+"/"+ndf1_2_t,"");
+  //gr1_legend->AddEntry((TObject*)0,"#chi^{2}/ndf : "+Chisquare1_2_t+"/"+ndf1_2_t,"");
   gr1_legend->AddEntry(gr1_fit3,"low pt","l");
-  gr1_legend->AddEntry((TObject*)0,"#chi^{2}/ndf : "+Chisquare1_3_t+"/"+ndf1_3_t,"");
+  //gr1_legend->AddEntry((TObject*)0,"#chi^{2}/ndf : "+Chisquare1_3_t+"/"+ndf1_3_t,"");
   gr1_legend->Draw();
 
 
@@ -281,11 +281,11 @@ for(unsigned int i=0; i<User_ID.size(); i++){
 
   TLegend* gr2_legend = new TLegend(0.65,0.7,0.9,0.9);
   gr2_legend->AddEntry(gr2_fit1,"high pt","l");
-  gr2_legend->AddEntry((TObject*)0,"#chi^{2}/ndf : "+Chisquare2_1_t+"/"+ndf2_1_t,"");
+  //gr2_legend->AddEntry((TObject*)0,"#chi^{2}/ndf : "+Chisquare2_1_t+"/"+ndf2_1_t,"");
   gr2_legend->AddEntry(gr2_fit2,"medium pt","l");
-  gr2_legend->AddEntry((TObject*)0,"#chi^{2}/ndf : "+Chisquare2_2_t+"/"+ndf2_2_t,"");
+  //gr2_legend->AddEntry((TObject*)0,"#chi^{2}/ndf : "+Chisquare2_2_t+"/"+ndf2_2_t,"");
   gr2_legend->AddEntry(gr2_fit3,"low pt","l");
-  gr2_legend->AddEntry((TObject*)0,"#chi^{2}/ndf : "+Chisquare2_3_t+"/"+ndf2_3_t,"");
+  //gr2_legend->AddEntry((TObject*)0,"#chi^{2}/ndf : "+Chisquare2_3_t+"/"+ndf2_3_t,"");
   gr2_legend->Draw();
 
   
@@ -315,7 +315,7 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   if(fitEC == "invx_only"){
     gr3_fit1 = new TF1("gr3_fit1","[0]/(x+[1])+[2]",0.,0.04);
     gr3_fit1->SetLineWidth(2);
-    gr3_fit1->SetLineColor(kRed);
+    gr3_fit1->SetLineColor(kGreen);
   }
   else{
     if(fitEC == "pol1"){
@@ -391,13 +391,14 @@ for(unsigned int i=0; i<User_ID.size(); i++){
     TString rate3_t = Form("%.10f",rate3);
 
     // draw the textbox
-    TPaveText *pt3 = new TPaveText(0.55,0.8,0.9,0.9,"NDC");
-    pt3->SetShadowColor(0);
-    pt3->SetFillColor(0);
-    pt3->AddText("#chi^{2}/ndf : "+Chisquare3_t+"/"+ndf3_t);
-    pt3->AddText("Fit func : #frac{"+par3_0+"}{x"+par3_1+"}+"+par3_2);
-    pt3->AddText("CF rate at inf GeV : "+rate3_t);
-    pt3->Draw(); 
+    //TPaveText *pt3 = new TPaveText(0.55,0.8,0.9,0.9,"NDC");
+    //pt3->SetShadowColor(0);
+    //pt3->SetFillColor(0);
+    //pt3->AddText("#chi^{2}/ndf : "+Chisquare3_t+"/"+ndf3_t);
+    //if(par3[2] < 0) pt3->AddText("Fit func : #frac{"+par3_0+"}{x"+par3_1+"}"+par3_2);
+		//else pt3->AddText("Fit func : #frac{"+par3_0+"}{x"+par3_1+"}+"+par3_2);
+    //pt3->AddText("CF rate at inf GeV : "+rate3_t);
+    //pt3->Draw(); 
   }
   else{  
     TLegend* gr3_legend = new TLegend(0.75,0.8,0.9,0.9);
