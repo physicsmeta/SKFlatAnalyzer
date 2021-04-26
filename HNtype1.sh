@@ -25,6 +25,8 @@
 #python python/SKFlat.py -a Control -y 2016 -l submitList/Dilepton_VV_CR_2016.txt -n 50 --skim SkimTree_Dilepton --nmax 80 &
 #python python/SKFlat.py -a Control -y 2016 -l submitList/NoSkim_VV_CR.txt -n 50 --nmax 80 &
 
+python python/SKFlat.py -a Control -y 2016 -i ZGTo2LG -n 50 --skim SkimTree_Dilepton --nmax 80 &
+
 ### CF ###
 #python python/SKFlat.py -a Signal -y 2016 -l submitList/2016_DoubleEG_BtoH.txt -n 80 --skim SkimTree_Dilepton --userflags RunCF &
 
@@ -64,10 +66,12 @@
 #python python/SKFlat.py -a Control_rep_2016H -y 2016 -i DoubleMuon:H -n 50 --skim SkimTree_Dilepton --nmax 80 &
 #python python/SKFlat.py -a Control_rep -y 2016 -l submitList/2016_DoubleEG_BtoH.txt -n 50 --skim SkimTree_Dilepton --nmax 80 &
 
-python python/SKFlat.py -a Control_rep -y 2016 -l submitList/2016_DoubleMuon_BtoG.txt -n 50 --skim SkimTree_Dilepton --userflags RunFake --nmax 80 &
-python python/SKFlat.py -a Control_rep_2016H -y 2016 -i DoubleMuon:H -n 50 --skim SkimTree_Dilepton --userflags RunFake --nmax 80 &
-python python/SKFlat.py -a Control_rep -y 2016 -l submitList/2016_DoubleEG_BtoH.txt -n 50 --skim SkimTree_Dilepton --userflags RunFake --nmax 80 &
+#python python/SKFlat.py -a Control_rep -y 2016 -l submitList/2016_DoubleMuon_BtoG.txt -n 50 --skim SkimTree_Dilepton --userflags RunFake --nmax 80 &
+#python python/SKFlat.py -a Control_rep_2016H -y 2016 -i DoubleMuon:H -n 50 --skim SkimTree_Dilepton --userflags RunFake --nmax 80 &
+#python python/SKFlat.py -a Control_rep -y 2016 -l submitList/2016_DoubleEG_BtoH.txt -n 50 --skim SkimTree_Dilepton --userflags RunFake --nmax 80 &
 
+#python python/SKFlat.py -a Control_rep -y 2016 -l submitList/Dilepton_VV_CR_2016.txt -n 50 --skim SkimTree_Dilepton --nmax 80 &
+python python/SKFlat.py -a Control_rep -y 2016 -i ZGTo2LG -n 50 --skim SkimTree_Dilepton --nmax 80 &
 
 ####TEST####
 #python python/SKFlat.py -a Control_2016H -y 2016 -l submitList/2016_DoubleMuon_H.txt -n 50 --skim SkimTree_Dilepton --userflags WZ --nmax 80 &
