@@ -1,0 +1,2 @@
+# alias PD xsec nmc sumw
+ttHTobb	ttHTobb_M125_TuneCUETP8M2_ttHtranche3_13TeV-powheg-pythia8	0.2151	9965577	9757039
