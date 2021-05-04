@@ -466,8 +466,10 @@ void CFSF_test::executeEventFromParameter(AnalyzerParameter param, Long64_t Nent
   
     if(eles.size() != 2) return;
     //if(eles.at(0).Pt()<lep0ptcut||eles.at(1).Pt()<lep1ptcut) return; //No need already pt min = 25
-    
+
+    double MCweight = 1.; // JH : test how DY distribution change with MC weight
     if(!IsDATA && MCSample == "DYJets"){
+      MCweight *= ev.MCweight();
       vector<Gen> gens = GetGens();
       for(unsigned int i=0; i<eles.size(); i++){
         if(GetLeptonType(eles.at(i), gens)<=0 || GetLeptonType(eles.at(i), gens)>=4) return; // JH : To extract MC template
@@ -480,31 +482,32 @@ void CFSF_test::executeEventFromParameter(AnalyzerParameter param, Long64_t Nent
     // BB
     if(abs(eles.at(0).scEta())<1.4442&&abs(eles.at(1).scEta())<1.4442){
       if(eles.at(0).Charge()*eles.at(1).Charge()>0){
-        FillHist(param.Name+"/ScaleFactor/BB_ZMass_SS_MET0", ZCand.M(), 1., NBin, MllLeft, MllRight);
+        FillHist(param.Name+"/ScaleFactor/BB_ZMass_SS_MET0", ZCand.M(), MCweight, NBin, MllLeft, MllRight);
       }
-      if(eles.at(0).Charge()*eles.at(1).Charge()<0){
-        FillHist(param.Name+"/ScaleFactor/BB_ZMass_OS_MET0", ZCand.M(), 1., NBin, MllLeft, MllRight);
-      }
+      //if(eles.at(0).Charge()*eles.at(1).Charge()<0){
+      //  FillHist(param.Name+"/ScaleFactor/BB_ZMass_OS_MET0", ZCand.M(), 1., NBin, MllLeft, MllRight);
+      //}
     }
     // BE
     if((abs(eles.at(0).scEta())<1.4442&&abs(eles.at(1).scEta())>=1.556)||(abs(eles.at(0).scEta())>=1.556&&abs(eles.at(1).scEta())<1.4442)){
       if(eles.at(0).Charge()*eles.at(1).Charge()>0){
-        FillHist(param.Name+"/ScaleFactor/BE_ZMass_SS_MET0", ZCand.M(), 1., NBin, MllLeft, MllRight);
+        FillHist(param.Name+"/ScaleFactor/BE_ZMass_SS_MET0", ZCand.M(), MCweight, NBin, MllLeft, MllRight);
       }
-      if(eles.at(0).Charge()*eles.at(1).Charge()<0){
-        FillHist(param.Name+"/ScaleFactor/BE_ZMass_OS_MET0", ZCand.M(), 1., NBin, MllLeft, MllRight);
-      }
+      //if(eles.at(0).Charge()*eles.at(1).Charge()<0){
+      //  FillHist(param.Name+"/ScaleFactor/BE_ZMass_OS_MET0", ZCand.M(), 1., NBin, MllLeft, MllRight);
+      //}
     }
     // EE
     if(abs(eles.at(0).scEta())>=1.556&&abs(eles.at(1).scEta())>=1.556){
       if(eles.at(0).Charge()*eles.at(1).Charge()>0){
-        FillHist(param.Name+"/ScaleFactor/EE_ZMass_SS_MET0", ZCand.M(), 1., NBin, MllLeft, MllRight);
+        FillHist(param.Name+"/ScaleFactor/EE_ZMass_SS_MET0", ZCand.M(), MCweight, NBin, MllLeft, MllRight);
       }
-      if(eles.at(0).Charge()*eles.at(1).Charge()<0){
-        FillHist(param.Name+"/ScaleFactor/EE_ZMass_OS_MET0", ZCand.M(), 1., NBin, MllLeft, MllRight);
-      }
+      //if(eles.at(0).Charge()*eles.at(1).Charge()<0){
+      //  FillHist(param.Name+"/ScaleFactor/EE_ZMass_OS_MET0", ZCand.M(), 1., NBin, MllLeft, MllRight);
+      //}
     }
- 
+
+/*  
     if(METv.Pt() < 50){
       // BB
       if(abs(eles.at(0).scEta())<1.4442&&abs(eles.at(1).scEta())<1.4442){
@@ -534,7 +537,8 @@ void CFSF_test::executeEventFromParameter(AnalyzerParameter param, Long64_t Nent
         }
       }
     }
-  
+*/  
+
     /* Now let's shift the electrons' energy X% */
     
     vector<Electron> eles_shifted = eles; // copy the vector
@@ -558,24 +562,9 @@ void CFSF_test::executeEventFromParameter(AnalyzerParameter param, Long64_t Nent
   
     Particle ZCand_shifted = eles_shifted.at(0) + eles_shifted.at(1);
     double weight_shifted = GetCFweight(eles_shifted, param.Electron_User_ID, false, 0.);
-    //double weight_shifted_SF = GetCFweight(eles_shifted, param.Electron_User_ID, true, 0.);
-    //double weight_shifted_SF_BWexpo_BWexpo = 0.;
-    //double weight_shifted_SF_BWexpo_gauspol3 = 0.;
-    //double weight_shifted_SF_gauspol3_BWexpo = 0.;
-    //double weight_shifted_SF_gauspol3_gauspol3 = 0.;
-    //if(DataYear==2016){
-    //  weight_shifted_SF_BWexpo_gauspol3 = GetCFweight(eles_shifted, param.Electron_User_ID, true, "BW_expo", "gaus_pol3");
-    //  weight_shifted_SF_gauspol3_gauspol3 = GetCFweight(eles_shifted, param.Electron_User_ID, true, "gaus_pol3", "gaus_pol3");
-    //}
-    //if(DataYear==2017){
-    //  weight_shifted_SF_BWexpo_BWexpo = GetCFweight(eles_shifted, param.Electron_User_ID, true, "BW_expo", "BW_expo");
-    //  weight_shifted_SF_BWexpo_gauspol3 = GetCFweight(eles_shifted, param.Electron_User_ID, true, "BW_expo", "gaus_pol3");
-    //  weight_shifted_SF_gauspol3_BWexpo = GetCFweight(eles_shifted, param.Electron_User_ID, true, "gaus_pol3", "BW_expo");
-    //  weight_shifted_SF_gauspol3_gauspol3 = GetCFweight(eles_shifted, param.Electron_User_ID, true, "gaus_pol3", "gaus_pol3");
-    //}
-    //if(DataYear==2018){
-    //  weight_shifted_SF_gauspol3_gauspol3 = GetCFweight(eles_shifted, param.Electron_User_ID, true, "gaus_pol3", "gaus_pol3");
-    //}
+    double weight_shifted_SF = GetCFweight(eles_shifted, param.Electron_User_ID, true, 0.);
+    weight_shifted *= MCweight;
+    weight_shifted_SF *= MCweight;
   
     Particle METv_shifted;
     METv_shifted.SetPxPyPzE(METv.Px()+ZCand.Px()-ZCand_shifted.Px(),METv.Py()+ZCand.Py()-ZCand_shifted.Py(),0,METv.E()+ZCand.E()-ZCand_shifted.E());
@@ -591,20 +580,7 @@ void CFSF_test::executeEventFromParameter(AnalyzerParameter param, Long64_t Nent
     
         // BE
         if((abs(eles_shifted.at(0).scEta())<1.4442&&abs(eles_shifted.at(1).scEta())>=1.556)||(abs(eles_shifted.at(0).scEta())>=1.556&&abs(eles_shifted.at(1).scEta())<1.4442)){
-          //FillHist(param.Name+"/ScaleFactor/BE_ZMass_OS_CFSF_weighted_shifted_"+X_string, ZCand_shifted.M(), weight_shifted_SF, NBin, MllLeft, MllRight);
-          //if(DataYear==2016){
-          //  FillHist(param.Name+"/ScaleFactor/BE_ZMass_OS_CFSF_BWexpo_gauspol3_weighted_shifted_"+X_string, ZCand_shifted.M(), weight_shifted_SF_BWexpo_gauspol3, NBin, MllLeft, MllRight);
-          //  FillHist(param.Name+"/ScaleFactor/BE_ZMass_OS_CFSF_gauspol3_gauspol3_weighted_shifted_"+X_string, ZCand_shifted.M(), weight_shifted_SF_gauspol3_gauspol3, NBin, MllLeft, MllRight);
-          //}
-          //else if(DataYear==2017){
-          //  FillHist(param.Name+"/ScaleFactor/BE_ZMass_OS_CFSF_BWexpo_BWexpo_weighted_shifted_"+X_string, ZCand_shifted.M(), weight_shifted_SF_BWexpo_BWexpo, NBin, MllLeft, MllRight);
-          //  FillHist(param.Name+"/ScaleFactor/BE_ZMass_OS_CFSF_BWexpo_gauspol3_weighted_shifted_"+X_string, ZCand_shifted.M(), weight_shifted_SF_BWexpo_gauspol3, NBin, MllLeft, MllRight);
-          //  FillHist(param.Name+"/ScaleFactor/BE_ZMass_OS_CFSF_gauspol3_BWexpo_weighted_shifted_"+X_string, ZCand_shifted.M(), weight_shifted_SF_gauspol3_BWexpo, NBin, MllLeft, MllRight);
-          //  FillHist(param.Name+"/ScaleFactor/BE_ZMass_OS_CFSF_gauspol3_gauspol3_weighted_shifted_"+X_string, ZCand_shifted.M(), weight_shifted_SF_gauspol3_gauspol3, NBin, MllLeft, MllRight);
-          //}
-          //if(DataYear==2018){
-          //  FillHist(param.Name+"/ScaleFactor/BE_ZMass_OS_CFSF_gauspol3_gauspol3_weighted_shifted_"+X_string, ZCand_shifted.M(), weight_shifted_SF_gauspol3_gauspol3, NBin, MllLeft, MllRight);
-          //}
+          FillHist(param.Name+"/ScaleFactor/BE_ZMass_OS_CFSFweighted_shifted_"+X_string, ZCand_shifted.M(), weight_shifted_SF, NBin, MllLeft, MllRight);
         }
     
         // EE

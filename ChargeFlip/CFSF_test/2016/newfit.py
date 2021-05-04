@@ -4,7 +4,7 @@ rt.gROOT.LoadMacro('./histFitter.C+')
 #rt.gROOT.LoadMacro('./RooCMSShape.cc+')
 from ROOT import tnpFitter
 
-channels = ["BB","EE"]
+channels = ["BB","EE","BE"]
 
 for channel in channels:
 
@@ -27,7 +27,10 @@ for channel in channels:
   this_workspace.extend(funcs)
   
   infile = rt.TFile("CFSF_test_DoubleEG.root", "read")
-  hOS = infile.Get("HNTightV1/ScaleFactor/"+channel+"_ZMass_OS_CFweighted_shifted_1.0%")
+  if channel == "BE":
+    hOS = infile.Get("HNTightV1/ScaleFactor/"+channel+"_ZMass_OS_CFSF_weighted_shifted_1.0%")
+  else:
+    hOS = infile.Get("HNTightV1/ScaleFactor/"+channel+"_ZMass_OS_CFweighted_shifted_1.0%")
   hSS = infile.Get("HNTightV1/ScaleFactor/"+channel+"_ZMass_SS_MET0")
   fitter = tnpFitter( hOS, hSS, "myhist_"+channel )
   infile.Close()
@@ -37,7 +40,10 @@ for channel in channels:
   fitter.setOutputFile( rootfile )
   
   fileTruth  = rt.TFile("CFSF_test_DYJets.root",'read')
-  histZLineShapeOS = fileTruth.Get("HNTightV1/ScaleFactor/"+channel+"_ZMass_OS_CFweighted_shifted_1.0%")
+  if channel == "BE":
+    histZLineShapeOS = fileTruth.Get("HNTightV1/ScaleFactor/"+channel+"_ZMass_OS_CFSF_weighted_shifted_1.0%")
+  else:
+    histZLineShapeOS = fileTruth.Get("HNTightV1/ScaleFactor/"+channel+"_ZMass_OS_CFweighted_shifted_1.0%")
   histZLineShapeSS = fileTruth.Get("HNTightV1/ScaleFactor/"+channel+"_ZMass_SS_MET0")
   fitter.setZLineShapes(histZLineShapeOS,histZLineShapeSS)
   
@@ -50,4 +56,5 @@ for channel in channels:
   
   title = "mytitle_"+channel
   fitter.fits(False,title)
+  print "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
   rootfile.Close()

@@ -1800,10 +1800,10 @@ double AnalyzerCore::GetCFweight(vector<Electron> eles, TString id, bool applySF
     if(applySF){
       if(DataYear==2016){
         if(fabs(eles.at(i).scEta()) < 1.479){
-          if(id == "HNTightV1") sf.push_back(0.68164 + syst*0.);
+          if(id == "HNTightV1") sf.push_back(0.9310 + syst*0.);
         }
         else{
-          if(id == "HNTightV1") sf.push_back(0.83324 + syst*0.);
+          if(id == "HNTightV1") sf.push_back(1.0760 + syst*0.);
         }
       }
     }
