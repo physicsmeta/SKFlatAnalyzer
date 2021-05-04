@@ -1806,6 +1806,7 @@ double AnalyzerCore::GetCFweight(vector<Electron> eles, TString id, bool applySF
           if(id == "HNTightV1") sf.push_back(1.0760 + syst*0.);
         }
       }
+      else sf.push_back(1.);
     }
     else sf.push_back(1.);
 
