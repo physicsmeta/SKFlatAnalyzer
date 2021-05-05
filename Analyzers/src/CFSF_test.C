@@ -468,7 +468,7 @@ void CFSF_test::executeEventFromParameter(AnalyzerParameter param, Long64_t Nent
     //if(eles.at(0).Pt()<lep0ptcut||eles.at(1).Pt()<lep1ptcut) return; //No need already pt min = 25
 
     double MCweight = 1.; // JH : test how DY distribution change with MC weight
-    if(!IsDATA && MCSample == "DYJets"){
+    if(!IsDATA && MCSample.Contains("DYJets")){
       MCweight *= ev.MCweight();
       vector<Gen> gens = GetGens();
       for(unsigned int i=0; i<eles.size(); i++){
@@ -580,6 +580,7 @@ void CFSF_test::executeEventFromParameter(AnalyzerParameter param, Long64_t Nent
     
         // BE
         if((abs(eles_shifted.at(0).scEta())<1.4442&&abs(eles_shifted.at(1).scEta())>=1.556)||(abs(eles_shifted.at(0).scEta())>=1.556&&abs(eles_shifted.at(1).scEta())<1.4442)){
+          FillHist(param.Name+"/ScaleFactor/BE_ZMass_OS_CFweighted_shifted_"+X_string, ZCand_shifted.M(), weight_shifted, NBin, MllLeft, MllRight);
           FillHist(param.Name+"/ScaleFactor/BE_ZMass_OS_CFSFweighted_shifted_"+X_string, ZCand_shifted.M(), weight_shifted_SF, NBin, MllLeft, MllRight);
         }
     

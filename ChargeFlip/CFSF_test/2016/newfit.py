@@ -3,8 +3,9 @@ rt.gROOT.LoadMacro('./histFitter.C+')
 #rt.gROOT.LoadMacro('./RooCBExGaussShape.cc+')
 #rt.gROOT.LoadMacro('./RooCMSShape.cc+')
 from ROOT import tnpFitter
+import time
 
-channels = ["BB","EE","BE"]
+channels = ["BB","EE"]
 
 for channel in channels:
 
@@ -16,8 +17,10 @@ for channel in channels:
       ]
   
   pars = [
+      #"meanOS[-0.0,-5.0,5.0]","sigmaOS[0.9,0.5,5.0]",
+      #"meanSS[-0.0,-5.0,5.0]","sigmaSS[0.9,0.5,5.0]",
       "meanOS[-0.0,-5.0,5.0]","sigmaOS[0.9,0.5,5.0]",
-      "meanSS[-0.0,-5.0,5.0]","sigmaSS[0.9,0.5,5.0]",
+      "meanSS[-0.0,-5.0,5.0]","sigmaSS[3.]",
       "acmsOS[60.,50.,80.]","betaOS[0.05,0.01,0.08]","gammaOS[0.1, -2, 2]","peakOS[90.0]",
       "acmsSS[60.,50.,80.]","betaSS[0.05,0.01,0.08]","gammaSS[0.1, -2, 2]","peakSS[90.0]",
       ]
@@ -39,7 +42,9 @@ for channel in channels:
   rootfile = rt.TFile("newfit.root",'update')
   fitter.setOutputFile( rootfile )
   
-  fileTruth  = rt.TFile("CFSF_test_DYJets.root",'read')
+  fileTruth  = rt.TFile("CFSF_test_DYJets_MG.root",'read')
+  #fileTruth  = rt.TFile("CFSF_test_DYJets.root",'read')
+  #fileTruth  = rt.TFile("CFSF_test_DYJets_noMCweight.root",'read')
   if channel == "BE":
     histZLineShapeOS = fileTruth.Get("HNTightV1/ScaleFactor/"+channel+"_ZMass_OS_CFSF_weighted_shifted_1.0%")
   else:
@@ -57,4 +62,7 @@ for channel in channels:
   title = "mytitle_"+channel
   fitter.fits(False,title)
   print "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  time.sleep(2)
   rootfile.Close()
+
+print "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
