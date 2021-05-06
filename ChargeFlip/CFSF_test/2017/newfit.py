@@ -19,8 +19,6 @@ for channel in channels:
   pars = [
       "meanOS[-0.0,-5.0,5.0]","sigmaOS[0.9,0.5,5.0]",
       "meanSS[-0.0,-5.0,5.0]","sigmaSS[0.9,0.5,5.0]",
-      #"meanOS[-0.0,-5.0,5.0]","sigmaOS[0.9,0.5,5.0]",
-      #"meanSS[-0.0,-5.0,5.0]","sigmaSS[3.]",
       "acmsOS[60.,50.,80.]","betaOS[0.05,0.01,0.08]","gammaOS[0.1, -2, 2]","peakOS[90.0]",
       "acmsSS[60.,50.,80.]","betaSS[0.05,0.01,0.08]","gammaSS[0.1, -2, 2]","peakSS[90.0]",
       ]

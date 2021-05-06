@@ -285,17 +285,17 @@
 #python python/SKFlat.py -a ChargeFlip -y 2017 -i DoubleEG -n 50 --userflags ScaleFactor --nmax 20 &
 #python python/SKFlat.py -a ChargeFlip -y 2018 -i EGamma -n 50 --userflags ScaleFactor --nmax 20 &
 
-#python python/SKFlat.py -a CFSF_test -y 2016 -i DoubleEG -n 50 --userflags ScaleFactor --nmax 80 &
-#python python/SKFlat.py -a CFSF_test -y 2017 -i DoubleEG -n 50 --userflags ScaleFactor --nmax 100 &
-python python/SKFlat.py -a CFSF_test -y 2018 -i EGamma -n 50 --userflags ScaleFactor --nmax 200 &
+#python python/SKFlat.py -a CFSF_test -y 2016 -i DoubleEG -n 50 --userflags ScaleFactor --nmax 350 &
+python python/SKFlat.py -a CFSF_test -y 2017 -i DoubleEG -n 50 --userflags ScaleFactor --nmax 300 &
+#python python/SKFlat.py -a CFSF_test -y 2018 -i EGamma -n 50 --userflags ScaleFactor --nmax 200 &
 
 #python python/SKFlat.py -a CFSF_test -y 2016 -i DYJets -n 50 --userflags ScaleFactor --nmax 200 &
 #python python/SKFlat.py -a CFSF_test -y 2017 -i DYJets -n 50 --userflags ScaleFactor --nmax 200 &
-#python python/SKFlat.py -a CFSF_test -y 2018 -i DYJets -n 50 --userflags ScaleFactor --nmax 200 &
+python python/SKFlat.py -a CFSF_test -y 2018 -i DYJets -n 50 --userflags ScaleFactor --nmax 300 &
 
-python python/SKFlat.py -a CFSF_test -y 2016 -i DYJets_MG -n 50 --userflags ScaleFactor --nmax 200 &
-python python/SKFlat.py -a CFSF_test -y 2017 -i DYJets_MG -n 50 --userflags ScaleFactor --nmax 200 &
-python python/SKFlat.py -a CFSF_test -y 2018 -i DYJets_MG -n 50 --userflags ScaleFactor --nmax 200 &
+#python python/SKFlat.py -a CFSF_test -y 2016 -i DYJets_MG -n 300 --userflags ScaleFactor --nmax 300 &
+python python/SKFlat.py -a CFSF_test -y 2017 -i DYJets_MG -n 50 --userflags ScaleFactor --nmax 300 &
+#python python/SKFlat.py -a CFSF_test -y 2018 -i DYJets_MG -n 50 --userflags ScaleFactor --nmax 200 &
 
 #python python/SKFlat.py -a CFSF_test -y 2016 -i ZGTo2LG -n 50 --userflags ScaleFactor --nmax 80 &
 #python python/SKFlat.py -a CFSF_test -y 2017 -i ZGToLLG_01J -n 50 --userflags ScaleFactor --nmax 80 &
