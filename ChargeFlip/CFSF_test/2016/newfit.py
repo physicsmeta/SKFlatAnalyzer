@@ -5,9 +5,14 @@ rt.gROOT.LoadMacro('./histFitter.C+')
 from ROOT import tnpFitter
 import time
 
-channels = ["BB","EE","BE"]
+channels = ["BB","EE"]
 
 for channel in channels:
+
+  fileTruth  = rt.TFile("CFSF_test_DYJets_MG_All.root",'read')
+  #fileTruth  = rt.TFile("CFSF_test_DYJets_All.root",'read')
+  #fileTruth  = rt.TFile("CFSF_test_DYJets_MG.root",'read')
+  #fileTruth  = rt.TFile("CFSF_test_DYJets.root",'read')
 
   funcs = [
       "Gaussian::sigResPass(x,meanOS,sigmaOS)",
@@ -15,15 +20,42 @@ for channel in channels:
       "RooCMSShape::bkgPass(x, acmsOS, betaOS, gammaOS, peakOS)",
       "RooCMSShape::bkgFail(x, acmsSS, betaSS, gammaSS, peakSS)",
       ]
-  
-  pars = [
-      "meanOS[-0.0,-5.0,5.0]","sigmaOS[0.9,0.5,5.0]",
-      "meanSS[-0.0,-5.0,5.0]","sigmaSS[0.9,0.5,5.0]",
-      #"meanOS[-0.0,-5.0,5.0]","sigmaOS[0.9,0.5,5.0]",
-      #"meanSS[-0.0,-5.0,5.0]","sigmaSS[3.]",
-      "acmsOS[60.,50.,80.]","betaOS[0.05,0.01,0.08]","gammaOS[0.1, -2, 2]","peakOS[90.0]",
-      "acmsSS[60.,50.,80.]","betaSS[0.05,0.01,0.08]","gammaSS[0.1, -2, 2]","peakSS[90.0]",
-      ]
+ 
+  if fileTruth.GetName() == "CFSF_test_DYJets_All.root" and channel == "BB":
+    pars = [
+        "meanOS[-0.0,-5.0,5.0]","sigmaOS[0.9,0.5,5.0]",
+        "meanSS[-0.0,-5.0,5.0]","sigmaSS[0.9,0.5,5.0]",
+        "acmsOS[60.,50.,80.]","betaOS[0.05,0.01,0.08]","gammaOS[0.1, -2, 2]","peakOS[90.0]",
+        "acmsSS[60.,50.,80.]","betaSS[0.05,0.01,0.08]","gammaSS[0., -2, 0.04]","peakSS[90.0]",
+        ]
+  elif fileTruth.GetName() == "CFSF_test_DYJets_All.root" and channel == "EE":
+    pars = [
+        "meanOS[-0.0,-5.0,5.0]","sigmaOS[0.9,0.5,5.0]",
+        "meanSS[-0.0,-5.0,5.0]","sigmaSS[0.9,0.5,5.0]",
+        "acmsOS[60.,50.,80.]","betaOS[0.05,0.01,0.08]","gammaOS[0.1, -2, 0.2]","peakOS[90.0]",
+        "acmsSS[60.,50.,80.]","betaSS[0.05,0.01,0.08]","gammaSS[0., -2, 0.04]","peakSS[90.0]",
+        ]
+  elif fileTruth.GetName() == "CFSF_test_DYJets_MG_All.root" and channel == "BB":
+    pars = [
+        "meanOS[-0.0,-5.0,5.0]","sigmaOS[0.9,0.5,5.0]",
+        "meanSS[-0.0,-5.0,5.0]","sigmaSS[0.9,0.5,5.0]",
+        "acmsOS[60.,50.,80.]","betaOS[0.04,0.01,0.07]","gammaOS[0.1, 0.08, 2]","peakOS[90.0]",
+        "acmsSS[60.,50.,80.]","betaSS[0.05,0.01,0.08]","gammaSS[0.1, -2, 2]","peakSS[90.0]",
+        ]
+  elif fileTruth.GetName() == "CFSF_test_DYJets_MG_All.root" and channel == "EE":
+    pars = [
+        "meanOS[-0.0,-5.0,5.0]","sigmaOS[0.9,0.5,5.0]",
+        "meanSS[-0.0,-5.0,5.0]","sigmaSS[0.9,0.5,5.0]",
+        "acmsOS[60.,50.,80.]","betaOS[0.04,0.01,0.07]","gammaOS[0.1, 0.08, 2]","peakOS[90.0]",
+        "acmsSS[60.,50.,80.]","betaSS[0.02,0.01,0.06]","gammaSS[0.1, -2, 2]","peakSS[90.0]",
+        ]
+  else:
+    pars = [
+        "meanOS[-0.0,-5.0,5.0]","sigmaOS[0.9,0.5,5.0]",
+        "meanSS[-0.0,-5.0,5.0]","sigmaSS[0.9,0.5,5.0]",
+        "acmsOS[60.,50.,80.]","betaOS[0.05,0.01,0.08]","gammaOS[0.1, -2, 2]","peakOS[90.0]",
+        "acmsSS[60.,50.,80.]","betaSS[0.05,0.01,0.08]","gammaSS[0.1, -2, 2]","peakSS[90.0]",
+        ]
   
   this_workspace = []
   this_workspace.extend(pars)
@@ -42,9 +74,6 @@ for channel in channels:
   rootfile = rt.TFile("newfit.root",'update')
   fitter.setOutputFile( rootfile )
   
-  fileTruth  = rt.TFile("CFSF_test_DYJets_MG.root",'read')
-  #fileTruth  = rt.TFile("CFSF_test_DYJets.root",'read')
-  #fileTruth  = rt.TFile("CFSF_test_DYJets_noMCweight.root",'read')
   if channel == "BE":
     histZLineShapeOS = fileTruth.Get("HNTightV1/ScaleFactor/"+channel+"_ZMass_OS_CFSFweighted_shifted_1.0%")
   else:
