@@ -5,12 +5,12 @@ rt.gROOT.LoadMacro('./histFitter.C+')
 from ROOT import tnpFitter
 import time
 
-channels = ["BB","EE"]
+channels = ["BE"]
 
 for channel in channels:
 
-  #fileTruth  = rt.TFile("CFSF_test_DYJets_All.root",'read')
-  fileTruth  = rt.TFile("CFSF_test_DYJets_MG_All.root",'read')
+  fileTruth  = rt.TFile("CFSF_test_DYJets_All.root",'read')
+  #fileTruth  = rt.TFile("CFSF_test_DYJets_MG_All.root",'read')
   #fileTruth  = rt.TFile("CFSF_test_DYJets_MG.root",'read')
   #fileTruth  = rt.TFile("CFSF_test_DYJets.root",'read')
 
@@ -21,19 +21,37 @@ for channel in channels:
       "RooCMSShape::bkgFail(x, acmsSS, betaSS, gammaSS, peakSS)",
       ]
 
-  if channel == "BB" and fileTruth.GetName() == "CFSF_test_DYJets_All.root":
+  if fileTruth.GetName() == "CFSF_test_DYJets_All.root" and channel == "BB":
     pars = [
         "meanOS[-0.0,-5.0,5.0]","sigmaOS[0.9,0.5,5.0]",
         "meanSS[-0.0,-5.0,5.0]","sigmaSS[0.9,0.5,5.0]",
         "acmsOS[60.,50.,80.]","betaOS[0.05,0.01,0.08]","gammaOS[0.1, -2, 2]","peakOS[90.0]",
         "acmsSS[60.,50.,80.]","betaSS[0.05,0.01,0.08]","gammaSS[0.1, 0.05, 2]","peakSS[90.0]",
         ]
-  elif channel == "BB" and fileTruth.GetName() == "CFSF_test_DYJets_MG_All.root":
+  elif fileTruth.GetName() == "CFSF_test_DYJets_MG_All.root" and channel == "BB":
     pars = [
         "meanOS[-0.0,-5.0,5.0]","sigmaOS[0.9,0.5,5.0]",
         "meanSS[-0.0,-5.0,5.0]","sigmaSS[0.9,0.5,5.0]",
         "acmsOS[60.,50.,80.]","betaOS[0.05,0.01,0.08]","gammaOS[0.1, -2, 2]","peakOS[90.0]",
         "acmsSS[60.,50.,80.]","betaSS[0.05,0.01,0.08]","gammaSS[0.1, 0.05, 2]","peakSS[90.0]",
+        ]
+  elif fileTruth.GetName() == "CFSF_test_DYJets_All.root" and channel == "BE":
+    pars = [
+        "meanOS[-0.0,-5.0,5.0]","sigmaOS[0.9,0.5,5.0]",
+        "meanSS[-0.0,-5.0,5.0]","sigmaSS[0.9,0.5,5.0]",
+        "acmsOS[60.,50.,80.]","betaOS[0.05,0.01,0.08]","gammaOS[0.1, -2, 2]","peakOS[90.0]",
+        "acmsSS[60.,50.,80.]","betaSS[0.05,0.01,0.08]","gammaSS[0.1, -2, 2]","peakSS[90.0,80.0,110.0]", # This gives 93.04% agreement
+        #"acmsSS[60.,50.,80.]","betaSS[0.01,0.,2.0]","gammaSS[2.0, 0.15, 5.0]","peakSS[90.0,80.0,110.0]", # This gives 98.8% agreement; sllllightly better to describe the peak
+        ]
+  elif fileTruth.GetName() == "CFSF_test_DYJets_MG_All.root" and channel == "BE":
+    pars = [
+        "meanOS[-0.0,-5.0,5.0]","sigmaOS[0.9,0.5,5.0]",
+        "meanSS[-0.0,-5.0,5.0]","sigmaSS[0.9,0.5,5.0]",
+        "acmsOS[60.,50.,80.]","betaOS[0.05,0.01,0.08]","gammaOS[0.1, -2, 2]","peakOS[90.0]",
+        #"acmsSS[60.,50.,80.]","betaSS[0.05,0.01,0.08]","gammaSS[0.1, -2, 2]","peakSS[90.0]", # default : 92.73%
+        "acmsSS[60.,50.,80.]","betaSS[0.05,0.01,0.08]","gammaSS[0.1, -2, 2]","peakSS[90.0,80.0,110.0]", # This gives 92.69% agreement
+        #"acmsSS[60.,50.,80.]","betaSS[0.01,0.,2.0]","gammaSS[2.0, 0.1, 5.0]","peakSS[90.0,80.0,110.0]", # This gives 94.12% agreement
+        #"acmsSS[60.,50.,80.]","betaSS[0.01,0.,2.0]","gammaSS[2.0, 0.15, 5.0]","peakSS[90.0,80.0,110.0]", # This gives 101.51% agreement; better to describe the peak
         ]
   else:
     pars = [
@@ -77,7 +95,6 @@ for channel in channels:
   title = "mytitle_"+channel
   fitter.fits(False,title)
   print "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-  time.sleep(2)
   rootfile.Close()
 
 print "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"

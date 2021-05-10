@@ -9,10 +9,8 @@ channels = ["BB","EE"]
 
 for channel in channels:
 
-  #fileTruth  = rt.TFile("CFSF_test_DYJets_MG_All.root",'read')
-  #fileTruth  = rt.TFile("CFSF_test_DYJets_MG.root",'read')
-  #fileTruth  = rt.TFile("CFSF_test_DYJets.root",'read')
-  fileTruth  = rt.TFile("CFSF_test_DYJets_All.root",'read')
+  fileTruth  = rt.TFile("CFSF_test_DYJets_MG_All.root",'read')
+  #fileTruth  = rt.TFile("CFSF_test_DYJets_All.root",'read')
 
   funcs = [
       "Gaussian::sigResPass(x,meanOS,sigmaOS)",
@@ -21,12 +19,47 @@ for channel in channels:
       "RooCMSShape::bkgFail(x, acmsSS, betaSS, gammaSS, peakSS)",
       ]
  
-  if channel == "BB" and fileTruth.GetName() == 'CFSF_test_DYJets_All.root':
+  if fileTruth.GetName() == 'CFSF_test_DYJets_MG_All.root' and channel == "BB":
+    pars = [
+        "meanOS[-0.0,-5.0,5.0]","sigmaOS[0.9,0.5,5.0]",
+        "meanSS[-0.0,-5.0,5.0]","sigmaSS[0.9,0.5,5.0]",
+        "acmsOS[60.,50.,80.]","betaOS[0.05,0.01,0.08]","gammaOS[0.1, -2, 2]","peakOS[90.0]",
+        "acmsSS[60.,50.,80.]","betaSS[0.5,0.01,2]","gammaSS[0.1, -2, 2]","peakSS[90.0,80.0,110.0]",
+        ]
+  elif fileTruth.GetName() == 'CFSF_test_DYJets_All.root' and channel == "BB":
     pars = [
         "meanOS[-0.0,-5.0,5.0]","sigmaOS[0.9,0.5,5.0]",
         "meanSS[-0.0,-5.0,5.0]","sigmaSS[0.9,0.5,5.0]",
         "acmsOS[60.,50.,80.]","betaOS[0.05,0.01,0.08]","gammaOS[0.1, -2, 2]","peakOS[90.0]",
         "acmsSS[60.,50.,80.]","betaSS[0.05,0.01,0.08]","gammaSS[0., -2, 0.015]","peakSS[90.0]",
+        ]
+  elif fileTruth.GetName() == 'CFSF_test_DYJets_MG_All.root' and channel == "EE":
+    pars = [
+        "meanOS[-0.0,-5.0,5.0]","sigmaOS[0.9,0.5,5.0]",
+        "meanSS[-0.0,-5.0,5.0]","sigmaSS[0.9,0.5,5.0]",
+        "acmsOS[60.,50.,80.]","betaOS[0.05,0.01,0.08]","gammaOS[0.1, -2, 2]","peakOS[90.0]",
+        "acmsSS[60.,50.,80.]","betaSS[0.5,0.01,2]","gammaSS[0.1, -2, 2]","peakSS[90.0,80.0,110.0]", #1.1819
+        ]
+  elif fileTruth.GetName() == 'CFSF_test_DYJets_All.root' and channel == "EE":
+    pars = [
+        "meanOS[-0.0,-5.0,5.0]","sigmaOS[0.9,0.5,5.0]",
+        "meanSS[-0.0,-5.0,5.0]","sigmaSS[0.9,0.5,5.0]",
+        "acmsOS[60.,50.,80.]","betaOS[0.05,0.01,0.08]","gammaOS[0.1, -2, 2]","peakOS[90.0]",
+        "acmsSS[60.,50.,80.]","betaSS[0.05,0.01,0.08]","gammaSS[0.1, -2, 2]","peakSS[90.0,80.0,110.0]", #1.1678
+        ]
+  elif fileTruth.GetName() == 'CFSF_test_DYJets_MG_All.root' and channel == "BE":
+    pars = [
+        "meanOS[-0.0,-5.0,5.0]","sigmaOS[0.9,0.5,5.0]",
+        "meanSS[-0.0,-5.0,5.0]","sigmaSS[0.9,0.5,5.0]",
+        "acmsOS[60.,50.,80.]","betaOS[0.05,0.01,0.08]","gammaOS[0.1, -2, 2]","peakOS[90.0]",
+        "acmsSS[60.,50.,80.]","betaSS[0.05,0.01,0.08]","gammaSS[0.1, -2, 2]","peakSS[90.0,80.0,110.0]", #1.1819
+        ]
+  elif fileTruth.GetName() == 'CFSF_test_DYJets_All.root' and channel == "BE":
+    pars = [
+        "meanOS[-0.0,-5.0,5.0]","sigmaOS[0.9,0.5,5.0]",
+        "meanSS[-0.0,-5.0,5.0]","sigmaSS[0.9,0.5,5.0]",
+        "acmsOS[60.,50.,80.]","betaOS[0.05,0.01,0.08]","gammaOS[0.1, -2, 2]","peakOS[90.0]",
+        "acmsSS[60.,50.,80.]","betaSS[0.05,0.01,0.08]","gammaSS[0.1, -2, 2]","peakSS[90.0,80.0,110.0]", #1.1678
         ]
   else:
     pars = [
@@ -71,7 +104,6 @@ for channel in channels:
   title = "mytitle_"+channel
   fitter.fits(False,title)
   print "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-  time.sleep(2)
   rootfile.Close()
 
 print "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"

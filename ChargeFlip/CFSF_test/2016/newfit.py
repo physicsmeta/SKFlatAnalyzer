@@ -5,7 +5,7 @@ rt.gROOT.LoadMacro('./histFitter.C+')
 from ROOT import tnpFitter
 import time
 
-channels = ["BB","EE"]
+channels = ["BE"]
 
 for channel in channels:
 
@@ -53,8 +53,8 @@ for channel in channels:
     pars = [
         "meanOS[-0.0,-5.0,5.0]","sigmaOS[0.9,0.5,5.0]",
         "meanSS[-0.0,-5.0,5.0]","sigmaSS[0.9,0.5,5.0]",
-        "acmsOS[60.,50.,80.]","betaOS[0.05,0.01,0.08]","gammaOS[0.1, -2, 2]","peakOS[90.0]",
-        "acmsSS[60.,50.,80.]","betaSS[0.05,0.01,0.08]","gammaSS[0.1, -2, 2]","peakSS[90.0]",
+        "acmsOS[60.,50.,80.]","betaOS[0.05,0.01,0.08]","gammaOS[0.1, -2, 2]","peakOS[90.0,80.0,100.0]",
+        "acmsSS[60.,50.,80.]","betaSS[0.05,0.01,0.08]","gammaSS[0.1, -2, 2]","peakSS[90.0,80.0,100.0]",
         ]
   
   this_workspace = []
@@ -91,7 +91,6 @@ for channel in channels:
   title = "mytitle_"+channel
   fitter.fits(False,title)
   print "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-  time.sleep(2)
   rootfile.Close()
 
 print "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
