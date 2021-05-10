@@ -167,7 +167,9 @@ void Control::executeEvent(){
     // Jet ID
 //    param.Jet_ID = "tightLepVeto";
     param.Jet_ID = "HNTight";
-    param.FatJet_ID = "HNTight";
+    //param.FatJet_ID = "HNTight";
+    if(DataYear==2016) param.FatJet_ID = "HNTight0p55";
+    else param.FatJet_ID = "HNTight0p45"; //JH : TODO
 
     executeEventFromParameter(param);
 
@@ -316,7 +318,7 @@ void Control::executeEventFromParameter(AnalyzerParameter param){
   vector<Muon> muons_veto = SelectMuons(this_AllMuons, param.Muon_Veto_ID, 5., 2.4);
   vector<Electron> electrons = SelectElectrons(this_AllElectrons, ElectronID, 10., 2.5);
   vector<Electron> electrons_veto = SelectElectrons(this_AllElectrons, param.Electron_Veto_ID, 10., 2.5); //JH : lepton selection done
-  vector<Jet> jets_nolepveto = SelectJets(this_AllJets, "tight", 20., 2.7); //JH : to reject bjets
+  vector<Jet> jets_nolepveto = SelectJets(this_AllJets, param.Jet_ID, 20., 2.7); //JH : to reject bjets
 //  vector<FatJet> fatjets = SelectFatJets(this_AllFatJets, param.FatJet_ID, 200., 2.7);
 
 //  FillHist("Njet_"+IDsuffix, jets_nolepveto.size(), weight, 8, 0., 8.);

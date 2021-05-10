@@ -336,9 +336,9 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
       if(!PassMETFilter()) return;
       Particle METv = ev.GetMETVector();
  
-      muons = SelectMuons(AllMuons, "POGTight", 20., 2.4); //Just to calculate HT
-      jets = SelectJets(AllJets, "tight", 30., 2.4); //Just to calculate HT
-      vector<Jet> jets_LeptonVeto = JetsVetoLeptonInside(jets, eles, muons); //To calculate HT
+      muons = SelectMuons(AllMuons, "HNTightV1", 5., 2.4); // to calculate HT
+      jets = SelectJets(AllJets, "HNTight", 20., 2.7); // to calculate HT
+      vector<Jet> jets_LeptonVeto = JetsVetoLeptonInside(jets, eles, muons); // to calculate HT
 
       /* Calculate the needed variables */
 
@@ -387,7 +387,8 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
 
         for(unsigned int i=0; i<eles.size(); i++){
           Gen truth_lep = GetGenMatchedLepton(eles.at(i), gens);
-          if(truth_lep.PID() == 0) return; 
+          if(GetLeptonType(eles.at(i), gens)<=0 || GetLeptonType(eles.at(i), gens)>=4) continue; // conversion veto
+          if(truth_lep.PID() == 0) continue;
       
           int truth_lep_Charge;
           if(truth_lep.PID() == 11) truth_lep_Charge = -1;
@@ -422,7 +423,8 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
 
         for(unsigned int i=0; i<eles.size(); i++){
           Gen truth_lep = GetGenMatchedLepton(eles.at(i), gens);
-          if(truth_lep.PID() == 0) return; 
+          if(GetLeptonType(eles.at(i), gens)<=0 || GetLeptonType(eles.at(i), gens)>=4) continue; // conversion veto
+          if(truth_lep.PID() == 0) continue;
       
           int truth_lep_Charge;
           if(truth_lep.PID() == 11) truth_lep_Charge = -1;
