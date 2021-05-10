@@ -765,9 +765,8 @@ double CFSF_test::GetCFweight_SF(std::vector<Electron> eles, TString id){
   }
 
 }
-*/
 
-double CFSF_test::GetHalfSampleWeight(const Electron& electron, TString id){;
+double CFSF_test::GetHalfSampleWeight(const Electron& electron, TString id){
 
   if(id == "HEID"){
 
@@ -818,3 +817,4 @@ double CFSF_test::GetHalfSampleWeight(const Electron& electron, TString id){;
   }
 
 }
+*/

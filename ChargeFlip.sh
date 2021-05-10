@@ -277,7 +277,7 @@
 
 ##############2016 HalfSampleTest using all available DY, TT set###################################
 
-#python python/SKFlat.py -a ChargeFlip -y 2016 -i DYJets -n 50 --skim SkimTree_Dilepton --userflags HalfSampleTest &
+python python/SKFlat.py -a ChargeFlip -y 2016 -i DYJets -n 50 --skim SkimTree_Dilepton --userflags HalfSampleTest &
 #python python/SKFlat.py -a ChargeFlip -y 2016 -i DYJets_M-100to200 -n 50 --skim SkimTree_Dilepton --userflags HalfSampleTest &
 #python python/SKFlat.py -a ChargeFlip -y 2016 -i DYJets_M-200to400 -n 50 --skim SkimTree_Dilepton --userflags HalfSampleTest &
 #python python/SKFlat.py -a ChargeFlip -y 2016 -i DYJets_M-400to500 -n 50 --skim SkimTree_Dilepton --userflags HalfSampleTest &

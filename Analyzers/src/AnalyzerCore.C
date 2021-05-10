@@ -1892,6 +1892,73 @@ double AnalyzerCore::GetCFweight(vector<Electron> eles, TString id, bool applySF
 
 }
 
+double AnalyzerCore::GetHalfSampleWeight(const Electron& electron, TString id){
+
+  if(DataYear==2016){
+    if(id == "HNTightV1"){
+      if(abs(electron.scEta())<0.8){
+        if(1/electron.Pt()<0.005) return 9.58505e-04-1.59759e-01/electron.Pt();
+        else if(0.005<=1/electron.Pt()&&1/electron.Pt()<0.0155) return 2.07325e-04-8.63460e-03/electron.Pt();
+        else return 9.37334e-05-9.81244e-04/electron.Pt();
+      }
+      else if(0.8<=abs(electron.scEta())&&abs(electron.scEta())<1.4442){
+        if(1/electron.Pt()<0.0055) return 3.82245e-03-4.55401e-01/electron.Pt();
+        else if(0.0055<=1/electron.Pt()&&1/electron.Pt()<0.0155) return 1.65421e-03-7.32609e-02/electron.Pt();
+        else return 6.57784e-04-6.53361e-03/electron.Pt();
+      }
+      else if(1.556<=abs(electron.scEta())&&abs(electron.scEta())<2.5){
+        if(1/electron.Pt()<0.01) return 1.27778e-02-7.44197e-01/electron.Pt();
+        else if(0.01<=1/electron.Pt()&&1/electron.Pt()<0.0205) return 7.25863e-03-1.88640e-01/electron.Pt();
+        else return 4.17112e-03-3.71866e-02/electron.Pt();
+      }
+    }
+  }
+  else if(DataYear==2017){
+    if(id == "HNTightV1"){
+      if(abs(electron.scEta())<0.8){
+        if(1/electron.Pt()<0.005) return 9.58505e-04-1.59759e-01/electron.Pt();
+        else if(0.005<=1/electron.Pt()&&1/electron.Pt()<0.0155) return 2.07325e-04-8.63460e-03/electron.Pt();
+        else return 9.37334e-05-9.81244e-04/electron.Pt();
+      }
+      else if(0.8<=abs(electron.scEta())&&abs(electron.scEta())<1.4442){
+        if(1/electron.Pt()<0.0055) return 3.82245e-03-4.55401e-01/electron.Pt();
+        else if(0.0055<=1/electron.Pt()&&1/electron.Pt()<0.0155) return 1.65421e-03-7.32609e-02/electron.Pt();
+        else return 6.57784e-04-6.53361e-03/electron.Pt();
+      }
+      else if(1.556<=abs(electron.scEta())&&abs(electron.scEta())<2.5){
+        if(1/electron.Pt()<0.01) return 1.27778e-02-7.44197e-01/electron.Pt();
+        else if(0.01<=1/electron.Pt()&&1/electron.Pt()<0.0205) return 7.25863e-03-1.88640e-01/electron.Pt();
+        else return 4.17112e-03-3.71866e-02/electron.Pt();
+      }
+    }
+  }
+  else if(DataYear==2018){
+    if(id == "HNTightV1"){
+      if(abs(electron.scEta())<0.8){
+        if(1/electron.Pt()<0.005) return 9.58505e-04-1.59759e-01/electron.Pt();
+        else if(0.005<=1/electron.Pt()&&1/electron.Pt()<0.0155) return 2.07325e-04-8.63460e-03/electron.Pt();
+        else return 9.37334e-05-9.81244e-04/electron.Pt();
+      }
+      else if(0.8<=abs(electron.scEta())&&abs(electron.scEta())<1.4442){
+        if(1/electron.Pt()<0.0055) return 3.82245e-03-4.55401e-01/electron.Pt();
+        else if(0.0055<=1/electron.Pt()&&1/electron.Pt()<0.0155) return 1.65421e-03-7.32609e-02/electron.Pt();
+        else return 6.57784e-04-6.53361e-03/electron.Pt();
+      }
+      else if(1.556<=abs(electron.scEta())&&abs(electron.scEta())<2.5){
+        if(1/electron.Pt()<0.01) return 1.27778e-02-7.44197e-01/electron.Pt();
+        else if(0.01<=1/electron.Pt()&&1/electron.Pt()<0.0205) return 7.25863e-03-1.88640e-01/electron.Pt();
+        else return 4.17112e-03-3.71866e-02/electron.Pt();
+      }
+    }
+  }
+
+}
+
+
+
+
+
+
 //=========================================================
 //==== Gen Matching Tools
 

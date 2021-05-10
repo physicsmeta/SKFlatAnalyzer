@@ -197,6 +197,7 @@ public:
   double GetCFweight(vector<Lepton *> lepptrs, AnalyzerParameter param, bool applySF, int syst);
   double GetCFweight(vector<Electron> eles, TString id, bool applySF, int syst);
   double GetCFweight(vector<Electron> eles, TString id, bool applySF, TString BBfit, TString EEfit);
+  double GetHalfSampleWeight(const Electron& electron, TString id);
 
   //==== GenMatching
 

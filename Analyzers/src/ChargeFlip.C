@@ -754,9 +754,8 @@ double ChargeFlip::GetCFweight_SF(std::vector<Electron> eles, TString id){
   }
 
 }
-*/
 
-double ChargeFlip::GetHalfSampleWeight(const Electron& electron, TString id){;
+double ChargeFlip::GetHalfSampleWeight(const Electron& electron, TString id){
 
   if(id == "HEID"){
 
@@ -807,3 +806,5 @@ double ChargeFlip::GetHalfSampleWeight(const Electron& electron, TString id){;
   }
 
 }
+
+*/
