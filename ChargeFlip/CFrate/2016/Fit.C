@@ -1,4 +1,4 @@
-void Fit(TString fitIB = "expo_invx", TString fitOB = "expo_invx", TString fitEC = "invx_only", TString scan = "y", TString zoom = "n", TString save = "y"){
+void Fit(TString fitIB = "expo_invx", TString fitOB = "expo_invx", TString fitEC = "invx_only", TString scan = "y", TString zoom = "n", TString save = "n"){
 TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/ChargeFlip/2016/CFrate__/ChargeFlip_All.root";
 TFile* f1 = new TFile(filename);
 
@@ -93,7 +93,7 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   
   // Define fit function and range //
  
-  vector<double> gr1_range = {0, 0.003, 0.015, 0.04};
+  vector<double> gr1_range = {0, 0.003, 0.013, 0.04};
 
   TF1 *gr1_fit1, *gr1_fit2, *gr1_fit3;
 
@@ -204,7 +204,7 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   if(zoom == "y") gr2->GetYaxis()->SetRangeUser(0.,0.004);
   
   
-  vector<double> gr2_range = {0, 0.003, 0.015, 0.04};
+  vector<double> gr2_range = {0, 0.003, 0.034, 0.04};
 
   TF1 *gr2_fit1, *gr2_fit2, *gr2_fit3;
 
@@ -507,7 +507,7 @@ for(unsigned int i=0; i<User_ID.size(); i++){
       }
       for(int k=0; k<bndrys.size(); k++){
         if(fabs( RelErrs[k] ) < MinRelErr){
-          MinRelErr = RelErrs[k];
+          MinRelErr = fabs( RelErrs[k] );
           this_k_RelErr = k;
         }
         if(Chi2overNDFs[k] < MinChi2overNDF){
@@ -528,7 +528,7 @@ for(unsigned int i=0; i<User_ID.size(); i++){
       cout << ">>>>>>>>rel. error : " << 100 * RelErrs[this_k_Chi2] << "%" << endl;
 
       vector<double> opts12 = {0.003, 0.003, 0.003}; // to check opt results by eyes
-      vector<double> opts23 = {0.013, 0.014, 0.015}; // to check opt results by eyes
+      vector<double> opts23 = {0.013, 0.034, 0.015}; // to check opt results by eyes
       TF1 *fit_opt1 = new TF1("fit_opt1","expo",0.,opts12.at(i));
       TF1 *fit_opt2 = new TF1("fit_opt2","[0]/(x+[1])+[2]",opts12.at(i),opts23.at(i));
       TF1 *fit_opt3 = new TF1("fit_opt3","pol1",opts23.at(i),0.04);

@@ -1,6 +1,6 @@
-void Odd_HEID(){
+void Odd(){
 
-TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v3/ChargeFlip/2016/HalfSampleTest__/ChargeFlip_DYJets_TTLL.root";
+TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/ChargeFlip/2016/HalfSampleTest__/ChargeFlip_All.root";
 TFile* f1 = new TFile(filename);
 
 TString samplename = filename(filename.Last('/')+12,filename.Length());
@@ -8,7 +8,7 @@ samplename.ReplaceAll(".root","");
 
 gSystem->Exec("mkdir -p "+samplename);
 
-TString User_ID = "HEID";
+TString User_ID = "HNTightV1";
 
 TH1D* h0 = (TH1D*)f1->Get(User_ID+"/HalfSampleTest/Odd/MET_Denom");
 TH1D* h1 = (TH1D*)f1->Get(User_ID+"/HalfSampleTest/Odd/MET_weight");

@@ -1,23 +1,23 @@
-void Fit(TString fitIB = "expo_invx", TString fitOB = "expo_invx", TString fitEC = "invx_only", TString scan = "y", TString zoom = "n", TString save = "y"){
-TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/ChargeFlip/2018/CFrate__/ChargeFlip_All.root";
+void Even_Fit(TString fitIB = "expo_invx", TString fitOB = "expo_invx", TString fitEC = "invx_only", TString scan = "y", TString zoom = "n", TString save = "y"){
+TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/ChargeFlip/2016/HalfSampleTest__/ChargeFlip_All.root";
 TFile* f1 = new TFile(filename);
 
 TString samplename = filename(filename.Last('/')+12,filename.Length());
 samplename.ReplaceAll(".root","");
 
-//gSystem->Exec("mkdir "+samplename);
+gSystem->Exec("mkdir -p "+samplename+"/Fit");
 
 vector<TString> User_ID;
 User_ID.push_back("HNTightV1");
 
 for(unsigned int i=0; i<User_ID.size(); i++){
 
-  TH1D* h1 = (TH1D*)f1->Get(User_ID.at(i)+"/CFrate/EtaRegion1_Denom");
-  TH1D* h2 = (TH1D*)f1->Get(User_ID.at(i)+"/CFrate/EtaRegion1_Num");
-  TH1D* h3 = (TH1D*)f1->Get(User_ID.at(i)+"/CFrate/EtaRegion2_Denom");
-  TH1D* h4 = (TH1D*)f1->Get(User_ID.at(i)+"/CFrate/EtaRegion2_Num");
-  TH1D* h5 = (TH1D*)f1->Get(User_ID.at(i)+"/CFrate/EtaRegion3_Denom");
-  TH1D* h6 = (TH1D*)f1->Get(User_ID.at(i)+"/CFrate/EtaRegion3_Num");
+  TH1D* h1 = (TH1D*)f1->Get(User_ID.at(i)+"/HalfSampleTest/Even/EtaRegion1_Denom");
+  TH1D* h2 = (TH1D*)f1->Get(User_ID.at(i)+"/HalfSampleTest/Even/EtaRegion1_Num");
+  TH1D* h3 = (TH1D*)f1->Get(User_ID.at(i)+"/HalfSampleTest/Even/EtaRegion2_Denom");
+  TH1D* h4 = (TH1D*)f1->Get(User_ID.at(i)+"/HalfSampleTest/Even/EtaRegion2_Num");
+  TH1D* h5 = (TH1D*)f1->Get(User_ID.at(i)+"/HalfSampleTest/Even/EtaRegion3_Denom");
+  TH1D* h6 = (TH1D*)f1->Get(User_ID.at(i)+"/HalfSampleTest/Even/EtaRegion3_Num");
   
   // Let's use vector instead of array, to remove zero bins and nan bins //
   
@@ -92,8 +92,8 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   
   
   // Define fit function and range //
- 
-  vector<double> gr1_range = {0, 0.002, 0.008, 0.04};
+
+  vector<double> gr1_range = {0, 0.002, 0.015, 0.04};
 
   TF1 *gr1_fit1, *gr1_fit2, *gr1_fit3;
 
@@ -203,8 +203,8 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   gr2->GetYaxis()->SetLabelSize(0.025);
   if(zoom == "y") gr2->GetYaxis()->SetRangeUser(0.,0.004);
   
-  
-  vector<double> gr2_range = {0, 0.002, 0.013, 0.04};
+
+  vector<double> gr2_range = {0, 0.003, 0.018, 0.04};
 
   TF1 *gr2_fit1, *gr2_fit2, *gr2_fit3;
 
@@ -339,23 +339,23 @@ for(unsigned int i=0; i<User_ID.size(); i++){
     gr3_fit1->SetLineWidth(2);
     gr3_fit2->SetLineWidth(2);
     gr3_fit3->SetLineWidth(2);
-
+    
     gr3_fit1->SetLineColor(kRed);
     gr3_fit2->SetLineColor(kGreen);
     gr3_fit3->SetLineColor(kBlue);
   }
-
+  
   cout << endl << "//////////////////// Now fitting on EtaRegion3 ... ////////////////////" << endl;
-
+  
   gr3->Fit(gr3_fit1,"R");
-
+  
   //TGraphErrors *gr3_fit1_err = new TGraphErrors(12);
   //for(int i=0; i<12; i++) gr3_fit1_err->SetPoint(i,0.001*i,0);
   //(TVirtualFitter::GetFitter())->GetConfidenceIntervals(gr3_fit1_err);
   //gr3_fit1_err->SetFillColor(4);
   //gr3_fit1_err->SetFillStyle(3001);
   //gr3_fit1_err->Draw("3 same");
-
+  
   //gr3->Fit(gr3_fit2,"R+");
 
   //TGraphErrors *gr3_fit2_err = new TGraphErrors(10);
@@ -364,7 +364,7 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   //gr3_fit2_err->SetFillColor(4);
   //gr3_fit2_err->SetFillStyle(3001);
   //gr3_fit2_err->Draw("3 same");
-
+  
   //gr3->Fit(gr3_fit3,"R+");
 
   //TGraphErrors *gr3_fit3_err = new TGraphErrors(22);
@@ -373,7 +373,7 @@ for(unsigned int i=0; i<User_ID.size(); i++){
   //gr3_fit3_err->SetFillColor(4);
   //gr3_fit3_err->SetFillStyle(3001);
   //gr3_fit3_err->Draw("3 same");
-
+ 
   if(fitEC.Contains("only")){
     // show the chisqaured and fit function
     double Chisquare3 = gr3_fit1->GetChisquare();
@@ -400,7 +400,7 @@ for(unsigned int i=0; i<User_ID.size(); i++){
     //pt3->AddText("CF rate at inf GeV : "+rate3_t);
     //pt3->Draw(); 
   }
-  else{
+  else{  
     TLegend* gr3_legend = new TLegend(0.75,0.8,0.9,0.9);
     gr3_legend->AddEntry(gr3_fit1,"high pt","l");
     gr3_legend->AddEntry(gr3_fit2,"medium pt","l");
@@ -475,7 +475,7 @@ for(unsigned int i=0; i<User_ID.size(); i++){
 
           //cout << "CFrate at " << bndry << " in medium pt : " << medval << endl;
           //cout << "CFrate at " << bndry << " in low pt : " << lowval << endl;
-          if(fabs(RelErr[bndry12]) < 0.2 && fabs(RelErr[bndry23]) < 0.2){
+          if(fabs(RelErr[bndry12]) < 0.12 && fabs(RelErr[bndry23]) < 0.12){
             cout << "In fit range : [0, " << bndry12 << ", " << bndry23 << ", 0.04]" << endl;
             cout << "rel. error at " << bndry12 << " : " << 100 * RelErr[bndry12] << "%" << endl;
             cout << "rel. error at " << bndry23 << " : " << 100 * RelErr[bndry23] << "%" << endl;
@@ -527,8 +527,8 @@ for(unsigned int i=0; i<User_ID.size(); i++){
       cout << "!!!!!!!!!!!!!!!Chi2/ndf opt at [0, " << Chi2OptRange[1] << ", " << Chi2OptRange[2] << ", 0.04]" << " : " << MinChi2overNDF <<  "!!!!!!!!!!!!!!!" << endl; //JH : the lower is the better (<1 is the best)
       cout << ">>>>>>>>rel. error : " << 100 * RelErrs[this_k_Chi2] << "%" << endl;
 
-      vector<double> opts12 = {0.002, 0.002, 0.003}; // to check opt results by eyes
-      vector<double> opts23 = {0.008, 0.013, 0.015}; // to check opt results by eyes
+      vector<double> opts12 = {0.002, 0.003, 0.003}; // to check opt results by eyes
+      vector<double> opts23 = {0.015, 0.018, 0.015}; // to check opt results by eyes
       TF1 *fit_opt1 = new TF1("fit_opt1","expo",0.,opts12.at(i));
       TF1 *fit_opt2 = new TF1("fit_opt2","[0]/(x+[1])+[2]",opts12.at(i),opts23.at(i));
       TF1 *fit_opt3 = new TF1("fit_opt3","pol1",opts23.at(i),0.04);

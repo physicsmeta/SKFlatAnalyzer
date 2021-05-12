@@ -507,7 +507,7 @@ for(unsigned int i=0; i<User_ID.size(); i++){
       }
       for(int k=0; k<bndrys.size(); k++){
         if(fabs( RelErrs[k] ) < MinRelErr){
-          MinRelErr = RelErrs[k];
+          MinRelErr = fabs( RelErrs[k] );
           this_k_RelErr = k;
         }
         if(Chi2overNDFs[k] < MinChi2overNDF){

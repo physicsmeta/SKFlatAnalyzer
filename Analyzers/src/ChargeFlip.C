@@ -397,21 +397,21 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
           if(abs(eles.at(i).scEta())<0.8){
             FillHist(param.Name+"/HalfSampleTest/Even/EtaRegion1_Denom", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
             if(truth_lep_Charge*eles.at(i).Charge()<0){
-              cout << "!!EtaRegion1!! truth lepton charge : " << truth_lep_Charge << ", reco lepton charge : " << eles.at(i).Charge() << endl;
+              //cout << "!!EtaRegion1!! truth lepton charge : " << truth_lep_Charge << ", reco lepton charge : " << eles.at(i).Charge() << endl;
               FillHist(param.Name+"/HalfSampleTest/Even/EtaRegion1_Num", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
             }
           }
           else if(0.8<=abs(eles.at(i).scEta())&&abs(eles.at(i).scEta())<1.4442){
             FillHist(param.Name+"/HalfSampleTest/Even/EtaRegion2_Denom", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
             if(truth_lep_Charge*eles.at(i).Charge()<0){
-              cout << "!!EtaRegion2!! truth lepton charge : " << truth_lep_Charge << ", reco lepton charge : " << eles.at(i).Charge() << endl;
+              //cout << "!!EtaRegion2!! truth lepton charge : " << truth_lep_Charge << ", reco lepton charge : " << eles.at(i).Charge() << endl;
               FillHist(param.Name+"/HalfSampleTest/Even/EtaRegion2_Num", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
             }
           }
           else if(1.556<=abs(eles.at(i).scEta())&&abs(eles.at(i).scEta())<2.5){
             FillHist(param.Name+"/HalfSampleTest/Even/EtaRegion3_Denom", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
             if(truth_lep_Charge*eles.at(i).Charge()<0){
-              cout << "!!EtaRegion3!! truth lepton charge : " << truth_lep_Charge << ", reco lepton charge : " << eles.at(i).Charge() << endl;
+              //cout << "!!EtaRegion3!! truth lepton charge : " << truth_lep_Charge << ", reco lepton charge : " << eles.at(i).Charge() << endl;
               FillHist(param.Name+"/HalfSampleTest/Even/EtaRegion3_Num", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
             }
           }
@@ -429,6 +429,28 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
           int truth_lep_Charge;
           if(truth_lep.PID() == 11) truth_lep_Charge = -1;
           else if(truth_lep.PID() == -11) truth_lep_Charge = 1;
+
+          if(abs(eles.at(i).scEta())<0.8){
+            FillHist(param.Name+"/HalfSampleTest/Odd/EtaRegion1_Denom", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
+            if(truth_lep_Charge*eles.at(i).Charge()<0){
+              //cout << "!!EtaRegion1!! truth lepton charge : " << truth_lep_Charge << ", reco lepton charge : " << eles.at(i).Charge() << endl;
+              FillHist(param.Name+"/HalfSampleTest/Odd/EtaRegion1_Num", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
+            }
+          }
+          else if(0.8<=abs(eles.at(i).scEta())&&abs(eles.at(i).scEta())<1.4442){
+            FillHist(param.Name+"/HalfSampleTest/Odd/EtaRegion2_Denom", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
+            if(truth_lep_Charge*eles.at(i).Charge()<0){
+              //cout << "!!EtaRegion2!! truth lepton charge : " << truth_lep_Charge << ", reco lepton charge : " << eles.at(i).Charge() << endl;
+              FillHist(param.Name+"/HalfSampleTest/Odd/EtaRegion2_Num", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
+            }
+          }
+          else if(1.556<=abs(eles.at(i).scEta())&&abs(eles.at(i).scEta())<2.5){
+            FillHist(param.Name+"/HalfSampleTest/Odd/EtaRegion3_Denom", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
+            if(truth_lep_Charge*eles.at(i).Charge()<0){
+              //cout << "!!EtaRegion3!! truth lepton charge : " << truth_lep_Charge << ", reco lepton charge : " << eles.at(i).Charge() << endl;
+              FillHist(param.Name+"/HalfSampleTest/Odd/EtaRegion3_Num", 1/eles.at(i).Pt(), 1., 40, 0., 0.04);
+            }
+          }
         
           FillHist(param.Name+"/HalfSampleTest/Odd/MET_Denom", MET, 1., 100, 0., 100.);
           FillHist(param.Name+"/HalfSampleTest/Odd/METsquaredOverST_Denom", METsquaredOverST, 1., 50, 0., 50.);
@@ -439,6 +461,16 @@ void ChargeFlip::executeEventFromParameter(AnalyzerParameter param, Long64_t Nen
           }
 
           double weight = GetHalfSampleWeight(eles.at(i), param.Electron_User_ID);
+
+          if(abs(eles.at(i).scEta())<0.8){
+            FillHist(param.Name+"/HalfSampleTest/Odd/EtaRegion1_weight", 1/eles.at(i).Pt(), weight, 40, 0., 0.04);
+          }
+          else if(0.8<=abs(eles.at(i).scEta())&&abs(eles.at(i).scEta())<1.4442){
+            FillHist(param.Name+"/HalfSampleTest/Odd/EtaRegion2_weight", 1/eles.at(i).Pt(), weight, 40, 0., 0.04);
+          }
+          else if(1.556<=abs(eles.at(i).scEta())&&abs(eles.at(i).scEta())<2.5){
+            FillHist(param.Name+"/HalfSampleTest/Odd/EtaRegion3_weight", 1/eles.at(i).Pt(), weight, 40, 0., 0.04);
+          }
 
           FillHist(param.Name+"/HalfSampleTest/Odd/MET_weight", MET, weight, 100, 0., 100.);
           FillHist(param.Name+"/HalfSampleTest/Odd/METsquaredOverST_weight", METsquaredOverST, weight, 50, 0., 50.);
