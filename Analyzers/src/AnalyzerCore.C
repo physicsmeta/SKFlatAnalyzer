@@ -1922,40 +1922,40 @@ double AnalyzerCore::GetHalfSampleWeight(const Electron& electron, TString id){
   else if(DataYear==2017){
     if(id == "HNTightV1"){
       if(eta < 0.8){
-        if(x < 0.002){ a = -5.51192e+00; b = -1.30329e+03; rate = TMath::Exp(a + b*x); }
-        else if(x>=0.002 && x<0.016){ a = 2.25880e-07; b = -1.24821e-03; c = 5.86034e-06; rate = a/(x+b)+c; }
-        else{ a = 2.90937e-05; b = -0.000565804; rate = a + b*x; }
+        if(x < 0.003){ a = -5.60206e+00; b = -1.07893e+03; rate = TMath::Exp(a + b*x); }
+        else if(x>=0.003 && x<0.020){ a = 2.36156e-07; b = -1.40897e-03; c = 4.62718e-06; rate = a/(x+b)+c; }
+        else{ a = 2.82303e-05; b = -0.000546111; rate = a + b*x; }
       }
       else if(eta>=0.8 && eta<1.479){
-        if(x < 0.002){ a = -3.89174e+00; b = -1.31915e+03; rate = TMath::Exp(a + b*x); }
-        else if(x>=0.002 && x<0.033){ a = 2.02602e-06; b = -6.43873e-04; c = -7.49608e-06; rate = a/(x+b)+c; }
-        else{ a = 0.000131226; b = -0.00245131; rate = a + b*x; }
+        if(x < 0.002){ a = -3.93076e+00; b = -1.28449e+03; rate = TMath::Exp(a + b*x); }
+        else if(x>=0.002 && x<0.017){ a = 1.90284e-06; b = -8.62397e-04; c = -1.12695e-06; rate = a/(x+b)+c; }
+        else{ a = 0.000172466; b = -0.00358503; rate = a + b*x; }
       }
       else{
         //if(x < 0.01){ a = 0.0127778; b = -0.744197; }
         //else if(x>=0.01 && x<0.0205){ a = 0.00725863; b = -0.18864; }
         //else{ a = 0.00417112; b = -0.0371866; }
-        a = 1.97099e-05; b = 4.12182e-04; c = 4.66663e-05; rate = a/(x+b)+c;
+        a = 2.13362e-05; b = 5.19032e-04; c = -1.17259e-05; rate = a/(x+b)+c;
       }
     }
   }
   else if(DataYear==2018){
     if(id == "HNTightV1"){
       if(eta < 0.8){
-        if(x < 0.002){ a = -5.54403e+00; b = -1.36409e+03; rate = TMath::Exp(a + b*x); }
-        else if(x>=0.002 && x<0.008){ a = 3.14164e-07; b = -9.31246e-04; c = -1.06387e-05; rate = a/(x+b)+c; }
-        else{ a = 3.7463e-05; b = -0.000733036; rate = a + b*x; }
+        if(x < 0.003){ a = -5.82253e+00; b = -9.78077e+02; rate = TMath::Exp(a + b*x); }
+        else if(x>=0.003 && x<0.021){ a = 1.71219e-07; b = -1.68484e-03; c = 1.29969e-05; rate = a/(x+b)+c; }
+        else{ a = 4.03842e-05; b = -0.000897667; rate = a + b*x; }
       }
       else if(eta>=0.8 && eta<1.479){
-        if(x < 0.002){ a = -4.12209e+00; b = -1.18386e+03; rate = TMath::Exp(a + b*x); }
-        else if(x>=0.002 && x<0.013){ a = 2.00453e-06; b = -7.98888e-04; c = 1.55959e-05; rate = a/(x+b)+c; }
-        else{ a = 0.000213673; b = -0.00443169; rate = a + b*x; }
+        if(x < 0.002){ a = -4.15717e+00; b = -1.14465e+03; rate = TMath::Exp(a + b*x); }
+        else if(x>=0.002 && x<0.024){ a = 2.09134e-06; b = -7.97474e-04; c = 1.23281e-05; rate = a/(x+b)+c; }
+        else{ a = 0.000182993; b = -0.00330714; rate = a + b*x; }
       }
       else{
         //if(x < 0.01){ a = 0.0127778; b = -0.744197; }
         //else if(x>=0.01 && x<0.0205){ a = 0.00725863; b = -0.18864; }
         //else{ a = 0.00417112; b = -0.0371866; }
-        a = 2.21433e-05; b = 5.64423e-04; c = -3.17389e-06; rate = a/(x+b)+c;
+        a = 2.36021e-05; b = 6.68482e-04; c = -4.55490e-05; rate = a/(x+b)+c;
       }
     }
   }
