@@ -62,8 +62,8 @@ gr2->SetLineColor(15);
 gr2->Draw("ZP SAME"); 
 
 TLegend* legend = new TLegend(0.75,0.78,0.9,0.92);
-legend->AddEntry(gr1,"Predicted","lp");
-legend->AddEntry(gr2,"Measured","lp");
+legend->AddEntry(gr1,"Measured","lp");
+legend->AddEntry(gr2,"Predicted","lp");
 legend->Draw();
 
 
@@ -91,7 +91,7 @@ gr3->GetXaxis()->SetRangeUser(0,100);
 gr3->GetYaxis()->SetLabelSize(0.05);
 gr3->GetYaxis()->SetTitle("#scale[1.5]{#frac{Measured}{Predicted}}");
 gr3->GetYaxis()->SetTitleOffset(0.8);
-gr3->GetYaxis()->SetRangeUser(0.8,1.2);
+gr3->GetYaxis()->SetRangeUser(0,2);
 gPad->SetGridx();
 gPad->SetGridy();
 
@@ -157,8 +157,8 @@ GR2->SetLineColor(15);
 GR2->Draw("ZP SAME"); 
 
 TLegend* legend_2 = new TLegend(0.75,0.78,0.9,0.92);
-legend_2->AddEntry(GR1,"Predicted","lp");
-legend_2->AddEntry(GR2,"Measured","lp");
+legend_2->AddEntry(GR1,"Measured","lp");
+legend_2->AddEntry(GR2,"Predicted","lp");
 legend_2->Draw();
 
 
@@ -186,7 +186,7 @@ GR3->GetXaxis()->SetRangeUser(0,50);
 GR3->GetYaxis()->SetLabelSize(0.05);
 GR3->GetYaxis()->SetTitle("#scale[1.5]{#frac{Measured}{Predicted}}");
 GR3->GetYaxis()->SetTitleOffset(0.8);
-GR3->GetYaxis()->SetRangeUser(0.8,1.2);
+GR3->GetYaxis()->SetRangeUser(0,2);
 gPad->SetGridx();
 gPad->SetGridy();
 

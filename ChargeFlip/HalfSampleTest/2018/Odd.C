@@ -1,6 +1,6 @@
 void Odd(){
 
-TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/ChargeFlip/2016/HalfSampleTest__/ChargeFlip_All.root";
+TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/ChargeFlip/2018/HalfSampleTest__/ChargeFlip_All.root";
 TFile* f1 = new TFile(filename);
 
 TString samplename = filename(filename.Last('/')+12,filename.Length());
@@ -53,7 +53,7 @@ gr1->GetXaxis()->SetTickLength(0.025);
 gr1->GetXaxis()->SetLabelSize(0);
 gr1->GetXaxis()->SetRangeUser(0,100);
 gr1->GetYaxis()->SetLabelSize(0.025);
-gr1->GetYaxis()->SetRangeUser(0,0.002);
+gr1->GetYaxis()->SetRangeUser(0,0.001);
 
 TGraphErrors* gr2 = new TGraphErrors(x_2.size(),&x_2[0],&y_2[0],&ex_2[0],&ey_2[0]);
 gr2->SetMarkerStyle(20);
@@ -62,8 +62,8 @@ gr2->SetLineColor(15);
 gr2->Draw("ZP SAME"); 
 
 TLegend* legend = new TLegend(0.75,0.78,0.9,0.92);
-legend->AddEntry(gr1,"Predicted","lp");
-legend->AddEntry(gr2,"Measured","lp");
+legend->AddEntry(gr1,"Measured","lp");
+legend->AddEntry(gr2,"Predicted","lp");
 legend->Draw();
 
 
@@ -91,7 +91,7 @@ gr3->GetXaxis()->SetRangeUser(0,100);
 gr3->GetYaxis()->SetLabelSize(0.05);
 gr3->GetYaxis()->SetTitle("#scale[1.5]{#frac{Measured}{Predicted}}");
 gr3->GetYaxis()->SetTitleOffset(0.8);
-gr3->GetYaxis()->SetRangeUser(0.8,1.2);
+gr3->GetYaxis()->SetRangeUser(0,2);
 gPad->SetGridx();
 gPad->SetGridy();
 
@@ -148,7 +148,7 @@ GR1->GetXaxis()->SetTickLength(0.025);
 GR1->GetXaxis()->SetLabelSize(0);
 GR1->GetXaxis()->SetRangeUser(0,50);
 GR1->GetYaxis()->SetLabelSize(0.025);
-GR1->GetYaxis()->SetRangeUser(0,0.002);
+GR1->GetYaxis()->SetRangeUser(0,0.001);
 
 TGraphErrors* GR2 = new TGraphErrors(X_2.size(),&X_2[0],&Y_2[0],&EX_2[0],&EY_2[0]);
 GR2->SetMarkerStyle(20);
@@ -157,8 +157,8 @@ GR2->SetLineColor(15);
 GR2->Draw("ZP SAME"); 
 
 TLegend* legend_2 = new TLegend(0.75,0.78,0.9,0.92);
-legend_2->AddEntry(GR1,"Predicted","lp");
-legend_2->AddEntry(GR2,"Measured","lp");
+legend_2->AddEntry(GR1,"Measured","lp");
+legend_2->AddEntry(GR2,"Predicted","lp");
 legend_2->Draw();
 
 
@@ -186,7 +186,7 @@ GR3->GetXaxis()->SetRangeUser(0,50);
 GR3->GetYaxis()->SetLabelSize(0.05);
 GR3->GetYaxis()->SetTitle("#scale[1.5]{#frac{Measured}{Predicted}}");
 GR3->GetYaxis()->SetTitleOffset(0.8);
-GR3->GetYaxis()->SetRangeUser(0.8,1.2);
+GR3->GetYaxis()->SetRangeUser(0,2);
 gPad->SetGridx();
 gPad->SetGridy();
 
