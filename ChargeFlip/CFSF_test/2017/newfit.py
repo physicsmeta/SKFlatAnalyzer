@@ -4,15 +4,16 @@ rt.gROOT.LoadMacro('./histFitter.C+')
 #rt.gROOT.LoadMacro('./RooCMSShape.cc+')
 from ROOT import tnpFitter
 import time
+import os
 
-channels = ["BE"]
+channels = ["BB","EE","BE"]
 
 for channel in channels:
 
-  fileTruth  = rt.TFile("CFSF_test_DYJets_All.root",'read')
-  #fileTruth  = rt.TFile("CFSF_test_DYJets_MG_All.root",'read')
-  #fileTruth  = rt.TFile("CFSF_test_DYJets_MG.root",'read')
-  #fileTruth  = rt.TFile("CFSF_test_DYJets.root",'read')
+  fileName = "DYJets_MG_All"
+  #fileName = "DYJets_All"
+  os.system("mkdir -p "+fileName)
+  fileTruth  = rt.TFile("CFSF_test_"+fileName+".root",'read')
 
   funcs = [
       "Gaussian::sigResPass(x,meanOS,sigmaOS)",
@@ -71,11 +72,11 @@ for channel in channels:
   else:
     hOS = infile.Get("HNTightV1/ScaleFactor/"+channel+"_ZMass_OS_CFweighted_shifted_1.0%")
   hSS = infile.Get("HNTightV1/ScaleFactor/"+channel+"_ZMass_SS_MET0")
-  fitter = tnpFitter( hOS, hSS, "myhist_"+channel )
+  fitter = tnpFitter( hOS, hSS, fileName, "myhist_"+channel )
   infile.Close()
   
   fitter.useMinos()
-  rootfile = rt.TFile("newfit.root",'update')
+  rootfile = rt.TFile("newfit_"+fileName+".root",'update')
   fitter.setOutputFile( rootfile )
   
   if channel == "BE":

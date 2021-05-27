@@ -1157,7 +1157,7 @@ void Signal::executeEventFromParameter(AnalyzerParameter param){
           int j5 = 0;
           for(unsigned int k=0; k<fatjets.size(); k++){
             if(fabs(fatjets.at(k).M() - MW) < tmpMassDiff3){
-              tmpMassDiff3 = fabs(fatjets.at(k).SDMass() - MW);
+              tmpMassDiff3 = fabs(fatjets.at(k).SDMass() - MW); //JH : TODO SDMass() vs M() ?
               j5 = k;
             }
           }

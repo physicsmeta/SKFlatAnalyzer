@@ -26,7 +26,7 @@ using namespace std;
 class tnpFitter {
 public:
   tnpFitter( TFile *file, std::string histname  );
-  tnpFitter( TH1 *hPass, TH1 *hFail, std::string histname  );
+  tnpFitter( TH1 *hPass, TH1 *hFail, std::string filename, std::string histname  );
   ~tnpFitter(void) {if( _work != 0 ) delete _work; }
   void setZLineShapes(TH1 *hZPass, TH1 *hZFail );
   void setWorkspace(std::vector<std::string>);
@@ -40,6 +40,7 @@ public:
   void setFitRange(double xMin,double xMax) { _xFitMin = xMin; _xFitMax = xMax; }
 private:
   RooWorkspace *_work;
+  std::string _filename_base;
   std::string _histname_base;
   TFile *_fOut;
   double _nTotP, _nTotF;
@@ -79,8 +80,9 @@ tnpFitter::tnpFitter(TFile *filein, std::string histname   ) : _useMinos(false),
   _xFitMax = 120;
 }
 
-tnpFitter::tnpFitter(TH1 *hPass, TH1 *hFail, std::string histname  ) : _useMinos(false),_fixSigmaFtoSigmaP(false) {
+tnpFitter::tnpFitter(TH1 *hPass, TH1 *hFail, std::string filename, std::string histname  ) : _useMinos(false),_fixSigmaFtoSigmaP(false) {
   RooMsgService::instance().setGlobalKillBelow(RooFit::WARNING);
+  _filename_base = filename; //JH
   _histname_base = histname;
   
   _nTotP = hPass->Integral();
@@ -216,6 +218,7 @@ void tnpFitter::fits(bool mcTruth,string title) {
   resPass->Write(TString::Format("%s_resP",_histname_base.c_str()),TObject::kOverwrite);
   resFail->Write(TString::Format("%s_resF",_histname_base.c_str()),TObject::kOverwrite);
 
+  c.SaveAs(TString::Format("%s/%s_Canv.pdf",_filename_base.c_str(),_histname_base.c_str())); // JH
   
 }
 
