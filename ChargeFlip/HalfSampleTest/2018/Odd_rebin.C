@@ -1,4 +1,4 @@
-void Odd_rebin(){
+void Odd_rebin(TString binSetting){
 
 TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/ChargeFlip/2018/HalfSampleTest__/ChargeFlip_All.root";
 TFile* f1 = new TFile(filename);
@@ -136,47 +136,71 @@ legend_ratio->Draw();
 TH1D* H0 = (TH1D*)f1->Get(User_ID+"/HalfSampleTest/Odd/METsquaredOverST_Denom");
 TH1D* H1 = (TH1D*)f1->Get(User_ID+"/HalfSampleTest/Odd/METsquaredOverST_weight");
 TH1D* H2 = (TH1D*)f1->Get(User_ID+"/HalfSampleTest/Odd/METsquaredOverST_Num");
+TH1D* H0_varBin;
+TH1D* H1_varBin;
+TH1D* H2_varBin;
 
 int rebin_2 = 10;
-
-H0->Rebin(rebin_2);
-H1->Rebin(rebin_2);
-H2->Rebin(rebin_2);
-
-//int Nbin = 3;
-//double xbins[4] = {0., 10., 20., 50.};
-//H0->Rebin(Nbin,"",xbins);
-//H1->Rebin(Nbin,"",xbins);
-//H2->Rebin(Nbin,"",xbins);
+int Nbin = 3;
+double xbins[4] = {0., 10., 20., 50.};
+if (binSetting == "even"){
+  H0->Rebin(rebin_2);
+  H1->Rebin(rebin_2);
+  H2->Rebin(rebin_2);
+}
+else if (binSetting == "var"){
+  H0_varBin = (TH1D*)H0->Rebin(Nbin,"",xbins);
+  H1_varBin = (TH1D*)H1->Rebin(Nbin,"",xbins);
+  H2_varBin = (TH1D*)H2->Rebin(Nbin,"",xbins);
+}
 
 vector<double> X_1, EX_1, X_2, EX_2, X_3, EX_3;
-for (int i=0; i<50/rebin_2; i++) {
-  X_1.push_back((2*i+1)*(rebin_2/2)); EX_1.push_back(rebin_2/2); 
-  X_2.push_back((2*i+1)*(rebin_2/2)); EX_2.push_back(rebin_2/2); 
-  X_3.push_back((2*i+1)*(rebin_2/2)); EX_3.push_back(rebin_2/2); 
-}
-//for (int i=0; i<Nbin; i++) {
-//  X_1.push_back(xbins[i]+(xbins[i+1]-xbins[i])/2.); EX_1.push_back((xbins[i+1]-xbins[i])/2.); 
-//  X_2.push_back(xbins[i]+(xbins[i+1]-xbins[i])/2.); EX_2.push_back((xbins[i+1]-xbins[i])/2.); 
-//  X_3.push_back(xbins[i]+(xbins[i+1]-xbins[i])/2.); EX_3.push_back((xbins[i+1]-xbins[i])/2.); 
-//}
 vector<double> Y_1, EY_1, Y_2, EY_2, Y_3, Y_3_show, EY_3, EY_3_stat, EY_3_stat_show, EY_3_syst, EY_3_tot, EY_3_tot_show;
-for (int i=0; i<50/rebin_2; i++) {
-//for (int i=0; i<Nbin; i++) {
-  Y_1.push_back(H1->GetBinContent(i+1)/H0->GetBinContent(i+1));
-  EY_1.push_back(Y_1[i]*(sqrt(pow(H1->GetBinError(i+1)/H1->GetBinContent(i+1),2)+pow(H0->GetBinError(i+1)/H0->GetBinContent(i+1),2))));
-  Y_2.push_back(H2->GetBinContent(i+1)/H0->GetBinContent(i+1));
-  EY_2.push_back(Y_2[i]*(sqrt(pow(H2->GetBinError(i+1)/H2->GetBinContent(i+1),2)+pow(H0->GetBinError(i+1)/H0->GetBinContent(i+1),2))));
-  Y_3.push_back(Y_2[i]/Y_1[i]);
-  EY_3.push_back(Y_3[i]*(sqrt(pow(EY_2[i]/Y_2[i],2)+pow(EY_1[i]/Y_1[i],2))));
-
-  //showing the ratio
-  Y_3_show.push_back(1.);
-  EY_3_stat.push_back(H1->GetBinError(i+1));
-  EY_3_syst.push_back(syst*H1->GetBinContent(i+1));
-  EY_3_tot.push_back( sqrt(EY_3_stat[i]*EY_3_stat[i] + EY_3_syst[i]*EY_3_syst[i]) );
-  EY_3_stat_show.push_back(EY_3_stat[i]/H1->GetBinContent(i+1));
-  EY_3_tot_show.push_back(EY_3_tot[i]/H1->GetBinContent(i+1));
+if (binSetting == "even"){
+  for (int i=0; i<50/rebin_2; i++) {
+    X_1.push_back((2*i+1)*(rebin_2/2)); EX_1.push_back(rebin_2/2); 
+    X_2.push_back((2*i+1)*(rebin_2/2)); EX_2.push_back(rebin_2/2); 
+    X_3.push_back((2*i+1)*(rebin_2/2)); EX_3.push_back(rebin_2/2); 
+  }
+  for (int i=0; i<50/rebin_2; i++) {
+    Y_1.push_back(H1->GetBinContent(i+1)/H0->GetBinContent(i+1));
+    EY_1.push_back(Y_1[i]*(sqrt(pow(H1->GetBinError(i+1)/H1->GetBinContent(i+1),2)+pow(H0->GetBinError(i+1)/H0->GetBinContent(i+1),2))));
+    Y_2.push_back(H2->GetBinContent(i+1)/H0->GetBinContent(i+1));
+    EY_2.push_back(Y_2[i]*(sqrt(pow(H2->GetBinError(i+1)/H2->GetBinContent(i+1),2)+pow(H0->GetBinError(i+1)/H0->GetBinContent(i+1),2))));
+    Y_3.push_back(Y_2[i]/Y_1[i]);
+    EY_3.push_back(Y_3[i]*(sqrt(pow(EY_2[i]/Y_2[i],2)+pow(EY_1[i]/Y_1[i],2))));
+  
+    //showing the ratio
+    Y_3_show.push_back(1.);
+    EY_3_stat.push_back(H1->GetBinError(i+1));
+    EY_3_syst.push_back(syst*H1->GetBinContent(i+1));
+    EY_3_tot.push_back( sqrt(EY_3_stat[i]*EY_3_stat[i] + EY_3_syst[i]*EY_3_syst[i]) );
+    EY_3_stat_show.push_back(EY_3_stat[i]/H1->GetBinContent(i+1));
+    EY_3_tot_show.push_back(EY_3_tot[i]/H1->GetBinContent(i+1));
+  }
+}
+else if (binSetting == "var"){
+  for (int i=0; i<Nbin; i++) {
+    X_1.push_back(xbins[i]+(xbins[i+1]-xbins[i])/2.); EX_1.push_back((xbins[i+1]-xbins[i])/2.); 
+    X_2.push_back(xbins[i]+(xbins[i+1]-xbins[i])/2.); EX_2.push_back((xbins[i+1]-xbins[i])/2.); 
+    X_3.push_back(xbins[i]+(xbins[i+1]-xbins[i])/2.); EX_3.push_back((xbins[i+1]-xbins[i])/2.); 
+  }
+  for (int i=0; i<Nbin; i++) {
+    Y_1.push_back(H1_varBin->GetBinContent(i+1)/H0_varBin->GetBinContent(i+1));
+    EY_1.push_back(Y_1[i]*(sqrt(pow(H1_varBin->GetBinError(i+1)/H1_varBin->GetBinContent(i+1),2)+pow(H0_varBin->GetBinError(i+1)/H0_varBin->GetBinContent(i+1),2))));
+    Y_2.push_back(H2_varBin->GetBinContent(i+1)/H0_varBin->GetBinContent(i+1));
+    EY_2.push_back(Y_2[i]*(sqrt(pow(H2_varBin->GetBinError(i+1)/H2_varBin->GetBinContent(i+1),2)+pow(H0_varBin->GetBinError(i+1)/H0_varBin->GetBinContent(i+1),2))));
+    Y_3.push_back(Y_2[i]/Y_1[i]);
+    EY_3.push_back(Y_3[i]*(sqrt(pow(EY_2[i]/Y_2[i],2)+pow(EY_1[i]/Y_1[i],2))));
+  
+    //showing the ratio
+    Y_3_show.push_back(1.);
+    EY_3_stat.push_back(H1_varBin->GetBinError(i+1));
+    EY_3_syst.push_back(syst*H1_varBin->GetBinContent(i+1));
+    EY_3_tot.push_back( sqrt(EY_3_stat[i]*EY_3_stat[i] + EY_3_syst[i]*EY_3_syst[i]) );
+    EY_3_stat_show.push_back(EY_3_stat[i]/H1_varBin->GetBinContent(i+1));
+    EY_3_tot_show.push_back(EY_3_tot[i]/H1_varBin->GetBinContent(i+1));
+  }
 }
 
 // Draw the plots //
@@ -266,9 +290,15 @@ legend_ratio_2->Draw();
 
 
 c1->SaveAs(samplename+"/"+User_ID+"_MET_rebin.pdf");
-c2->SaveAs(samplename+"/"+User_ID+"_METsquaredOverST_rebin.pdf");
-
 c1->SaveAs(samplename+"/"+User_ID+"_MET_rebin.png");
-c2->SaveAs(samplename+"/"+User_ID+"_METsquaredOverST_rebin.png");
+
+if(binSetting == "even"){
+  c2->SaveAs(samplename+"/"+User_ID+"_METsquaredOverST_evenBin.pdf");
+  c2->SaveAs(samplename+"/"+User_ID+"_METsquaredOverST_evenBin.png");
+}
+else if (binSetting == "var"){
+  c2->SaveAs(samplename+"/"+User_ID+"_METsquaredOverST_varBin.pdf");
+  c2->SaveAs(samplename+"/"+User_ID+"_METsquaredOverST_varBin.png");
+}
 
 }

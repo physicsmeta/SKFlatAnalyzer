@@ -1,6 +1,6 @@
 void Odd(){
 
-TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/ChargeFlip/2016/HalfSampleTest__/ChargeFlip_All.root";
+TString filename = "/data6/Users/jihkim/SKFlatOutput/Run2Legacy_v4/ChargeFlip/2017/HalfSampleTest__/ChargeFlip_All.root";
 TFile* f1 = new TFile(filename);
 
 TString samplename = filename(filename.Last('/')+12,filename.Length());
