@@ -10,8 +10,8 @@ channels = ["BB","EE","BE"]
 
 for channel in channels:
 
-  fileName = "DYJets_MG_All"
-  #fileName = "DYJets_All"
+  #fileName = "DYJets_MG_All"
+  fileName = "DYJets_All"
   os.system("mkdir -p "+fileName)
   fileTruth  = rt.TFile("CFSF_test_"+fileName+".root",'read')
 

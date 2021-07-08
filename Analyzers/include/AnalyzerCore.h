@@ -59,6 +59,7 @@ public:
   //==== ** Recommend you to do the same for other objects (Electron, Jet, FatJet, ...) **
   inline static bool PtComparing(const Particle& p1, const Particle& p2){ return (p1.Pt() > p2.Pt()); }
   inline static bool PtComparingPtr(Particle* p1, Particle* p2){ return (p1->Pt() > p2->Pt()); }
+  inline static bool PtConeComparing(const Lepton& l1, const Lepton& l2){ return (l1.PtCone() > l2.PtCone()); } //JH : mimic HNtypeI_VV_CR
 
   Event GetEvent();
 

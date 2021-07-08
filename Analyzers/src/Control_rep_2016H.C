@@ -241,7 +241,8 @@ void Control_rep_2016H::executeEventFromParameter(AnalyzerParameter param){
   //==== Trigger
   //==============
 
-  if(!(ev.PassTrigger(MuonTriggersH) || ev.PassTrigger(MuonTriggersHighPt) || ev.PassTrigger(ElectronTriggers) || ev.PassTrigger(EMuTriggersH))) return; 
+  //if(!(ev.PassTrigger(MuonTriggersH) || ev.PassTrigger(MuonTriggersHighPt) || ev.PassTrigger(ElectronTriggers) || ev.PassTrigger(EMuTriggersH))) return; 
+  if(!(ev.PassTrigger(MuonTriggersH) || ev.PassTrigger(ElectronTriggers))) return; //JH : mimic HNtypeI_VV_CR trigger
 
   //======================
   //==== Copy AllObjects
@@ -318,7 +319,8 @@ void Control_rep_2016H::executeEventFromParameter(AnalyzerParameter param){
   vector<Muon> muons_veto = SelectMuons(this_AllMuons, param.Muon_Veto_ID, 5., 2.4);
   vector<Electron> electrons = SelectElectrons(this_AllElectrons, ElectronID, 10., 2.5);
   vector<Electron> electrons_veto = SelectElectrons(this_AllElectrons, param.Electron_Veto_ID, 10., 2.5); //JH : lepton selection done
-  vector<Jet> jets_nolepveto = SelectJets(this_AllJets, param.Jet_ID, 20., 2.7); //JH : to reject bjets
+  //vector<Jet> jets_nolepveto = SelectJets(this_AllJets, param.Jet_ID, 20., 2.7); //JH : to reject bjets
+  vector<Jet> jets_nolepveto = SelectJets(this_AllJets, "tight", 20., 2.7); //JH : mimic HNtypeI_VV_CR
 //  vector<FatJet> fatjets = SelectFatJets(this_AllFatJets, param.FatJet_ID, 200., 2.7);
 
 //  FillHist("Njet_"+IDsuffix, jets_nolepveto.size(), weight, 8, 0., 8.);
@@ -473,6 +475,16 @@ void Control_rep_2016H::executeEventFromParameter(AnalyzerParameter param){
     electrons.at(i).SetPtCone(this_ptcone_electron);
   }
 
+  vector<Muon> muons_mimic;
+  vector<Electron> electrons_mimic;
+  if(RunFake){
+    METv = UpdateMETFake(METv, electrons, muons);
+    std::sort(muons.begin(), muons.end(), PtConeComparing);
+    std::sort(electrons.begin(), electrons.end(), PtConeComparing);
+    muons_mimic = MuonUsePtCone(muons);
+    electrons_mimic = ElectronUsePtCone(electrons);
+  } //JH : mimic HNtypeI_VV_CR
+
   //if(muons.size()==2 && electrons.size()==0){
   //  FillHist("Pt_muon1", muons.at(0).Pt(), weight, 1000, 0., 1000.);
   //  FillHist("Pt_muon2", muons.at(1).Pt(), weight, 1000, 0., 1000.);
@@ -508,6 +520,12 @@ void Control_rep_2016H::executeEventFromParameter(AnalyzerParameter param){
   for(unsigned int i=0; i<muons.size(); i++) leptons.push_back(&muons.at(i));
   for(unsigned int i=0; i<electrons.size(); i++) leptons.push_back(&electrons.at(i));
   std::sort(leptons.begin(), leptons.end(), PtComparingPtr);
+  if(RunFake){
+		leptons.clear();
+    for(unsigned int i=0; i<muons_mimic.size(); i++) leptons.push_back(&muons_mimic.at(i));
+    for(unsigned int i=0; i<electrons_mimic.size(); i++) leptons.push_back(&electrons_mimic.at(i));
+		std::sort(leptons.begin(), leptons.end(), PtComparingPtr); 
+	} // JH : mimic HNtypeI_VV_CR
 
   // Define leptons passing veto IDs
   for(unsigned int i=0; i<muons_veto.size(); i++) leptons_veto.push_back(&muons_veto.at(i));
@@ -526,6 +544,7 @@ void Control_rep_2016H::executeEventFromParameter(AnalyzerParameter param){
   lepton_veto_size = leptons_veto.size() - leptons.size();
 
   // Define ST, MET^2/ST
+  MET = METv.Pt(); // JH : mimic HNtypeI_VV_CR
   for(unsigned int i=0; i<jets.size(); i++) ST += jets.at(i).Pt();
   for(unsigned int i=0; i<fatjets.size(); i++) ST += fatjets.at(i).Pt();
   for(unsigned int i=0; i<leptons.size(); i++) ST += leptons.at(i)->Pt();
@@ -827,16 +846,32 @@ void Control_rep_2016H::executeEventFromParameter(AnalyzerParameter param){
       }
       FillHist(regionsSM.at(it_rg2)+"/MET_Fourth_"+IDsuffix, MET, weight, 1000, 0., 1000.); //JH
       if(muons.size() == 3){
-        if(! (muons.at(0).Pt()>MuonPtCut1 && muons.at(1).Pt()>MuonPtCut2 && muons.at(2).Pt()>MuonPtCut2) ) continue;
+        FillHist(regionsSM.at(it_rg2)+"/Mu1_Pt", muons.at(0).Pt(), weight, 1000, 0., 1000.); //JH
+        FillHist(regionsSM.at(it_rg2)+"/Mu2_Pt", muons.at(1).Pt(), weight, 1000, 0., 1000.); //JH
+        FillHist(regionsSM.at(it_rg2)+"/Mu3_Pt", muons.at(2).Pt(), weight, 1000, 0., 1000.); //JH
+        FillHist(regionsSM.at(it_rg2)+"/Mu1_PtCone", muons.at(0).PtCone(), weight, 1000, 0., 1000.); //JH
+        FillHist(regionsSM.at(it_rg2)+"/Mu2_PtCone", muons.at(1).PtCone(), weight, 1000, 0., 1000.); //JH
+        FillHist(regionsSM.at(it_rg2)+"/Mu3_PtCone", muons.at(2).PtCone(), weight, 1000, 0., 1000.); //JH
+        FillHist(regionsSM.at(it_rg2)+"/Mu1_RelIso", muons.at(0).RelIso(), weight, 1000, 0., 10.); //JH
+        FillHist(regionsSM.at(it_rg2)+"/Mu2_RelIso", muons.at(1).RelIso(), weight, 1000, 0., 10.); //JH
+        FillHist(regionsSM.at(it_rg2)+"/Mu3_RelIso", muons.at(2).RelIso(), weight, 1000, 0., 10.); //JH
+        FillHist(regionsSM.at(it_rg2)+"/Mu1_MiniAODPt", muons.at(0).MiniAODPt(), weight, 1000, 0., 1000.); //JH
+        FillHist(regionsSM.at(it_rg2)+"/Mu2_MiniAODPt", muons.at(1).MiniAODPt(), weight, 1000, 0., 1000.); //JH
+        FillHist(regionsSM.at(it_rg2)+"/Mu3_MiniAODPt", muons.at(2).MiniAODPt(), weight, 1000, 0., 1000.); //JH
+        //if(! (muons.at(0).Pt()>MuonPtCut1 && muons.at(1).Pt()>MuonPtCut2 && muons.at(2).Pt()>MuonPtCut2) ) continue;
+        if(! (muons.at(0).PtCone()>MuonPtCut1 && muons.at(1).PtCone()>MuonPtCut2 && muons.at(2).PtCone()>MuonPtCut2) ) continue;
       }
       if(muons.size()==2 && electrons.size()==1){
-        if(! (muons.at(0).Pt()>MuonPtCut1 && muons.at(1).Pt()>MuonPtCut2 && electrons.at(0).Pt()>ElectronPtCut2) ) continue;
+        //if(! (muons.at(0).Pt()>MuonPtCut1 && muons.at(1).Pt()>MuonPtCut2 && electrons.at(0).Pt()>ElectronPtCut2) ) continue;
+        if(! (muons.at(0).PtCone()>MuonPtCut1 && muons.at(1).PtCone()>MuonPtCut2 && electrons.at(0).PtCone()>ElectronPtCut2) ) continue;
       }
       if(muons.size()==1 && electrons.size()==2){
-        if(! (muons.at(0).Pt()>MuonPtCut2 && electrons.at(0).Pt()>ElectronPtCut1 && electrons.at(1).Pt()>ElectronPtCut2) ) continue;
+        //if(! (muons.at(0).Pt()>MuonPtCut2 && electrons.at(0).Pt()>ElectronPtCut1 && electrons.at(1).Pt()>ElectronPtCut2) ) continue;
+        if(! (muons.at(0).PtCone()>MuonPtCut2 && electrons.at(0).PtCone()>ElectronPtCut1 && electrons.at(1).PtCone()>ElectronPtCut2) ) continue;
       }
       if(electrons.size() == 3){
-        if(! (electrons.at(0).Pt()>ElectronPtCut1 && electrons.at(1).Pt()>ElectronPtCut2 && electrons.at(2).Pt()>ElectronPtCut2) ) continue;
+        //if(! (electrons.at(0).Pt()>ElectronPtCut1 && electrons.at(1).Pt()>ElectronPtCut2 && electrons.at(2).Pt()>ElectronPtCut2) ) continue;
+        if(! (electrons.at(0).PtCone()>ElectronPtCut1 && electrons.at(1).PtCone()>ElectronPtCut2 && electrons.at(2).PtCone()>ElectronPtCut2) ) continue; //JH : mimic HNtypeI_VV_CR PtCone
       }
       FillHist(regionsSM.at(it_rg2)+"/MET_Fifth_"+IDsuffix, MET, weight, 1000, 0., 1000.); //JH
 
@@ -923,19 +958,27 @@ void Control_rep_2016H::executeEventFromParameter(AnalyzerParameter param){
       int l1 = -999, l2 = -999, l3 = -999, l4 = -999, wlepWZ = -999, wlepWG = -999;
       // OSSF lepton pair, W-tagged lepton
       if(muons.size()==2 && muons.at(0).Charge()*muons.at(1).Charge()<0){ //JH : mme
-        ZCand = muons.at(0) + muons.at(1);
-        WtagLep = electrons.at(0);
-        ZtagLep1 = muons.at(0);
-        ZtagLep2 = muons.at(1);
+        //ZCand = muons.at(0) + muons.at(1);
+        //WtagLep = electrons.at(0);
+        //ZtagLep1 = muons.at(0);
+        //ZtagLep2 = muons.at(1); //JH : this is the original
+        ZCand = muons_mimic.at(0) + muons_mimic.at(1);
+        WtagLep = electrons_mimic.at(0);
+        ZtagLep1 = muons_mimic.at(0);
+        ZtagLep2 = muons_mimic.at(1); //JH : mimic HNtypeI_VV_CR
         GammaCand = ZCand;
         GammaLep1 = ZtagLep1;
         GammaLep2 = ZtagLep2;
       }
       else if(electrons.size()==2 && electrons.at(0).Charge()*electrons.at(1).Charge()<0){ //JH : eem
-        ZCand = electrons.at(0) + electrons.at(1);
-        WtagLep = muons.at(0);
-        ZtagLep1 = electrons.at(0);
-        ZtagLep2 = electrons.at(1);
+        //ZCand = electrons.at(0) + electrons.at(1);
+        //WtagLep = muons.at(0);
+        //ZtagLep1 = electrons.at(0);
+        //ZtagLep2 = electrons.at(1); //JH : this is the original
+        ZCand = electrons_mimic.at(0) + electrons_mimic.at(1);
+        WtagLep = muons_mimic.at(0);
+        ZtagLep1 = electrons_mimic.at(0);
+        ZtagLep2 = electrons_mimic.at(1); //JH : mimic HNtypeI_VV_CR
         GammaCand = ZCand;
         GammaLep1 = ZtagLep1;
         GammaLep2 = ZtagLep2;
@@ -990,6 +1033,7 @@ void Control_rep_2016H::executeEventFromParameter(AnalyzerParameter param){
         // Cutflow : m(ll) > 10 GeV
         FillHist(regionsSM.at(it_rg2)+"/Number_Events_"+IDsuffix, 5.5, weight, cutflow_bin, 0., cutflow_max);
         FillHist(regionsSM.at(it_rg2)+"/Number_Events_unweighted_"+IDsuffix, 5.5, 1., cutflow_bin, 0., cutflow_max);
+        FillHist(regionsSM.at(it_rg2)+"/Number_BJets_Medium_BeforeCut", Nbjet_medium, weight, 10, 0., 10.); //JH
 
         if(!(Nbjet_medium == 0)) continue;
 
@@ -1172,10 +1216,12 @@ void Control_rep_2016H::executeEventFromParameter(AnalyzerParameter param){
       if(muons.size() >= 2){
         if(IsDATA){ if(!isDoubleMuon) continue; }
         if(muons.size() == 4){
-          if(!(muons.at(0).Pt()>MuonPtCut1 && muons.at(1).Pt()>MuonPtCut2 && muons.at(2).Pt()>MuonPtCut2 && muons.at(3).Pt()>MuonPtCut2)) continue;
+          //if(!(muons.at(0).Pt()>MuonPtCut1 && muons.at(1).Pt()>MuonPtCut2 && muons.at(2).Pt()>MuonPtCut2 && muons.at(3).Pt()>MuonPtCut2)) continue;
+          if(!(muons.at(0).PtCone()>MuonPtCut1 && muons.at(1).PtCone()>MuonPtCut2 && muons.at(2).PtCone()>MuonPtCut2 && muons.at(3).PtCone()>MuonPtCut2)) continue;
         }
         else if(muons.size() == 2 && electrons.size() == 2){
-          if(!(muons.at(0).Pt()>MuonPtCut1 && muons.at(1).Pt()>MuonPtCut2 && electrons.at(0).Pt()>ElectronPtCut2 && electrons.at(1).Pt()>ElectronPtCut2)) continue;
+          //if(!(muons.at(0).Pt()>MuonPtCut1 && muons.at(1).Pt()>MuonPtCut2 && electrons.at(0).Pt()>ElectronPtCut2 && electrons.at(1).Pt()>ElectronPtCut2)) continue;
+          if(!(muons.at(0).PtCone()>MuonPtCut1 && muons.at(1).PtCone()>MuonPtCut2 && electrons.at(0).PtCone()>ElectronPtCut2 && electrons.at(1).PtCone()>ElectronPtCut2)) continue;
         }
         if(param.Muon_Tight_ID.Contains("HighPt")){
           if(!ev.PassTrigger(MuonTriggersHighPt)) continue; 
@@ -1187,7 +1233,8 @@ void Control_rep_2016H::executeEventFromParameter(AnalyzerParameter param){
       if(electrons.size() == 4){
         if(IsDATA){ if(!isDoubleEG) continue; }
         if(!ev.PassTrigger(ElectronTriggers)) continue;
-        if(!(electrons.at(0).Pt()>ElectronPtCut1 && electrons.at(1).Pt()>ElectronPtCut2 && electrons.at(2).Pt()>ElectronPtCut2 && electrons.at(3).Pt()>ElectronPtCut2)) continue;
+        //if(!(electrons.at(0).Pt()>ElectronPtCut1 && electrons.at(1).Pt()>ElectronPtCut2 && electrons.at(2).Pt()>ElectronPtCut2 && electrons.at(3).Pt()>ElectronPtCut2)) continue;
+        if(!(electrons.at(0).PtCone()>ElectronPtCut1 && electrons.at(1).PtCone()>ElectronPtCut2 && electrons.at(2).PtCone()>ElectronPtCut2 && electrons.at(3).PtCone()>ElectronPtCut2)) continue; //JH : mimic HNtypeI_VV_CR PtCone
       }
 
       weight = 1.;

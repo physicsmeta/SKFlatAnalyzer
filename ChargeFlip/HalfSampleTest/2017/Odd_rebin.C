@@ -256,7 +256,7 @@ legend_ratio_2->Draw();
 c1->SaveAs(samplename+"/"+User_ID+"_MET_rebin.pdf");
 c2->SaveAs(samplename+"/"+User_ID+"_METsquaredOverST_rebin.pdf");
 
-//c1->SaveAs(samplename+"/"+User_ID+"_MET_rebin.png");
-//c2->SaveAs(samplename+"/"+User_ID+"_METsquaredOverST_rebin.png");
+c1->SaveAs(samplename+"/"+User_ID+"_MET_rebin.png");
+c2->SaveAs(samplename+"/"+User_ID+"_METsquaredOverST_rebin.png");
 
 }

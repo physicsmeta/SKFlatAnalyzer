@@ -143,14 +143,26 @@ H0->Rebin(rebin_2);
 H1->Rebin(rebin_2);
 H2->Rebin(rebin_2);
 
+//int Nbin = 3;
+//double xbins[4] = {0., 10., 20., 50.};
+//H0->Rebin(Nbin,"",xbins);
+//H1->Rebin(Nbin,"",xbins);
+//H2->Rebin(Nbin,"",xbins);
+
 vector<double> X_1, EX_1, X_2, EX_2, X_3, EX_3;
 for (int i=0; i<50/rebin_2; i++) {
   X_1.push_back((2*i+1)*(rebin_2/2)); EX_1.push_back(rebin_2/2); 
   X_2.push_back((2*i+1)*(rebin_2/2)); EX_2.push_back(rebin_2/2); 
   X_3.push_back((2*i+1)*(rebin_2/2)); EX_3.push_back(rebin_2/2); 
 }
+//for (int i=0; i<Nbin; i++) {
+//  X_1.push_back(xbins[i]+(xbins[i+1]-xbins[i])/2.); EX_1.push_back((xbins[i+1]-xbins[i])/2.); 
+//  X_2.push_back(xbins[i]+(xbins[i+1]-xbins[i])/2.); EX_2.push_back((xbins[i+1]-xbins[i])/2.); 
+//  X_3.push_back(xbins[i]+(xbins[i+1]-xbins[i])/2.); EX_3.push_back((xbins[i+1]-xbins[i])/2.); 
+//}
 vector<double> Y_1, EY_1, Y_2, EY_2, Y_3, Y_3_show, EY_3, EY_3_stat, EY_3_stat_show, EY_3_syst, EY_3_tot, EY_3_tot_show;
 for (int i=0; i<50/rebin_2; i++) {
+//for (int i=0; i<Nbin; i++) {
   Y_1.push_back(H1->GetBinContent(i+1)/H0->GetBinContent(i+1));
   EY_1.push_back(Y_1[i]*(sqrt(pow(H1->GetBinError(i+1)/H1->GetBinContent(i+1),2)+pow(H0->GetBinError(i+1)/H0->GetBinContent(i+1),2))));
   Y_2.push_back(H2->GetBinContent(i+1)/H0->GetBinContent(i+1));
@@ -256,7 +268,7 @@ legend_ratio_2->Draw();
 c1->SaveAs(samplename+"/"+User_ID+"_MET_rebin.pdf");
 c2->SaveAs(samplename+"/"+User_ID+"_METsquaredOverST_rebin.pdf");
 
-//c1->SaveAs(samplename+"/"+User_ID+"_MET_rebin.png");
-//c2->SaveAs(samplename+"/"+User_ID+"_METsquaredOverST_rebin.png");
+c1->SaveAs(samplename+"/"+User_ID+"_MET_rebin.png");
+c2->SaveAs(samplename+"/"+User_ID+"_METsquaredOverST_rebin.png");
 
 }

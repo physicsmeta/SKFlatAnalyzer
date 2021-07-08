@@ -219,6 +219,7 @@ void tnpFitter::fits(bool mcTruth,string title) {
   resFail->Write(TString::Format("%s_resF",_histname_base.c_str()),TObject::kOverwrite);
 
   c.SaveAs(TString::Format("%s/%s_Canv.pdf",_filename_base.c_str(),_histname_base.c_str())); // JH
+  c.SaveAs(TString::Format("%s/%s_Canv.png",_filename_base.c_str(),_histname_base.c_str())); // JH
   
 }
 
